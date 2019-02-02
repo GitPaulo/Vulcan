@@ -84,3 +84,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# PLS NO LEAK KEK
+settings/noleakdata.yaml

@@ -10,7 +10,7 @@ class Vulcan extends Client {
         this.credentials = credentials;
 
         // LOGGER NEEDED - WORKING ON THAT RN LULW
-        this.logger = LoggerFactory.getInstance();
+        this.logger = Logger.LoggerFactory.getInstance();
 
         // MANAGER NEEDED (STORAGE I.E.)
 
@@ -25,7 +25,7 @@ class Vulcan extends Client {
             
             this.guilds.forEach( function(v, k, m){
                 const LUL = v.emojis.find(emoji => emoji.name === "LUL");
-                v.systemChannel.send(`Hi there, i'm currently under construction. This is a test. Hopefully this shows up meaning i successfully logged in. Goodbye! Y'all are gay ${LUL}`);
+                v.systemChannel.send( `I am alive. Chan is gay ${LUL}`);
             })
         });
 

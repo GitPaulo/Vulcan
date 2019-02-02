@@ -17,7 +17,7 @@ const LogLevelsNumbers = {
 };
 
 // Implemented as Singleton class (or at least I tried)
-var LoggerFactory = (function () {
+let LoggerFactory = (function () {
     function constructLogObject(level, text) {
         let result = '(' + new Date().toLocaleString() + ')';
         result += '[' + level + '|' + LogLevelsNumbers[level] + ']#';
@@ -78,5 +78,5 @@ var LoggerFactory = (function () {
     };
 })();
 
-// It's sort of a singleton class so lets have a global refrence to its only object :)
-global.LoggerFactory = LoggerFactory;
+// Use exports!
+exports.LoggerFactory = LoggerFactory;
