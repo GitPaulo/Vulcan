@@ -2,7 +2,7 @@
   "name": "discordbot",
   "version": "1.0.0",
   "description": "Collab discord bot using discord.js.",
-  "main": "index.js",
+  "main": "bot.js",
   "scripts": {
     "test": "tacosgay"
   },

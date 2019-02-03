@@ -13,23 +13,11 @@ class Vulcan extends Client {
         this.logger = Logger.LoggerFactory.getInstance();
 
         // MANAGER NEEDED (STORAGE I.E.)
-
-        // HANDLERS NEEDED (MESSAGE PARSER)
-        // Remove this soon! We should aim to write class-like files claled have "handlers" for each event!
-        this.on("ready", () => {
-            // This event will run if the bot starts, and logs in, successfully.
-            this.logger.log(`Bot has started, with ${this.users.size} users, in ${this.channels.size} channels of ${this.guilds.size} guilds.`);
-            // Example of changing the bot's playing game to something useful. `client.user` is what the
-            // docs refer to as the "ClientUser".
-            this.user.setActivity(`Under development!`);
-            
-            this.guilds.forEach( function(v, k, m){
-                const LUL = v.emojis.find(emoji => emoji.name === "LUL");
-                v.systemChannel.send( `I am alive. Chan is gay ${LUL}`);
-            })
-        });
+        
 
         // LOAD COMMANDS SOMEHOW?? (structure needed)
+
+        this.inititialsationTime = Date.now();
     }
 
     connect() {
@@ -38,5 +26,5 @@ class Vulcan extends Client {
     }
 }
 
-// sets up class to be accessed by require("./class")
+// sets up class to be accessed by require()
 module.exports = Vulcan;

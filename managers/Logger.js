@@ -20,7 +20,7 @@ const LogLevelsNumbers = {
 let LoggerFactory = (function () {
     function constructLogObject(level, text) {
         let result = '(' + new Date().toLocaleString() + ')';
-        result += '[' + level + '|' + LogLevelsNumbers[level] + ']#';
+        result += '[' + level + '|' + LogLevelsNumbers[level] + '] =>';
         result += text;
 
         return {
@@ -79,4 +79,4 @@ let LoggerFactory = (function () {
 })();
 
 // Use exports!
-exports.LoggerFactory = LoggerFactory;
+module.exports.LoggerFactory = LoggerFactory;
