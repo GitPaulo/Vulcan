@@ -87,3 +87,6 @@ $RECYCLE.BIN/
 
 # PLS NO LEAK KEK
 settings/noleakdata.yaml
+
+#VS PLS
+.vscode/
