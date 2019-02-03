@@ -2,7 +2,7 @@
 // For now have shit message handle function:
 
 vulcan.on("message", async message => {
-    vulcan.logger.info("[MESSAGE][" + message.author.username + "][" + message.channel.name + "]: " + message);
+    vulcan.logger.info("[GUILD: " + message.guild.name + "] =>[MESSAGE][" + message.author.username + "][" + message.channel.name + "]: " + message);
 
     if (message.author.bot) return;
 

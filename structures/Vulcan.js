@@ -1,5 +1,9 @@
 const { Client, Collection } = require('discord.js');
+const { _, performance }     = require('perf_hooks');
 const Logger                 = require('../managers/Logger');
+const fs                     = require('fs');
+const path                   = require('path');
+const rutil                  = require('../scripts/randomutils');
 
 class Vulcan extends Client {
 
@@ -7,7 +11,7 @@ class Vulcan extends Client {
         super();
 
         this.configurations = configurations;
-        this.credentials = credentials;
+        this.credentials    = credentials;
 
         // LOGGER NEEDED - WORKING ON THAT RN LULW
         this.logger = Logger.LoggerFactory.getInstance();
@@ -17,7 +21,24 @@ class Vulcan extends Client {
 
         // LOAD COMMANDS SOMEHOW?? (structure needed)
 
-        this.inititialsationTime = Date.now();
+        this.initialisationTime = Date.now();
+    }
+
+    loadEvents(){
+        // Load Events
+        let events_path = __dirname + "/../events";
+        
+        fs.readdirSync(events_path).forEach(function (file) {
+            vulcan.logger.info("Vulcan is loading event file '" + file + "'.");
+            
+            let t = performance.now();
+            module.exports[path.basename(file, '.js')] = require(path.join(events_path, file)); // Store module with its name (from filename)
+            t = performance.now() - t;
+
+            vulcan.logger.info("Finished loading event file '" + file + "' (took " + rutil.round(t,2) + "ms).");
+        });
+        
+        return this;
     }
 
     connect() {
