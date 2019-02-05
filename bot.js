@@ -1,7 +1,10 @@
+// Extend structures
+require("./structures/extensions");
+
 // Get them boys first.
 const YAML     = require("js-yaml");
 const fs       = require('fs');
-const Vulcan   = require('./structures/Vulcan');
+const Vulcan   = require('./structures/classes/Vulcan');
 
 // Load Data.
 const configurationsFile = fs.readFileSync('settings/config.yaml', 'utf8');

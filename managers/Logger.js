@@ -62,6 +62,10 @@ let LoggerFactory = (function () {
         this._write = function (messageObject) {
             console.log(messageObject.result);
         }
+
+        this.print = function (...args) {
+            console.log(...args);
+        }
     }
 
     let instance;

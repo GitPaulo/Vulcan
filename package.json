@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/GitPaulo/DiscordBot#readme",
   "dependencies": {
-    "discord.js": "^11.4.2",
+    "discord.js": "github:discordjs/discord.js",
+    "discord.js-commando": "github:discordjs/Commando",
     "eslint": "^5.13.0",
     "js-yaml": "^3.12.1",
     "npm": "^6.7.0"
