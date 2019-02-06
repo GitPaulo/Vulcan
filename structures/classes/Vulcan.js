@@ -1,6 +1,7 @@
 const { Client, Collection } = require('discord.js');
 const { _, performance }     = require('perf_hooks');
 const Logger                 = require('../../managers/Logger');
+const CommandLoader          = require("./CommandLoader");
 const os                     = require("os");
 const fs                     = require('fs');
 const path                   = require('path');
@@ -34,9 +35,9 @@ class Vulcan extends Client {
         // DATABASE MANAGER NEEDED <<< TACUUUUUS
         this.storageManager = null;
 
-        // LOAD COMMANDS SOMEHOW?? (CLASS/INTERFACE FOR COMMAND ABSTRACTION NEEDED & Way to store command info - HashMap (id --> Command object)? )
-        this.commands = [];
-
+        // Class that handles loading all commands recursively from commands/ dir
+        this.commands = new CommandLoader(this).loadCommands();
+        console.log(this.commands);
         // Log all node-js process unhandled exceptions
         process.on("unhandledRejection", (e) => this.logger.error(e));
 

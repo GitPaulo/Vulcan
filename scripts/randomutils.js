@@ -1,5 +1,6 @@
 /* Random Utility functions will be here - this is sort of a meme module */
 const fs                 = require("fs");
+const path               = require("path");
 const { _, performance } = require('perf_hooks');
 
 exports.round = function (value, decimals) {
@@ -29,4 +30,23 @@ exports.loadModules = function (path){
     console.log(`=[ Sucessfully loaded ${n} modules at '${path}' (took ${t}ms) ]=`);
 
     return n;
+}
+
+exports.getAllFiles = function (dir, fileTypes = ".js") {
+    var filesToReturn = [];
+    
+    function walkDir(currentPath) {
+        var files = fs.readdirSync(currentPath);
+        for (var i in files) {
+            var curFile = path.join(currentPath, files[i]);      
+            if (fs.statSync(curFile).isFile() && fileTypes.indexOf(path.extname(curFile)) != -1) {
+                filesToReturn.push(curFile.replace(dir, ''));
+            } else if (fs.statSync(curFile).isDirectory()) {
+                walkDir(curFile);
+            }
+        }
+    };
+
+    walkDir(dir);
+    return filesToReturn; 
 }
