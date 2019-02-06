@@ -88,5 +88,8 @@ $RECYCLE.BIN/
 # PLS NO LEAK KEK
 settings/noleakdata.yaml
 
+# Ignore logs folder
+logs/
+
 #VS PLS
 .vscode/

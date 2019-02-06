@@ -12,6 +12,8 @@ const couldnt_have_forged_it_better_myself = `\\ \\    / /   | |
    \\  /| |_| | | (_| (_| | | | |
     \\/  \\__,_|_|\\___\\__,_|_| |_| by Pas-kun & Tacos`
 
+let rootPath = path.dirname(require.main.filename);
+
 class Vulcan extends Client {
 
     constructor (configurations, credentials) {
@@ -40,17 +42,18 @@ class Vulcan extends Client {
 
         // Vulcan is here!
         this.logger.print(couldnt_have_forged_it_better_myself);
+        this.logger.info("========== VULCAN has initialised ==========")
     }
 
     loadEvents () {
         // Load Events
-        let events_path = __dirname + "/../../events";
+        let eventsPath = path.join(rootPath, "events");
         
-        fs.readdirSync(events_path).forEach(function (file) {
+        fs.readdirSync(eventsPath).forEach(function (file) {
             vulcan.logger.info("Vulcan is loading event file '" + file + "'.");
             
             let t = performance.now();
-            module.exports[path.basename(file, '.js')] = require(path.join(events_path, file)); // Store module with its name (from filename)
+            module.exports[path.basename(file, '.js')] = require(path.join(eventsPath, file)); // Store module with its name (from filename)
             t = performance.now() - t;
 
             vulcan.logger.info("Finished loading event file '" + file + "' (took " + rutil.round(t,2) + "ms).");
@@ -75,7 +78,18 @@ class Vulcan extends Client {
     }
 
     connect () {
-        this.login(this.credentials.token);
+        this.logger.info("Attempting to connect to discord servers...");
+
+        if (this.credentials.token === global.DEFAULT) {
+            this.logger.warn(">>>>>>>> TOKEN IS MISSING FROM noleakdata.yaml FILE <<<<<<<<<");
+        }else{
+            this.login(this.credentials.token).then((token) => {
+                this.logger.info(`Sucessfully logged in to discord servers with token: ${token}`)
+            }).catch((err) => {
+                throw err;
+            });
+        }
+
         return this;
     }
 }
