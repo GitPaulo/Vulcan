@@ -22,12 +22,19 @@ class GitPull extends Command {
     }
 
     async execute (message) {
-        exec("git pull", async (err, pull) => {
+        exec("git pull origin master", async (err, pull) => {
             let vulcan = message.client;
             if (err) return vulcan.logger.error(err);
-            vulcan.logger.debug(pull.toString());
+
+            let pullText = pull.toString();
+            vulcan.logger.debug(pullText);
             
-            const m = await message.channel.send("Bot files have been updated!");
+            const m = await message.channel.send({
+                embed: {
+                    color: 3447003,
+                    description: pullText,
+                }
+            });
         })
     }
 }
