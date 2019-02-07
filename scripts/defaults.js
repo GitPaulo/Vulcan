@@ -19,6 +19,13 @@ let essentialsList = [
             token: global.DEFAULT,
         }
     },
+    {
+        location: rootPath + "/settings/database_credentials.yaml",
+        defaultData: {
+            username: "ur mom gay",
+            password: "no u"
+        }
+    }
 ];
 
 (function () {

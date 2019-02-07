@@ -12,13 +12,12 @@ class Ping extends Command {
                 usages: 2,
                 duration: 10
             },
-            args: []
+            args: {}
         });
     }
 
-    async validate (message) {
-        // Code ran to check if someone can execute this command; (need to decide on args)
-        return true; // if true execute() will run
+    async validate (message, hasValidArguments) {
+        return hasValidArguments; // if true execute() will run
     }
 
     async execute (message) {

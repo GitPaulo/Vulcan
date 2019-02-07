@@ -24,6 +24,20 @@ class Command {
     execute () {
         throw new Error("This method has not been implemented!");
     }
+
+    /*
+        {
+            key: 'text',
+            prompt: 'What text would you like the bot to say?',
+            type: 'string'
+        }
+    */
+    validateMessageArguments(message_args) {
+        /*for (let metaArgData of message_args) { // not iterable
+            // finish this
+        }*/
+        return true;
+    }
 }
 
 module.exports = Command;

@@ -20,31 +20,13 @@ vulcan.on("message", async message => {
 
     if (message.isCommand) {
         let cmd = message.command;
-<<<<<<< HEAD
-        if(cmd.validate(message)){
+        let va  = cmd.validateMessageArguments(message); // Returns boolean wethere - if arguments of message match expected meta-data of arguments of command.
+        if(cmd.validate(message, va)){
            cmd.execute(message);
         }else{
-            // Not allowed!
+            message.channel.send("Command validation failed :(!"); // changed to custom embed - is this async?
         }
     }else{
-        // Not a valid command!
-=======
-        if (cmd.validate(message)) {
-            cmd.execute(message);
-        } else {
-
-        }
-    } else {
-
->>>>>>> b0e6a92a7f4513829a59b6b6c316ff8dfe04c82a
+        message.channel.send("Invalid command received!");
     }
-    /*
-    const args    = message.content.slice(1).trim().split(/ +/g);
-    const command = args.shift().toLowerCase();
-
-    if (command === "say") {
-        const sayMessage = args.join(" ");
-        message.delete().catch(O_o => {});
-        message.channel.send(sayMessage);
-    }*/
 });

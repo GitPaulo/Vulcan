@@ -14,14 +14,12 @@ class MessageParser {
         let command = this.vulcan.commands[firstword];
 
         if (!command)
-            return false;
+            return; // no need to return bool message.isCommand is false by default
         
         let args      = matches.shift();
         let argString = matches.join(' ');
         
         this.message.initCommand(command, argString, args, raw, firstword);
-        
-        return true;
     }
 }
 
