@@ -37,9 +37,9 @@ class Vulcan extends Client {
 
         // Class that handles loading all commands recursively from commands/ dir
         this.commands = new CommandLoader(this).loadCommands();
-        console.log(this.commands);
+
         // Log all node-js process unhandled exceptions
-        process.on("unhandledRejection", (e) => this.logger.error(e));
+        //process.on("unhandledRejection", (e) => this.logger.error(e));
 
         // Vulcan is here!
         this.logger.print(couldnt_have_forged_it_better_myself);
@@ -50,6 +50,7 @@ class Vulcan extends Client {
         // Load Events
         let eventsPath = path.join(rootPath, "events");
         
+        let vulcan = this;
         fs.readdirSync(eventsPath).forEach(function (file) {
             vulcan.logger.info("Vulcan is loading event file '" + file + "'.");
             
@@ -60,7 +61,7 @@ class Vulcan extends Client {
             vulcan.logger.info("Finished loading event file '" + file + "' (took " + rutil.round(t,2) + "ms).");
         });
         
-        return this;
+        return vulcan;
     }
 
     getOnlineStatistics () {

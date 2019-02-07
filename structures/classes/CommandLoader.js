@@ -8,8 +8,8 @@ let rootPath = path.dirname(require.main.filename)
 
 class CommandLoader {
     constructor (vulcan) {
-        this.vulcan      = vulcan; // at this point vulcan isnt global yet :*(
-        this.commandList = []; // Using array. Might be slow, theta(n/2) + object look up time. Use map in the future? Need to map all alias to cmd object tho *thinking*.
+        this.vulcan      = vulcan;
+        this.commandList = {};
     }
 
     loadCommands () {
@@ -25,7 +25,12 @@ class CommandLoader {
                 let fullPath     = path.join(rootPath, "commands/" + commandPath);
                 let CommandClass = require(fullPath);
 
-                this.commandList.push(new CommandClass());
+                let command = new CommandClass();
+                let keys    = [command.name, ...command.aliases];
+
+                for (let key of keys){
+                    this.commandList[key] = command;
+                }
 
                 t = rutil.round(performance.now() - t, 2);
                 this.vulcan.logger.info(`Loaded command ${cmdName} from ${commandPath} (took ${t}ms)`);

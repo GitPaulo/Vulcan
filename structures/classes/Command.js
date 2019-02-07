@@ -10,8 +10,8 @@ class Command {
         this.name  = rassert(properties.name, "Essential command name property is undefined!");
         this.group = rassert(properties.group, "Essential command group property is undefined!");
         this.args  = rassert(properties.args, "Essential command args property is undefined!");
-
-        this.group       = properties.group || "";
+        
+        this.aliases     = properties.aliases || [];
         this.description = properties.description || "[No description for this command]";
         this.examples    = properties.examples || [];
         this.throtling   = properties.throtling || { usages: -1, duration: -1 };

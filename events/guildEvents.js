@@ -1,3 +1,5 @@
+const vulcan = require("../bot");
+
 vulcan.on("guildCreate", guild => {
 
 });

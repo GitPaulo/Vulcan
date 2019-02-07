@@ -14,7 +14,10 @@ const configurations     = YAML.safeLoad(configurationsFile);
 const credentials        = YAML.safeLoad(credentialsFile);
 
 // Instantiate Vulcan Client Wrapper.
-global.vulcan = new Vulcan(configurations, credentials);  // I think this is an >>acceptable<< global variable?
+const vulcan = new Vulcan(configurations, credentials);  // if we have trouble with this - blame tacos. *tacos will fix*
+
+// Export (before loading events)
+module.exports = vulcan;
 
 // Fire in the hole.
 vulcan.loadEvents().connect();

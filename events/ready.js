@@ -1,3 +1,5 @@
+const vulcan = require("../bot");
+
 vulcan.on("ready", () => {
     vulcan.logger.info(`Bot has started, with ${vulcan.users.size} users, in ${vulcan.channels.size} channels of ${vulcan.guilds.size} guilds.`);
     vulcan.user.setActivity(`Under development!`);

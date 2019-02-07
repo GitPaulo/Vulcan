@@ -1,8 +1,10 @@
+const vulcan        = require("../bot");
 const MessageParser = require("../structures/classes/MessageParser");
 
-vulcan.on("message", async message => {
-    vulcan.logger.info("[GUILD: " + message.guild.name + "] =>[MESSAGE][" + message.author.username + "][" + message.channel.name + "]: " + message.toString());
-
+vulcan.on("message", async message => { 
+    // message.client === vulcan
+    vulcan.logger.info("[GUILD: " + message.guild.name + "] =>[MESSAGE][" + message.author.username + "][" + message.channel.name + "]: " + message.content);
+    
     // Don't respond to self - bad recursion can happen LULW
     if (message.author.bot) return; 
 
@@ -13,7 +15,7 @@ vulcan.on("message", async message => {
 
     if (!found) return; // Before we parse, we must check that it's worth parsing!
 
-    let mparser = new MessageParser(message);
+    let mparser = new MessageParser(vulcan, message); 
     mparser.parse();
 
     if (message.isCommand){
@@ -21,19 +23,14 @@ vulcan.on("message", async message => {
         if(cmd.validate(message)){
            cmd.execute(message);
         }else{
-
+            // Not allowed!
         }
     }else{
-
+        // Not a valid command!
     }
     /*
     const args    = message.content.slice(1).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
-
-    if (command === "ping") {
-        const m = await message.channel.send("Ping?");
-        m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(vulcan.ping)}ms`);
-    }
 
     if (command === "say") {
         const sayMessage = args.join(" ");
