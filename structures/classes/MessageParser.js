@@ -6,6 +6,10 @@ class MessageParser {
         this.message = message;
     }
 
+    stringToDataType (str) {
+
+    }
+
     parse () {
         let raw       = this.message.content;
         let matches   = raw.match(DISCORD_ARGS_REGULAR_EXPRESSION);
@@ -14,12 +18,18 @@ class MessageParser {
         let command = this.vulcan.commands[firstword];
 
         if (!command)
-            return; // no need to return bool message.isCommand is false by default
+            return { error = false, message = null };
+
+        let args = matches;
+        args.shift();
+      
+        let argString = args.join(' ');
         
-        let args      = matches.shift();
-        let argString = matches.join(' ');
-        
+        console.log(`[MESSAGE PARSER DEBUG] => Matches: [${matches}]`, `Arguments Array: [${args}]`, `Argument String: ${argString}`, `Parsed Name: ${firstword}`);
+
         this.message.initCommand(command, argString, args, raw, firstword);
+
+        return { error = false, message = null }; 
     }
 }
 

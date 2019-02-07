@@ -1,8 +1,8 @@
 const Command = require("../../structures/classes/Command");
 
 class Ping extends Command {
-    constructor () {
-        super({
+    constructor (type) { // type = root folder name (passed on by command loader)
+        super(type, {
             name: 'ping',
             aliases: ['pingpong', 'latency'],
             group: 'group2',
@@ -12,7 +12,7 @@ class Ping extends Command {
                 usages: 2,
                 duration: 10
             },
-            args: {}
+            args: []
         });
     }
 

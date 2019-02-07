@@ -2,8 +2,8 @@ const Command  = require("../../structures/classes/Command");
 const { exec } = require("child_process");
 
 class GitPull extends Command {
-    constructor () {
-        super({
+    constructor (type) {
+        super(type, {
             name: 'gitpull',
             aliases: ['updatefiles', 'pullgit'],
             group: 'group2',
@@ -13,7 +13,7 @@ class GitPull extends Command {
                 usages: 2,
                 duration: 10
             },
-            args: {}
+            args: []
         });
     }
 

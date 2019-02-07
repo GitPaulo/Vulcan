@@ -15,8 +15,11 @@ vulcan.on("message", async message => {
 
     if (!found) return; // Before we parse, we must check that it's worth parsing!
 
-    let mparser = new MessageParser(vulcan, message); 
-    mparser.parse();
+    let mparser    = new MessageParser(vulcan, message); 
+    let parseError = mparser.parse();
+
+    if (parseError.hasError)
+        message.channel.send("Parse error: " + parseError.message);
 
     if (message.isCommand) {
         let cmd = message.command;

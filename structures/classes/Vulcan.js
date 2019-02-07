@@ -1,12 +1,12 @@
 const { Client, Collection } = require('discord.js');
 const { _, performance }     = require('perf_hooks');
-const Logger                 = require('../../managers/Logger');
+const rutil                  = require('../../scripts/randomutils');
+const Logger                 = require('../../managers/LogManager');
+const StorageManager         = require("../../managers/StorageManager");
 const CommandLoader          = require("./CommandLoader");
-const StorageManager         = require("./StorageManager");
 const os                     = require("os");
 const fs                     = require('fs');
 const path                   = require('path');
-const rutil                  = require('../../scripts/randomutils');
 
 const couldnt_have_forged_it_better_myself = `\\ \\    / /   | |                
  \\ \\  / /   _| | ___ __ _ _ __  

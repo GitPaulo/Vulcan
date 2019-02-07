@@ -6,7 +6,8 @@ function rassert (exp, msg) {
 }
 
 class Command {
-    constructor (properties) {
+    constructor (type, properties) {
+        this.type  = rassert(typeof type == "string" && type, "Command type property is invalid! Please check file structure & CommandLoader.") // && statement to return last true value
         this.name  = rassert(properties.name, "Essential command name property is undefined!");
         this.group = rassert(properties.group, "Essential command group property is undefined!");
         this.args  = rassert(properties.args, "Essential command args property is undefined!");
@@ -32,11 +33,23 @@ class Command {
             type: 'string'
         }
     */
-    validateMessageArguments(message_args) {
-        /*for (let metaArgData of message_args) { // not iterable
-            // finish this
-        }*/
-        return true;
+    validateMessageArguments (message) {
+        let messageArgs = message.args;
+        let command     = message.command;
+
+        let problemFound     = false;
+        let messageArgsIndex = 0;
+
+        for (let metadata of command.args) { // not iterable
+            let messageArg = messageArgs[messageArgsIndex];
+
+            if (typeof messagaArg ==! metadata.type){
+                problemFound = true;
+                break;
+            }
+        }
+
+        return problemFound;
     }
 }
 
