@@ -4,10 +4,10 @@ vulcan.on("message", async message => {
     vulcan.logger.info("[GUILD: " + message.guild.name + "] =>[MESSAGE][" + message.author.username + "][" + message.channel.name + "]: " + message.toString());
 
     // Don't respond to self - bad recursion can happen LULW
-    if (message.author.bot) return; 
+    if (message.author.bot) return;
 
     let found = false;
-    for (let prefix of vulcan.configurations.prefixes){
+    for (let prefix of vulcan.configurations.prefixes) {
         found = found || Boolean(message.content[0] == prefix);
     }
 
@@ -16,14 +16,14 @@ vulcan.on("message", async message => {
     let mparser = new MessageParser(message);
     mparser.parse();
 
-    if (message.isCommand){
+    if (message.isCommand) {
         let cmd = message.command;
-        if(cmd.validate(message)){
-           cmd.execute(message);
-        }else{
+        if (cmd.validate(message)) {
+            cmd.execute(message);
+        } else {
 
         }
-    }else{
+    } else {
 
     }
     /*

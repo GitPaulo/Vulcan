@@ -2,6 +2,7 @@ const { Client, Collection } = require('discord.js');
 const { _, performance }     = require('perf_hooks');
 const Logger                 = require('../../managers/Logger');
 const CommandLoader          = require("./CommandLoader");
+const StorageManager         = require("./StorageManager");
 const os                     = require("os");
 const fs                     = require('fs');
 const path                   = require('path');
@@ -33,7 +34,7 @@ class Vulcan extends Client {
         this.logger = Logger.LoggerFactory.getInstance();
 
         // DATABASE MANAGER NEEDED <<< TACUUUUUS
-        this.storageManager = null;
+        this.storageManager = new StorageManager();
 
         // Class that handles loading all commands recursively from commands/ dir
         this.commands = new CommandLoader(this).loadCommands();

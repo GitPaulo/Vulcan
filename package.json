@@ -25,6 +25,7 @@
     "discord.js-commando": "github:discordjs/Commando",
     "eslint": "^5.13.0",
     "js-yaml": "^3.12.1",
+    "mongoose": "^5.4.10",
     "npm": "^6.7.0"
   }
 }
