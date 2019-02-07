@@ -86,7 +86,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # PLS NO LEAK KEK
-settings/noleakdata.yaml
+settings/
 
 # Ignore logs folder
 logs/
