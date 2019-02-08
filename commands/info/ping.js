@@ -8,10 +8,7 @@ class Ping extends Command {
             group: 'group2',
             description: 'Pings the bot and wait for a reply displaying the latency in ms.',
             examples: ['ping'],
-            throttling: {
-                usages: 2,
-                duration: 10
-            },
+            throttling: 2000,
             args: []
         });
     }

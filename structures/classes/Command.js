@@ -15,11 +15,29 @@ class Command {
         this.aliases     = properties.aliases || [];
         this.description = properties.description || "[No description for this command]";
         this.examples    = properties.examples || [];
-        this.throtling   = properties.throtling || { usages: -1, duration: -1 };
+        this.throtling   = properties.throtling || 1;
+        this.lastUserCalls = {}
     }
 
     validate () {
         throw new Error("This method has not been implemented!");
+    }
+
+    checkTimeout(author) {
+        if(!author in this.lastUserCalls) {
+            this.lastUserCalls[author] = new Date();
+            return true;
+        } else {
+            currentDate = new Date();
+            timeDiff = currentDate.getTime() - this.lastUserCalls[author].getTime()
+            if(timeDiff < this.throtling) {
+                this.lastUserCalls[author] = currentDate;
+                return true;
+            } else {
+                return false;
+            }
+        }
+
     }
 
     execute () {

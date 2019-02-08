@@ -23,14 +23,17 @@ vulcan.on("message", async message => {
 
     if (message.isCommand) {
         let cmd = message.command;
-        let va  = cmd.validateMessageArguments(message); // Returns boolean wethere - if arguments of message match expected meta-data of arguments of command.
-        let canExecute = await cmd.validate(message, va);
-        if(canExecute){
-           await cmd.execute(message);
-        }else{
-            message.channel.send("Command validation failed :(!"); // changed to custom embed - is this async?
+        let va = cmd.validateMessageArguments(message); // Returns boolean wethere - if arguments of message match expected meta-data of arguments of command.
+        let hasTimedOut = cmd.checkTimeout(message.author);
+        let canExecute = hasTimedOut && await cmd.validate(message, va);
+        if (canExecute) {
+            await cmd.execute(message);
+        } else {
+            // maybe change to handle this as exceptions
+            userMessage = hasTimedOut ? "WAIT YOU FUCKER!" : "Command validation failed :(!";
+            message.channel.send(userMessage); // changed to custom embed - is this async?
         }
-    }else{
+    } else {
         message.channel.send("Invalid command received!");
     }
-});
+    });
