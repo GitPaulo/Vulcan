@@ -37,19 +37,19 @@ class Command {
         let messageArgs = message.args;
         let command     = message.command;
 
-        let problemFound     = false;
-        let messageArgsIndex = 0;
+        let hasValidArguments = true;
+        let messageArgsIndex  = 0;
 
         for (let metadata of command.args) { // not iterable
             let messageArg = messageArgs[messageArgsIndex];
-
-            if (typeof messagaArg ==! metadata.type){
-                problemFound = true;
+            console.log(messageArg, typeof messageArg, metadata.type, typeof messageArg != typeof metadata.type);
+            if (typeof messageArg != typeof metadata.type){
+                hasValidArguments = false;
                 break;
             }
         }
 
-        return problemFound;
+        return hasValidArguments;
     }
 }
 

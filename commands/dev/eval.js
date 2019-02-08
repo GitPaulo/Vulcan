@@ -1,4 +1,6 @@
-const Command  = require("../../structures/classes/Command");
+const Command            = require("../../structures/classes/Command");
+const { _, performance } = require('perf_hooks');
+const rutil               = require('../../scripts/randomutils');
 
 class Eval extends Command {
     constructor (type) {
@@ -27,7 +29,17 @@ class Eval extends Command {
     }
 
     async execute (message) {
-        
+        let t = performance.now();
+        let returnValue;
+
+        try {
+            returnValue = await eval(message.args[0]);
+        } catch (e) {
+            returnValue = e.toString();
+        }
+
+        t = rutil.round(performance.now() - t, 2);
+        message.channel.send(`Return (time: ${t}ms): \`` + returnValue + "`");
     }
 }
 

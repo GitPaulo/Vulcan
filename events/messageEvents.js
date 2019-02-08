@@ -24,8 +24,9 @@ vulcan.on("message", async message => {
     if (message.isCommand) {
         let cmd = message.command;
         let va  = cmd.validateMessageArguments(message); // Returns boolean wethere - if arguments of message match expected meta-data of arguments of command.
-        if(cmd.validate(message, va)){
-           cmd.execute(message);
+        let canExecute = await cmd.validate(message, va);
+        if(canExecute){
+           await cmd.execute(message);
         }else{
             message.channel.send("Command validation failed :(!"); // changed to custom embed - is this async?
         }
