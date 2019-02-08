@@ -1,6 +1,6 @@
 const { Client, Collection } = require('discord.js');
 const { _, performance }     = require('perf_hooks');
-const rutil                  = require('../../scripts/randomutils');
+const RUtil                  = require('../../scripts/randomutils');
 const Logger                 = require('../../managers/LogManager');
 const StorageManager         = require("../../managers/StorageManager");
 const CommandLoader          = require("./CommandLoader");
@@ -59,7 +59,7 @@ class Vulcan extends Client {
             module.exports[path.basename(file, '.js')] = require(path.join(eventsPath, file)); // Store module with its name (from filename)
             t = performance.now() - t;
 
-            vulcan.logger.info("Finished loading event file '" + file + "' (took " + rutil.round(t,2) + "ms).");
+            vulcan.logger.info("Finished loading event file '" + file + "' (took " + RUtil.round(t,2) + "ms).");
         });
         
         return vulcan;
