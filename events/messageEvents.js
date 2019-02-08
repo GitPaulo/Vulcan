@@ -1,5 +1,6 @@
 const vulcan        = require("../bot");
 const MessageParser = require("../structures/classes/MessageParser");
+const MessageEmbeds = require("../scripts/messageEmbeds");
 
 vulcan.on("message", async message => { 
     // message.client === vulcan
@@ -19,7 +20,7 @@ vulcan.on("message", async message => {
     let parseError    = messageParser.parse(vulcan, message); // changes the message objet! (if command: attaches extra properties)
 
     if (parseError.hasError)
-        message.channel.send("Parse error: " + parseError.message);
+        message.channel.send(MessageEmbeds.error(message.author.username, "Command Validation", `Command Parse error: ${parseError.message}`));
 
     if (message.isCommand) {
         let cmd = message.command;
@@ -30,10 +31,12 @@ vulcan.on("message", async message => {
             await cmd.execute(message);
         } else {
             // maybe change to handle this as exceptions
-            userMessage = hasTimedOut ? "WAIT YOU FUCKER!" : "Command validation failed :(!";
+            userMessage = hasTimedOut ? "Command Timeout triggered => WOA, WAIT YOU FUCKER!" : "Command validation failed :(!";
+            userMessage = MessageEmbeds.warning(message.author.username, "Command Validation", userMessage);
+
             message.channel.send(userMessage); // changed to custom embed - is this async?
         }
     } else {
-        message.channel.send("Invalid command received!");
+        message.channel.send(MessageEmbeds.warning(message.author.username, "Command Existance Check", "The command you have entered does not exist!"));
     }
     });

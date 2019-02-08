@@ -23,5 +23,5 @@ class Message extends Discord.Message {
         return this;
     }
 }
-
+console.log(Discord.TextChannel);
 Discord.Structures.extend('Message', m => Message);
