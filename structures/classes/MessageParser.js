@@ -1,15 +1,13 @@
 const DISCORD_ARGS_REGULAR_EXPRESSION = /"+([^;]*)"+|{+([^;]*)}+|`+([^;]*)`+|\[([^;]*)\]|\S+/g;
 
-class MessageParser {
-    constructor (vulcan, message) {
-        this.vulcan  = vulcan;
-        this.message = message;
-    }
-
-    parseStringToDataTypes (targetText) {
+let MessageParserFactory = (function () {
+    function parseStringToDataTypes (targetText) {
         let matches      = targetText.match(DISCORD_ARGS_REGULAR_EXPRESSION);
         let parsedValues = [];
 
+        if (matches === null)
+            return parsedValues;
+            
         for(let i = 0; i < matches.length; i++) {
             let match       = matches[i]
             parsedValues[i] = Number(match);
@@ -34,29 +32,44 @@ class MessageParser {
         return parsedValues;
     }
 
-    parse () {
-        let raw       = this.message.content;
-        let matches   = raw.match(DISCORD_ARGS_REGULAR_EXPRESSION);
-        let firstword = matches[0].slice(1);
+    function MessageParser() {
+        this.parse = function (vulcan, message) {
+            let raw       = message.content;
+            let matches   = raw.match(DISCORD_ARGS_REGULAR_EXPRESSION);
+            let firstword = matches[0].slice(1);
 
-        let command = this.vulcan.commands[firstword];
+            let command = vulcan.commands[firstword];
 
-        if (!command)
-            return { error: false, message: null };
+            if (!command)
+                return { error: false, message: null };
 
-        let args = matches;
-        args.shift();
+            let args = matches;
+            args.shift();
 
-        let argString = args.join(' ').trim();
-        args = this.parseStringToDataTypes(argString);
+            let argString = args.join(' ').trim();
+            args = parseStringToDataTypes(argString);
 
-        console.log(args, "<<< parsed values");
-        console.log(`[MESSAGE PARSER DEBUG] => Matches: [${matches}]`, `Arguments Array: [${args}](wrong types check above spew)`, `Argument String: ${argString}`, `Parsed Name: ${firstword}`);
+            console.log(args, "<<< parsed values");
+            console.log(`[MESSAGE PARSER DEBUG] => Matches: [${matches}]`, `Arguments Array: [${args}](wrong types check above spew)`, `Argument String: ${argString}`, `Parsed Name: ${firstword}`);
 
-        this.message.initCommand(command, argString, args, raw, firstword);
+            message.initCommand(command, argString, args, raw, firstword);
 
-        return { error: false, message: null }; 
+            return { error: false, message: null }; 
+        }
     }
-}
 
-module.exports = MessageParser;
+    let instance;
+
+    return {
+        getInstance: function () {
+            if (instance == null) {
+                instance = new MessageParser();
+                // Hide the constructor so the returned object can't be new'd...
+                instance.constructor = null;
+            }
+            return instance;
+        }
+    };
+})();
+
+module.exports = MessageParserFactory;

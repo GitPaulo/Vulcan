@@ -189,4 +189,4 @@ let LoggerFactory = (function () {
 })();
 
 // Use exports!
-module.exports.LoggerFactory = LoggerFactory;
+module.exports = LoggerFactory;

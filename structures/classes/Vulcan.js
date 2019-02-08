@@ -31,7 +31,7 @@ class Vulcan extends Client {
         });
 
         // Logger from Singleton 
-        this.logger = Logger.LoggerFactory.getInstance();
+        this.logger = Logger.getInstance();
 
         // DATABASE MANAGER NEEDED <<< TACUUUUUS
         this.storageManager = new StorageManager();

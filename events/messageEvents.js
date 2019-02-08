@@ -15,8 +15,8 @@ vulcan.on("message", async message => {
 
     if (!found) return; // Before we parse, we must check that it's worth parsing!
 
-    let mparser    = new MessageParser(vulcan, message); 
-    let parseError = mparser.parse();
+    let messageParser = MessageParser.getInstance();
+    let parseError    = messageParser.parse(vulcan, message); // changes the message objet! (if command: attaches extra properties)
 
     if (parseError.hasError)
         message.channel.send("Parse error: " + parseError.message);
