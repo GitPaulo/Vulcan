@@ -16,21 +16,20 @@ class CommandLoader {
         let commandsFolderPath = path.join(__dirname, "../../commands");
         const commands         = rutil.getAllFiles(commandsFolderPath);
         
-        console.log(commands);
+
 
         for (let commandPath of commands) {
             let t       = performance.now();
             let matches = commandPath.match(/\w*.js/)
             let cmdName = matches[matches.length - 1].slice(0, -3);
-            
             try {
-                let fullPath     = path.join(rootPath, "commands/" + commandPath);
+                let fullPath     = path.join(rootPath, "commands", commandPath);
                 let CommandClass = require(fullPath);
-
                 let s = `\\`;
                 let firstOccurrence = commandPath.indexOf(s)
                 let lastOccurrence  = commandPath.lastIndexOf(s);
                 let CommandType     = commandPath.substring(firstOccurrence+1, lastOccurrence).replace(s, ".");
+                console.log("CommandType: " + CommandType);
 
                 let command = new CommandClass(CommandType);
                 let keys    = [command.name, ...command.aliases];

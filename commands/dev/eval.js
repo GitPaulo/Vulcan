@@ -10,10 +10,7 @@ class Eval extends Command {
             group: 'group2',
             description: 'Evaluates javascript code using an internal environment.',
             examples: ['eval 1+1'],
-            throttling: {
-                usages: 2,
-                duration: 10
-            },
+            throttling: 2000,
             args: [
                 {
                     key: 'text',

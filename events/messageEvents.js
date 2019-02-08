@@ -25,7 +25,7 @@ vulcan.on("message", async message => {
         let cmd = message.command;
         let va = cmd.validateMessageArguments(message); // Returns boolean wethere - if arguments of message match expected meta-data of arguments of command.
         let hasTimedOut = cmd.checkTimeout(message.author);
-        let canExecute = hasTimedOut && await cmd.validate(message, va);
+        let canExecute = !hasTimedOut && await cmd.validate(message, va);
         if (canExecute) {
             await cmd.execute(message);
         } else {

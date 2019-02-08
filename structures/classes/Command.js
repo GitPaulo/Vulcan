@@ -15,8 +15,8 @@ class Command {
         this.aliases     = properties.aliases || [];
         this.description = properties.description || "[No description for this command]";
         this.examples    = properties.examples || [];
-        this.throtling   = properties.throtling || 1;
-        this.lastUserCalls = {}
+        this.throttling   = properties.throttling || 1;
+        this.lastUserCalls = {};
     }
 
     validate () {
@@ -24,21 +24,20 @@ class Command {
     }
 
     checkTimeout(author) {
-        if(!author in this.lastUserCalls) {
-            this.lastUserCalls[author] = new Date();
-            return true;
+        if(!(author.id in this.lastUserCalls)) {
+            this.lastUserCalls[author.id] = new Date();
+            return false;
         } else {
-            currentDate = new Date();
-            timeDiff = currentDate.getTime() - this.lastUserCalls[author].getTime()
-            if(timeDiff < this.throtling) {
-                this.lastUserCalls[author] = currentDate;
-                return true;
-            } else {
+            let currentDate = new Date();
+            let timeDiff = currentDate.getTime() - this.lastUserCalls[author.id].getTime();
+            if(timeDiff > this.throttling) {
+                this.lastUserCalls[author.id] = currentDate;
                 return false;
             }
         }
-
+        return true;
     }
+    
 
     execute () {
         throw new Error("This method has not been implemented!");

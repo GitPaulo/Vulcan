@@ -9,10 +9,7 @@ class GitPull extends Command {
             group: 'group2',
             description: 'Automatically updates files from github',
             examples: ['gitpull'],
-            throttling: {
-                usages: 2,
-                duration: 10
-            },
+            throttling: 2000,
             args: []
         });
     }
