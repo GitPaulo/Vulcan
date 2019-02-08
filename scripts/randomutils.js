@@ -3,11 +3,13 @@ const fs                 = require("fs");
 const path               = require("path");
 const { _, performance } = require('perf_hooks');
 
-exports.round = function (value, decimals) {
+const RUtil = { };
+
+RUtil.round = function (value, decimals) {
     return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
 }
 
-exports.loadModules = function (path){
+RUtil.loadModules = function (path){
     const extensions = ["js", ""];
     const modules    = fs.readdirSync(path);
 
@@ -22,17 +24,17 @@ exports.loadModules = function (path){
         if (!extensions.includes(ext)) continue;
 
         const name = fileData.join("");
-        exports[name] = require(`${path}/${mod}`);
+        exports[name] = require(`${path}/${mod}`); // this is dumb, exports is local to util file :C
         n++;
     }
 
-    t = exports.round(performance.now()-t, 2);
+    t = RUtil.round(performance.now()-t, 2);
     console.log(`=[ Sucessfully loaded ${n} modules at '${path}' (took ${t}ms) ]=`);
 
     return n;
 }
 
-exports.getAllFiles = function (dir, fileTypes = ".js") {
+RUtil.getAllFiles = function (dir, fileTypes = ".js") {
     var filesToReturn = [];
     
     function walkDir(currentPath) {
@@ -50,3 +52,5 @@ exports.getAllFiles = function (dir, fileTypes = ".js") {
     walkDir(dir);
     return filesToReturn; 
 }
+
+module.exports = RUtil;
