@@ -14,8 +14,8 @@ class GitPull extends Command {
         });
     }
 
-    async validate(message, hasValidArguments) {
-        return hasValidArguments; // if true execute() will run
+    async validate(message) {
+        return true; // if true execute() will run
     }
 
     async execute(message) {

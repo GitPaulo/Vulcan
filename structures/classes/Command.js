@@ -38,7 +38,7 @@ class Command {
         return true;
     }
     
-    execute () {
+    execute() {
         throw new Error("This method has not been implemented!");
     }
 
@@ -49,23 +49,27 @@ class Command {
             type: 'string'
         }
     */
-    validateMessageArguments (message) {
+    validateMessageArguments(message) {
         let messageArgs = message.args;
         let command     = message.command;
 
-        let hasValidArguments = true;
-        let messageArgsIndex  = 0;
+        let hasValidArguments    = true;
+        let messageArgsIndex     = 0;
+        let invalidArgsPositions = [];
 
         for (let metadata of command.args) { // not iterable
             let messageArg = messageArgs[messageArgsIndex];
-            console.log(messageArg, typeof messageArg, metadata.type, typeof messageArg != typeof metadata.type);
-            if (typeof messageArg != typeof metadata.type) {
+            console.log(messageArg, typeof messageArg, metadata.type, typeof messageArg !== typeof metadata.type);
+            if (typeof messageArg !== typeof metadata.type) {
+                invalidArgsPositions.push(messageArgsIndex);
                 hasValidArguments = false;
-                break;
             }
         }
 
-        return hasValidArguments;
+        return {
+            isValid: hasValidArguments,
+            list: invalidArgsPositions
+        }
     }
 }
 

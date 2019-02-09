@@ -19,8 +19,8 @@ class Eval extends Command {
         });
     }
 
-    async validate(message, hasValidArguments) {
-        return hasValidArguments; // if true execute() will run
+    async validate(message) {
+        return true; // if true execute() will run
     }
 
     async execute(message) {
@@ -34,7 +34,7 @@ class Eval extends Command {
         }
 
         t = RUtil.round(performance.now() - t, 2);
-        message.channel.send(`Return (time: ${t}ms): \`` + returnValue + "`");
+        message.channel.send(`Result (time: ${t}ms): \`` + returnValue + "`");
     }
 }
 

@@ -2,6 +2,7 @@ const vulcan        = require("../bot");
 const MessageParser = require("../structures/classes/MessageParser");
 const MessageEmbeds = require("../scripts/messageEmbeds");
 
+// Reminder: Check if message.channel.send() is async if so use await?
 vulcan.on("message", async message => {
     // message.client === vulcan
     vulcan.logger.info("[GUILD: " + message.guild.name + "] =>[MESSAGE][" + message.author.username + "][" + message.channel.name + "]: " + message.content);
@@ -23,11 +24,18 @@ vulcan.on("message", async message => {
         message.channel.send(MessageEmbeds.error(message.author.username, "Command Validation", `Command Parse error: ${parseError.message}`));
 
     if (message.isCommand) {
-        let cmd = message.command;
-        let va  = cmd.validateMessageArguments(message); // Returns boolean wethere - if arguments of message match expected meta-data of arguments of command.
+        let cmd        = message.command;
+        let validation = cmd.validateMessageArguments(message); // Returns an object: { isValid: (boolean), list: (array) } // list: array with entries related to index of the invalid arg
         
-        let hasTimedOut = cmd.checkTimeout(message.author);
-        let canExecute  = !hasTimedOut && await cmd.validate(message, va);
+        if (!validation.isValid) {
+            let invalidArguments = validation.list.toString();
+            message.channel.send(MessageEmbeds.warning(message.author.username, "Command Argument Validation", `The arguments corresponding to positions: \`${invalidArguments}\` did not match the expected types!`));
+            return;
+        }
+
+        let hasTimedOut       = cmd.checkTimeout(message.author);
+        let isExternallyValid = await cmd.validate(message);
+        let canExecute        = !hasTimedOut && isExternallyValid;
         
         if (canExecute) {
             await cmd.execute(message);
@@ -36,7 +44,7 @@ vulcan.on("message", async message => {
             userMessage = hasTimedOut ? "Command Timeout triggered => WOA, WAIT YOU FUCKER!" : "Command validation failed :(!";
             userMessage = MessageEmbeds.warning(message.author.username, "Command Validation", userMessage);
 
-            message.channel.send(userMessage); // changed to custom embed - is this async?
+            message.channel.send(userMessage); 
         }
     } else {
         message.channel.send(MessageEmbeds.warning(message.author.username, "Command Existance Check", "The command you have entered does not exist!"));
