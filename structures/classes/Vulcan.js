@@ -33,14 +33,17 @@ class Vulcan extends Client {
         // Logger from Singleton 
         this.logger = Logger.getInstance();
 
-        // DATABASE MANAGER NEEDED <<< TACUUUUUS
+        // Storage manager needs some work boys
         this.storageManager = new StorageManager();
 
         // Class that handles loading all commands recursively from commands/ dir
         this.commands = new CommandLoader(this).loadCommands();
 
         // Log all node-js process unhandled exceptions
-        //process.on("unhandledRejection", (e) => this.logger.error(e));
+        process.on("unhandledRejection", (e) => {
+            this.logger.error(e)
+            throw e; // for now throw everything!
+        });
 
         // Vulcan is here!
         this.logger.print(couldnt_have_forged_it_better_myself);
@@ -50,8 +53,8 @@ class Vulcan extends Client {
     loadEvents () {
         // Load Events
         let eventsPath = path.join(rootPath, "events");
-        
-        let vulcan = this;
+        let vulcan     = this; // this scope hack-thingymacjig
+
         fs.readdirSync(eventsPath).forEach(function (file) {
             vulcan.logger.info("Vulcan is loading event file '" + file + "'.");
             
@@ -85,7 +88,7 @@ class Vulcan extends Client {
 
         if (this.credentials.token === global.DEFAULT) {
             this.logger.warn(">>>>>>>> TOKEN IS MISSING FROM noleakdata.yaml FILE <<<<<<<<<");
-        }else{
+        } else {
             this.login(this.credentials.token).then((token) => {
                 this.logger.info(`Sucessfully logged in to discord servers with token: ${token}`)
             }).catch((err) => {

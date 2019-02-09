@@ -1,31 +1,31 @@
 const DISCORD_ARGS_REGULAR_EXPRESSION = /"+([^;]*)"+|{+([^;]*)}+|`+([^;]*)`+|\[([^;]*)\]|\S+/g;
 
 let MessageParserFactory = (function () {
-    function parseStringToDataTypes (targetText) {
+    function parseStringToDataTypes(targetText) {
         let matches      = targetText.match(DISCORD_ARGS_REGULAR_EXPRESSION);
         let parsedValues = [];
 
         if (matches === null)
             return parsedValues;
-            
-        for(let i = 0; i < matches.length; i++) {
+
+        for (let i = 0; i < matches.length; i++) {
             let match       = matches[i]
             parsedValues[i] = Number(match);
-            
+
             if (!isNaN(parsedValues[i]))
                 continue;
-                
+
             parsedValues[i] = match === "false" ? false : match === "true" ? true : undefined;
-       
+
             if (parsedValues[i] !== undefined)
                 continue;
-            
-            try{    
+
+            try {
                 parsedValues[i] = JSON.parse(match);
-            }catch(e){
+            } catch (e) {
                 parsedValues[i] = null;
             }
-            
+
             parsedValues[i] = parsedValues[i] === null ? match : parsedValues[i];
         }
 
@@ -41,20 +41,26 @@ let MessageParserFactory = (function () {
             let command = vulcan.commands[firstword];
 
             if (!command)
-                return { error: false, message: null };
+                return {
+                    error: false,
+                    message: null
+                };
 
             let args = matches;
             args.shift();
 
             let argString = args.join(' ').trim();
-            args = parseStringToDataTypes(argString);
+            args          = parseStringToDataTypes(argString);
 
             console.log(args, "<<< parsed values");
             console.log(`[MESSAGE PARSER DEBUG] => Matches: [${matches}]`, `Arguments Array: [${args}](wrong types check above spew)`, `Argument String: ${argString}`, `Parsed Name: ${firstword}`);
 
             message.initCommand(command, argString, args, raw, firstword);
 
-            return { error: false, message: null }; 
+            return {
+                error: false,
+                message: null
+            };
         }
     }
 

@@ -1,30 +1,30 @@
 const assert = require("assert");
 
-function rassert (exp, msg) {
+function rassert(exp, msg) {
     assert(exp, msg)
     return exp;
 }
 
 class Command {
-    constructor (type, properties) {
+    constructor(type, properties) {
         this.type  = rassert(typeof type == "string" && type, "Command type property is invalid! Please check file structure & CommandLoader.") // && statement to return last true value
         this.name  = rassert(properties.name, "Essential command name property is undefined!");
         this.group = rassert(properties.group, "Essential command group property is undefined!");
         this.args  = rassert(properties.args, "Essential command args property is undefined!");
         
-        this.aliases     = properties.aliases || [];
-        this.description = properties.description || "[No description for this command]";
-        this.examples    = properties.examples || [];
-        this.throttling   = properties.throttling || 1;
+        this.aliases       = properties.aliases || [];
+        this.description   = properties.description || "[No description for this command]";
+        this.examples      = properties.examples || [];
+        this.throttling    = properties.throttling || 1;
         this.lastUserCalls = {};
     }
 
-    validate () {
+    validate() {
         throw new Error("This method has not been implemented!");
     }
 
     checkTimeout(author) {
-        if(!(author.id in this.lastUserCalls)) {
+        if (!(author.id in this.lastUserCalls)) {
             this.lastUserCalls[author.id] = new Date();
             return false;
         } else {
@@ -38,7 +38,6 @@ class Command {
         return true;
     }
     
-
     execute () {
         throw new Error("This method has not been implemented!");
     }
@@ -60,7 +59,7 @@ class Command {
         for (let metadata of command.args) { // not iterable
             let messageArg = messageArgs[messageArgsIndex];
             console.log(messageArg, typeof messageArg, metadata.type, typeof messageArg != typeof metadata.type);
-            if (typeof messageArg != typeof metadata.type){
+            if (typeof messageArg != typeof metadata.type) {
                 hasValidArguments = false;
                 break;
             }

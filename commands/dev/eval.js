@@ -3,7 +3,7 @@ const { _, performance } = require('perf_hooks');
 const RUtil              = require('../../scripts/randomutils');
 
 class Eval extends Command {
-    constructor (type) {
+    constructor(type) {
         super(type, {
             name: 'eval',
             aliases: ['js', 'runjs', 'jsrun'],
@@ -11,23 +11,21 @@ class Eval extends Command {
             description: 'Evaluates javascript code using an internal environment.',
             examples: ['eval 1+1'],
             throttling: 2000,
-            args: [
-                {
-                    key: 'text',
-                    prompt: 'Code to be evaluated.',
-                    type: 'string',
-                }
-            ]
+            args: [{
+                key: 'text',
+                prompt: 'Code to be evaluated.',
+                type: 'string',
+            }]
         });
     }
 
-    async validate (message, hasValidArguments) {
+    async validate(message, hasValidArguments) {
         return hasValidArguments; // if true execute() will run
     }
 
-    async execute (message) {
-        let t = performance.now();
+    async execute(message) {
         let returnValue;
+        let t = performance.now();
 
         try {
             returnValue = await eval(message.args[0]);

@@ -1,7 +1,7 @@
 const Command = require("../../structures/classes/Command");
 
 class Ping extends Command {
-    constructor (type) { // type = root folder name (passed on by command loader)
+    constructor(type) { // type = root folder name (passed on by command loader)
         super(type, {
             name: 'ping',
             aliases: ['pingpong', 'latency'],
@@ -13,14 +13,14 @@ class Ping extends Command {
         });
     }
 
-    async validate (message, hasValidArguments) {
+    async validate(message, hasValidArguments) {
         return hasValidArguments; // if true execute() will run
     }
 
-    async execute (message) {
+    async execute(message) {
         const m = await message.channel.send("Ping?");
         m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(message.client.ping)}ms`);
     }
 }
 
-module.exports = Ping; 
+module.exports = Ping;

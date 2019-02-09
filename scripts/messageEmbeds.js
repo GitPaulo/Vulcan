@@ -1,6 +1,6 @@
 var MessageEmbeds = {};
 
-MessageEmbeds.error = function(authorName = "", title, message) {
+MessageEmbeds.error = function (authorName = "", title, message) {
     return {
         embed: {
             color: 0xFF0000, // red
@@ -18,7 +18,7 @@ MessageEmbeds.error = function(authorName = "", title, message) {
     }
 }
 
-MessageEmbeds.warning = function(authorName = "", title, message) {
+MessageEmbeds.warning = function (authorName = "", title, message) {
     return {
         embed: {
             color: 0xff8d00, // orange

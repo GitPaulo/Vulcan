@@ -3,15 +3,15 @@ const fs                 = require("fs");
 const path               = require("path");
 const { _, performance } = require('perf_hooks');
 
-const RUtil = { };
+const RUtil = {};
 
 RUtil.round = function (value, decimals) {
-    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+    return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
 }
 
-RUtil.loadModules = function (path){
+RUtil.loadModules = function (path) {
     const extensions = ["js", ""];
-    const modules    = fs.readdirSync(path);
+    const modules = fs.readdirSync(path);
 
     let t = performance.now();
     let n = 0;
@@ -28,7 +28,7 @@ RUtil.loadModules = function (path){
         n++;
     }
 
-    t = RUtil.round(performance.now()-t, 2);
+    t = RUtil.round(performance.now() - t, 2);
     console.log(`=[ Sucessfully loaded ${n} modules at '${path}' (took ${t}ms) ]=`);
 
     return n;
@@ -36,11 +36,11 @@ RUtil.loadModules = function (path){
 
 RUtil.getAllFiles = function (dir, fileTypes = ".js") {
     var filesToReturn = [];
-    
+
     function walkDir(currentPath) {
         var files = fs.readdirSync(currentPath);
         for (var i in files) {
-            var curFile = path.join(currentPath, files[i]);      
+            var curFile = path.join(currentPath, files[i]);
             if (fs.statSync(curFile).isFile() && fileTypes.indexOf(path.extname(curFile)) != -1) {
                 filesToReturn.push(curFile.replace(dir, ''));
             } else if (fs.statSync(curFile).isDirectory()) {
@@ -50,7 +50,7 @@ RUtil.getAllFiles = function (dir, fileTypes = ".js") {
     };
 
     walkDir(dir);
-    return filesToReturn; 
+    return filesToReturn;
 }
 
 module.exports = RUtil;

@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 class Message extends Discord.Message {
-    constructor (...args) {
+    constructor(...args) {
         super(...args);
 
         this.isCommand  = false;
@@ -23,5 +23,5 @@ class Message extends Discord.Message {
         return this;
     }
 }
-console.log(Discord.TextChannel);
+
 Discord.Structures.extend('Message', m => Message);
