@@ -16,13 +16,13 @@ class StorageManager {
         
         this.db = mongoose.connection;
         this.db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-        this.test("https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif");
+        // this.test("https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif");
     }
 
-    test(link) {
-        let test = new gif({name: "cat", link: link, owner: 1});
-        test.save((err) => { if(err) vulcan.logger.error(err); });
-    }
+    // test(link) {
+    //     let test = new gif({name: "cat", link: link, owner: 1});
+    //     test.save((err) => { if(err) vulcan.logger.error(err); });
+    // }
 }
 
 module.exports = StorageManager;
