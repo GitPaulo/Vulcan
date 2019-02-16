@@ -5,7 +5,7 @@ const MessageEmbeds = require("../scripts/messageEmbeds");
 // Reminder: Check if message.channel.send() is async if so use await?
 vulcan.on("message", async message => {
     // message.client === vulcan
-    vulcan.logger.info("[GUILD: " + message.guild.name + "] =>[MESSAGE][" + message.author.username + "][" + message.channel.name + "]: " + message.content);
+    vulcan.logger.info("[GUILD: " + message.guild.name + "] => [MESSAGE][" + message.author.username + "][" + message.channel.name + "]: " + message.content);
 
     // Don't respond to self - bad recursion can happen LULW
     if (message.author.bot) return;

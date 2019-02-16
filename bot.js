@@ -21,3 +21,5 @@ module.exports = vulcan;
 
 // Fire in the hole.
 vulcan.loadEvents().connect();
+
+vulcan.logger.error("TESTING123");

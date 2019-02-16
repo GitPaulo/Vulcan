@@ -30,51 +30,50 @@ const classification = {
     }      
 }
 
-function initialiseLogFileFromClass(filePath, fileClass){
-    fs.writeFileSync(filePath, `[INIT File ${fileClass.filename} of Log classification ${fileClass.value}]`, function(err) {
-        if (err) throw err;
-    }); 
+function initialiseLogFileFromClass(filePath, logClass){
+    fs.writeFileSync(filePath, `[INIT File ${logClass.filename} of Log classification ${logClass.value}]\n`); 
 }
 
+// Note: Keep all file r/w/a methods sync to avoid deadlock. (unless you know what you are doing)
 // Create folder (logs and oldlogs) and files if non existant.
-const LOG_FILE_MAX_SIZE = 10*1024*1024; // 10Mb
+const LOG_FILE_MAX_SIZE = 3000; // 10Mb
 
 let folder_name = "logs";
 let rootPath    = path.dirname(require.main.filename);
 let folderPath  = path.join(rootPath, folder_name);
 
 if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath, function(e) {
-        if (e) throw e;
-    });
+    fs.mkdirSync(folderPath);
 }
 
 let oldLogsFolderPath = path.join(folderPath, "oldlogs");
 
 if (!fs.existsSync(oldLogsFolderPath)) {
-    fs.mkdirSync(oldLogsFolderPath, function(e) {
-        if (e) throw e;
-    });
+    fs.mkdirSync(oldLogsFolderPath);
 }
 
-for (let fileClassKey in classification) {
-    let fileClass = classification[fileClassKey];
-    let filePath  = path.join(folderPath, fileClass.filename);
+for (let logClassKey in classification) {
+    let logClass = classification[logClassKey];
+    let filePath  = path.join(folderPath, logClass.filename);
 
     if (!fs.existsSync(filePath)) {
-        initialiseLogFileFromClass(filePath, fileClass);
+        initialiseLogFileFromClass(filePath, logClass);
     }
 }
 
 // Implemented as Singleton class (or at least I tried)
 let LoggerFactory = (function () {
-    function constructLogObject(logLevel, text) {
+    function constructLogObject(logLevelID, text) {
+        let logLevelValue = logLevelsNumbers[logLevelID];
         let result = '(' + new Date().toLocaleString() + ')';
-        result += '[' + logLevel + '|' + logLevelsNumbers[logLevel] + '] =>';
+        result += '[' + logLevelID + '|' + logLevelValue + '] => ';
         result += text;
 
         return {
-            logLevel,
+            logLevel: {
+                id: logLevelID,
+                value: logLevelValue
+            },
             text: result,
         };
     }
@@ -119,9 +118,9 @@ let LoggerFactory = (function () {
             let highBound   = mediumBound + Math.floor(div + (mod > 1 ? 1 : 0));
             
             let c;
-            if (logLevel < lowBound) {
+            if (logLevel.value < lowBound) {
                 c = classification.IMPORTANT;
-            }else if(logLevel >= lowBound && logLevel < highBound) {
+            }else if(logLevel.value >= lowBound && logLevel.value < highBound) {
                 c = classification.CASUAL;
             }else{
                 c = classification.PLEB;
@@ -147,30 +146,24 @@ let LoggerFactory = (function () {
                 let fstr = (new Date().toJSON().slice(0,10)) + "_" + logClass.filename;
                 let numberOfRepeats = 0;
 
-                fs.readdirSync(oldLogsFolderPath, (err, files) => {
-                    if (err) throw err;
+                let files = fs.readdirSync(oldLogsFolderPath);
 
-                    for (var file of files) {
-                        if (file.includes(fstr))
-                            numberOfRepeats++;
-                    }
-                });
+                for (var file of files) {
+                    if (file.includes(fstr))
+                        numberOfRepeats++;
+                }
 
                 let oldLogFileName = fstr + (numberOfRepeats + 1);
                 let oldLogFilePath = path.join(oldLogsFolderPath, oldLogFileName);
 
-                fs.copyFile(logfilePath, oldLogFilePath, (err) => {
-                    if (err) throw err;
-                });
+                fs.copyFileSync(logfilePath, oldLogFilePath);
 
-                initialiseLogFileFromClass(filePath, fileClass);
+                initialiseLogFileFromClass(logfilePath, logClass);
             }
 
             // maybe use async? (Risks confusing log order - but benefits to bot performance?)
             // alternative is queue logs and then write a batch? Needs testing.
-            fs.appendFileSync(logfilePath, messageObject.text + "\n", function(err) {
-                if (err) throw err;
-            }); 
+            fs.appendFileSync(logfilePath, messageObject.text + "\n"); 
         }
     }
 

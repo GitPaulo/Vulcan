@@ -1,5 +1,5 @@
-const Command = require("../../structures/classes/Command");
-const RUtil = require("../../scripts/randomutils");
+const Command  = require("../../structures/classes/Command");
+const RUtil    = require("../../scripts/randomutils");
 const gifModel = require("../../structures/database/models/gif")
 
 class Gif extends Command {
@@ -62,7 +62,6 @@ class Gif extends Command {
                 }
                 message.edit("Memes in my possession: " + images);
             }
-
         })
     }
 
@@ -80,6 +79,7 @@ class Gif extends Command {
             link: link,
             owner: owner
         });
+        
         gif.save((err) => {
             if(err) {
                 vulcan.logger.error(err);
