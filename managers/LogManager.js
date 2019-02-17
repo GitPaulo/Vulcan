@@ -36,7 +36,7 @@ function initialiseLogFileFromClass(filePath, logClass){
 
 // Note: Keep all file r/w/a methods sync to avoid deadlock. (unless you know what you are doing)
 // Create folder (logs and oldlogs) and files if non existant.
-const LOG_FILE_MAX_SIZE = 3000; // 10Mb
+const LOG_FILE_MAX_SIZE = 1*1024*1024; // 1Mb
 
 let folder_name = "logs";
 let rootPath    = path.dirname(require.main.filename);
