@@ -1,6 +1,6 @@
 const Command            = require("../../structures/classes/Command");
 const { _, performance } = require('perf_hooks');
-const RUtil              = require('../../scripts/randomutils');
+const RandomUtility      = require('../../scripts/RandomUtility');
 
 class Eval extends Command {
     constructor(type) {
@@ -33,7 +33,7 @@ class Eval extends Command {
             returnValue = e.toString();
         }
 
-        t = RUtil.round(performance.now() - t, 2);
+        t = RandomUtility.round(performance.now() - t, 2);
         message.channel.send(`Result (time: ${t}ms): \`` + returnValue + "`");
     }
 }

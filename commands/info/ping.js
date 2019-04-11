@@ -1,5 +1,5 @@
 const Command = require("../../structures/classes/Command");
-const RUtil   = require("../../scripts/randomutils");
+const RandomUtility   = require("../../scripts/RandomUtility");
 
 class Ping extends Command {
     constructor(type) { // type = root folder name (passed on by command loader)
@@ -20,7 +20,7 @@ class Ping extends Command {
 
     async execute(message) {
         const m  = await message.channel.send("Ping?");
-        let ping = RUtil.round(message.client.ping, 2);
+        let ping = RandomUtility.round(message.client.ping, 2);
         m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${ping}ms`);
     }
 }

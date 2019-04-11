@@ -1,28 +1,46 @@
 const mongoose = require('mongoose');
 const YAML     = require('js-yaml');
 const fs       = require('fs');
-const gif  = require('../structures/database/models/gif')
+const gif      = require('../database/models/gif')
 
 class StorageManager {
     constructor(vulcan) {
         this.vulcan = vulcan;
-
-        const credentialsFile = fs.readFileSync('./settings/database_credentials.yaml', 'utf8');
-        const credentials     = YAML.safeLoad(credentialsFile);
-        
-        let dbURL = 'mongodb://' + credentials.username + ':' + credentials.password + '@ds125125.mlab.com:25125/vulcan'
-        mongoose.connect(dbURL);
-        mongoose.Promise = global.Promise;
-        
-        this.db = mongoose.connection;
-        this.db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-        // this.test("https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif");
     }
 
-    // test(link) {
-    //     let test = new gif({name: "cat", link: link, owner: 1});
-    //     test.save((err) => { if(err) vulcan.logger.error(err); });
-    // }
+    databaseConnect() {
+        mongoose.Promise = global.Promise;
+
+        // PASSWORD SAFETY?? HASH??? uhmmm (WE NEED TO LOOK INTO THIS)
+        const credentialsFile = fs.readFileSync(global.Defaults.files.dbcredentials.location, 'utf8');
+        const credentials     = YAML.safeLoad(credentialsFile);
+
+        this.dbURL = 'mongodb://' + credentials.username + ':' + credentials.password + '@ds125125.mlab.com:25125/vulcan';
+        this.db    = mongoose.connection;
+        
+        // DB Event callbacks
+        let logger = this.vulcan.logger;
+        this.db.on('error', logger.error.bind(logger, 'MongoDB connection error:'));
+        this.db.on('disconnected', logger.info.bind(logger, 'MongoDB connection has been lost!'));
+        this.db.on('reconnected', logger.info.bind(logger, 'MongoDB connection has been restablished!'));
+        this.db.on('close', logger.info.bind(logger, 'MongoDB connection has been closed!'));
+        
+        mongoose.connect(this.dbURL, () => {
+            logger.info("MongoDB connection has been established!");
+        });
+
+        // If the Node process ends, close the Mongoose connection 
+        process.on('SIGINT', function() {  
+            mongoose.connection.close(function () { 
+                console.log('Mongoose default connection disconnected through app termination'); 
+                process.exit(0); 
+            }); 
+        });
+    }
+
+    // to do (on both, check first if this.db is undefined [we may sometimes not want to use database])
+    async databaseQuery(query) {}
+    databaseQuerySync() {}
 }
 
 module.exports = StorageManager;

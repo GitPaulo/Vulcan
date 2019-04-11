@@ -1,25 +1,32 @@
-// Check for missing config/essential files & Load essential modules
-require("./scripts/defaults.js");
-require("./structures/extensions");
+// Require globals and defaults + structures needed before initialisation
+require("./scripts/globals.js")
+require('./scripts/defaults.js');
+requireall("./structures/prototypes");
+requireall('./structures/extensions');
 
 // Get them boys first.
-const YAML     = require("js-yaml");
-const fs       = require('fs');
-const Vulcan   = require('./structures/classes/Vulcan');
+const fs     = require('fs');
+const YAML   = require('js-yaml');
+const Vulcan = require('./structures/classes/Vulcan');
 
 // Load Data.
 const configurationsFile = fs.readFileSync('./settings/config.yaml', 'utf8');
-const credentialsFile    = fs.readFileSync('./settings/noleakdata.yaml', 'utf8');
+const privatedataFile    = fs.readFileSync('./settings/noleakdata.yaml', 'utf8');
 const configurations     = YAML.safeLoad(configurationsFile);
-const credentials        = YAML.safeLoad(credentialsFile);
+const privatedata        = YAML.safeLoad(privatedataFile);
 
-// Instantiate Vulcan Client Wrapper.
-const vulcan = new Vulcan(configurations, credentials);  // if we have trouble with this - blame tacos. *tacos will fix*
+// Instantiate Vulcan Client object.
+const vulcan = new Vulcan(configurations, privatedata);  // if we have trouble with this - blame tacos. *tacos will fix*
 
 // Export (before loading events)
 module.exports = vulcan;
 
-// Fire in the hole.
+// Connect to database (comment out if no database needed)
+// vulcan.storageManager.databaseConnect()
+
+// Fire in the hole!
 vulcan.loadEvents().connect();
 
-vulcan.logger.error("TESTING123");
+// Log
+let uptime = process.uptime();
+vulcan.logger.log(`Vulcan initialisation completed! Time since start: ${String(uptime).toHHMMSS()}`);

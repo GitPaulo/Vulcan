@@ -54,6 +54,4 @@ MessageEmbeds.info = function (authorName = "", title, message) {
     }
 }
 
-
-
 module.exports = MessageEmbeds;

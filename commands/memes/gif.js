@@ -1,6 +1,6 @@
-const Command  = require("../../structures/classes/Command");
-const RUtil    = require("../../scripts/randomutils");
-const gifModel = require("../../structures/database/models/gif")
+const Command       = require("../../classes/Command");
+const RandomUtility = require("../../scripts/RandomUtility");
+const gifModel      = require("../../database/models/gif")
 
 class Gif extends Command {
     constructor(type) { // type = root folder name (passed on by command loader)

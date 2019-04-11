@@ -1,6 +1,6 @@
 const { Client, Collection } = require('discord.js');
 const { _, performance }     = require('perf_hooks');
-const RUtil                  = require('../../scripts/randomutils');
+const RandomUtility                  = require('../../scripts/RandomUtility');
 const Logger                 = require('../../managers/LogManager');
 const StorageManager         = require("../../managers/StorageManager");
 const CommandLoader          = require("./CommandLoader");
@@ -18,23 +18,23 @@ let rootPath = path.dirname(require.main.filename);
 
 class Vulcan extends Client {
 
-    constructor (configurations, credentials) {
+    constructor (configurations, privatedata) {
         super();
 
         let t = Date.now();
 
         // Seal these properties! :)
         Object.defineProperties(this, {
-            configurations: { value: configurations, writable: false, enumerable: false, configurable: false },
-            credentials:    { value: credentials,    writable: false, enumerable: false, configurable: false },
-            initialisationTime: { value: t, writable: false }
+            configurations:     { value: configurations, writable: false, enumerable: false, configurable: false },
+            privatedata:        { value: privatedata,    writable: false, enumerable: false, configurable: false },
+            initialisationTime: { value: t,              writable: false }
         });
 
         // Logger from Singleton 
         this.logger = Logger.getInstance();
 
         // Storage manager needs some work boys
-        this.storageManager = new StorageManager();
+        this.storageManager = new StorageManager(this);
 
         // Class that handles loading all commands recursively from commands/ dir
         this.commands = new CommandLoader(this).loadCommands();
@@ -62,7 +62,7 @@ class Vulcan extends Client {
             module.exports[path.basename(file, '.js')] = require(path.join(eventsPath, file)); // Store module with its name (from filename)
             t = performance.now() - t;
 
-            vulcan.logger.info("Finished loading event file '" + file + "' (took " + RUtil.round(t,2) + "ms).");
+            vulcan.logger.info("Finished loading event file '" + file + "' (took " + RandomUtility.round(t,2) + "ms).");
         });
         
         return vulcan;
@@ -86,15 +86,15 @@ class Vulcan extends Client {
     connect () {
         this.logger.info("Attempting to connect to discord servers...");
 
-        if (this.credentials.token === global.DEFAULT) {
-            this.logger.warn(">>>>>>>> TOKEN IS MISSING FROM noleakdata.yaml FILE <<<<<<<<<");
-        } else {
-            this.login(this.credentials.token).then((token) => {
-                this.logger.info(`Sucessfully logged in to discord servers with token: ${token}`)
-            }).catch((err) => {
-                throw err;
-            });
+        if (this.privatedata.token === global.Defaults.files.privatedata.data.token) {
+            this.logger.warn(`>>>> DEFAULT CONFIGURATION DETECTED - ADD YOUR DISCORD BOT TOKEN IN "${Defaults.files.privatedata.location}"`);
         }
+
+        this.login(this.privatedata.token).then((token) => {
+            this.logger.info(`Sucessfully logged in to discord servers with token: ${token}`)
+        }).catch((err) => {
+            throw err;
+        });
 
         return this;
     }

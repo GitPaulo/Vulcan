@@ -1,7 +1,7 @@
 const Command = require("./Command");
 const fs      = require("fs");
 const path    = require("path");
-const rutil   = require("../../scripts/randomutils");
+const RandomUtility   = require("../../scripts/RandomUtility");
 const { _, performance } = require('perf_hooks');
 
 let rootPath = path.dirname(require.main.filename)
@@ -14,7 +14,7 @@ class CommandLoader {
 
     loadCommands() {
         let commandsFolderPath = path.join(__dirname, "../../commands");
-        const commands         = rutil.getAllFiles(commandsFolderPath);
+        const commands         = RandomUtility.getAllFiles(commandsFolderPath);
 
         for (let commandPath of commands) {
             let t       = performance.now();
@@ -38,7 +38,7 @@ class CommandLoader {
                     this.commandList[key] = command;
                 }
 
-                t = rutil.round(performance.now() - t, 2);
+                t = RandomUtility.round(performance.now() - t, 2);
                 this.vulcan.logger.info(`Loaded command ${cmdName} from ${commandPath} (took ${t}ms)`);
             } catch( err ) {
                 this.vulcan.logger.error(err);

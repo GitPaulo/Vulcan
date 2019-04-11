@@ -4,7 +4,10 @@
   "description": "Collab discord bot using discord.js.",
   "main": "bot.js",
   "scripts": {
-    "test": "tacosgay"
+    "test": "tacosgay",
+    "fire in the hole": "bot.js",
+    "start": "bot.js",
+    "vulcan": "bot.js"
   },
   "repository": {
     "type": "git",
