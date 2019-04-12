@@ -1,18 +1,21 @@
+// Node Modules
 const { Client, Collection } = require('discord.js');
 const { _, performance }     = require('perf_hooks');
-const RandomUtility                  = require('../../modules/objects/RandomUtility');
-const Logger                 = require('../../managers/LogManager');
-const StorageManager         = require("../../managers/StorageManager");
-const CommandLoader          = require("./CommandLoader");
-const os                     = require("os");
+const os                     = require('os');
 const fs                     = require('fs');
 const path                   = require('path');
+
+// Vulcan Modules
+const RandomUtility  = require('../../modules/objects/RandomUtility');
+const Logger         = require('../../managers/LogManager');
+const StorageManager = require('../../managers/StorageManager');
+const CommandLoader  = require('./CommandLoader');
 
 const couldnt_have_forged_it_better_myself = `\\ \\    / /   | |                
  \\ \\  / /   _| | ___ __ _ _ __  
   \\ \\/ / | | | |/ __/ _\` | \'_ \\ 
    \\  /| |_| | | (_| (_| | | | |
-    \\/  \\__,_|_|\\___\\__,_|_| |_| by Pas-kun & Tacos`
+    \\/  \\__,_|_|\\___\\__,_|_| |_| by Pas-kun & Tacos-sama`
 
 let rootPath = path.dirname(require.main.filename);
 
@@ -77,10 +80,14 @@ class Vulcan extends Client {
     }
 
     getMachineStatistics () {
-        return{
+        return {
             cpuUsage: os.loadavg()[1],
             memUsage: process.memoryUsage().rss / 1024 / 1024,
         }
+    }
+    
+    uptime () {
+    	return String(process.uptime()).toHHMMSS();
     }
 
     connect () {

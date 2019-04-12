@@ -16,7 +16,7 @@ const configurations     = YAML.safeLoad(configurationsFile);
 const privatedata        = YAML.safeLoad(privatedataFile);
 
 // Instantiate Vulcan Client object.
-const vulcan = new Vulcan(configurations, privatedata);  // if we have trouble with this - blame tacos. *tacos will fix*
+const vulcan = new Vulcan(configurations, privatedata); // if we have trouble with this - blame tacos. *tacos will fix*
 
 // Export (before loading events)
 module.exports = vulcan;
@@ -28,5 +28,4 @@ module.exports = vulcan;
 vulcan.loadEvents().connect();
 
 // Log
-let uptime = process.uptime();
-vulcan.logger.log(`Vulcan initialisation completed! Time since start: ${String(uptime).toHHMMSS()}`);
+vulcan.logger.log(`Vulcan initialisation completed! Time taken: ${vulcan.uptime()}`);

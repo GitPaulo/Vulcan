@@ -93,3 +93,6 @@ logs/
 
 #VS PLS
 .vscode/
+
+#Vim :)
+.swp
