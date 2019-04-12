@@ -1,6 +1,6 @@
 const { Client, Collection } = require('discord.js');
 const { _, performance }     = require('perf_hooks');
-const RandomUtility                  = require('../../scripts/RandomUtility');
+const RandomUtility                  = require('../../modules/objects/RandomUtility');
 const Logger                 = require('../../managers/LogManager');
 const StorageManager         = require("../../managers/StorageManager");
 const CommandLoader          = require("./CommandLoader");

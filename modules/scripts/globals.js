@@ -1,5 +1,5 @@
 // GLOBALS FILE! 
-const RandomUtility     = require('./RandomUtility');
+const RandomUtility     = require('../objects/RandomUtility');
 const { _, performance} = require('perf_hooks');
 const fs                = require('fs');
 const path              = require('path');

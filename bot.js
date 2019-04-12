@@ -1,7 +1,7 @@
 // Require globals and defaults + structures needed before initialisation
-require("./scripts/globals.js")
-require('./scripts/defaults.js');
-requireall("./structures/prototypes");
+require('./modules/scripts/globals.js');
+require('./modules/scripts/defaults.js');
+requireall('./structures/prototypes');
 requireall('./structures/extensions');
 
 // Get them boys first.

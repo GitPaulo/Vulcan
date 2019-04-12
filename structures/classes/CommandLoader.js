@@ -1,7 +1,7 @@
 const Command = require("./Command");
 const fs      = require("fs");
 const path    = require("path");
-const RandomUtility   = require("../../scripts/RandomUtility");
+const RandomUtility   = require("../../modules/objects/RandomUtility");
 const { _, performance } = require('perf_hooks');
 
 let rootPath = path.dirname(require.main.filename)

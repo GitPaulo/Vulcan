@@ -1,6 +1,6 @@
 const Command            = require("../../structures/classes/Command");
 const { _, performance } = require('perf_hooks');
-const RandomUtility      = require('../../scripts/RandomUtility');
+const RandomUtility      = require('../../modules/objects/RandomUtility');
 
 class Eval extends Command {
     constructor(type) {

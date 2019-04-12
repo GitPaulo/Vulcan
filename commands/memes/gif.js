@@ -1,5 +1,5 @@
 const Command       = require("../../classes/Command");
-const RandomUtility = require("../../scripts/RandomUtility");
+const RandomUtility = require("../../modules/objects/RandomUtility");
 const gifModel      = require("../../database/models/gif")
 
 class Gif extends Command {

@@ -1,5 +1,5 @@
 const Command = require("../../structures/classes/Command");
-const RandomUtility   = require("../../scripts/RandomUtility");
+const RandomUtility   = require("../../modules/objects/RandomUtility");
 
 class Ping extends Command {
     constructor(type) { // type = root folder name (passed on by command loader)
