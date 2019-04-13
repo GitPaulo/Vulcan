@@ -57,7 +57,7 @@ class Gif extends Command {
         gifModel.find({}, 'name', (err, result) => {
             if (err){
                 message.edit("Could not preform action");
-                vulcan.logger.error(`(${err.name}): ${err.message}\n[${err.lineNumber}] => '${err.filename}'`);
+                vulcan.logger.error(err.shortMessage());
             }
             else {
                 let images = "";
@@ -87,7 +87,7 @@ class Gif extends Command {
         
         gif.save((err) => {
             if(err) {
-                vulcan.logger.error(`(${err.name}): ${err.message}\n[${err.lineNumber}] => '${err.filename}'`);
+                vulcan.logger.error(err.shortMessage());
                 message.edit("Could not add image");
             }
             else message.edit("Image added with name " + name);

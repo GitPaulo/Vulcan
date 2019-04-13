@@ -30,7 +30,7 @@ class GitPull extends Command {
             let reply;
 
             if (err) {
-                let errStr = `(${err.name}): ${err.message}\n[${err.lineNumber}] => '${err.filename}'`;
+                let errStr = err.shortMessage();
                 vulcan.logger.error(errStr);
                 reply = MessageEmbeds.error(errStr);
             } else {
