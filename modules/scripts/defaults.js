@@ -16,6 +16,7 @@ global.Defaults = {
             path.join(ROOT_PATH, SETTINGS_FOLDER, "config.yaml"),
             { 
                 prefixes: ["!", ">"],
+                devsID:   ["166176374036365312", "207606117159796737"], // please don't change this
             }
         ),
         "privatedata" : new DefaultFile(

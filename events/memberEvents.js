@@ -1,4 +1,4 @@
-const vulcan = require("../bot");
+const vulcan = require('../bot');
 
 vulcan.on("guildMemberAdd", (member) => {
 

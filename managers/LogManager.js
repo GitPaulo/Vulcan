@@ -1,6 +1,36 @@
 const fs   = require('fs');
 const path = require('path');
 
+const consoleColors = {
+    Reset      : "\x1b[0m",
+    Bright     : "\x1b[1m",
+    Dim        : "\x1b[2m",
+    Underscore : "\x1b[4m",
+    Blink      : "\x1b[5m",
+    Reverse    : "\x1b[7m",
+    Hidden     : "\x1b[8m",
+
+    FgBlack   : "\x1b[30m",
+    FgRed     : "\x1b[31m",
+    FgGreen   : "\x1b[32m",
+    FgYellow  : "\x1b[33m",
+    FgBlue    : "\x1b[34m",
+    FgMagenta : "\x1b[35m",
+    FgCyan    : "\x1b[36m",
+    FgWhite   : "\x1b[37m",
+
+    FgLightGreen : "\x1b[92m",
+
+    BgBlack   : "\x1b[40m",
+    BgRed     : "\x1b[41m",
+    BgGreen   : "\x1b[42m",
+    BgYellow  : "\x1b[43m",
+    BgBlue    : "\x1b[44m",
+    BgMagenta : "\x1b[45m",
+    BgCyan    : "\x1b[46m",
+    BgWhite   : "\x1b[47m",
+}
+
 const logLevels = {
     ERROR: 'ERROR',
     WARN:  'WARNING',
@@ -63,7 +93,7 @@ for (let logClassKey in classification) {
 
 // Implemented as Singleton class (or at least I tried)
 let LoggerFactory = (function () {
-    function constructLogObject(logLevelID, text) {
+    function constructLogObject(logLevelID, color, text) {
         let logLevelValue = logLevelsNumbers[logLevelID];
         let result = '(' + new Date().toLocaleString() + ')';
         result += '[' + logLevelID + '|' + logLevelValue + '] => ';
@@ -75,28 +105,29 @@ let LoggerFactory = (function () {
                 value: logLevelValue
             },
             text: result,
+            color: color,
         };
     }
 
     function Logger() {
         this.debug = function () {
             if (this._shouldLog(logLevels.DEBUG))
-                this._write(constructLogObject(logLevels.DEBUG, ...arguments));
+                this._write(constructLogObject(logLevels.DEBUG, "FgMagenta", ...arguments));
         }
 
         this.info = function () {
             if (this._shouldLog(logLevels.INFO))
-                this._write(constructLogObject(logLevels.INFO, ...arguments));
+                this._write(constructLogObject(logLevels.INFO, "FgLightGreen", ...arguments));
         }
 
         this.warn = function () {
             if (this._shouldLog(logLevels.WARN))
-                this._write(constructLogObject(logLevels.WARN, ...arguments));
+                this._write(constructLogObject(logLevels.WARN, "FgYellow", ...arguments));
         }
 
         this.error = function () {
             if (this._shouldLog(logLevels.ERROR))
-                this._write(constructLogObject(logLevels.ERROR, ...arguments));
+                this._write(constructLogObject(logLevels.ERROR, "FgRed", ...arguments));
         }
 
         this.log = function () {
@@ -104,8 +135,16 @@ let LoggerFactory = (function () {
                 this.debug.apply(this, arguments);
         }
 
-        this.print = function (...args) {
-            console.log(...args);
+        this.print = function () {
+            console.log(consoleColors.FgWhite, ...arguments);
+        }
+
+        this.printc = function () {
+            for (let i = 0; i < arguments.length; i = i+2)
+                arguments[i] = consoleColors[arguments[i]];
+
+            let args = Array.prototype.slice.call(arguments);
+            console.log(args.join(""));
         }
 
         this.getLogClassification = function (logLevel) {
@@ -134,7 +173,7 @@ let LoggerFactory = (function () {
         }
 
         this._write = function (messageObject) {
-            this.print(messageObject.text);
+            this.printc(messageObject.color, messageObject.text);
             
             let logClass    = this.getLogClassification(messageObject.logLevel);
             let logfilePath = path.join(folderPath, logClass.filename);

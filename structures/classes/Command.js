@@ -1,4 +1,4 @@
-const assert = require("assert");
+const assert = require('assert');
 
 function rassert(exp, msg) {
     assert(exp, msg)
@@ -16,10 +16,15 @@ class Command {
         this.description   = properties.description || "[No description for this command]";
         this.examples      = properties.examples || [];
         this.throttling    = properties.throttling || 1;
+        this.embed         = properties.embed;
         this.lastUserCalls = {};
     }
 
     validate() {
+        throw new Error("This method has not been implemented!");
+    }
+
+    execute() {
         throw new Error("This method has not been implemented!");
     }
 
@@ -36,10 +41,6 @@ class Command {
             }
         }
         return true;
-    }
-    
-    execute() {
-        throw new Error("This method has not been implemented!");
     }
 
     /*

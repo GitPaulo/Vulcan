@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const Discord = require('discord.js');
 
 class Message extends Discord.Message {
     constructor(...args) {

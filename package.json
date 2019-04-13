@@ -1,7 +1,7 @@
 {
   "name": "discordbot",
   "version": "1.0.0",
-  "description": "Collab discord bot using discord.js.",
+  "description": "Collab discord bot with tacos-sama using discord.js.",
   "main": "bot.js",
   "scripts": {
     "test": "tacosgay",
@@ -11,24 +11,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GitPaulo/DiscordBot.git"
+    "url": "git+https://github.com/GitPaulo/Vulcan.git"
   },
   "keywords": [
     "Discord",
-    "Bot"
+    "Bot",
+    "discord-js",
+    "music-bot"
   ],
   "author": "Paulo & Carlos",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/GitPaulo/DiscordBot/issues"
+    "url": "https://github.com/GitPaulo/Vulcan/issues"
   },
-  "homepage": "https://github.com/GitPaulo/DiscordBot#readme",
+  "homepage": "https://github.com/GitPaulo/Vulcan#readme",
   "dependencies": {
     "discord.js": "github:discordjs/discord.js",
-    "discord.js-commando": "github:discordjs/Commando",
-    "eslint": "^5.13.0",
     "js-yaml": "^3.12.1",
-    "mongoose": "^5.4.10",
-    "npm": "^6.7.0"
-  }
+    "mongoose": "^5.5.1"
+  },
+  "devDependencies": {}
 }

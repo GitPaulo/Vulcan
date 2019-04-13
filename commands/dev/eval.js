@@ -1,6 +1,8 @@
-const Command            = require("../../structures/classes/Command");
 const { _, performance } = require('perf_hooks');
-const RandomUtility      = require('../../modules/objects/RandomUtility');
+
+const Command       = require('../../structures/classes/Command');
+const RandomUtility = require('../../modules/objects/RandomUtility');
+const MessageEmbeds = require('../../modules/objects/MessageEmbeds');
 
 class Eval extends Command {
     constructor(type) {
@@ -11,11 +13,18 @@ class Eval extends Command {
             description: 'Evaluates javascript code using an internal environment.',
             examples: ['eval 1+1'],
             throttling: 2000,
-            args: [{
-                key: 'text',
-                prompt: 'Code to be evaluated.',
-                type: 'string',
-            }]
+            args: [
+                {
+                    key: 'text',
+                    prompt: 'Code to be evaluated.',
+                    type: 'string',
+                }
+            ],
+            embed: {
+                color: 0xFFCE6D,
+                title: `JavaScript - Expression Evaluation`,
+                image: './assets/media/images/commands/Eval.gif',
+            }
         });
     }
 
@@ -34,7 +43,17 @@ class Eval extends Command {
         }
 
         t = RandomUtility.round(performance.now() - t, 2);
-        message.channel.send(`Result (time: ${t}ms): \`` + returnValue + "`");
+
+        let reply = MessageEmbeds.cmdreply(
+            `\`${message.args[0]}\``, 
+            message, 
+            [ 
+                { name: "Perfomance Benchmark", value: `${t}ms` },
+                { name: "Output",               value:  `${returnValue}` }
+            ]
+        );
+
+        await message.channel.send(reply);
     }
 }
 

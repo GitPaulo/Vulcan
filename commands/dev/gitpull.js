@@ -1,5 +1,5 @@
-const Command  = require("../../structures/classes/Command");
-const { exec } = require("child_process");
+const Command  = require('../../structures/classes/Command');
+const { exec } = require('child_process');
 
 class GitPull extends Command {
     constructor(type) {
@@ -10,7 +10,12 @@ class GitPull extends Command {
             description: 'Automatically updates files from github',
             examples: ['gitpull'],
             throttling: 2000,
-            args: []
+            args: [],
+            embed: {
+                color: 0x761CFF,
+                title: `Git - Pull Operation`,
+                image: './assets/media/images/commands/GitPull.gif',
+            }
         });
     }
 
@@ -21,17 +26,27 @@ class GitPull extends Command {
     async execute(message) {
         exec("git pull origin master", async (err, pull) => {
             let vulcan = message.client;
-            if (err) return vulcan.logger.error(err);
 
-            let pullText = pull.toString();
-            vulcan.logger.debug(pullText);
+            let reply;
 
-            const m = await message.channel.send({
-                embed: {
-                    color: 3447003,
-                    description: pullText,
-                }
-            });
+            if (err) {
+                let errStr = `(${err.name}): ${err.message}`;
+                vulcan.logger.error(errStr);
+                reply = MessageEmbeds.error(errStr);
+            } else {
+                let pullText = pull.toString();
+                vulcan.logger.debug(pullText);
+    
+                reply = MessageEmbeds.cmdreply(
+                    `Pulling from branch \`master\``, 
+                    message, 
+                    [ 
+                        { name: "Output", value:  `${pullText}` }
+                    ]
+                );
+            }
+
+            await message.channel.send(reply);
         })
     }
 }

@@ -10,13 +10,13 @@ const YAML   = require('js-yaml');
 const Vulcan = require('./structures/classes/Vulcan');
 
 // Load Data.
-const configurationsFile = fs.readFileSync('./settings/config.yaml', 'utf8');
-const privatedataFile    = fs.readFileSync('./settings/noleakdata.yaml', 'utf8');
-const configurations     = YAML.safeLoad(configurationsFile);
-const privatedata        = YAML.safeLoad(privatedataFile);
+const configurationFile = fs.readFileSync('./settings/config.yaml', 'utf8');
+const privatedataFile   = fs.readFileSync('./settings/noleakdata.yaml', 'utf8');
+const configuration     = YAML.safeLoad(configurationFile);
+const privatedata       = YAML.safeLoad(privatedataFile);
 
 // Instantiate Vulcan Client object.
-const vulcan = new Vulcan(configurations, privatedata); // if we have trouble with this - blame tacos. *tacos will fix*
+const vulcan = new Vulcan(configuration, privatedata); // if we have trouble with this - blame tacos. *tacos will fix*
 
 // Export (before loading events)
 module.exports = vulcan;

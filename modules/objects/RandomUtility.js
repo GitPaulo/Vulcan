@@ -1,6 +1,6 @@
 /* Random Utility functions will be here - this is sort of a meme module */
-const fs   = require("fs");
-const path = require("path");
+const fs   = require('fs');
+const path = require('path');
 
 var RandomUtility = {};
 

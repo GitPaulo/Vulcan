@@ -1,6 +1,6 @@
-const vulcan        = require("../bot");
-const MessageParser = require("../structures/classes/MessageParser");
-const MessageEmbeds = require("../modules/objects/MessageEmbeds");
+const vulcan        = require('../bot');
+const MessageParser = require('../structures/classes/MessageParser');
+const MessageEmbeds = require('../modules/objects/MessageEmbeds');
 
 // Reminder: Check if message.channel.send() is async if so use await?
 vulcan.on("message", async message => {
@@ -11,7 +11,7 @@ vulcan.on("message", async message => {
     if (message.author.bot) return;
 
     let found = false;
-    for (let prefix of vulcan.configurations.prefixes) {
+    for (let prefix of vulcan.configuration.prefixes) {
         found = found || Boolean(message.content[0] == prefix);
     }
 

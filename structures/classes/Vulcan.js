@@ -21,16 +21,15 @@ let rootPath = path.dirname(require.main.filename);
 
 class Vulcan extends Client {
 
-    constructor (configurations, privatedata) {
+    constructor (configuration, privatedata) {
         super();
 
-        let t = Date.now();
+        let t = performance.now();
 
         // Seal these properties! :)
         Object.defineProperties(this, {
-            configurations:     { value: configurations, writable: false, enumerable: false, configurable: false },
-            privatedata:        { value: privatedata,    writable: false, enumerable: false, configurable: false },
-            initialisationTime: { value: t,              writable: false }
+            configuration: { value: configuration,  writable: false, enumerable: false, configurable: false },
+            privatedata:   { value: privatedata,    writable: false, enumerable: false, configurable: false },
         });
 
         // Logger from Singleton 
@@ -43,14 +42,16 @@ class Vulcan extends Client {
         this.commands = new CommandLoader(this).loadCommands();
 
         // Log all node-js process unhandled exceptions
-        process.on("unhandledRejection", (e) => {
-            this.logger.error(e)
-            throw e; // for now throw everything!
+        process.on("unhandledRejection", (err) => {
+            this.logger.error(`(${err.name}): ${err.message}`);
+            throw err; // for now throw everything!
         });
 
         // Vulcan is here!
-        this.logger.print(couldnt_have_forged_it_better_myself);
-        this.logger.info("========== VULCAN has initialised ==========")
+        this.logger.printc("FgRed", couldnt_have_forged_it_better_myself);
+        this.logger.info("========== VULCAN has initialised ==========");
+        
+        this.initialisationTime = performance.now() - t;
     }
 
     loadEvents () {
@@ -85,7 +86,7 @@ class Vulcan extends Client {
             memUsage: process.memoryUsage().rss / 1024 / 1024,
         }
     }
-    
+
     uptime () {
     	return String(process.uptime()).toHHMMSS();
     }
@@ -94,7 +95,11 @@ class Vulcan extends Client {
         this.logger.info("Attempting to connect to discord servers...");
 
         if (this.privatedata.token === global.Defaults.files.privatedata.data.token) {
-            this.logger.warn(`>>>> DEFAULT CONFIGURATION DETECTED - ADD YOUR DISCORD BOT TOKEN IN "${Defaults.files.privatedata.location}"`);
+            this.logger.warn(`>>> Default token detected, please change @"${Defaults.files.privatedata.location}"`);
+        }
+
+        if (this.configuration.devsID.sort().join(',') !== global.Defaults.files.configuration.data.devsID.sort().join(',')) {
+            this.logger.warn(`>>> Developer IDs have been changed from the default! We are slightly unhappy :C`);
         }
 
         this.login(this.privatedata.token).then((token) => {

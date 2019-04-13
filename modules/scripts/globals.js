@@ -53,7 +53,7 @@ global.requireall = function () {
     }
 
     t = RandomUtility.round(performance.now() - t, 2);
-    console.log(`=[ Sucessfully loaded ${n} modules at '${path}' (took ${t}ms) ]=`);
+    console.log(`[REQUIREALL] => Sucessfully loaded ${n} modules at '${path}' (took ${t}ms)`);
 
     return exports;
 }

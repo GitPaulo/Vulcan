@@ -1,7 +1,8 @@
-const Command = require("./Command");
-const fs      = require("fs");
-const path    = require("path");
-const RandomUtility   = require("../../modules/objects/RandomUtility");
+const Command = require('./Command');
+const fs      = require('fs');
+const path    = require('path');
+
+const RandomUtility      = require('../../modules/objects/RandomUtility');
 const { _, performance } = require('perf_hooks');
 
 let rootPath = path.dirname(require.main.filename)
@@ -40,8 +41,8 @@ class CommandLoader {
 
                 t = RandomUtility.round(performance.now() - t, 2);
                 this.vulcan.logger.info(`Loaded command ${cmdName} from ${commandPath} (took ${t}ms)`);
-            } catch( err ) {
-                this.vulcan.logger.error(err);
+            } catch(err) {
+                this.vulcan.logger.error(`(${err.name}): ${err.message}`);
             }
         }
 

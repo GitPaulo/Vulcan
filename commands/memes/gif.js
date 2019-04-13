@@ -1,6 +1,6 @@
-const Command       = require("../../classes/Command");
-const RandomUtility = require("../../modules/objects/RandomUtility");
-const gifModel      = require("../../database/models/gif")
+const Command       = require('../../structures/classes/Command');
+const RandomUtility = require('../../modules/objects/RandomUtility');
+const gifModel      = require('../../database/models/gif');
 
 class Gif extends Command {
     constructor(type) { // type = root folder name (passed on by command loader)
@@ -11,7 +11,12 @@ class Gif extends Command {
             description: 'Retrieves a Gif from the database',
             examples: ['gif cat'],
             throttling: 2000,
-            args: []
+            args: [],
+            embed: {
+                color: 0x666666,
+                title: `Gif Commands!`,
+                image: './assets/media/images/commands/Gif.gif',
+            }
         });
     }
 
@@ -52,7 +57,7 @@ class Gif extends Command {
         gifModel.find({}, 'name', (err, result) => {
             if (err){
                 message.edit("Could not preform action");
-                vulcan.logger.error(err);
+                vulcan.logger.error(`(${err.name}): ${err.message}`);
             }
             else {
                 let images = "";
@@ -82,7 +87,7 @@ class Gif extends Command {
         
         gif.save((err) => {
             if(err) {
-                vulcan.logger.error(err);
+                vulcan.logger.error(`(${err.name}): ${err.message}`);
                 message.edit("Could not add image");
             }
             else message.edit("Image added with name " + name);
