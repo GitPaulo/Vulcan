@@ -5,7 +5,7 @@ const fs                = require('fs');
 const path              = require('path');
 
 global.print = function () {
-    console.log("[PRINT]", ...arguments);
+    console.log('[PRINT]', ...arguments);
 }
 
 global.xrequire = (...module) => {
@@ -34,20 +34,20 @@ global.xrequire.resolve.paths = request => {
 
 global.requireall = function () {
     let path         = arguments[0];
-    const extensions = ["js", ""];
+    const extensions = ['js', ''];
     const modules    = fs.readdirSync(path);
 
     let t = performance.now();
     let n = 0;
 
     for (let mod of modules) {
-        if (mod === "index.js") continue;
-        const fileData = mod.split(".");
+        if (mod === 'index.js') continue;
+        const fileData = mod.split('.');
 
         const ext = fileData.splice(-1, 1)[0];
         if (!extensions.includes(ext)) continue;
 
-        const name = fileData.join("");
+        const name = fileData.join('');
         exports[name] = xrequire(`${path}/${mod}`); // this is dumb, exports is local to util file :C
         n++;
     }

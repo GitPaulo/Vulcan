@@ -8,7 +8,7 @@ RandomUtility.round = function (value, decimals) {
     return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
 }
 
-RandomUtility.getAllFiles = function (dir, fileTypes = ".js") {
+RandomUtility.getAllFiles = function (dir, fileTypes = '.js') {
     var filesToReturn = [];
 
     function walkDir(currentPath) {

@@ -48,8 +48,8 @@ class Eval extends Command {
             `\`${message.args[0]}\``, 
             message, 
             [ 
-                { name: "Perfomance Benchmark", value: `${t}ms` },
-                { name: "Output",               value:  `${returnValue}` }
+                { name: 'Perfomance Benchmark', value: `${t}ms` },
+                { name: 'Output',               value:  `${returnValue}` }
             ]
         );
 

@@ -7,13 +7,13 @@ function rassert(exp, msg) {
 
 class Command {
     constructor(type, properties) {
-        this.type  = rassert(typeof type == "string" && type, "Command type property is invalid! Please check file structure & CommandLoader.") // && statement to return last true value
-        this.name  = rassert(properties.name, "Essential command name property is undefined!");
-        this.group = rassert(properties.group, "Essential command group property is undefined!");
-        this.args  = rassert(properties.args, "Essential command args property is undefined!");
+        this.type  = rassert(typeof type == 'string' && type, 'Command type property is invalid! Please check file structure & CommandLoader.') // && statement to return last true value
+        this.name  = rassert(properties.name, 'Essential command name property is undefined!');
+        this.group = rassert(properties.group, 'Essential command group property is undefined!');
+        this.args  = rassert(properties.args, 'Essential command args property is undefined!');
         
         this.aliases       = properties.aliases || [];
-        this.description   = properties.description || "[No description for this command]";
+        this.description   = properties.description || '[No description for this command]';
         this.examples      = properties.examples || [];
         this.throttling    = properties.throttling || 1;
         this.embed         = properties.embed;
@@ -21,11 +21,11 @@ class Command {
     }
 
     validate() {
-        throw new Error("This method has not been implemented!");
+        throw new Error('This method has not been implemented!');
     }
 
     execute() {
-        throw new Error("This method has not been implemented!");
+        throw new Error('This method has not been implemented!');
     }
 
     checkTimeout(author) {

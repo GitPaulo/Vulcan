@@ -1,4 +1,4 @@
-const DISCORD_ARGS_REGULAR_EXPRESSION = /"+([^;]*)"+|{+([^;]*)}+|`+([^;]*)`+|\[([^;]*)\]|\S+/g;
+const DISCORD_ARGS_REGULAR_EXPRESSION = /'+([^;]*)'+|{+([^;]*)}+|`+([^;]*)`+|\[([^;]*)\]|\S+/g;
 
 let MessageParserFactory = (function () {
     function parseStringToDataTypes(targetText) {
@@ -15,7 +15,7 @@ let MessageParserFactory = (function () {
             if (!isNaN(parsedValues[i]))
                 continue;
 
-            parsedValues[i] = match === "false" ? false : match === "true" ? true : undefined;
+            parsedValues[i] = match === 'false' ? false : match === 'true' ? true : undefined;
 
             if (parsedValues[i] !== undefined)
                 continue;
@@ -52,7 +52,7 @@ let MessageParserFactory = (function () {
             let argString = args.join(' ').trim();
             args          = parseStringToDataTypes(argString);
 
-            console.log(args, "<<< parsed values");
+            console.log(args, '<<< parsed values');
             console.log(`[MESSAGE PARSER DEBUG] => Matches: [${matches}]`, `Arguments Array: [${args}](wrong types check above spew)`, `Argument String: ${argString}`, `Parsed Name: ${firstword}`);
 
             message.initCommand(command, argString, args, raw, firstword);

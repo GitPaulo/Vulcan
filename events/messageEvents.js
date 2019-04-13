@@ -3,9 +3,9 @@ const MessageParser = require('../structures/classes/MessageParser');
 const MessageEmbeds = require('../modules/objects/MessageEmbeds');
 
 // Reminder: Check if message.channel.send() is async if so use await?
-vulcan.on("message", async message => {
+vulcan.on('message', async message => {
     // message.client === vulcan
-    vulcan.logger.info("[GUILD: " + message.guild.name + "] => [MESSAGE][" + message.author.username + "][" + message.channel.name + "]: " + message.content);
+    vulcan.logger.info('[GUILD: ' + message.guild.name + '] => [MESSAGE][' + message.author.username + '][' + message.channel.name + ']: ' + message.content);
 
     // Don't respond to self - bad recursion can happen LULW
     if (message.author.bot) return;
@@ -21,7 +21,7 @@ vulcan.on("message", async message => {
     let parseError    = messageParser.parse(vulcan, message); // changes the message objet! (if command: attaches extra properties)
 
     if (parseError.hasError)
-        message.channel.send(MessageEmbeds.error(message.author.username, "Command Validation", `Command Parse error: ${parseError.message}`));
+        message.channel.send(MessageEmbeds.error(message.author.username, 'Command Validation', `Command Parse error: ${parseError.message}`));
 
     if (message.isCommand) {
         let cmd        = message.command;
@@ -29,7 +29,7 @@ vulcan.on("message", async message => {
         
         if (!validation.isValid) {
             let invalidArguments = validation.list.toString();
-            message.channel.send(MessageEmbeds.warning(message.author.username, "Command Argument Validation", `The arguments corresponding to positions: \`${invalidArguments}\` did not match the expected types!`));
+            message.channel.send(MessageEmbeds.warning(message.author.username, 'Command Argument Validation', `The arguments corresponding to positions: \`${invalidArguments}\` did not match the expected types!`));
             return;
         }
 
@@ -41,12 +41,12 @@ vulcan.on("message", async message => {
             await cmd.execute(message);
         } else {
             // maybe change to handle this as exceptions
-            userMessage = hasTimedOut ? "Command Timeout triggered => WOA, WAIT YOU FUCKER!" : "Command validation failed :(!";
-            userMessage = MessageEmbeds.warning(message.author.username, "Command Validation", userMessage);
+            userMessage = hasTimedOut ? 'Command Timeout triggered => WOA, WAIT YOU FUCKER!' : 'Command validation failed :(!';
+            userMessage = MessageEmbeds.warning(message.author.username, 'Command Validation', userMessage);
 
             message.channel.send(userMessage); 
         }
     } else {
-        message.channel.send(MessageEmbeds.warning(message.author.username, "Command Existance Check", "The command you have entered does not exist!"));
+        message.channel.send(MessageEmbeds.warning(message.author.username, 'Command Existance Check', 'The command you have entered does not exist!'));
     }
 });

@@ -3,7 +3,7 @@ const path     = require('path');
 const YAML     = require('js-yaml');
 
 const ROOT_PATH       = path.dirname(require.main.filename);
-const SETTINGS_FOLDER = "settings";
+const SETTINGS_FOLDER = 'settings';
 
 let DefaultFile = function (location, data) {
     this.location = location;
@@ -12,24 +12,24 @@ let DefaultFile = function (location, data) {
 
 global.Defaults = {
     files : {
-        "configuration" : new DefaultFile(
-            path.join(ROOT_PATH, SETTINGS_FOLDER, "config.yaml"),
+        'configuration' : new DefaultFile(
+            path.join(ROOT_PATH, SETTINGS_FOLDER, 'config.yaml'),
             { 
-                prefixes: ["!", ">"],
-                devsID:   ["166176374036365312", "207606117159796737"], // please don't change this
+                prefixes: ['!', '>'],
+                devsID:   ['166176374036365312', '207606117159796737'], // please don't change this
             }
         ),
-        "privatedata" : new DefaultFile(
-            path.join(ROOT_PATH, SETTINGS_FOLDER, "noleakdata.yaml"),
+        'privatedata' : new DefaultFile(
+            path.join(ROOT_PATH, SETTINGS_FOLDER, 'noleakdata.yaml'),
             {
-                token: "\"PLEASE ADD YOUR DISCORD TOKEN HERE\"",
+                token: `'PLEASE ADD YOUR DISCORD TOKEN HERE'`,
             }
         ),
-        "dbcredentials" : new DefaultFile(
-            path.join(ROOT_PATH, SETTINGS_FOLDER, "dbcredentials.yaml"),
+        'dbcredentials' : new DefaultFile(
+            path.join(ROOT_PATH, SETTINGS_FOLDER, 'dbcredentials.yaml'),
             {
-                username: "ur_mom_gay",
-                password: "no_u"
+                username: 'ur_mom_gay',
+                password: 'no_u'
             }
         )
     }
@@ -49,7 +49,7 @@ global.Defaults = {
 
         if (!fs.existsSync(path)) {
             let data = YAML.safeDump(defaultObject.data);
-            console.log(`Missing essential file: "${path}" - writing defaults...`);
+            console.log(`Missing essential file: '${path}' - writing defaults...`);
            
             fs.writeFileSync(path, data, function(err) {
                 if (err) throw err;

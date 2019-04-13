@@ -24,13 +24,13 @@ class GitPull extends Command {
     }
 
     async execute(message) {
-        exec("git pull origin master", async (err, pull) => {
+        exec('git pull origin master', async (err, pull) => {
             let vulcan = message.client;
 
             let reply;
 
             if (err) {
-                let errStr = `(${err.name}): ${err.message}`;
+                let errStr = `(${err.name}): ${err.message}\n[${err.lineNumber}] => '${err.filename}'`;
                 vulcan.logger.error(errStr);
                 reply = MessageEmbeds.error(errStr);
             } else {
@@ -41,7 +41,7 @@ class GitPull extends Command {
                     `Pulling from branch \`master\``, 
                     message, 
                     [ 
-                        { name: "Output", value:  `${pullText}` }
+                        { name: 'Output', value:  `${pullText}` }
                     ]
                 );
             }

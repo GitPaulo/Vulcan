@@ -42,31 +42,31 @@ class Vulcan extends Client {
         this.commands = new CommandLoader(this).loadCommands();
 
         // Log all node-js process unhandled exceptions
-        process.on("unhandledRejection", (err) => {
-            this.logger.error(`(${err.name}): ${err.message}`);
+        process.on('unhandledRejection', (err) => {
+            this.logger.error(err.shortMessage());
             throw err; // for now throw everything!
         });
 
         // Vulcan is here!
-        this.logger.printc("FgRed", couldnt_have_forged_it_better_myself);
-        this.logger.info("========== VULCAN has initialised ==========");
+        this.logger.printc('FgRed', couldnt_have_forged_it_better_myself);
+        this.logger.info('========== VULCAN has initialised ==========');
         
         this.initialisationTime = performance.now() - t;
     }
 
     loadEvents () {
         // Load Events
-        let eventsPath = path.join(rootPath, "events");
+        let eventsPath = path.join(rootPath, 'events');
         let vulcan     = this; // this scope hack-thingymacjig
 
         fs.readdirSync(eventsPath).forEach(function (file) {
-            vulcan.logger.info("Vulcan is loading event file '" + file + "'.");
+            vulcan.logger.info(`Vulcan is loading event file '${file}'.`);
             
             let t = performance.now();
             module.exports[path.basename(file, '.js')] = require(path.join(eventsPath, file)); // Store module with its name (from filename)
             t = performance.now() - t;
 
-            vulcan.logger.info("Finished loading event file '" + file + "' (took " + RandomUtility.round(t,2) + "ms).");
+            vulcan.logger.info(`Finished loading event file '${file}' (took '${RandomUtility.round(t,2)}ms').`);
         });
         
         return vulcan;
@@ -92,10 +92,10 @@ class Vulcan extends Client {
     }
 
     connect () {
-        this.logger.info("Attempting to connect to discord servers...");
+        this.logger.info('Attempting to connect to discord servers...');
 
         if (this.privatedata.token === global.Defaults.files.privatedata.data.token) {
-            this.logger.warn(`>>> Default token detected, please change @"${Defaults.files.privatedata.location}"`);
+            this.logger.warn(`>>> Default token detected, please change @'${Defaults.files.privatedata.location}'`);
         }
 
         if (this.configuration.devsID.sort().join(',') !== global.Defaults.files.configuration.data.devsID.sort().join(',')) {

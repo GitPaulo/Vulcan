@@ -21,12 +21,12 @@ class Ping extends Command {
         );
 
         this.phrases = [
-            "Imagine pinging vulcan...",
-            "Give me a second lad.",
-            "OI OI m8!!",
-            "Pinging...",
-            "This won't take long...",
-            "Ping request received....",
+            `Imagine pinging vulcan...`,
+            `Give me a second lad.`,
+            `OI OI m8!!`,
+            `Pinging...`,
+            `This wont take long...`,
+            `Ping request received....`,
         ]
     }
 
@@ -43,8 +43,8 @@ class Ping extends Command {
             `Pong!`, 
             message, 
             [ 
-                { name: "Server Latency", value: `${replyMessage.createdTimestamp - message.createdTimestamp}ms` },
-                { name: "API Latency",    value:  `${ping}ms` }
+                { name: 'Server Latency', value: `${replyMessage.createdTimestamp - message.createdTimestamp}ms` },
+                { name: 'API Latency',    value:  `${ping}ms` }
             ]
         );
 

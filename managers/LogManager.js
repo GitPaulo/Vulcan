@@ -2,33 +2,33 @@ const fs   = require('fs');
 const path = require('path');
 
 const consoleColors = {
-    Reset      : "\x1b[0m",
-    Bright     : "\x1b[1m",
-    Dim        : "\x1b[2m",
-    Underscore : "\x1b[4m",
-    Blink      : "\x1b[5m",
-    Reverse    : "\x1b[7m",
-    Hidden     : "\x1b[8m",
+    Reset      : '\x1b[0m',
+    Bright     : '\x1b[1m',
+    Dim        : '\x1b[2m',
+    Underscore : '\x1b[4m',
+    Blink      : '\x1b[5m',
+    Reverse    : '\x1b[7m',
+    Hidden     : '\x1b[8m',
 
-    FgBlack   : "\x1b[30m",
-    FgRed     : "\x1b[31m",
-    FgGreen   : "\x1b[32m",
-    FgYellow  : "\x1b[33m",
-    FgBlue    : "\x1b[34m",
-    FgMagenta : "\x1b[35m",
-    FgCyan    : "\x1b[36m",
-    FgWhite   : "\x1b[37m",
+    FgBlack   : '\x1b[30m',
+    FgRed     : '\x1b[31m',
+    FgGreen   : '\x1b[32m',
+    FgYellow  : '\x1b[33m',
+    FgBlue    : '\x1b[34m',
+    FgMagenta : '\x1b[35m',
+    FgCyan    : '\x1b[36m',
+    FgWhite   : '\x1b[37m',
 
-    FgLightGreen : "\x1b[92m",
+    FgLightGreen : '\x1b[92m',
 
-    BgBlack   : "\x1b[40m",
-    BgRed     : "\x1b[41m",
-    BgGreen   : "\x1b[42m",
-    BgYellow  : "\x1b[43m",
-    BgBlue    : "\x1b[44m",
-    BgMagenta : "\x1b[45m",
-    BgCyan    : "\x1b[46m",
-    BgWhite   : "\x1b[47m",
+    BgBlack   : '\x1b[40m',
+    BgRed     : '\x1b[41m',
+    BgGreen   : '\x1b[42m',
+    BgYellow  : '\x1b[43m',
+    BgBlue    : '\x1b[44m',
+    BgMagenta : '\x1b[45m',
+    BgCyan    : '\x1b[46m',
+    BgWhite   : '\x1b[47m',
 }
 
 const logLevels = {
@@ -68,7 +68,7 @@ function initialiseLogFileFromClass(filePath, logClass){
 // Create folder (logs and oldlogs) and files if non existant.
 const LOG_FILE_MAX_SIZE = 1*1024*1024; // 1Mb
 
-let folder_name = "logs";
+let folder_name = 'logs';
 let rootPath    = path.dirname(require.main.filename);
 let folderPath  = path.join(rootPath, folder_name);
 
@@ -76,7 +76,7 @@ if (!fs.existsSync(folderPath)) {
     fs.mkdirSync(folderPath);
 }
 
-let oldLogsFolderPath = path.join(folderPath, "oldlogs");
+let oldLogsFolderPath = path.join(folderPath, 'oldlogs');
 
 if (!fs.existsSync(oldLogsFolderPath)) {
     fs.mkdirSync(oldLogsFolderPath);
@@ -112,22 +112,22 @@ let LoggerFactory = (function () {
     function Logger() {
         this.debug = function () {
             if (this._shouldLog(logLevels.DEBUG))
-                this._write(constructLogObject(logLevels.DEBUG, "FgMagenta", ...arguments));
+                this._write(constructLogObject(logLevels.DEBUG, 'FgMagenta', ...arguments));
         }
 
         this.info = function () {
             if (this._shouldLog(logLevels.INFO))
-                this._write(constructLogObject(logLevels.INFO, "FgLightGreen", ...arguments));
+                this._write(constructLogObject(logLevels.INFO, 'FgLightGreen', ...arguments));
         }
 
         this.warn = function () {
             if (this._shouldLog(logLevels.WARN))
-                this._write(constructLogObject(logLevels.WARN, "FgYellow", ...arguments));
+                this._write(constructLogObject(logLevels.WARN, 'FgYellow', ...arguments));
         }
 
         this.error = function () {
             if (this._shouldLog(logLevels.ERROR))
-                this._write(constructLogObject(logLevels.ERROR, "FgRed", ...arguments));
+                this._write(constructLogObject(logLevels.ERROR, 'FgRed', ...arguments));
         }
 
         this.log = function () {
@@ -144,7 +144,7 @@ let LoggerFactory = (function () {
                 arguments[i] = consoleColors[arguments[i]];
 
             let args = Array.prototype.slice.call(arguments);
-            console.log(args.join(""));
+            console.log(args.join(''));
         }
 
         this.getLogClassification = function (logLevel) {
@@ -182,7 +182,7 @@ let LoggerFactory = (function () {
 
             // File too big! Copy file to old logs and then overwrite it! 
             if (stats.size >= LOG_FILE_MAX_SIZE) {
-                let fstr = (new Date().toJSON().slice(0,10)) + "_" + logClass.filename;
+                let fstr = (new Date().toJSON().slice(0,10)) + '_' + logClass.filename;
                 let numberOfRepeats = 0;
 
                 let files = fs.readdirSync(oldLogsFolderPath);
@@ -202,7 +202,7 @@ let LoggerFactory = (function () {
 
             // maybe use async? (Risks confusing log order - but benefits to bot performance?)
             // alternative is queue logs and then write a batch? Needs testing.
-            fs.appendFileSync(logfilePath, messageObject.text + "\n"); 
+            fs.appendFileSync(logfilePath, messageObject.text + '\n'); 
         }
     }
 

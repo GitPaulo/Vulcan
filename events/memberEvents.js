@@ -1,17 +1,17 @@
 const vulcan = require('../bot');
 
-vulcan.on("guildMemberAdd", (member) => {
+vulcan.on('guildMemberAdd', (member) => {
 
 });
 
-vulcan.on("guildMemberRemove", (member) => {
+vulcan.on('guildMemberRemove', (member) => {
     
 });
 
-vulcan.on("guildMemberUpdate", (oldMember, newMember) => {
+vulcan.on('guildMemberUpdate', (oldMember, newMember) => {
     
 });
 
-vulcan.on("guildMemberSpeaking", (member, isSpeaking) => {
+vulcan.on('guildMemberSpeaking', (member, isSpeaking) => {
     
 });

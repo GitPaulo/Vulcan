@@ -14,7 +14,7 @@ class CommandLoader {
     }
 
     loadCommands() {
-        let commandsFolderPath = path.join(__dirname, "../../commands");
+        let commandsFolderPath = path.join(__dirname, '../../commands');
         const commands         = RandomUtility.getAllFiles(commandsFolderPath);
 
         for (let commandPath of commands) {
@@ -23,13 +23,13 @@ class CommandLoader {
             let cmdName = matches[matches.length - 1].slice(0, -3);
             
             try {
-                let fullPath     = path.join(rootPath, "commands", commandPath);
+                let fullPath     = path.join(rootPath, 'commands', commandPath);
                 let CommandClass = require(fullPath);
                 
                 let s               = `\\`;
                 let firstOccurrence = commandPath.indexOf(s)
                 let lastOccurrence  = commandPath.lastIndexOf(s);
-                let CommandType     = commandPath.substring(firstOccurrence+1, lastOccurrence).replace(s, ".");
+                let CommandType     = commandPath.substring(firstOccurrence+1, lastOccurrence).replace(s, '.');
                 
 
                 let command = new CommandClass(CommandType);
@@ -42,7 +42,8 @@ class CommandLoader {
                 t = RandomUtility.round(performance.now() - t, 2);
                 this.vulcan.logger.info(`Loaded command ${cmdName} from ${commandPath} (took ${t}ms)`);
             } catch(err) {
-                this.vulcan.logger.error(`(${err.name}): ${err.message}`);
+                console.log(err.code, err.stack)
+                this.vulcan.logger.error(err.shortMessage());
             }
         }
 

@@ -26,7 +26,7 @@ class StorageManager {
         this.db.on('close', logger.info.bind(logger, 'MongoDB connection has been closed!'));
         
         mongoose.connect(this.dbURL, () => {
-            logger.info("MongoDB connection has been established!");
+            logger.info('MongoDB connection has been established!');
         });
 
         // If the Node process ends, close the Mongoose connection 
