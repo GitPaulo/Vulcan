@@ -1,2 +1,2 @@
 # Vulcan
-**Project Notes:** https://hackmd.io/ZyxmMsJITiKiteYnEHcJrA
+Discord JS bot made for my discord server w/ @CarlosGomes98
