@@ -1,13 +1,10 @@
 {
-  "name": "discordbot",
+  "name": "vulcan",
   "version": "1.0.0",
-  "description": "Collab discord bot with tacos-sama using discord.js.",
+  "description": "Collaboration discord bot Tacos & Paul, using discord.js.",
   "main": "bot.js",
   "scripts": {
-    "test": "tacosgay",
-    "fire in the hole": "bot.js",
-    "start": "bot.js",
-    "vulcan": "bot.js"
+    "start": "node bot.js"
   },
   "repository": {
     "type": "git",
@@ -17,7 +14,8 @@
     "Discord",
     "Bot",
     "discord-js",
-    "music-bot"
+    "music-bot",
+    "vulcan"
   ],
   "author": "Paulo & Carlos",
   "license": "MIT",
@@ -27,8 +25,8 @@
   "homepage": "https://github.com/GitPaulo/Vulcan#readme",
   "dependencies": {
     "discord.js": "github:discordjs/discord.js",
-    "js-yaml": "^3.12.1",
-    "mongoose": "^5.5.1"
+    "js-yaml": "^3.13.1",
+    "mongoose": "^5.5.12"
   },
   "devDependencies": {}
 }

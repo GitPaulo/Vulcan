@@ -1,10 +1,12 @@
-const Command  = require('../../structures/classes/Command');
 const { exec } = require('child_process');
 
-class GitPull extends Command {
+const Command       = require('../../structures/classes/Command');
+const MessageEmbeds = require('../../modules/objects/MessageEmbeds');
+
+class Git extends Command {
     constructor(type) {
         super(type, {
-            name: 'gitpull',
+            name: 'git',
             aliases: ['updatefiles', 'pullgit'],
             group: 'group2',
             description: 'Automatically updates files from github',
@@ -51,4 +53,4 @@ class GitPull extends Command {
     }
 }
 
-module.exports = GitPull;
+module.exports = Git;
