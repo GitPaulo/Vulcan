@@ -1,6 +1,6 @@
 const Command       = require('../../structures/classes/Command');
-const RandomUtility = require('../../modules/objects/RandomUtility');
-const MessageEmbeds = require('../../modules/objects/MessageEmbeds');
+const mathematics   = require('../../modules/utility/mathematics');
+const messageEmbeds = require('../../modules/utility/messageEmbeds');
 
 class Ping extends Command {
     constructor(type) { // type = root folder name (passed on by command loader)
@@ -35,11 +35,11 @@ class Ping extends Command {
     }
 
     async execute(message) {
-        let ping = RandomUtility.round(message.client.ping, 2);
+        let ping = mathematics.round(message.client.ping, 2);
         
         const replyMessage = await message.channel.send(this.phrases[Math.floor(Math.random() * this.phrases.length)]);
         
-        let reply = MessageEmbeds.cmdreply(
+        let replyEmbed = messageEmbeds.cmdreply(
             `Pong!`, 
             message, 
             [ 
@@ -48,7 +48,7 @@ class Ping extends Command {
             ]
         );
 
-        await message.channel.send(reply);
+        await message.channel.send(replyEmbed);
     }
 }
 

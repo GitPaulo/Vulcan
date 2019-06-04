@@ -10,6 +10,10 @@ let DefaultFile = function (location, data) {
     this.data     = data
 }
 
+const COMPLEX = 1;
+const SIMPLE  = 2;
+global.ParsingTypes = { COMPLEX, SIMPLE };
+
 global.Defaults = {
     files : {
         'configuration' : new DefaultFile(
@@ -17,6 +21,7 @@ global.Defaults = {
             { 
                 prefixes: ['!', '>'],
                 devsID:   ['166176374036365312', '207606117159796737'], // please don't change this
+                parsingType: [SIMPLE], // complex or simple
             }
         ),
         'privatedata' : new DefaultFile(

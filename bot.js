@@ -16,9 +16,7 @@ const configuration     = YAML.safeLoad(configurationFile);
 const privatedata       = YAML.safeLoad(privatedataFile);
 
 // Instantiate Vulcan Client object.
-const vulcan = new Vulcan(configuration, privatedata); // if we have trouble with this - blame tacos. *tacos will fix*
-
-// Export (before loading events)
+const vulcan   = new Vulcan(configuration, privatedata); // if we have trouble with this - blame tacos. *tacos will fix*
 module.exports = vulcan;
 
 // Connect to database (comment out if no database needed)

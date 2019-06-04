@@ -1,7 +1,7 @@
 const { exec } = require('child_process');
 
 const Command       = require('../../structures/classes/Command');
-const MessageEmbeds = require('../../modules/objects/MessageEmbeds');
+const MessageEmbeds = require('../../modules/utility/messageEmbeds');
 
 class Git extends Command {
     constructor(type) {

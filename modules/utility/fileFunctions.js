@@ -1,14 +1,10 @@
-/* Random Utility functions will be here - this is sort of a meme module */
+
 const fs   = require('fs');
 const path = require('path');
 
-var RandomUtility = {};
+var fileFunctions = {};
 
-RandomUtility.round = function (value, decimals) {
-    return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
-}
-
-RandomUtility.getAllFiles = function (dir, fileTypes = '.js') {
+fileFunctions.getAllFiles = function (dir, fileTypes = '.js') {
     var filesToReturn = [];
 
     function walkDir(currentPath) {
@@ -27,4 +23,4 @@ RandomUtility.getAllFiles = function (dir, fileTypes = '.js') {
     return filesToReturn;
 }
 
-module.exports = RandomUtility;
+module.exports = fileFunctions;

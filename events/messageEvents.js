@@ -1,6 +1,6 @@
 const vulcan        = require('../bot');
 const MessageParser = require('../structures/classes/MessageParser');
-const MessageEmbeds = require('../modules/objects/MessageEmbeds');
+const MessageEmbeds = require('../modules/utility/messageEmbeds');
 
 // Reminder: Check if message.channel.send() is async if so use await?
 vulcan.on('message', async message => {

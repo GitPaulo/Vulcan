@@ -6,9 +6,9 @@ const fs                     = require('fs');
 const path                   = require('path');
 
 // Vulcan Modules
-const RandomUtility  = require('../../modules/objects/RandomUtility');
-const Logger         = require('../../managers/LogManager');
-const StorageManager = require('../../managers/StorageManager');
+const mathematics    = require('../../modules/utility/mathematics');
+const Logger         = require('../../managers/logManager');
+const StorageManager = require('../../managers/storageManager');
 const CommandLoader  = require('./CommandLoader');
 
 const couldnt_have_forged_it_better_myself = `\\ \\    / /   | |                
@@ -66,7 +66,7 @@ class Vulcan extends Client {
             module.exports[path.basename(file, '.js')] = require(path.join(eventsPath, file)); // Store module with its name (from filename)
             t = performance.now() - t;
 
-            vulcan.logger.info(`Finished loading event file '${file}' (took '${RandomUtility.round(t,2)}ms').`);
+            vulcan.logger.info(`Finished loading event file '${file}' (took '${mathematics.round(t,2)}ms').`);
         });
         
         return vulcan;

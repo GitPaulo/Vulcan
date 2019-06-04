@@ -1,27 +1,14 @@
-const Discord = require('discord.js');
 
-class Message extends Discord.Message {
-    constructor(...args) {
-        super(...args);
+const { Message } = require('discord.js');
 
-        this.isCommand  = false;
-        this.command    = null;
-        this.argString  = null;
-        this.args       = null;
-        this.raw        = null;
-        this.parsedName = null;
-    }
+Message.prototype.initCommand = function (command, argString, args, raw, parsedName) {
+    this.isCommand  = true;
+    this.command    = command;
+    this.argString  = argString;
+    this.args       = args;
+    this.raw        = raw;
+    this.parsedName = parsedName;
 
-    initCommand(command, argString, args, raw, parsedName) {
-        this.isCommand  = true;
-        this.command    = command;
-        this.argString  = argString;
-        this.args       = args;
-        this.raw        = raw;
-        this.parsedName = parsedName;
+    return this;
+};
 
-        return this;
-    }
-}
-
-Discord.Structures.extend('Message', m => Message);

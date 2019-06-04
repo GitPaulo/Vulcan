@@ -84,7 +84,7 @@ if (!fs.existsSync(oldLogsFolderPath)) {
 
 for (let logClassKey in classification) {
     let logClass = classification[logClassKey];
-    let filePath  = path.join(folderPath, logClass.filename);
+    let filePath = path.join(folderPath, logClass.filename);
 
     if (!fs.existsSync(filePath)) {
         initialiseLogFileFromClass(filePath, logClass);

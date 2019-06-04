@@ -10,7 +10,7 @@ MessageEmbeds.cmdreply = function (text, requestMessage, replyFields=[], extraFi
             color: cmd.embed.color,
             author: {
                 name: 'Replying@' + requestMessage.author.username,
-                icon_url: requestMessage.author.avatarURL()
+                icon_url: requestMessage.author.avatarURL
             },
             title: cmd.embed.title,
             description: text,

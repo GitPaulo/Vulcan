@@ -1,8 +1,8 @@
 const Command = require('./Command');
 const fs      = require('fs');
 const path    = require('path');
-
-const RandomUtility      = require('../../modules/objects/RandomUtility');
+const mathematics        = require('../../modules/utility/mathematics');
+const fileFunctions      = require('../../modules/utility/fileFunctions');
 const { _, performance } = require('perf_hooks');
 
 let rootPath = path.dirname(require.main.filename)
@@ -15,7 +15,7 @@ class CommandLoader {
 
     loadCommands() {
         let commandsFolderPath = path.join(__dirname, '../../commands');
-        const commands         = RandomUtility.getAllFiles(commandsFolderPath);
+        const commands         = fileFunctions.getAllFiles(commandsFolderPath);
 
         for (let commandPath of commands) {
             let t       = performance.now();
@@ -39,7 +39,7 @@ class CommandLoader {
                     this.commandList[key] = command;
                 }
 
-                t = RandomUtility.round(performance.now() - t, 2);
+                t = mathematics.round(performance.now() - t, 2);
                 this.vulcan.logger.info(`Loaded command ${cmdName} from ${commandPath} (took ${t}ms)`);
             } catch(err) {
                 console.log(err.code, err.stack)

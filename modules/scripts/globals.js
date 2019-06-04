@@ -1,5 +1,5 @@
 // GLOBALS FILE! 
-const RandomUtility     = require('../objects/RandomUtility');
+const mathematics       = require('../utility/mathematics');
 const { _, performance} = require('perf_hooks');
 const fs                = require('fs');
 const path              = require('path');
@@ -52,7 +52,7 @@ global.requireall = function () {
         n++;
     }
 
-    t = RandomUtility.round(performance.now() - t, 2);
+    t = mathematics.round(performance.now() - t, 2);
     console.log(`[REQUIREALL] => Sucessfully loaded ${n} modules at '${path}' (took ${t}ms)`);
 
     return exports;

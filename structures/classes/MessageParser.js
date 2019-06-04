@@ -1,6 +1,10 @@
 const DISCORD_ARGS_REGULAR_EXPRESSION = /'+([^;]*)'+|{+([^;]*)}+|`+([^;]*)`+|\[([^;]*)\]|\S+/g;
 
 let MessageParserFactory = (function () {
+    /**
+     *  This is just a stupid attempt at string -> Data Type parsing.
+     *  Bot uses two types of parsing, this and simple string spliting. 
+     */
     function parseStringToDataTypes(targetText) {
         let matches      = targetText.match(DISCORD_ARGS_REGULAR_EXPRESSION);
         let parsedValues = [];
@@ -10,7 +14,7 @@ let MessageParserFactory = (function () {
 
         for (let i = 0; i < matches.length; i++) {
             let match       = matches[i]
-            parsedValues[i] = Number(match);
+            parsedValues[i] = parseInt(match);
 
             if (!isNaN(parsedValues[i]))
                 continue;
@@ -25,8 +29,9 @@ let MessageParserFactory = (function () {
             } catch (e) {
                 parsedValues[i] = null;
             }
-
-            parsedValues[i] = parsedValues[i] === null ? match : parsedValues[i];
+            
+            parsedValues[i] = match.startsWith('"') && match.endsWith('"') ? match.substring(1, match.length-1) : match
+            parsedValues[i] = parsedValues[i].replaceAll('%"', '"');
         }
 
         return parsedValues;
@@ -46,11 +51,12 @@ let MessageParserFactory = (function () {
                     message: null
                 };
 
-            let args = matches;
-            args.shift();
-
+            let args      = matches; args.shift();
             let argString = args.join(' ').trim();
-            args          = parseStringToDataTypes(argString);
+            
+            if (vulcan.configuration.parsingType == global.ParsingTypes.COMPLEX) {
+                args = parseStringToDataTypes(argString);
+            }
 
             console.log(args, '<<< parsed values');
             console.log(`[MESSAGE PARSER DEBUG] => Matches: [${matches}]`, `Arguments Array: [${args}](wrong types check above spew)`, `Argument String: ${argString}`, `Parsed Name: ${firstword}`);

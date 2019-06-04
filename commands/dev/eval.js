@@ -1,8 +1,8 @@
 const { _, performance } = require('perf_hooks');
 
 const Command       = require('../../structures/classes/Command');
-const RandomUtility = require('../../modules/objects/RandomUtility');
-const MessageEmbeds = require('../../modules/objects/MessageEmbeds');
+const mathematics   = require('../../modules/utility/mathematics');
+const messageEmbeds = require('../../modules/utility/messageEmbeds');
 
 class Eval extends Command {
     constructor(type) {
@@ -42,9 +42,9 @@ class Eval extends Command {
             returnValue = e.toString();
         }
 
-        t = RandomUtility.round(performance.now() - t, 2);
+        t = mathematics.round(performance.now() - t, 2);
 
-        let reply = MessageEmbeds.cmdreply(
+        let reply = messageEmbeds.cmdreply(
             `\`${message.args[0]}\``, 
             message, 
             [ 

@@ -1,7 +1,1 @@
-const Discord = require('discord.js');
-
-class User extends Discord.User {
-
-}
-
-Discord.Structures.extend('User', u => User);
+const { User } = require('discord.js');

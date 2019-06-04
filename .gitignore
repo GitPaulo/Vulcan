@@ -91,6 +91,9 @@ settings/
 # Ignore logs folder
 logs/
 
+# Gif command folder
+gifs/
+
 #VS PLS
 .vscode/
 
