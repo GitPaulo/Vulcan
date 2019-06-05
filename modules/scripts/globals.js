@@ -4,9 +4,7 @@ const { _, performance} = require('perf_hooks');
 const fs                = require('fs');
 const path              = require('path');
 
-global.print = function () {
-    console.log('[PRINT]', ...arguments);
-}
+global.print = console.log;
 
 global.xrequire = (...module) => {
     if (module[0] && module[0].startsWith('.')) {
@@ -53,7 +51,7 @@ global.requireall = function () {
     }
 
     t = mathematics.round(performance.now() - t, 2);
-    console.log(`[REQUIREALL] => Sucessfully loaded ${n} modules at '${path}' (took ${t}ms)`);
+    print(`[REQUIREALL] => Sucessfully loaded ${n} modules at '${path}' (took ${t}ms)`);
 
     return exports;
 }

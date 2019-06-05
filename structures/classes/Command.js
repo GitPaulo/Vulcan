@@ -1,6 +1,7 @@
-const assert = require('assert');
+const assert        = require('assert');
+const messageEmbeds = require('../../modules/utility/messageEmbeds');
 
-function rassert(exp, msg) {
+var rassert = (exp, msg) => {
     assert(exp, msg)
     return exp;
 }
@@ -60,7 +61,7 @@ class Command {
 
         for (let metadata of command.args) { // not iterable
             let messageArg = messageArgs[messageArgsIndex];
-            console.log(messageArg, typeof messageArg, metadata.type, typeof messageArg !== typeof metadata.type);
+            print(messageArg, typeof messageArg, metadata.type, typeof messageArg !== typeof metadata.type);
             if (typeof messageArg !== typeof metadata.type) {
                 invalidArgsPositions.push(messageArgsIndex);
                 hasValidArguments = false;

@@ -1,7 +1,7 @@
 const { exec } = require('child_process');
 
 const Command       = require('../../structures/classes/Command');
-const MessageEmbeds = require('../../modules/utility/messageEmbeds');
+const messageEmbeds = require('../../modules/utility/messageEmbeds');
 
 class Git extends Command {
     constructor(type) {
@@ -34,12 +34,12 @@ class Git extends Command {
             if (err) {
                 let errStr = err.shortMessage();
                 vulcan.logger.error(errStr);
-                reply = MessageEmbeds.error(errStr);
+                reply = messageEmbeds.error(errStr);
             } else {
                 let pullText = pull.toString();
                 vulcan.logger.debug(pullText);
     
-                reply = MessageEmbeds.cmdreply(
+                reply = messageEmbeds.cmdreply(
                     `Pulling from branch \`master\``, 
                     message, 
                     [ 

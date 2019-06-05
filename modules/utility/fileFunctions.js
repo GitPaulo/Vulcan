@@ -2,7 +2,7 @@
 const fs   = require('fs');
 const path = require('path');
 
-var fileFunctions = {};
+module.exports = fileFunctions = {};
 
 fileFunctions.getAllFiles = function (dir, fileTypes = '.js') {
     var filesToReturn = [];
@@ -22,5 +22,3 @@ fileFunctions.getAllFiles = function (dir, fileTypes = '.js') {
     walkDir(dir);
     return filesToReturn;
 }
-
-module.exports = fileFunctions;

@@ -42,7 +42,7 @@ class CommandLoader {
                 t = mathematics.round(performance.now() - t, 2);
                 this.vulcan.logger.info(`Loaded command ${cmdName} from ${commandPath} (took ${t}ms)`);
             } catch(err) {
-                console.log(err.code, err.stack)
+                print(err.code, err.stack)
                 this.vulcan.logger.error(err.shortMessage());
             }
         }

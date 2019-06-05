@@ -1,8 +1,9 @@
-const fs            = require('fs');
-const path          = require('path');
-const http          = require('http');
-const Command       = require('../../structures/classes/Command');
-const messageEmbeds = require('../../modules/utility/messageEmbeds');
+const Discord          = require('discord.js');
+const fs               = require('fs');
+const path             = require('path');
+const http             = require('http');
+const Command          = require('../../structures/classes/Command');
+const messageEmbeds    = require('../../modules/utility/messageEmbeds');
 const stringAlgorithms = require('../../modules/utility/stringAlgorithms');
 
 class Gif extends Command {
@@ -17,15 +18,15 @@ class Gif extends Command {
             args: [],
             embed: {
                 color: 0x666666,
-                title: `Gif Commands!`,
+                title: `Gif`,
                 image: './assets/media/images/commands/Gif.gif',
             }
         });
 
         // Create gif folder 
-        let folder_name  = 'gifs';
-        let rootPath     = path.dirname(require.main.filename);
-        this.folderPath  = path.join(rootPath, 'data', folder_name);
+        let folder_name = 'gifs';
+        let rootPath    = path.dirname(require.main.filename);
+        this.folderPath = path.join(rootPath, 'data', folder_name);
         this.allowedExtensions = ['.png', '.jpg', '.mp4', '.gif'];
 
         // Create Gif folder (where we store all downloaded gifs)
@@ -35,62 +36,113 @@ class Gif extends Command {
     }
 
     async validate(message) {
-        return true; // if true execute() will run
+        return true;
     }
 
     async execute(message) {
-        let reply = await message.channel.send('**Processing request...**');;
-        let cmd   = message.args[0];
+        let cmd        = message.args[0];
+        let channel    = message.channel;
+        let replyEmbedData = {
+            replyeeMessage: message,
+            title: `Gif request received: **${cmd}**`,
+            fields: [
+                {
+                    name: 'Arguments',
+                    value: message.args.join(', ')
+                },
+                {
+                    name: 'Output',
+                    value: 'Processing...'
+                }
+            ]
+        };
+
+        let firstReply = await channel.send(messageEmbeds.reply(replyEmbedData));
 
         switch (cmd) {
-            case 'store': case 'upload': case 'put':
+            case 'store':
+            case 'upload':
+            case 'put':
                 let keyword = message.args[1];
                 let data    = message.args[2];
-                if (stringAlgorithms.isURL(data)) {    
+                if (typeof data === undefined  || data === "" 
+                    || typeof keyword == undefined || typeof keyword === undefined) {
+                    await message.channel.send(messageEmbeds.warning(
+                        {
+                            authorName: message.author.username,
+                            title:      this.constructor.name + ' -> Invalid arguments.',
+                            description: `There were invalid arguments for the "put" request: arg[1] = ${keyword}, arg[2] = ${data}`
+                        }
+                    ));
+                    return;
+                }
+                if (stringAlgorithms.isURL(data)) {
                     this.storeImageFromURL(keyword, data, async (result) => {
-                        await reply.edit(result);
+                        replyEmbedData.fields[1].value = result;
+                        firstReply.edit(messageEmbeds.reply(replyEmbedData));
                     });
                 } else { // its file upload
                     let messageWithImage;
                     try {
-                        console.log(data);
                         messageWithImage = await message.channel.fetchMessage(String(data));
                     } catch (err) {
-                        let replyEmbed = messageEmbeds.warning(
-                            message.author.username,
-                            this.constructor.name + ' -> Unknown channel message', 
-                            'The message with id: **' + data + '** was not found in the list of messages from this channel.', 
-                        );
-                        await message.channel.send(replyEmbed);
+                        await message.channel.send(messageEmbeds.warning(
+                            {
+                                authorName: message.author.username,
+                                title:      this.constructor.name + ' -> Unknown channel message',
+                                description: 'The message with id: **' + data + '** was not found in the list of messages from this channel.'
+                            }
+                        ));
                         return;
                     }
                     this.storeImageFromMessage(keyword, messageWithImage, async (result) => {
-                        await reply.edit(result);
+                        replyEmbedData.fields[1].value = result;
+                        firstReply.edit(messageEmbeds.reply(replyEmbedData));
                     });
                 }
                 break;
-            case 'get': case 'fetch':
+            case 'get':
+            case 'fetch':
                 let potentialKeyword = message.args[1];
+                if (!potentialKeyword) {
+                    await message.channel.send(messageEmbeds.warning(
+                        {
+                            authorName: message.author.username,
+                            title:      this.constructor.name + ' -> Invalid arguments.',
+                            description:`There were invalid arguments for the "fetch" request: arg[1] = ${potentialKeyword}`
+                        }
+                    ));
+                    return;
+                }
                 this.fetchImage(potentialKeyword, async (result) => {
-                    console.log("RESULT: ", result);
+                    replyEmbedData.fields[1].value = result, 
+                    firstReply.edit(messageEmbeds.reply(replyEmbedData));
                     await message.channel.send({
                         files: [result]
                     });
                 });
                 break;
-            case 'list': case 'all':
-                // some sort of listing, because this can grow large, publish to pastebin?
-                await message.channel.send('**[NOT IMPLEMENTED YET]**');
+            case 'list':
+            case 'all':
+                this.getImages(async (err, files) => {
+                    replyEmbedData.fields[1].value = files.join(', ');
+                    firstReply.edit(messageEmbeds.reply(replyEmbedData));
+                });
                 break;
             default:
-                let replyEmbed = messageEmbeds.warning(
-                    message.author.username,
-                    'Invalid "' + this.constructor.name + '" sub-command!', 
-                    'The command **' + cmd + '** was not found in the list of sub-commands for this operation. Please try again or check documentation.', 
-                );
-                await message.channel.send(replyEmbed);
+                await message.channel.send(messageEmbeds.warning(
+                    {
+                        authorName: message.author.username,
+                        title: '    Invalid "' + this.constructor.name + '" sub-command!',
+                        description:'The command **' + cmd + '** was not found in the list of sub-commands for this operation. Please try again or check documentation.',
+                    }
+                ));
                 break;
         }
+    }
+
+    getImages(callback) {
+        fs.readdir(this.folderPath, callback);
     }
 
     storeImageFromMessage(fileName, message, callback) {
@@ -100,59 +152,62 @@ class Gif extends Command {
             this.storeImageFromURL(fileName, attachment.proxyURL);
         }
 
-        console.log(message.attachments);
         if (callback)
             callback("completed!");
     }
 
     storeImageFromURL(fileName, url, callback) {
-        // make sure it is http
+        // Only 'http' allowed with GET
         url = url.replace('https://', 'http://');
 
         let extension = url.substr(url.lastIndexOf('.'));
         if (!this.allowedExtensions.includes(extension)) {
             if (callback)
-                callback("Invalid extension!"); 
+                callback("Invalid extension!");
             return;
         }
 
         let filePath = path.join(this.folderPath, fileName + extension);
         let file = fs.createWriteStream(filePath);
 
-        let request = http.get(url, function (response) {
-            response.pipe(file);
-            file.on('finish', function () {
-                file.close(); // close() is async, call callback after close completes.
-                if (callback) 
-                    callback("File stored!");
+        try {
+            let request = http.get(url, function (response) {
+                response.pipe(file);
+                file.on('finish', function () {
+                    file.close(); 
+                    if (callback)
+                        callback("File stored!");
+                });
+            }).on('error', function (err) { // Handle errors
+                fs.unlink(this.folderPath); // Delete the file async. (But we don't check the result)
+                if (callback)
+                    callback(err.message);
             });
-        }).on('error', function (err) { // Handle errors
-            fs.unlink(this.folderPath); // Delete the file async. (But we don't check the result)
-            if (callback) 
-                callback(err.message);
-        });
+        } catch (err) {
+            if (callback)
+                callback(err.message)
+        }
     };
 
     fetchImage(keyword, callback) {
         fs.readdir(this.folderPath, (err, files) => {
-            // handling error
             if (err) {
-                if (callback) 
+                if (callback)
                     callback(err.message);
-            } 
+            }
 
             let filePath = 'N/A';
             let hvalue   = 0;
 
             files.forEach(function (file) {
                 let cvalue = stringAlgorithms.levenshteinSimilarity(keyword, file);
-                if (cvalue > hvalue){
+                if (cvalue > hvalue) {
                     filePath = file;
                     hvalue   = cvalue;
                 }
             });
-            
-            if (callback) 
+
+            if (callback)
                 callback(path.join(this.folderPath, filePath));
         });
     }

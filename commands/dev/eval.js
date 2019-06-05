@@ -44,16 +44,18 @@ class Eval extends Command {
 
         t = mathematics.round(performance.now() - t, 2);
 
-        let reply = messageEmbeds.cmdreply(
-            `\`${message.args[0]}\``, 
-            message, 
-            [ 
-                { name: 'Perfomance Benchmark', value: `${t}ms` },
-                { name: 'Output',               value:  `${returnValue}` }
-            ]
+        let embed = messageEmbeds.reply(
+            {
+                replyeeMessage : message, 
+                title: `\`${message.args[0]}\``, 
+                fields: [ 
+                    { name: 'Perfomance Benchmark', value: `${t}ms` },
+                    { name: 'Output',               value:  `${returnValue}` }
+                ]
+            }
         );
 
-        await message.channel.send(reply);
+        await message.channel.send(embed);
     }
 }
 

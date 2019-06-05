@@ -54,7 +54,7 @@ global.Defaults = {
 
         if (!fs.existsSync(path)) {
             let data = YAML.safeDump(defaultObject.data);
-            console.log(`Missing essential file: '${path}' - writing defaults...`);
+            print(`Missing essential file: '${path}' - writing defaults...`);
            
             fs.writeFileSync(path, data, function(err) {
                 if (err) throw err;

@@ -1,6 +1,6 @@
 const vulcan        = require('../bot');
+const messageEmbeds = require('../modules/utility/messageEmbeds');
 const MessageParser = require('../structures/classes/MessageParser');
-const MessageEmbeds = require('../modules/utility/messageEmbeds');
 
 // Reminder: Check if message.channel.send() is async if so use await?
 vulcan.on('message', async message => {
@@ -21,7 +21,7 @@ vulcan.on('message', async message => {
     let parseError    = messageParser.parse(vulcan, message); // changes the message objet! (if command: attaches extra properties)
 
     if (parseError.hasError)
-        message.channel.send(MessageEmbeds.error(message.author.username, 'Command Validation', `Command Parse error: ${parseError.message}`));
+        message.channel.send(messageEmbeds.error(message.author.username, 'Command Validation', `Command Parse error: ${parseError.message}`));
 
     if (message.isCommand) {
         let cmd        = message.command;
@@ -29,7 +29,13 @@ vulcan.on('message', async message => {
         
         if (!validation.isValid) {
             let invalidArguments = validation.list.toString();
-            message.channel.send(MessageEmbeds.warning(message.author.username, 'Command Argument Validation', `The arguments corresponding to positions: \`${invalidArguments}\` did not match the expected types!`));
+            message.channel.send(messageEmbeds.warning(
+                {
+                    authorName: message.author.username, 
+                    title:      'Command Argument Validation', 
+                    description: `The arguments corresponding to positions: \`${invalidArguments}\` did not match the expected types!`
+                }
+            ));
             return;
         }
 
@@ -42,11 +48,23 @@ vulcan.on('message', async message => {
         } else {
             // maybe change to handle this as exceptions
             userMessage = hasTimedOut ? 'Command Timeout triggered => WOA, WAIT YOU FUCKER!' : 'Command validation failed :(!';
-            userMessage = MessageEmbeds.warning(message.author.username, 'Command Validation', userMessage);
+            userMessage = messageEmbeds.warning(
+                {   
+                    authorName: message.author.username, 
+                    title:      'Command Validation', 
+                    description: userMessage
+                }
+            );
 
             message.channel.send(userMessage); 
         }
     } else {
-        message.channel.send(MessageEmbeds.warning(message.author.username, 'Command Existance Check', 'The command you have entered does not exist!'));
+        message.channel.send(messageEmbeds.warning(
+            {
+                authorName: message.author.username, 
+                title:      'Command Existance Check', 
+                description:'The command you have entered does not exist!'
+            }
+        ));
     }
 });

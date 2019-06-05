@@ -136,7 +136,7 @@ let LoggerFactory = (function () {
         }
 
         this.print = function () {
-            console.log(consoleColors.FgWhite, ...arguments);
+            print(consoleColors.FgWhite, ...arguments);
         }
 
         this.printc = function () {
@@ -144,7 +144,7 @@ let LoggerFactory = (function () {
                 arguments[i] = consoleColors[arguments[i]];
 
             let args = Array.prototype.slice.call(arguments);
-            console.log(args.join(''));
+            print(args.join(''));
         }
 
         this.getLogClassification = function (logLevel) {

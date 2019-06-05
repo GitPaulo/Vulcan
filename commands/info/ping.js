@@ -35,20 +35,18 @@ class Ping extends Command {
     }
 
     async execute(message) {
-        let ping = mathematics.round(message.client.ping, 2);
-        
-        const replyMessage = await message.channel.send(this.phrases[Math.floor(Math.random() * this.phrases.length)]);
-        
-        let replyEmbed = messageEmbeds.cmdreply(
-            `Pong!`, 
-            message, 
-            [ 
-                { name: 'Server Latency', value: `${replyMessage.createdTimestamp - message.createdTimestamp}ms` },
+        let ping       = mathematics.round(message.client.ping, 2);
+        let preMessage = await message.channel.send(this.phrases[Math.floor(Math.random() * this.phrases.length)]);
+        let reply      = messageEmbeds.reply({
+            replyeeMessage: message,
+            title: "Pong!",
+            fields: [ 
+                { name: 'Server Latency', value: `${preMessage.createdTimestamp - message.createdTimestamp}ms` },
                 { name: 'API Latency',    value:  `${ping}ms` }
             ]
-        );
-
-        await message.channel.send(replyEmbed);
+        });
+        
+        await message.channel.send(reply);
     }
 }
 

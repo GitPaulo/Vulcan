@@ -1,4 +1,4 @@
-var stringAlgorithms = {};
+module.exports = stringAlgorithms = {};
 
 stringAlgorithms.isURL = function (str) {
     var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
@@ -57,5 +57,3 @@ stringAlgorithms.levenshteinSimilarity = function (s1, s2) {
 
     return (longerLength - stringAlgorithms.editDistance(longer, shorter)) / parseFloat(longerLength);
 }
-
-module.exports = stringAlgorithms;

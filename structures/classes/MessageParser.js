@@ -3,7 +3,7 @@ const DISCORD_ARGS_REGULAR_EXPRESSION = /'+([^;]*)'+|{+([^;]*)}+|`+([^;]*)`+|\[(
 let MessageParserFactory = (function () {
     /**
      *  This is just a stupid attempt at string -> Data Type parsing.
-     *  Bot uses two types of parsing, this and simple string spliting. 
+     *  Bot uses two types of parsing this, COMPLEX, and SIMPLE, string spliting. 
      */
     function parseStringToDataTypes(targetText) {
         let matches      = targetText.match(DISCORD_ARGS_REGULAR_EXPRESSION);
@@ -58,8 +58,11 @@ let MessageParserFactory = (function () {
                 args = parseStringToDataTypes(argString);
             }
 
-            console.log(args, '<<< parsed values');
-            console.log(`[MESSAGE PARSER DEBUG] => Matches: [${matches}]`, `Arguments Array: [${args}](wrong types check above spew)`, `Argument String: ${argString}`, `Parsed Name: ${firstword}`);
+            print(args, '<<< parsed values');
+            print(`[MESSAGE PARSER DEBUG] => Matches: [${matches}]`, 
+                `Arguments Array: [${args}](wrong types check above spew)`, 
+                `Argument String: ${argString}`, `Parsed Name: ${firstword}`
+            );
 
             message.initCommand(command, argString, args, raw, firstword);
 

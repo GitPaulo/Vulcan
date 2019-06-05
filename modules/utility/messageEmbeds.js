@@ -1,52 +1,77 @@
-var MessageEmbeds = {};
+module.exports = messageEmbeds = {};
 
-MessageEmbeds.cmdreply = function (text, requestMessage, replyFields=[], extraFiles=[]) {
-    let cmd     = requestMessage.command;
-    let imgPath = cmd.embed.image; 
-    let imgName = imgPath.substring(imgPath.lastIndexOf('/')+1);
+messageEmbeds.reply = function ( 
+    { 
+        replyeeMessage,
+        cmd    = replyeeMessage.command,
+        color  = cmd.embed.color,
+        title  = cmd.embed.title, 
+        author = {
+            name:     'Replying@' + replyeeMessage.author.username,
+            icon_url: replyeeMessage.author.avatarURL,
+            url:      replyeeMessage.url
+        },
+        description = "", 
+        fields      = [], 
+        timestamp   = new Date(),
+        footer      = {
+            text: `Vulcan's reply to a command request!`
+        },
+        extraFiles  = [],
+    }
+) {
+    if (typeof replyeeMessage === undefined)
+        return; 
+
+    let imgPath   = replyeeMessage.command.embed.image; 
+    let imgName   = imgPath.substring(imgPath.lastIndexOf('/') + 1);
+    let thumbnail = { url: 'attachment://' + imgName };
+    let files     = [
+        {
+            attachment: imgPath,
+            name: imgName
+        },
+        ...extraFiles
+    ];
 
     return {
         embed: {
-            color: cmd.embed.color,
-            author: {
-                name: 'Replying@' + requestMessage.author.username,
-                icon_url: requestMessage.author.avatarURL
-            },
-            title: cmd.embed.title,
-            description: text,
-            thumbnail: {
-                url: 'attachment://' + imgName,
-            },
-            fields : replyFields,
-            timestamp: new Date(),
-            footer: {
-                text: `Vulcan's reply to a command request!`
-            }
+            color,
+            author,
+            title,
+            description,
+            thumbnail,
+            fields,
         },
-        files: [
-            {
-                attachment: imgPath,
-                name: imgName
-            },
-            ...extraFiles
-        ]
-    }
+        files,
+    };
 }
 
-MessageEmbeds.error = function (message, title='Error!', ) {
+messageEmbeds.error = function (
+    {
+        title       = `Error`,
+        description = "",
+        color       = 0xFF0000, // red
+        authorName  = "",
+        author      = {
+            name:      authorName,
+            icon_url: `attachment://error.png` 
+        },
+        timestamp   = new Date(),
+        footer      = {
+            text: '[Error] An exception thrown by vulcan or something bad! Contact devs pls!'
+        },
+        url         = ""
+    }
+) {
     return {
         embed: {
-            color: 0xFF0000, // red
-            author: {
-                name: authorName,
-                icon_url: `attachment://error.png` 
-            },
-            title: title,
-            description: message,
-            timestamp: new Date(),
-            footer: {
-                text: '[Error] => An exception thrown by vulcan or something bad! Contact devs pls!'
-            }
+            title,
+            description,
+            color,
+            author,
+            timestamp,
+            footer,
         },
         files: [
             {
@@ -57,20 +82,31 @@ MessageEmbeds.error = function (message, title='Error!', ) {
     }
 }
 
-MessageEmbeds.warning = function (authorName = '', title, message) {
+messageEmbeds.warning = function (
+    {
+        title       = `Warning`, 
+        description = "",
+        color       = 0xff8d00, // orange
+        authorName  = "",
+        author      = {
+            name:      authorName,
+            icon_url: `attachment://warning.png` 
+        },
+        timestamp   = new Date(),
+        footer      = {
+            text: '[Warning] An unexpected behaviour not controlled by vulcan.'
+        },
+        url         = ""
+    }
+) {
     return {
         embed: {
-            color: 0xff8d00, // orange
-            author: {
-                name: authorName,
-                icon_url: `attachment://warning.png`
-            },
-            title: title,
-            description: message,
-            timestamp: new Date(),
-            footer: {
-                text: '[Warning] => An unexpected behaviour not controlled by vulcan.'
-            }
+            title,
+            description,
+            color,
+            author,
+            timestamp,
+            footer,
         },
         files: [
             {
@@ -81,20 +117,31 @@ MessageEmbeds.warning = function (authorName = '', title, message) {
     }
 }
 
-MessageEmbeds.info = function (authorName = '', title, message) {
+messageEmbeds.info = function (
+    {
+        title       = `Information`,
+        description = "",
+        color       = 0x89CFF0, // bblue
+        authorName  = "",
+        author      = {
+            name:      authorName,
+            icon_url: `attachment://warning.png` 
+        },
+        timestamp   = new Date(),
+        footer      = {
+            text: '[Info] Information displayed by vulcan for the users.'
+        },
+        url         = ""
+    }
+) {
     return {
         embed: {
-            color: 0xC0C0C0, // grey
-            author: {
-                name: authorName,
-                icon_url: `attachment://info.png`
-            },
-            title: title,
-            description: message,
-            timestamp: new Date(),
-            footer: {
-                text: '[Info] => Information displayed by vulcan for the users.'
-            }
+            title,
+            description,
+            color,
+            author,
+            timestamp,
+            footer,
         },
         files: [
             {
@@ -104,5 +151,3 @@ MessageEmbeds.info = function (authorName = '', title, message) {
         ]
     }
 }
-
-module.exports = MessageEmbeds;
