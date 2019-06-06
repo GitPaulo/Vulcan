@@ -1,15 +1,14 @@
-const Command = require('./Command');
-const fs      = require('fs');
-const path    = require('path');
+const Command            = require('./Command');
+const fs                 = require('fs');
+const path               = require('path');
+const { _, performance } = require('perf_hooks');
 const mathematics        = require('../../modules/utility/mathematics');
 const fileFunctions      = require('../../modules/utility/fileFunctions');
-const { _, performance } = require('perf_hooks');
-
-let rootPath = path.dirname(require.main.filename)
+const logger             = require('../../managers/logManager').getInstance();
+const rootPath           = path.dirname(require.main.filename);
 
 class CommandLoader {
-    constructor(vulcan) {
-        this.vulcan      = vulcan;
+    constructor(logger) {
         this.commandList = {};
     }
 
@@ -40,10 +39,10 @@ class CommandLoader {
                 }
 
                 t = mathematics.round(performance.now() - t, 2);
-                this.vulcan.logger.info(`Loaded command ${cmdName} from ${commandPath} (took ${t}ms)`);
+                logger.info(`Loaded command ${cmdName} from ${commandPath} (took ${t}ms)`);
             } catch(err) {
                 print(err.code, err.stack)
-                this.vulcan.logger.error(err.shortMessage());
+                logger.error(err.shortMessage());
             }
         }
 

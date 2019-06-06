@@ -1,14 +1,14 @@
-Object.defineProperty(Object.prototype, 'getMethodNames', {
-    enumerable: false,
-    value: function () {
-        let obj = this;
-        let properties = new Set()
-        let currentObj = obj;
-        
-        do {
-            Object.getOwnPropertyNames(currentObj).map(item => properties.add(item))
-        } while ((currentObj = Object.getPrototypeOf(currentObj)))
+const isPlainObject = x =>
+    Object(x) === x && !Array.isArray(x)
 
-        return [...properties.keys()].filter(item => typeof obj[item] === 'function')
-    }
-});
+const formatKey = (...segments) =>
+    segments.join('.')
+
+Object.allKeys = (o, pre = [], acc = []) =>
+    Object
+    .keys(o)
+    .reduce((acc, k) =>
+        isPlainObject(o[k]) ?
+        [...acc, ...deepKeys(o[k], [...pre, k], acc)] :
+        [...acc, formatKey(...pre, k)], []
+    )

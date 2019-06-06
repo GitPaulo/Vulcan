@@ -1,11 +1,12 @@
 const vulcan        = require('../bot');
+const logger        = require('../managers/logManager').getInstance();
 const messageEmbeds = require('../modules/utility/messageEmbeds');
 const MessageParser = require('../structures/classes/MessageParser');
 
 // Reminder: Check if message.channel.send() is async if so use await?
 vulcan.on('message', async message => {
     // message.client === vulcan
-    vulcan.logger.info('[GUILD: ' + message.guild.name + '] => [MESSAGE][' + message.author.username + '][' + message.channel.name + ']: ' + message.content);
+    logger.info('[GUILD: ' + message.guild.name + '] => [MESSAGE][' + message.author.username + '][' + message.channel.name + ']: ' + message.content);
 
     // Don't respond to self - bad recursion can happen LULW
     if (message.author.bot) return;

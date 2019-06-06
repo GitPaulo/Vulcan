@@ -1,13 +1,14 @@
-// Require globals and defaults + structures needed before initialisation
-require('./modules/scripts/globals.js');
-require('./modules/scripts/defaults.js');
+// Pre initialisation
+require('./modules/scripts/globals');
 requireall('./structures/prototypes');
 requireall('./structures/extensions');
+require('./modules/scripts/defaults');
 
 // Get them boys first.
 const fs     = require('fs');
 const YAML   = require('js-yaml');
 const Vulcan = require('./structures/classes/Vulcan');
+const logger = require('./managers/logManager').getInstance();
 
 // Load Data.
 const configurationFile = fs.readFileSync('./settings/config.yaml', 'utf8');
@@ -26,4 +27,4 @@ module.exports = vulcan;
 vulcan.loadEvents().connect();
 
 // Log
-vulcan.logger.log(`Vulcan initialisation completed! Time taken: ${vulcan.uptime()}`);
+logger.log(`Vulcan initialisation completed! Time taken: ${vulcan.uptime()}`);

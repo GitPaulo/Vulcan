@@ -25,8 +25,9 @@
   "homepage": "https://github.com/GitPaulo/Vulcan#readme",
   "dependencies": {
     "discord.js": "~11.5.1",
+    "github-api": "^3.2.0",
     "js-yaml": "^3.13.1",
-    "mongoose": "^5.5.12"
+    "mongoose": "^5.5.13"
   },
   "devDependencies": {}
 }

@@ -4,8 +4,7 @@ const fs       = require('fs');
 const gif      = require('../database/models/gif')
 
 class StorageManager {
-    constructor(vulcan) {
-        this.vulcan = vulcan;
+    constructor() {
     }
 
     databaseConnect() {
@@ -19,7 +18,7 @@ class StorageManager {
         this.db    = mongoose.connection;
         
         // DB Event callbacks
-        let logger = this.vulcan.logger;
+        let logger = logger;
         this.db.on('error', logger.error.bind(logger, 'MongoDB connection error:'));
         this.db.on('disconnected', logger.info.bind(logger, 'MongoDB connection has been lost!'));
         this.db.on('reconnected', logger.info.bind(logger, 'MongoDB connection has been restablished!'));

@@ -1,7 +1,6 @@
-const { exec } = require('child_process');
-
 const Command       = require('../../structures/classes/Command');
 const messageEmbeds = require('../../modules/utility/messageEmbeds');
+const githubAPI     = require('github-api');
 
 class Git extends Command {
     constructor(type) {
@@ -19,6 +18,11 @@ class Git extends Command {
                 image: './assets/media/images/commands/GitPull.gif',
             }
         });
+
+        this.client = new githubAPI({
+            username: 'FOO',
+            password: 'NotFoo'
+        }); 
     }
 
     async validate(message) {
@@ -26,30 +30,7 @@ class Git extends Command {
     }
 
     async execute(message) {
-        exec('git pull origin master', async (err, pull) => {
-            let vulcan = message.client;
-
-            let reply;
-
-            if (err) {
-                let errStr = err.shortMessage();
-                vulcan.logger.error(errStr);
-                reply = messageEmbeds.error(errStr);
-            } else {
-                let pullText = pull.toString();
-                vulcan.logger.debug(pullText);
-    
-                reply = messageEmbeds.cmdreply(
-                    `Pulling from branch \`master\``, 
-                    message, 
-                    [ 
-                        { name: 'Output', value:  `${pullText}` }
-                    ]
-                );
-            }
-
-            await message.channel.send(reply);
-        })
+        
     }
 }
 

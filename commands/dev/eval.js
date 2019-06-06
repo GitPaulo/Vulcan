@@ -1,8 +1,7 @@
 const { _, performance } = require('perf_hooks');
-
-const Command       = require('../../structures/classes/Command');
-const mathematics   = require('../../modules/utility/mathematics');
-const messageEmbeds = require('../../modules/utility/messageEmbeds');
+const Command            = require('../../structures/classes/Command');
+const mathematics        = require('../../modules/utility/mathematics');
+const messageEmbeds      = require('../../modules/utility/messageEmbeds');
 
 class Eval extends Command {
     constructor(type) {
@@ -49,8 +48,8 @@ class Eval extends Command {
                 replyeeMessage : message, 
                 title: `\`${message.args[0]}\``, 
                 fields: [ 
-                    { name: 'Perfomance Benchmark', value: `${t}ms` },
-                    { name: 'Output',               value:  `${returnValue}` }
+                    { name: 'Performance Benchmark', value: `${t}ms` },
+                    { name: 'Output',                value:  `${returnValue}` }
                 ]
             }
         );
