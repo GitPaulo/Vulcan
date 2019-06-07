@@ -1,3 +1,6 @@
+// It's useful :)
+global.__basedir = __dirname;
+
 // Pre initialisation
 require('./modules/scripts/globals');
 requireall('./structures/prototypes');
@@ -16,15 +19,18 @@ const privatedataFile   = fs.readFileSync('./settings/noleakdata.yaml', 'utf8');
 const configuration     = YAML.safeLoad(configurationFile);
 const privatedata       = YAML.safeLoad(privatedataFile);
 
-// Instantiate Vulcan Client object.
-const vulcan   = new Vulcan(configuration, privatedata); // if we have trouble with this - blame tacos. *tacos will fix*
-module.exports = vulcan;
+// For now throw everything!
+process.on('unhandledRejection', (err) => {
+    logger.error(err.shortMessage());
+    throw err; 
+});
 
-// Connect to database (comment out if no database needed)
-// vulcan.storageManager.databaseConnect()
-
-// Fire in the hole!
-vulcan.loadEvents().connect();
+// Instantiate & export vulcan client.
+module.exports = vulcan = new Vulcan(configuration, privatedata)
+    .loadCommands()
+    .loadEvents()
+    .dbConnect()
+    .connect();
 
 // Log
-logger.log(`Vulcan initialisation completed! Time taken: ${vulcan.uptime()}`);
+logger.log(`Vulcan start-up has completed! Time taken: ${vulcan.uptime()}`);

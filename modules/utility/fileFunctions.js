@@ -4,7 +4,7 @@ const path = require('path');
 
 module.exports = fileFunctions = {};
 
-fileFunctions.getAllFiles = function (dir, fileTypes = '.js') {
+fileFunctions.allDirFiles = function (dir, fileTypes = '.js') {
     var filesToReturn = [];
 
     function walkDir(currentPath) {
@@ -20,5 +20,6 @@ fileFunctions.getAllFiles = function (dir, fileTypes = '.js') {
     };
 
     walkDir(dir);
+
     return filesToReturn;
 }

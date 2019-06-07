@@ -1,10 +1,7 @@
-const vulcan        = require('../bot');
-const logger        = require('../managers/logManager').getInstance();
-const messageEmbeds = require('../modules/utility/messageEmbeds');
-const MessageParser = require('../structures/classes/MessageParser');
+const logger        = require('../../managers/logManager').getInstance();
+const messageEmbeds = require('../../modules/utility/messageEmbeds');
 
-// Reminder: Check if message.channel.send() is async if so use await?
-vulcan.on('message', async message => {
+module.exports = async message => {
     // message.client === vulcan
     logger.info('[GUILD: ' + message.guild.name + '] => [MESSAGE][' + message.author.username + '][' + message.channel.name + ']: ' + message.content);
 
@@ -17,9 +14,8 @@ vulcan.on('message', async message => {
     }
 
     if (!found) return; // Before we parse, we must check that it's worth parsing!
-
-    let messageParser = MessageParser.getInstance();
-    let parseError    = messageParser.parse(vulcan, message); // changes the message objet! (if command: attaches extra properties)
+    
+    let parseError = require('../../handlers/messageHandler')(vulcan, message); 
 
     if (parseError.hasError)
         message.channel.send(messageEmbeds.error(message.author.username, 'Command Validation', `Command Parse error: ${parseError.message}`));
@@ -68,4 +64,4 @@ vulcan.on('message', async message => {
             }
         ));
     }
-});
+};

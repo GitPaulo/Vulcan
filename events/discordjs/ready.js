@@ -1,8 +1,7 @@
-const vulcan = require('../bot');
-const pjson  = require('../package.json');
-const logger = require('../managers/logManager').getInstance();
+const pjson  = require('../../package.json');
+const logger = require('../../managers/logManager').getInstance();
 
-vulcan.on('ready', () => {
+module.exports = () => {
     logger.info(`Bot has started, with ${vulcan.users.size} users, in ${vulcan.channels.size} channels of ${vulcan.guilds.size} guilds.`);
 
     let version = pjson.version; 
@@ -11,5 +10,5 @@ vulcan.on('ready', () => {
     vulcan.guilds.forEach(function(v, k, m){
         const LUL = v.emojis.find(emoji => emoji.name === 'LUL');
         //v.systemChannel.send(`I am alive. Chan is gay ${LUL}`);
-    })
-});
+    });
+};
