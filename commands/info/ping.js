@@ -27,7 +27,7 @@ class Ping extends Command {
             `Pinging...`,
             `This wont take long...`,
             `Ping request received....`,
-        ]
+        ];
     }
 
     async validate(message) {

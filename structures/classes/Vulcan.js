@@ -45,19 +45,15 @@ class Vulcan extends Discord.Client {
 
         for (let commandPath of commands) {
             let t       = performance.now();
-            let matches = commandPath.match(/\w*.js/)
+            let matches = commandPath.match(/\w*.js/);
             let cmdName = matches[matches.length - 1].slice(0, -3);
-            
+   
             try {
                 let fullPath     = path.join(dirPath, commandPath);
                 let CommandClass = xrequire(fullPath);
-                
-                let s               = `\\`;
-                let firstOccurrence = commandPath.indexOf(s)
-                let lastOccurrence  = commandPath.lastIndexOf(s);
-                let CommandType     = commandPath.substring(firstOccurrence+1, lastOccurrence).replace(s, '.');
-    
-                let command = new CommandClass(CommandType);
+                let commandType  = path.dirname(fullPath).split(path.sep).slice(-1).pop();           
+
+                let command = new CommandClass(commandType);
                 let keys    = [command.name, ...command.aliases];
     
                 for (let key of keys) {
