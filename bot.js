@@ -1,7 +1,7 @@
 // Pre initialisation
 require('./modules/scripts/globals');
-requireall('structures/prototypes');
-requireall('structures/extensions');
+requireall('./structures/prototypes');
+requireall('./structures/extensions');
 xrequire('./modules/scripts/defaults');
 
 // Get them boys first.

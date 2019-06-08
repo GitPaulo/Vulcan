@@ -1,10 +1,9 @@
-const path            = require('path');
-const { performance } = require('perf_hooks');
-
-require(path.join("..", 'modules/scripts/globals'));
+require('../modules/scripts/globals');
 
 // Remember to offset paths by their parent since we are in ./tests/
-const logger = xrequire('./managers/logManager').getInstance();
+const path            = require('path');
+const { performance } = require('perf_hooks');
+const logger          = xrequire('./managers/logManager').getInstance();
 
 logger.plain(
 `=======================================

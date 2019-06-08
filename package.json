@@ -5,8 +5,8 @@
     "main": "bot.js",
     "scripts": {
         "start": "node bot.js",
-        "dev":   "nodemon bot.js",
-        "test":  "node tests/loading.js"
+        "dev": "nodemon bot.js",
+        "test": "node tests/loading.js"
     },
     "repository": {
         "type": "git",
