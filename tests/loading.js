@@ -15,9 +15,8 @@ logger.plain(
 let t0 = performance.now();
 
 // Pre initialisation
-
-requireall('structures/prototypes');
-requireall('structures/extensions');
+requireall('./structures/prototypes');
+requireall('./structures/extensions');
 xrequire('./modules/scripts/defaults');
 
 // Get them boys first.
