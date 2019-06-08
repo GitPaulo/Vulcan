@@ -30,10 +30,10 @@ global.xrequire.resolve.paths = request => {
     return require.resolve.paths(request);
 };
 
-global.requireall = function () {
-    let path         = arguments[0];
-    const extensions = ['js', ''];
-    const modules    = fs.readdirSync(path);
+global.requireall = function (relativePath) {
+    const modulesPath = path.join(path.dirname(module.parent.filename), relativePath);
+    const extensions  = ['js', ''];
+    const modules     = fs.readdirSync(modulesPath);
 
     let t = performance.now();
     let n = 0;
@@ -46,12 +46,12 @@ global.requireall = function () {
         if (!extensions.includes(ext)) continue;
 
         const name = fileData.join('');
-        exports[name] = xrequire(`${path}/${mod}`); // this is dumb, exports is local to util file :C
+        exports[name] = xrequire(`${modulesPath}/${mod}`); // this is dumb, exports is local to util file :C
         n++;
     }
 
     t = mathematics.round(performance.now() - t, 2);
-    print(`[REQUIREALL] => Sucessfully loaded ${n} modules at '${path}' (took ${t}ms)`);
+    console.log(`[REQUIREALL] => Sucessfully loaded ${n} modules at '${modulesPath}' (took ${t}ms)`);
 
     return exports;
 }

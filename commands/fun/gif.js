@@ -25,7 +25,7 @@ class Gif extends Command {
 
         // Create gif folder 
         let folder_name = 'gifs';
-        let rootPath    = path.dirname(require.main.filename);
+        let rootPath    = __basedir;
         this.folderPath = path.join(rootPath, 'data', folder_name);
         this.allowedExtensions = ['.png', '.jpg', '.mp4', '.gif'];
 

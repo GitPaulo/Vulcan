@@ -67,7 +67,7 @@ class Vulcan extends Discord.Client {
                 t = mathematics.round(performance.now() - t, 2);
                 logger.info(`Loaded command ${cmdName} from ${commandPath} (took ${t}ms)`);
             } catch(err) {
-                print(err.code, err.stack)
+                console.log(err.code, err.stack)
                 logger.error(err.shortMessage());
             }
         }

@@ -52,8 +52,8 @@ module.exports = (vulcan, message) => {
         args = parseStringToDataTypes(argString);
     }
 
-    print(args, '<<< parsed values');
-    print(`[MESSAGE PARSER DEBUG] => Matches: [${matches}]`, 
+    console.log(args, '<<< parsed values');
+    console.log(`[MESSAGE PARSER DEBUG] => Matches: [${matches}]`, 
         `Arguments Array: [${args}](wrong types check above spew)`, 
         `Argument String: ${argString}`, `Parsed Name: ${firstword}`
     );

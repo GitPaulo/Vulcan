@@ -69,7 +69,7 @@ function initialiseLogFileFromClass(filePath, logClass){
 const LOG_FILE_MAX_SIZE = 1*1024*1024; // 1Mb
 
 let folder_name = 'logs';
-let rootPath    = path.dirname(require.main.filename);
+let rootPath    = __basedir;
 let folderPath  = path.join(rootPath, folder_name);
 
 if (!fs.existsSync(folderPath)) {
@@ -135,8 +135,16 @@ let LoggerFactory = (function () {
                 this.debug.apply(this, arguments);
         }
 
+        // bypasses everything
+        this.plain = function(str="\n", logLevel=logLevels.INFO) {
+            let logClass    = this.getLogClassification(logLevel);
+            let logfilePath = path.join(folderPath, logClass.filename);
+            console.log(str);
+            fs.appendFileSync(logfilePath, str + '\n'); 
+        }
+
         this.print = function () {
-            print(consoleColors.FgWhite, ...arguments);
+            console.log(consoleColors.FgWhite, ...arguments);
         }
 
         this.printc = function () {
@@ -144,7 +152,7 @@ let LoggerFactory = (function () {
                 arguments[i] = consoleColors[arguments[i]];
 
             let args = Array.prototype.slice.call(arguments);
-            print(args.join(''));
+            console.log(args.join(''));
         }
 
         this.getLogClassification = function (logLevel) {

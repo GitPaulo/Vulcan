@@ -1,37 +1,37 @@
 {
-  "name": "Vulcan",
-  "version": "1.0.0",
-  "description": "Collaboration discord bot by Paulo & Carlos, using discord.js.",
-  "main": "bot.js",
-  "scripts": {
-    "start": "node bot.js",
-    "dev": "nodemon bot.js",
-    "test": ""
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/GitPaulo/Vulcan.git"
-  },
-  "keywords": [
-    "Discord",
-    "Bot",
-    "discord-js",
-    "music-bot",
-    "vulcan"
-  ],
-  "author": "Paulo & Carlos",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/GitPaulo/Vulcan/issues"
-  },
-  "homepage": "https://github.com/GitPaulo/Vulcan#readme",
-  "dependencies": {
-    "discord.js": "~11.5.1",
-    "github-api": "^3.2.0",
-    "js-yaml": "^3.13.1",
-    "mongoose": "^5.5.13"
-  },
-  "devDependencies": {
-    "nodemon": "^1.19.1"
-  }
+    "name": "Vulcan",
+    "version": "1.0.0",
+    "description": "Collaboration discord bot by Paulo & Carlos, using discord.js.",
+    "main": "bot.js",
+    "scripts": {
+        "start": "node bot.js",
+        "dev":   "nodemon bot.js",
+        "test":  "node tests/loading.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/GitPaulo/Vulcan.git"
+    },
+    "keywords": [
+        "Discord",
+        "Bot",
+        "discord-js",
+        "music-bot",
+        "vulcan"
+    ],
+    "author": "Paulo & Carlos",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/GitPaulo/Vulcan/issues"
+    },
+    "homepage": "https://github.com/GitPaulo/Vulcan#readme",
+    "dependencies": {
+        "discord.js": "~11.5.1",
+        "github-api": "^3.2.0",
+        "js-yaml": "^3.13.1",
+        "mongoose": "^5.5.13"
+    },
+    "devDependencies": {
+        "nodemon": "^1.19.1"
+    }
 }

@@ -61,7 +61,7 @@ class Command {
 
         for (let metadata of command.args) { // not iterable
             let messageArg = messageArgs[messageArgsIndex];
-            print(messageArg, typeof messageArg, metadata.type, typeof messageArg !== typeof metadata.type);
+            console.log(messageArg, typeof messageArg, metadata.type, typeof messageArg !== typeof metadata.type);
             if (typeof messageArg !== typeof metadata.type) {
                 invalidArgsPositions.push(messageArgsIndex);
                 hasValidArguments = false;

@@ -4,7 +4,7 @@ const YAML = require('js-yaml');
 
 const SETTINGS_FOLDER = 'settings';
 const PRINT_PREFIX    = '[DEFAULTS]';
-const ROOT_PATH       = path.dirname(require.main.filename);
+const ROOT_PATH       = __basedir;
 const PARSING_TYPES   = {
     COMPLEX: 1,
     SIMPLE: 2
@@ -16,7 +16,7 @@ let DefaultFile = function (location, data) {
 }
 
 let log = (...args) => {
-    print(PRINT_PREFIX, ...args);
+    console.log(PRINT_PREFIX, ...args);
 }
 
 let writeToDefaultFile = (object, path) => {
