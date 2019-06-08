@@ -14,7 +14,8 @@ const logger = xrequire('./managers/logManager').getInstance();
 const configurationFile = fs.readFileSync('./settings/config.yaml', 'utf8');
 const privatedataFile   = fs.readFileSync('./settings/noleakdata.yaml', 'utf8');
 const configuration     = YAML.safeLoad(configurationFile);
-privatedata.token = process.env.BOT_TOKEN
+const privatedata = YAML.safeLoad(privatedataFile);
+privatedata.token = process.env.BOT_TOKEN;
 
 // For now throw everything!
 process.on('unhandledRejection', (err) => {
