@@ -1,5 +1,5 @@
-const assert        = require('assert');
-const messageEmbeds = require('../../modules/utility/messageEmbeds');
+const assert        = xrequire('assert');
+const messageEmbeds = xrequire('./modules/utility/messageEmbeds');
 
 var rassert = (exp, msg) => {
     assert(exp, msg)

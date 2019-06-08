@@ -1,9 +1,10 @@
 const path            = require('path');
 const { performance } = require('perf_hooks');
 
+require(path.join("..", 'modules/scripts/globals'));
+
 // Remember to offset paths by their parent since we are in ./tests/
-global.__basedir = path.join(__dirname, '/../');
-const logger     = require('../managers/logManager').getInstance();
+const logger = xrequire('./managers/logManager').getInstance();
 
 logger.plain(
 `=======================================
@@ -14,15 +15,15 @@ logger.plain(
 let t0 = performance.now();
 
 // Pre initialisation
-require('../modules/scripts/globals');
-requireall('../structures/prototypes');
-requireall('../structures/extensions');
-require('../modules/scripts/defaults');
+
+requireall('structures/prototypes');
+requireall('structures/extensions');
+xrequire('./modules/scripts/defaults');
 
 // Get them boys first.
-const fs     = require('fs');
-const YAML   = require('js-yaml');
-const Vulcan = require('../structures/classes/Vulcan');
+const fs     = xrequire('fs');
+const YAML   = xrequire('js-yaml');
+const Vulcan = xrequire('./structures/classes/Vulcan');
 
 // Load Data. Remember, file functions do not use relative path. 
 const configurationFile = fs.readFileSync(path.resolve(__dirname, '../settings/config.yaml'), 'utf8');

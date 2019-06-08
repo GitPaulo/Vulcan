@@ -1,5 +1,5 @@
 
-const { Message } = require('discord.js');
+const { Message } = xrequire('discord.js');
 
 Message.prototype.initCommand = function (command, argString, args, raw, parsedName) {
     this.isCommand  = true;

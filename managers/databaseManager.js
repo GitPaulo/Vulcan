@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
-const YAML     = require('js-yaml');
-const fs       = require('fs');
-const gif      = require('../database/models/gif');
-const logger   = require('./logManager').getInstance();
+const mongoose = xrequire('mongoose');
+const YAML     = xrequire('js-yaml');
+const fs       = xrequire('fs');
+const gif      = xrequire('./database/models/gif');
+const logger   = xrequire('./managers/logManager').getInstance();
 
 mongoose.Promise = global.Promise;
 

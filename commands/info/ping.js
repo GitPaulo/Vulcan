@@ -1,6 +1,6 @@
-const Command       = require('../../structures/classes/Command');
-const mathematics   = require('../../modules/utility/mathematics');
-const messageEmbeds = require('../../modules/utility/messageEmbeds');
+const Command       = xrequire('./structures/classes/Command');
+const mathematics   = xrequire('./modules/utility/mathematics');
+const messageEmbeds = xrequire('./modules/utility/messageEmbeds');
 
 class Ping extends Command {
     constructor(type) { // type = root folder name (passed on by command loader)

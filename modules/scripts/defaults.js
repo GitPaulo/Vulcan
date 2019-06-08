@@ -1,6 +1,6 @@
-const fs   = require('fs');
-const path = require('path');
-const YAML = require('js-yaml');
+const fs   = xrequire('fs');
+const path = xrequire('path');
+const YAML = xrequire('js-yaml');
 
 const SETTINGS_FOLDER = 'settings';
 const PRINT_PREFIX    = '[DEFAULTS]';

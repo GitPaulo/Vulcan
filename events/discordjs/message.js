@@ -1,5 +1,5 @@
-const logger        = require('../../managers/logManager').getInstance();
-const messageEmbeds = require('../../modules/utility/messageEmbeds');
+const logger        = xrequire('./managers/logManager').getInstance();
+const messageEmbeds = xrequire('./modules/utility/messageEmbeds');
 
 module.exports = async message => {
     // message.client === vulcan
@@ -15,7 +15,7 @@ module.exports = async message => {
 
     if (!found) return; // Before we parse, we must check that it's worth parsing!
     
-    let parseError = require('../../handlers/messageHandler')(vulcan, message); 
+    let parseError = xrequire('./handlers/messageHandler')(vulcan, message); 
 
     if (parseError.hasError)
         message.channel.send(messageEmbeds.error(message.author.username, 'Command Validation', `Command Parse error: ${parseError.message}`));

@@ -1,17 +1,14 @@
-// It's useful :)
-global.__basedir = __dirname;
-
 // Pre initialisation
 require('./modules/scripts/globals');
-requireall('./structures/prototypes');
-requireall('./structures/extensions');
-require('./modules/scripts/defaults');
+requireall('structures/prototypes');
+requireall('structures/extensions');
+xrequire('./modules/scripts/defaults');
 
 // Get them boys first.
-const fs     = require('fs');
-const YAML   = require('js-yaml');
-const Vulcan = require('./structures/classes/Vulcan');
-const logger = require('./managers/logManager').getInstance();
+const fs     = xrequire('fs');
+const YAML   = xrequire('js-yaml');
+const Vulcan = xrequire('./structures/classes/Vulcan');
+const logger = xrequire('./managers/logManager').getInstance();
 
 // Load Data.
 const configurationFile = fs.readFileSync('./settings/config.yaml', 'utf8');

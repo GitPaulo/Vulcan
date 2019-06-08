@@ -1,6 +1,6 @@
 
-const fs   = require('fs');
-const path = require('path');
+const fs   = xrequire('fs');
+const path = xrequire('path');
 
 module.exports = fileFunctions = {};
 

@@ -1,10 +1,10 @@
-const Discord          = require('discord.js');
-const fs               = require('fs');
-const path             = require('path');
-const http             = require('http');
-const Command          = require('../../structures/classes/Command');
-const messageEmbeds    = require('../../modules/utility/messageEmbeds');
-const stringAlgorithms = require('../../modules/utility/stringAlgorithms');
+const Discord          = xrequire('discord.js');
+const fs               = xrequire('fs');
+const path             = xrequire('path');
+const http             = xrequire('http');
+const Command          = xrequire('./structures/classes/Command');
+const messageEmbeds    = xrequire('./modules/utility/messageEmbeds');
+const stringAlgorithms = xrequire('./modules/utility/stringAlgorithms');
 
 class Gif extends Command {
     constructor(type) { // type = root folder name (passed on by command loader)

@@ -1,13 +1,13 @@
-const Discord            = require('discord.js');
-const { _, performance } = require('perf_hooks');
-const os                 = require('os');
-const fs                 = require('fs');
-const path               = require('path');
-const YAML               = require('js-yaml');
-const databaseManager    = require('../../managers/databaseManager');
-const mathematics        = require('../../modules/utility/mathematics');
-const fileFunctions      = require('../../modules/utility/fileFunctions');
-const logger             = require('../../managers/logManager').getInstance();
+const Discord            = xrequire('discord.js');
+const { _, performance } = xrequire('perf_hooks');
+const os                 = xrequire('os');
+const fs                 = xrequire('fs');
+const path               = xrequire('path');
+const YAML               = xrequire('js-yaml');
+const databaseManager    = xrequire('./managers/databaseManager');
+const mathematics        = xrequire('./modules/utility/mathematics');
+const fileFunctions      = xrequire('./modules/utility/fileFunctions');
+const logger             = xrequire('./managers/logManager').getInstance();
 
 ////////////////////////////////////////////////////////////////
 const couldnt_have_forged_it_better_myself = `\\ \\    / /   | |                
@@ -50,7 +50,7 @@ class Vulcan extends Discord.Client {
             
             try {
                 let fullPath     = path.join(dirPath, commandPath);
-                let CommandClass = require(fullPath);
+                let CommandClass = xrequire(fullPath);
                 
                 let s               = `\\`;
                 let firstOccurrence = commandPath.indexOf(s)
@@ -88,14 +88,14 @@ class Vulcan extends Discord.Client {
         for (let eventFile of discordEvents) {
             let t     = performance.now();
             let event = eventFile.replace(/\.js$/i, '');
-            this.on(event, require(path.join(discordjsEventsPath, eventFile)));
+            this.on(event, xrequire(path.join(discordjsEventsPath, eventFile)));
             logger.info(`Finished loading (DiscordJS) event file '${eventFile}' (took '${mathematics.round(performance.now() - t, 2)}ms').`);
         }
 
         for (let eventFile of vulcanEvents) {
             let t     = performance.now();
             let event = eventFile.replace(/\.js$/i, '');
-            this.on(event, require(path.join(discordjsEventsPath, eventFile)));
+            this.on(event, xrequire(path.join(discordjsEventsPath, eventFile)));
             logger.info(`Finished loading (Vulcan) event file '${eventFile}' (took '${mathematics.round(performance.now() - t, 2)}ms').`);
         }
 

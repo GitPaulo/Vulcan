@@ -1,1 +1,1 @@
-const { Guild } = require('discord.js');
+const { Guild } = xrequire('discord.js');

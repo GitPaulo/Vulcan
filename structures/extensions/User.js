@@ -1,1 +1,1 @@
-const { User } = require('discord.js');
+const { User } = xrequire('discord.js');

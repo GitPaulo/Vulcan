@@ -1,5 +1,5 @@
-const pjson  = require('../../package.json');
-const logger = require('../../managers/logManager').getInstance();
+const pjson  = xrequire('./package.json');
+const logger = xrequire('./managers/logManager').getInstance();
 
 module.exports = () => {
     logger.info(`Bot has started, with ${vulcan.users.size} users, in ${vulcan.channels.size} channels of ${vulcan.guilds.size} guilds.`);

@@ -1,1 +1,1 @@
-const { TextChannel } = require('discord.js');
+const { TextChannel } = xrequire('discord.js');
