@@ -95,7 +95,7 @@ class Vulcan extends Discord.Client {
         for (let eventFile of vulcanEvents) {
             let t     = performance.now();
             let event = eventFile.replace(/\.js$/i, '');
-            this.on(event, xrequire(path.join(discordjsEventsPath, eventFile)));
+            this.on(event, xrequire(path.join(vulcanEventsPath, eventFile)));
             logger.info(`Finished loading (Vulcan) event file '${eventFile}' (took '${mathematics.round(performance.now() - t, 2)}ms').`);
         }
 
