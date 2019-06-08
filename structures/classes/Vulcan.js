@@ -1,14 +1,13 @@
-const { Client, Collection } = require('discord.js');
-const { _, performance }     = require('perf_hooks');
-const os                     = require('os');
-const fs                     = require('fs');
-const path                   = require('path');
-const YAML                   = require('js-yaml');
-const databaseManager        = require('../../managers/databaseManager');
-const mathematics            = require('../../modules/utility/mathematics');
-const fileFunctions          = require('../../modules/utility/fileFunctions');
-const logger                 = require('../../managers/logManager').getInstance();
-const rootPath               = path.dirname(require.main.filename);
+const Discord            = require('discord.js');
+const { _, performance } = require('perf_hooks');
+const os                 = require('os');
+const fs                 = require('fs');
+const path               = require('path');
+const YAML               = require('js-yaml');
+const databaseManager    = require('../../managers/databaseManager');
+const mathematics        = require('../../modules/utility/mathematics');
+const fileFunctions      = require('../../modules/utility/fileFunctions');
+const logger             = require('../../managers/logManager').getInstance();
 
 ////////////////////////////////////////////////////////////////
 const couldnt_have_forged_it_better_myself = `\\ \\    / /   | |                
@@ -22,7 +21,7 @@ let chainPrint = (category, chainee) => (logger.info('Initialised => ' +
     category
 ), chainee);
 
-class Vulcan extends Client {
+class Vulcan extends Discord.Client {
     constructor (configuration, privatedata) {
         super();
 
@@ -50,14 +49,13 @@ class Vulcan extends Client {
             let cmdName = matches[matches.length - 1].slice(0, -3);
             
             try {
-                let fullPath     = path.join(rootPath, 'commands', commandPath);
+                let fullPath     = path.join(dirPath, commandPath);
                 let CommandClass = require(fullPath);
                 
                 let s               = `\\`;
                 let firstOccurrence = commandPath.indexOf(s)
                 let lastOccurrence  = commandPath.lastIndexOf(s);
                 let CommandType     = commandPath.substring(firstOccurrence+1, lastOccurrence).replace(s, '.');
-                
     
                 let command = new CommandClass(CommandType);
                 let keys    = [command.name, ...command.aliases];
@@ -79,8 +77,8 @@ class Vulcan extends Client {
         return chainPrint('Vulcan Commands', this);
     }
 
-    loadEvents () {
-        const eventsPath          = path.join(rootPath, 'events');
+    loadEvents (folderPath = './events/') {
+        const eventsPath          = path.join(__basedir, folderPath);
         const vulcanEventsPath    = path.join(eventsPath, 'vulcan');
         const discordjsEventsPath = path.join(eventsPath, 'discordjs');
         
