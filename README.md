@@ -1,4 +1,4 @@
-# Vulcan
+# Vulcan [![Build Status](https://travis-ci.org/GitPaulo/Vulcan.svg?branch=master)](https://travis-ci.org/GitPaulo/Vulcan)
 *'Vulcan'* is a multi-purpose discord bot created to administrate the discord server of our group of friends. This bot has been made in collaboration w/ @CarlosGomes98.
   
 This repository is currently **under-development**. All code is subject to change.
