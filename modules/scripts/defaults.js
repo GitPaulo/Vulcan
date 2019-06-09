@@ -51,11 +51,6 @@ global.Defaults = {
                 username: 'ur_mom_gay',
                 password: 'no_u'
             }
-        ),
-        'datagoeshere' : new DefaultFile(
-            path.join(ROOT_PATH, 'data', 'data.yaml'), {
-                readme : 'Hello, because we have shit code. This exists. :)'
-            }
         )
     }
 };
