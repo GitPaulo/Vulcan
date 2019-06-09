@@ -139,7 +139,7 @@ let LoggerFactory = (function () {
         this.plain = function(str="\n", logLevel=logLevels.INFO) {
             let logClass    = this.getLogClassification(logLevel);
             let logfilePath = path.join(folderPath, logClass.filename);
-            console.log(str);
+            this.print(str);
             fs.appendFileSync(logfilePath, str + '\n'); 
         }
 

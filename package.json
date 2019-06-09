@@ -4,20 +4,21 @@
     "description": "Collaboration discord bot by Paulo & Carlos, using discord.js.",
     "main": "bot.js",
     "scripts": {
-        "start": "node bot.js",
-        "dev": "nodemon bot.js",
-        "test": "node tests/loading.js"
+        "start": "node --require ./modules/scripts/globals.js bot.js",
+        "dev": "nodemon --require ./modules/scripts/globals.js bot.js",
+        "test": "node --require ./modules/scripts/globals.js tests/loading.js"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/GitPaulo/Vulcan.git"
     },
     "keywords": [
-        "Discord",
-        "Bot",
+        "vulcan",
+        "discord",
+        "bot",
         "discord-js",
-        "music-bot",
-        "vulcan"
+        "discordjs",
+        "heroku"
     ],
     "author": "Paulo & Carlos",
     "license": "MIT",

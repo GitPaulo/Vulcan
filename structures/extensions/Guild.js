@@ -1,1 +1,3 @@
-const { Guild } = xrequire('discord.js');
+module.exports = {
+    
+}

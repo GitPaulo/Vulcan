@@ -1,1 +1,3 @@
-const { User } = xrequire('discord.js');
+module.exports = {
+    
+}
