@@ -1,8 +1,7 @@
 # Vulcan 
 [![Build Status](https://travis-ci.org/GitPaulo/Vulcan.svg?branch=master)](https://travis-ci.org/GitPaulo/Vulcan) 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/GitPaulo/Vulcan.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/GitPaulo/Vulcan/alerts/)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/GitPaulo/Vulcan.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/GitPaulo/Vulcan/context:javascript)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f7e68b17b25b4f43b2bfd74756e488fb)](https://www.codacy.com/app/GitPaulo/Vulcan?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GitPaulo/Vulcan&amp;utm_campaign=Badge_Grade)
 
 **'Vulcan'** is a multi-purpose discord bot created to administrate the discord server of our group of friends. This bot has been made in collaboration w/ @CarlosGomes98.
   
