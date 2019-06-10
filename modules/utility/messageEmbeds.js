@@ -17,12 +17,10 @@ messageEmbeds.reply = function (
         footer      = {
             text: `Vulcan's reply to a command request!`
         },
+        url         = "",
         extraFiles  = [],
     }
 ) {
-    if (typeof replyeeMessage === undefined)
-        return; 
-
     let imgPath   = replyeeMessage.command.embed.image; 
     let imgName   = imgPath.substring(imgPath.lastIndexOf('/') + 1);
     let thumbnail = { url: 'attachment://' + imgName };
@@ -42,6 +40,9 @@ messageEmbeds.reply = function (
             description,
             thumbnail,
             fields,
+            timestamp,
+            footer,
+            url
         },
         files,
     };
@@ -61,6 +62,7 @@ messageEmbeds.error = function (
         footer      = {
             text: '[Error] An exception thrown by vulcan or something bad! Contact devs pls!'
         },
+        fields      = [],
         url         = ""
     }
 ) {
@@ -72,6 +74,8 @@ messageEmbeds.error = function (
             author,
             timestamp,
             footer,
+            fields,
+            url
         },
         files: [
             {
@@ -96,6 +100,7 @@ messageEmbeds.warning = function (
         footer      = {
             text: '[Warning] An unexpected behaviour not controlled by vulcan.'
         },
+        fields      = [],
         url         = ""
     }
 ) {
@@ -106,7 +111,9 @@ messageEmbeds.warning = function (
             color,
             author,
             timestamp,
+            fields,
             footer,
+            url
         },
         files: [
             {
@@ -131,7 +138,8 @@ messageEmbeds.info = function (
         footer      = {
             text: '[Info] Information displayed by vulcan for the users.'
         },
-        url         = ""
+        fields      = [],
+        url         = "",
     }
 ) {
     return {
@@ -142,6 +150,8 @@ messageEmbeds.info = function (
             author,
             timestamp,
             footer,
+            fields,
+            url
         },
         files: [
             {

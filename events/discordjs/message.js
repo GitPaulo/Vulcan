@@ -43,17 +43,13 @@ module.exports = async message => {
         if (canExecute) {
             await cmd.execute(message);
         } else {
-            // maybe change to handle this as exceptions
-            userMessage = hasTimedOut ? 'Command Timeout triggered => WOA, WAIT YOU FUCKER!' : 'Command validation failed :(!';
-            userMessage = messageEmbeds.warning(
+            message.channel.send(messageEmbeds.warning(
                 {   
                     authorName: message.author.username, 
                     title:      'Command Validation', 
-                    description: userMessage
+                    description: hasTimedOut ? 'Command Timeout triggered => WOA, WAIT YOU FUCKER!' : 'Command validation failed :(!'
                 }
-            );
-
-            message.channel.send(userMessage); 
+            )); 
         }
     } else {
         message.channel.send(messageEmbeds.warning(

@@ -14,7 +14,7 @@ const couldnt_have_forged_it_better_myself = `\\ \\    / /   | |
  \\ \\  / /   _| | ___ __ _ _ __  
   \\ \\/ / | | | |/ __/ _\` | \'_ \\ 
    \\  /| |_| | | (_| (_| | | | |
-    \\/  \\__,_|_|\\___\\__,_|_| |_| by Pas-kun & Tacos-sama`
+    \\/  \\__,_|_|\\___\\__,_|_| |_| by Pas-kun & Tacos-sama`;
 ////////////////////////////////////////////////////////////////
 
 let chainPrint = (category, chainee) => (logger.info('Initialised => ' +
@@ -63,7 +63,7 @@ class Vulcan extends Discord.Client {
                 t = mathematics.round(performance.now() - t, 2);
                 logger.info(`Loaded command ${cmdName} from ${commandPath} (took ${t}ms)`);
             } catch(err) {
-                console.log(err.code, err.stack)
+                console.log(err.code, err.stack);
                 logger.error(err.shortMessage());
             }
         }
