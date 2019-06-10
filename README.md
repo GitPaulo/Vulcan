@@ -1,4 +1,4 @@
-# Vulcan [![Build Status](https://travis-ci.org/GitPaulo/Vulcan.svg?branch=master)](https://travis-ci.org/GitPaulo/Vulcan)
+# Vulcan [![Build Status](https://travis-ci.org/GitPaulo/Vulcan.svg?branch=master)](https://travis-ci.org/GitPaulo/Vulcan)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)[![Total alerts](https://img.shields.io/lgtm/alerts/g/GitPaulo/Vulcan.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/GitPaulo/Vulcan/alerts/)
 *'Vulcan'* is a multi-purpose discord bot created to administrate the discord server of our group of friends. This bot has been made in collaboration w/ @CarlosGomes98.
   
 This repository is currently **under-development**. All code is subject to change.
