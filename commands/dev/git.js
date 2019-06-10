@@ -1,5 +1,4 @@
 const Command       = xrequire('./structures/classes/Command');
-const messageEmbeds = xrequire('./modules/utility/messageEmbeds');
 const githubAPI     = xrequire('github-api');
 
 class Git extends Command {
@@ -25,10 +24,12 @@ class Git extends Command {
         }); 
     }
 
+    // eslint-disable-next-line no-unused-vars
     async validate(message) {
         return true; // if true execute() will run
     }
 
+    // eslint-disable-next-line no-unused-vars
     async execute(message) {
         
     }

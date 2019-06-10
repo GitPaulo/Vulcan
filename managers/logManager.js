@@ -176,6 +176,7 @@ let LoggerFactory = (function () {
             return c;
         }
 
+        // eslint-disable-next-line no-unused-vars
         this._shouldLog = function (logLevel) {
             return true; // for now
         }

@@ -31,6 +31,7 @@ class Gif extends Command {
         }
     }
 
+    // eslint-disable-next-line no-unused-vars
     async validate(message) {
         return true;
     }
@@ -54,18 +55,16 @@ class Gif extends Command {
         };
 
         let firstReply = await channel.send(messageEmbeds.reply(replyEmbedData));
+        let numArgs    = message.args.length;
 
         switch (cmd) {
             case 'store':
             case 'upload':
             case 'put':
-                let n = message.args.length;
-                if (n < 3)
+                if (numArgs < 3)
                     return message.client.emit('invalidCommandCall', `Expected 3 arguments got ${n}.`, message);
-                let keyword = message.args[1];
-                let data    = message.args[2];
-                if (stringAlgorithms.isURL(data)) {
-                    this.storeImageFromURL(keyword, data, async (result) => {
+                if (stringAlgorithms.isURL(message.args[2])) {
+                    this.storeImageFromURL(message.args[1], message.args[2], async (result) => {
                         replyEmbedData.fields[1].value = result;
                         firstReply.edit(messageEmbeds.reply(replyEmbedData));
                     });
@@ -84,9 +83,8 @@ class Gif extends Command {
                 break;
             case 'get':
             case 'fetch':
-                let potentialKeyword = message.args[1];
-                if (!potentialKeyword)
-                    return message.client.emit('invalidCommandCall', `There were invalid arguments for the "fetch" request: arg[1] = ${potentialKeyword}`, message);
+                if (numArgs < 3)
+                    return message.client.emit('invalidCommandCall', `Expected 2 arguments got ${n}.`, message);
                 this.fetchImage(potentialKeyword, async (result) => {
                     replyEmbedData.fields[1].value = result, 
                     firstReply.edit(messageEmbeds.reply(replyEmbedData));
@@ -154,7 +152,7 @@ class Gif extends Command {
             if (callback)
                 callback(err.message)
         }
-    };
+    }
 
     fetchImage(keyword, callback) {
         fs.readdir(this.folderPath, (err, files) => {

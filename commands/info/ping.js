@@ -30,6 +30,7 @@ class Ping extends Command {
         ];
     }
 
+    // eslint-disable-next-line no-unused-vars
     async validate(message) {
         return true; // if true execute() will run
     }

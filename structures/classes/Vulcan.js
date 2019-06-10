@@ -148,7 +148,7 @@ class Vulcan extends Discord.Client {
     }
 
     uptime () {
-    	return String(process.uptime()).toHHMMSS();
+        return String(process.uptime()).toHHMMSS();
     }
 }
 
