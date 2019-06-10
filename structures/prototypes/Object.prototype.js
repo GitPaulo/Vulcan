@@ -1,6 +1,5 @@
-Object.defineProperty(Object.prototype, 'methodNames', {
-    enumerable: false,
-    value: function () {
+module.exports = {
+    'methodNames' : function () {
         let obj = this;
         let properties = new Set()
         let currentObj = obj;
@@ -11,4 +10,4 @@ Object.defineProperty(Object.prototype, 'methodNames', {
 
         return [...properties.keys()].filter(item => typeof obj[item] === 'function')
     }
-});
+};

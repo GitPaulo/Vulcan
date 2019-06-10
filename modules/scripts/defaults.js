@@ -33,7 +33,7 @@ global.Defaults = {
         'configuration': new DefaultFile(
             path.join(ROOT_PATH, 'settings', 'config.yaml'), {
                 prefixes: ['!', '>'],
-                devsID: ['166176374036365312', '207606117159796737'], // please don't change this
+                devsID: ['166176374036365312', '207606117159796737'], // Please don't change this
                 parsingType: [PARSING_TYPES.SIMPLE],
             }
         ),
@@ -51,15 +51,9 @@ global.Defaults = {
                 username: 'ur_mom_gay',
                 password: 'no_u'
             }
-        ),
-        'datagoeshere' : new DefaultFile(
-            path.join(ROOT_PATH, 'data', 'data.yaml'), {
-                readme : 'Hello, because we have shit code. This exists. :)'
-            }
         )
     }
 };
-
 
 // Check for missing settings files and root properties & write defaults.
 (function () {
@@ -75,23 +69,25 @@ global.Defaults = {
         let filePath      = defaultObject.location;
         let folderName    = path.dirname(filePath).split(path.sep).pop();
 
-        // check folder
+        // Check folder
         if (!Defaults.folders.includes(folderName)){
             throw new Error('Default folders are not valid!');
         }
 
-        // check files
+        // Check files
         if (!fs.existsSync(filePath)) {
             log(`Default file: ${filePath} is missing. Writing defaults.`);
             writeToDefaultFile(defaultObject.data, filePath);
         } else { // check if contents are proper
-            let defaultFile = fs.readFileSync(filePath, 'utf8');
-            let parsedObject = YAML.safeLoad(defaultFile);
-            let missingProperties = Object.keys(defaultObject.data).difference(Object.keys(parsedObject));
+            let defaultFile       = fs.readFileSync(filePath, 'utf8');
+            let parsedObject      = YAML.safeLoad(defaultFile);
+            let missingProperties = Object.keys(defaultObject.data).filter(x=>!Object.keys(parsedObject).includes(x));
+
             if (missingProperties.length > 0) {
                 for (let rootProperty of missingProperties) {
                     parsedObject[rootProperty] = defaultObject.data[rootProperty];
                 }
+
                 log(`Root property(s) missing: ${missingProperties.toString()}, writing defaults for file in ${filePath}.`);
                 writeToDefaultFile(parsedObject, filePath);
             }

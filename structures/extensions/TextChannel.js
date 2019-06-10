@@ -1,1 +1,3 @@
-const { TextChannel } = xrequire('discord.js');
+module.exports = {
+    
+}

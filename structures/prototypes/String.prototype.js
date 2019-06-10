@@ -1,6 +1,5 @@
-Object.defineProperty(String.prototype, 'toHHMMSS', {
-    enumerable: false,
-    value: function () {
+module.exports = { 
+    toHHMMSS : function () {
         var sec_num = parseInt(this, 10); // don't forget the second param
         var hours   = Math.floor(sec_num / 3600);
         var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
@@ -21,13 +20,9 @@ Object.defineProperty(String.prototype, 'toHHMMSS', {
         var time = hours + ':' + minutes + ':' + seconds;
 
         return time;
-    }
-});
-
-Object.defineProperty(String.prototype, 'replaceAll', {
-    enumerable: false,
-    value: function(search, replacement) {
+    },
+    replaceAll : function (search, replacement) {
         var target = this;
         return target.split(search).join(replacement);
     }
-});
+};

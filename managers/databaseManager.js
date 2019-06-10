@@ -1,7 +1,4 @@
 const mongoose = xrequire('mongoose');
-const YAML     = xrequire('js-yaml');
-const fs       = xrequire('fs');
-const gif      = xrequire('./database/models/gif');
 const logger   = xrequire('./managers/logManager').getInstance();
 
 mongoose.Promise = global.Promise;

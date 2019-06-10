@@ -1,5 +1,4 @@
-const assert        = xrequire('assert');
-const messageEmbeds = xrequire('./modules/utility/messageEmbeds');
+const assert = xrequire('assert');
 
 var rassert = (exp, msg) => {
     assert(exp, msg)
@@ -8,7 +7,7 @@ var rassert = (exp, msg) => {
 
 class Command {
     constructor(type, properties) {
-        this.type  = rassert(typeof type == 'string' && type, 'Command type property is invalid! Please check file structure & CommandLoader.') // && statement to return last true value
+        this.type  = rassert(typeof type == 'string' && type, 'Command type property is invalid! Please check file structure & CommandLoader.'); // && statement to return last true value
         this.name  = rassert(properties.name, 'Essential command name property is undefined!');
         this.group = rassert(properties.group, 'Essential command group property is undefined!');
         this.args  = rassert(properties.args, 'Essential command args property is undefined!');

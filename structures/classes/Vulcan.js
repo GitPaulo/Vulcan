@@ -1,5 +1,5 @@
 const Discord            = xrequire('discord.js');
-const { _, performance } = xrequire('perf_hooks');
+const { performance }    = xrequire('perf_hooks');
 const os                 = xrequire('os');
 const fs                 = xrequire('fs');
 const path               = xrequire('path');
@@ -14,7 +14,7 @@ const couldnt_have_forged_it_better_myself = `\\ \\    / /   | |
  \\ \\  / /   _| | ___ __ _ _ __  
   \\ \\/ / | | | |/ __/ _\` | \'_ \\ 
    \\  /| |_| | | (_| (_| | | | |
-    \\/  \\__,_|_|\\___\\__,_|_| |_| by Pas-kun & Tacos-sama`
+    \\/  \\__,_|_|\\___\\__,_|_| |_| by Pas-kun & Tacos-sama`;
 ////////////////////////////////////////////////////////////////
 
 let chainPrint = (category, chainee) => (logger.info('Initialised => ' +
@@ -63,7 +63,7 @@ class Vulcan extends Discord.Client {
                 t = mathematics.round(performance.now() - t, 2);
                 logger.info(`Loaded command ${cmdName} from ${commandPath} (took ${t}ms)`);
             } catch(err) {
-                console.log(err.code, err.stack)
+                console.log(err.code, err.stack);
                 logger.error(err.shortMessage());
             }
         }
@@ -85,14 +85,14 @@ class Vulcan extends Discord.Client {
             let t     = performance.now();
             let event = eventFile.replace(/\.js$/i, '');
             this.on(event, xrequire(path.join(discordjsEventsPath, eventFile)));
-            logger.info(`Finished loading (DiscordJS) event file '${eventFile}' (took '${mathematics.round(performance.now() - t, 2)}ms').`);
+            logger.info(`Finished loading (DiscordJS) event file '${eventFile}' (took ${mathematics.round(performance.now() - t, 2)}ms).`);
         }
 
         for (let eventFile of vulcanEvents) {
             let t     = performance.now();
             let event = eventFile.replace(/\.js$/i, '');
             this.on(event, xrequire(path.join(vulcanEventsPath, eventFile)));
-            logger.info(`Finished loading (Vulcan) event file '${eventFile}' (took '${mathematics.round(performance.now() - t, 2)}ms').`);
+            logger.info(`Finished loading (Vulcan) event file '${eventFile}' (took ${mathematics.round(performance.now() - t, 2)}ms).`);
         }
 
         return chainPrint('Discord & Vulcan Events', this);

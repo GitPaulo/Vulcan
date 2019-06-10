@@ -1,4 +1,3 @@
-const Discord          = xrequire('discord.js');
 const fs               = xrequire('fs');
 const path             = xrequire('path');
 const http             = xrequire('http');
@@ -23,10 +22,7 @@ class Gif extends Command {
             }
         });
 
-        // Create gif folder 
-        let folder_name = 'gifs';
-        let rootPath    = __basedir;
-        this.folderPath = path.join(rootPath, 'data', folder_name);
+        this.folderPath        = path.join(__basedir, 'data', 'gifs');
         this.allowedExtensions = ['.png', '.jpg', '.mp4', '.gif'];
 
         // Create Gif folder (where we store all downloaded gifs)
@@ -63,19 +59,11 @@ class Gif extends Command {
             case 'store':
             case 'upload':
             case 'put':
+                let n = message.args.length;
+                if (n < 3)
+                    return message.client.emit('invalidCommandCall', `Expected 3 arguments got ${n}.`, message);
                 let keyword = message.args[1];
                 let data    = message.args[2];
-                if (typeof data === undefined  || data === "" 
-                    || typeof keyword == undefined || typeof keyword === undefined) {
-                    await message.channel.send(messageEmbeds.warning(
-                        {
-                            authorName: message.author.username,
-                            title:      this.constructor.name + ' -> Invalid arguments.',
-                            description: `There were invalid arguments for the "put" request: arg[1] = ${keyword}, arg[2] = ${data}`
-                        }
-                    ));
-                    return;
-                }
                 if (stringAlgorithms.isURL(data)) {
                     this.storeImageFromURL(keyword, data, async (result) => {
                         replyEmbedData.fields[1].value = result;
@@ -86,14 +74,7 @@ class Gif extends Command {
                     try {
                         messageWithImage = await message.channel.fetchMessage(String(data));
                     } catch (err) {
-                        await message.channel.send(messageEmbeds.warning(
-                            {
-                                authorName: message.author.username,
-                                title:      this.constructor.name + ' -> Unknown channel message',
-                                description: 'The message with id: **' + data + '** was not found in the list of messages from this channel.'
-                            }
-                        ));
-                        return;
+                        return message.client.emit('invalidCommandCall', 'The message with id: **' + data + '** was not found in the list of messages from this channel.', message);
                     }
                     this.storeImageFromMessage(keyword, messageWithImage, async (result) => {
                         replyEmbedData.fields[1].value = result;
@@ -104,16 +85,8 @@ class Gif extends Command {
             case 'get':
             case 'fetch':
                 let potentialKeyword = message.args[1];
-                if (!potentialKeyword) {
-                    await message.channel.send(messageEmbeds.warning(
-                        {
-                            authorName: message.author.username,
-                            title:      this.constructor.name + ' -> Invalid arguments.',
-                            description:`There were invalid arguments for the "fetch" request: arg[1] = ${potentialKeyword}`
-                        }
-                    ));
-                    return;
-                }
+                if (!potentialKeyword)
+                    return message.client.emit('invalidCommandCall', `There were invalid arguments for the "fetch" request: arg[1] = ${potentialKeyword}`, message);
                 this.fetchImage(potentialKeyword, async (result) => {
                     replyEmbedData.fields[1].value = result, 
                     firstReply.edit(messageEmbeds.reply(replyEmbedData));
@@ -130,14 +103,7 @@ class Gif extends Command {
                 });
                 break;
             default:
-                await message.channel.send(messageEmbeds.warning(
-                    {
-                        authorName: message.author.username,
-                        title: '    Invalid "' + this.constructor.name + '" sub-command!',
-                        description:'The command **' + cmd + '** was not found in the list of sub-commands for this operation. Please try again or check documentation.',
-                    }
-                ));
-                break;
+                return message.client.emit('invalidCommandCall', `The command **${cmd}** was not found in the list of sub-commands for this operation.`, message);
         }
     }
 
@@ -146,11 +112,12 @@ class Gif extends Command {
     }
 
     storeImageFromMessage(fileName, message, callback) {
-        let files = message.attachments;
+        let attachments = message.attachments;
+        let i = 0;
 
-        for (let [key, attachment] of files) {
-            this.storeImageFromURL(fileName, attachment.proxyURL);
-        }
+        attachments.forEach(attachment => {
+            this.storeImageFromURL(fileName + (i>0 ? i++ : i++, ""), attachment.proxyURL);
+        });
 
         if (callback)
             callback("completed!");
@@ -171,7 +138,7 @@ class Gif extends Command {
         let file = fs.createWriteStream(filePath);
 
         try {
-            let request = http.get(url, function (response) {
+            http.get(url, function (response) {
                 response.pipe(file);
                 file.on('finish', function () {
                     file.close(); 
