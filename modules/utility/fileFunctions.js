@@ -17,7 +17,7 @@ fileFunctions.allDirFiles = function (dir, fileTypes = '.js') {
                 walkDir(curFile);
             }
         }
-    };
+    }
 
     walkDir(dir);
 

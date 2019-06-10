@@ -2,7 +2,7 @@
     "name": "Vulcan",
     "version": "1.0.0",
     "description": "Collaboration discord bot by Paulo & Carlos, using discord.js.",
-    "main": "bot.js",
+    "main": "vulcan.js",
     "scripts": {
         "start": "node --require ./modules/scripts/globals.js bot.js",
         "dev": "nodemon --require ./modules/scripts/globals.js bot.js",
@@ -33,6 +33,7 @@
         "mongoose": "^5.5.13"
     },
     "devDependencies": {
+        "eslint": "^5.16.0",
         "nodemon": "^1.19.1"
     }
 }

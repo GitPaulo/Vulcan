@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const isPlainObject = x =>
     Object(x) === x && !Array.isArray(x)
 
