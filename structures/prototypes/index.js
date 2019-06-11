@@ -13,7 +13,7 @@
 const fs              = xrequire('fs');
 const path            = xrequire('path');
 const { performance } = xrequire('perf_hooks');
-const logger          = xrequire('./managers/logManager').getInstance();
+const logger          = xrequire('./managers/LogManager').getInstance();
 
 module.exports = () => {
     let files = fs.readdirSync(__dirname);

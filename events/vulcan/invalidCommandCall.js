@@ -8,7 +8,7 @@
  */
 
 const messageEmbeds = xrequire('./modules/utility/messageEmbeds');
-const logger        = xrequire('./managers/logManager').getInstance();
+const logger        = xrequire('./managers/LogManager').getInstance();
 
 module.exports = (description, message) => {
     message.channel.send(messageEmbeds.warning(

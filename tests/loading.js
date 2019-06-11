@@ -1,7 +1,7 @@
 // Remember to offset paths by their parent since we are in ./tests/
 const path            = require('path');
 const { performance } = require('perf_hooks');
-const logger          = xrequire('./managers/logManager').getInstance();
+const logger          = xrequire('./managers/LogManager').getInstance();
 
 logger.plain(
 `=======================================
