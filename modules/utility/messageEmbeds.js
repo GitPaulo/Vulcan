@@ -1,27 +1,27 @@
 module.exports = messageEmbeds = {};
 
-messageEmbeds.reply = function ( 
-    { 
+messageEmbeds.reply = function (
+    {
         replyeeMessage,
         cmd    = replyeeMessage.command,
         color  = cmd.embed.color,
-        title  = cmd.embed.title, 
+        title  = cmd.embed.title,
         author = {
-            name:     'Replying@' + replyeeMessage.author.username,
+            name: 'Replying@' + replyeeMessage.author.username,
             icon_url: replyeeMessage.author.avatarURL,
-            url:      replyeeMessage.url
+            url: replyeeMessage.url
         },
-        description = "", 
-        fields      = [], 
+        description = '',
+        fields      = [],
         timestamp   = new Date(),
         footer      = {
             text: `Vulcan's reply to a command request!`
         },
-        url         = "",
-        extraFiles  = [],
+        url         = '',
+        extraFiles  = []
     }
 ) {
-    let imgPath   = replyeeMessage.command.embed.image; 
+    let imgPath   = replyeeMessage.command.embed.image;
     let imgName   = imgPath.substring(imgPath.lastIndexOf('/') + 1);
     let thumbnail = { url: 'attachment://' + imgName };
     let files     = [
@@ -44,26 +44,26 @@ messageEmbeds.reply = function (
             footer,
             url
         },
-        files,
+        files
     };
 }
 
 messageEmbeds.error = function (
     {
         title       = `Error`,
-        description = "",
+        description = '',
         color       = 0xFF0000, // red
-        authorName  = "",
+        authorName  = '',
         author      = {
-            name:      authorName,
-            icon_url: `attachment://error.png` 
+            name: authorName,
+            icon_url: `attachment://error.png`
         },
         timestamp   = new Date(),
         footer      = {
             text: '[Error] An exception thrown by vulcan or something bad! Contact devs pls!'
         },
         fields      = [],
-        url         = ""
+        url         = ''
     }
 ) {
     return {
@@ -81,27 +81,27 @@ messageEmbeds.error = function (
             {
                 attachment: './assets/media/images/general/error.png',
                 name: 'error.png'
-            },
+            }
         ]
     }
 }
 
 messageEmbeds.warning = function (
     {
-        title       = `Warning`, 
-        description = "",
+        title       = `Warning`,
+        description = '',
         color       = 0xff8d00, // orange
-        authorName  = "",
+        authorName  = '',
         author      = {
-            name:      authorName,
-            icon_url: `attachment://warning.png` 
+            name: authorName,
+            icon_url: `attachment://warning.png`
         },
         timestamp   = new Date(),
         footer      = {
             text: '[Warning] An unexpected behaviour not controlled by vulcan.'
         },
         fields      = [],
-        url         = ""
+        url         = ''
     }
 ) {
     return {
@@ -119,7 +119,7 @@ messageEmbeds.warning = function (
             {
                 attachment: './assets/media/images/general/warning.png',
                 name: 'warning.png'
-            },
+            }
         ]
     }
 }
@@ -127,19 +127,19 @@ messageEmbeds.warning = function (
 messageEmbeds.info = function (
     {
         title       = `Information`,
-        description = "",
+        description = '',
         color       = 0x89CFF0, // bblue
-        authorName  = "",
+        authorName  = '',
         author      = {
-            name:      authorName,
-            icon_url: `attachment://warning.png` 
+            name: authorName,
+            icon_url: `attachment://warning.png`
         },
         timestamp   = new Date(),
         footer      = {
             text: '[Info] Information displayed by vulcan for the users.'
         },
         fields      = [],
-        url         = "",
+        url         = ''
     }
 ) {
     return {
@@ -157,7 +157,7 @@ messageEmbeds.info = function (
             {
                 attachment: './assets/media/images/general/info.png',
                 name: 'info.png'
-            },
+            }
         ]
     }
 }

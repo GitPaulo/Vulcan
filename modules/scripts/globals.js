@@ -1,6 +1,4 @@
-/********************************************* 
->>>>> This file is loaded via npm script <<<<< 
-*********************************************/
+/* This file is loaded via npm script */
 const path       = require('path');
 global.__basedir = path.join(__dirname, '..', '..');
 
@@ -15,13 +13,13 @@ global.xrequire.cache = require.cache;
 global.xrequire.main  = require.main;
 
 global.xrequire.resolve = (request, options = null) => {
-    if (request.startsWith('.')) 
+    if (request.startsWith('.'))
         return require.resolve(path.resolve(request), options);
     return require.resolve(request, options);
 };
 
 global.xrequire.resolve.paths = request => {
-    if (request.startsWith('.')) 
+    if (request.startsWith('.'))
         return require.resolve.paths(path.resolve(request));
     return require.resolve.paths(request);
 };

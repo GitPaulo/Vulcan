@@ -1,10 +1,10 @@
-/* 
-* Files of type (1): <Class>.prototype.js 
+/*
+* Files of type (1): <Class>.prototype.js
 * Will have the module.exports methods added
 * -with enumerate property as false, to the prototype of <Class>.
 */
 
-/* 
+/*
 * Files of type (2): <Class>.js
 * Will have the module.exports methods added
 * -to the <Class> object.
@@ -33,13 +33,13 @@ module.exports = () => {
             throw Error(`Invalid prototypes file extension: ${file}`);
 
         let globalObject = global[parts[0]];
-       
+
         if (!globalObject)
             throw Error(`Invalid object from file name: ${globalObject} from ${file}`);
 
         let targetObject = parts[1] === 'prototype' ? globalObject.prototype : globalObject;
         let properties   = xrequire(path.join(__dirname, file));
-        
+
         for (let property in properties) {
             let propertyValue = properties[property];
             Object.defineProperty(targetObject, property, {

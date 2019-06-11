@@ -6,12 +6,12 @@ var rassert = (exp, msg) => {
 }
 
 class Command {
-    constructor(type, properties) {
-        this.type  = rassert(typeof type == 'string' && type, 'Command type property is invalid! Please check file structure & CommandLoader.'); // && statement to return last true value
+    constructor (type, properties) {
+        this.type  = rassert(typeof type === 'string' && type, 'Command type property is invalid! Please check file structure & CommandLoader.'); // && statement to return last true value
         this.name  = rassert(properties.name, 'Essential command name property is undefined!');
         this.group = rassert(properties.group, 'Essential command group property is undefined!');
         this.args  = rassert(properties.args, 'Essential command args property is undefined!');
-        
+
         this.aliases       = properties.aliases || [];
         this.description   = properties.description || '[No description for this command]';
         this.examples      = properties.examples || [];
@@ -20,22 +20,22 @@ class Command {
         this.lastUserCalls = {};
     }
 
-    validate() {
+    validate () {
         throw new Error('This method has not been implemented!');
     }
 
-    execute() {
+    execute () {
         throw new Error('This method has not been implemented!');
     }
 
-    checkTimeout(author) {
+    checkTimeout (author) {
         if (!(author.id in this.lastUserCalls)) {
             this.lastUserCalls[author.id] = new Date();
             return false;
         } else {
             let currentDate = new Date();
             let timeDiff = currentDate.getTime() - this.lastUserCalls[author.id].getTime();
-            if(timeDiff > this.throttling) {
+            if (timeDiff > this.throttling) {
                 this.lastUserCalls[author.id] = currentDate;
                 return false;
             }
@@ -50,7 +50,7 @@ class Command {
             type: 'string'
         }
     */
-    validateMessageArguments(message) {
+    validateMessageArguments (message) {
         let messageArgs = message.args;
         let command     = message.command;
 

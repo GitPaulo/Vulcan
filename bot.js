@@ -2,7 +2,7 @@
 xrequire('./modules/scripts/initscript');
 xrequire('./modules/scripts/defaults');
 
-// Vulcan init structures (via index.js) 
+// Vulcan init structures (via index.js)
 xrequire('./structures/prototypes')();
 xrequire('./structures/extensions')();
 
