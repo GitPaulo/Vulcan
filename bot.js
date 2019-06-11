@@ -18,7 +18,7 @@ const privatedataFile   = fs.readFileSync('./settings/noleakdata.yaml', 'utf8');
 const configuration     = YAML.safeLoad(configurationFile);
 const privatedata       = YAML.safeLoad(privatedataFile);
 
-// Heroku stores token in ENV vars
+// Heroku ENV token
 privatedata.token = process.env.BOT_TOKEN;
 
 // Instantiate & export vulcan client
