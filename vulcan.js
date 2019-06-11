@@ -16,7 +16,9 @@ const logger = xrequire('./managers/logManager').getInstance();
 const configurationFile = fs.readFileSync('./settings/config.yaml', 'utf8');
 const privatedataFile   = fs.readFileSync('./settings/noleakdata.yaml', 'utf8');
 const configuration     = YAML.safeLoad(configurationFile);
-const privatedata = YAML.safeLoad(privatedataFile);
+const privatedata       = YAML.safeLoad(privatedataFile);
+
+// Heroku stores token in ENV vars
 privatedata.token = process.env.BOT_TOKEN;
 
 // Instantiate & export vulcan client
