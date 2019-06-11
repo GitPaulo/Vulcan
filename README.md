@@ -3,7 +3,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f7e68b17b25b4f43b2bfd74756e488fb)](https://www.codacy.com/app/GitPaulo/Vulcan?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GitPaulo/Vulcan&amp;utm_campaign=Badge_Grade)
 [![codebeat badge](https://codebeat.co/badges/f520f33c-38f6-4d1e-b0b9-49c6049a16a0)](https://codebeat.co/projects/github-com-gitpaulo-vulcan-master-6c3e8013-7c4e-4992-9d1d-a8fa4b77d934)
-[![codecov](https://codecov.io/gh/GitPaulo/Vulcan/branch/master/graph/badge.svg)](https://codecov.io/gh/GitPaulo/Vulcan)
 
 **'Vulcan'** is a multi-purpose discord bot created to administrate the discord server of our group of friends. This bot has been made in collaboration w/ @CarlosGomes98.
   
