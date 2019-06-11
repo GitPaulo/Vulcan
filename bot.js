@@ -10,7 +10,7 @@ xrequire('./structures/extensions')();
 const fs     = xrequire('fs');
 const YAML   = xrequire('js-yaml');
 const Vulcan = xrequire('./structures/classes/Vulcan');
-const logger = xrequire('./managers/logManager').getInstance();
+const logger = xrequire('./managers/LogManager').getInstance();
 
 // Load Data
 const configurationFile = fs.readFileSync('./settings/config.yaml', 'utf8');

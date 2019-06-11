@@ -1,4 +1,4 @@
-const logger = xrequire('./managers/logManager').getInstance();
+const logger = xrequire('./managers/LogManager').getInstance();
 
 module.exports = (error, description, channel) => {
     if (channel) {

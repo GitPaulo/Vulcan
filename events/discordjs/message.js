@@ -1,4 +1,4 @@
-const logger        = xrequire('./managers/logManager').getInstance();
+const logger        = xrequire('./managers/LogManager').getInstance();
 const messageEmbeds = xrequire('./modules/utility/messageEmbeds');
 
 module.exports = async message => {

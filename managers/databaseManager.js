@@ -1,5 +1,5 @@
 const mongoose = xrequire('mongoose');
-const logger   = xrequire('./managers/logManager').getInstance();
+const logger   = xrequire('./managers/LogManager').getInstance();
 
 mongoose.Promise = global.Promise;
 

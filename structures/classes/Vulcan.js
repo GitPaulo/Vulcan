@@ -4,10 +4,10 @@ const os              = xrequire('os');
 const fs              = xrequire('fs');
 const path            = xrequire('path');
 const yaml            = xrequire('js-yaml');
-const DatabaseManager = xrequire('./managers/databaseManager');
+const DatabaseManager = xrequire('./managers/DatabaseManager');
 const mathematics     = xrequire('./modules/utility/mathematics');
 const fileFunctions   = xrequire('./modules/utility/fileFunctions');
-const logger          = xrequire('./managers/logManager').getInstance();
+const logger          = xrequire('./managers/LogManager').getInstance();
 
 /****************************************************************/
 // eslint-disable-next-line camelcase
