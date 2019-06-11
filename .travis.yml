@@ -12,14 +12,12 @@ script:
 notifications:
   email: false
 
-env:
-  - WEBHOOK_URL = https://discordapp.com/api/webhooks/586591377958371330/GdRTdo_-ezSX4D41Q00EMoJdZhYAkg_ZorqLBDyANbAUHtvA3AxrBgbGMtNscwj46md9
-
 after_success:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
-  - ./send.sh success $WEBHOOK_URL
+  - ./send.sh success $WEBHOOK_URL_SHOGUNATE
+
 after_failure:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
-  - ./send.sh failure $WEBHOOK_URL
+  - ./send.sh failure $WEBHOOK_URL_SHOGUNATE
