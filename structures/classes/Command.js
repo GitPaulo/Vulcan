@@ -72,11 +72,9 @@ class Command {
         }
     }
 
-    validatePermission(message) {
-        vulcan = message.client;
-        authorID = message.author.id;
-        authorPermission = vulcan.getUserPermission(authorID);
-
+    validatePermissions(message) {
+        let vulcan = message.client;
+        let authorPermission = vulcan.getUserPermissions(message.author.id);
         if (authorPermission <= this.group) return true;
       
         return false;

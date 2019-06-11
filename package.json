@@ -6,7 +6,8 @@
     "scripts": {
         "start": "node --require ./modules/scripts/globals.js bot.js",
         "dev": "nodemon --require ./modules/scripts/globals.js bot.js",
-        "test": "node --require ./modules/scripts/globals.js tests/loading.js"
+        "test": "node --require ./modules/scripts/globals.js tests/loading.js", 
+        "require": "node --require ./modules/scripts/globals.js"
     },
     "repository": {
         "type": "git",

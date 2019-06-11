@@ -55,7 +55,7 @@ global.Defaults = {
         ),
         // Commands will have 3 groups. Group 1 only roots can use. Group 2 only admin and above can use. Group 3 everyone can use. Everyone not in this file is a pleb by default.
         'user_permissions': new DefaultFile(
-            path.join(ROOT_PATH, 'settings', 'user_permissions.yaml'), {
+            path.join(rootPath, 'settings', 'user_permissions.yaml'), {
                 roots: ['166176374036365312', '207606117159796737'],
                 admins: []
             }

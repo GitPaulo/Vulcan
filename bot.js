@@ -1,4 +1,5 @@
 // Initialisation
+require('./modules/scripts/globals.js');
 xrequire('./modules/scripts/initscript');
 xrequire('./modules/scripts/defaults');
 
