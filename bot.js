@@ -15,14 +15,16 @@ const logger = xrequire('./managers/LogManager').getInstance();
 // Load Data
 const configurationFile = fs.readFileSync('./settings/config.yaml', 'utf8');
 const privatedataFile   = fs.readFileSync('./settings/noleakdata.yaml', 'utf8');
+const permissionsFile   = fs.readFileSync('./settings/user_permissions.yaml', 'utf8');
 const configuration     = YAML.safeLoad(configurationFile);
 const privatedata       = YAML.safeLoad(privatedataFile);
+const permissions       = YAML.safeLoad(permissionsFile);
 
 // Heroku ENV token
 privatedata.token = process.env.BOT_TOKEN;
 
 // Instantiate & export vulcan client
-module.exports = vulcan = new Vulcan(configuration, privatedata)
+module.exports = vulcan = new Vulcan(configuration, privatedata, permissions)
     .loadCommands()
     .loadEvents()
     .dbConnect()

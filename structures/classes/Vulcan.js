@@ -24,13 +24,14 @@ let chainPrint = (category, chainee) => (logger.info('Initialised => ' +
 ), chainee);
 
 class Vulcan extends Discord.Client {
-    constructor (configuration, privatedata) {
+    constructor (configuration, privatedata, permissions) {
         super();
 
         // Seal these properties! :)
         Object.defineProperties(this, {
             configuration: { value: configuration,  writable: false, enumerable: false, configurable: false },
-            privatedata: { value: privatedata,    writable: false, enumerable: false, configurable: false }
+            privatedata:   { value: privatedata,    writable: false, enumerable: false, configurable: false },
+            permissions:   { value: permissions,    writable: false, enumerable: false, configurable: false }
         });
 
         // Vulcan is here!
@@ -151,6 +152,12 @@ class Vulcan extends Discord.Client {
 
     uptime () {
         return String(process.uptime()).toHHMMSS();
+    }
+
+    getUserPermissions(ID) {
+        if (this.permissions.roots.includes(ID)) return 1;
+        else if (this.permissions.admins.includes(ID)) return 2;
+        return 3;
     }
 }
 

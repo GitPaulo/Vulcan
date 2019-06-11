@@ -21,10 +21,12 @@ module.exports = async message => {
         message.channel.send(messageEmbeds.error(message.author.username, 'Command Validation', `Command Parse error: ${parseError.message}`));
 
     if (message.isCommand) {
-        let cmd        = message.command;
-        let validation = cmd.validateMessageArguments(message); // Returns an object: { isValid: (boolean), list: (array) } // list: array with entries related to index of the invalid arg
-
-        if (!validation.isValid) {
+        // check permissions, then check arguments are valid
+        let cmd        = message.command;        
+        if(!cmd.validatePermission(message)) return;
+        let argumentsValidation = cmd.validateMessageArguments(message); // Returns an object: { isValid: (boolean), list: (array) } // list: array with entries related to index of the invalid arg
+        
+        if (!argumentsValidation.isValid) {
             let invalidArguments = validation.list.toString();
             message.channel.send(messageEmbeds.warning(
                 {
