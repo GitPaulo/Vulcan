@@ -1,24 +1,26 @@
-const Discord            = xrequire('discord.js');
-const { performance }    = xrequire('perf_hooks');
-const os                 = xrequire('os');
-const fs                 = xrequire('fs');
-const path               = xrequire('path');
-const YAML               = xrequire('js-yaml');
-const databaseManager    = xrequire('./managers/databaseManager');
-const mathematics        = xrequire('./modules/utility/mathematics');
-const fileFunctions      = xrequire('./modules/utility/fileFunctions');
-const logger             = xrequire('./managers/logManager').getInstance();
+const Discord         = xrequire('discord.js');
+const { performance } = xrequire('perf_hooks');
+const os              = xrequire('os');
+const fs              = xrequire('fs');
+const path            = xrequire('path');
+const yaml            = xrequire('js-yaml');
+const DatabaseManager = xrequire('./managers/databaseManager');
+const mathematics     = xrequire('./modules/utility/mathematics');
+const fileFunctions   = xrequire('./modules/utility/fileFunctions');
+const logger          = xrequire('./managers/logManager').getInstance();
 
-////////////////////////////////////////////////////////////////
+/****************************************************************/
+// eslint-disable-next-line camelcase
 const couldnt_have_forged_it_better_myself = `\\ \\    / /   | |                
  \\ \\  / /   _| | ___ __ _ _ __  
   \\ \\/ / | | | |/ __/ _\` | \'_ \\ 
    \\  /| |_| | | (_| (_| | | | |
     \\/  \\__,_|_|\\___\\__,_|_| |_| by Pas-kun & Tacos-sama`;
-////////////////////////////////////////////////////////////////
+/****************************************************************/
 
 let chainPrint = (category, chainee) => (logger.info('Initialised => ' +
     category
+// eslint-disable-next-line no-sequences
 ), chainee);
 
 class Vulcan extends Discord.Client {
@@ -28,7 +30,7 @@ class Vulcan extends Discord.Client {
         // Seal these properties! :)
         Object.defineProperties(this, {
             configuration: { value: configuration,  writable: false, enumerable: false, configurable: false },
-            privatedata:   { value: privatedata,    writable: false, enumerable: false, configurable: false },
+            privatedata: { value: privatedata,    writable: false, enumerable: false, configurable: false }
         });
 
         // Vulcan is here!
@@ -47,22 +49,22 @@ class Vulcan extends Discord.Client {
             let t       = performance.now();
             let matches = commandPath.match(/\w*.js/);
             let cmdName = matches[matches.length - 1].slice(0, -3);
-   
+
             try {
                 let fullPath     = path.join(dirPath, commandPath);
                 let CommandClass = xrequire(fullPath);
-                let commandType  = path.dirname(fullPath).split(path.sep).slice(-1).pop();           
+                let commandType  = path.dirname(fullPath).split(path.sep).slice(-1).pop();
 
                 let command = new CommandClass(commandType);
                 let keys    = [command.name, ...command.aliases];
-    
+
                 for (let key of keys) {
                     commandList[key] = command;
                 }
-    
+
                 t = mathematics.round(performance.now() - t, 2);
                 logger.info(`Loaded command ${cmdName} from ${commandPath} (took ${t}ms)`);
-            } catch(err) {
+            } catch (err) {
                 console.log(err.code, err.stack);
                 logger.error(err.shortMessage());
             }
@@ -77,10 +79,10 @@ class Vulcan extends Discord.Client {
         const eventsPath          = path.join(__basedir, folderPath);
         const vulcanEventsPath    = path.join(eventsPath, 'vulcan');
         const discordjsEventsPath = path.join(eventsPath, 'discordjs');
-        
+
         let discordEvents = fs.readdirSync(discordjsEventsPath).filter(file => file.endsWith('.js'));
         let vulcanEvents  = fs.readdirSync(vulcanEventsPath).filter(file => file.endsWith('.js'));
-        
+
         for (let eventFile of discordEvents) {
             let t     = performance.now();
             let event = eventFile.replace(/\.js$/i, '');
@@ -97,12 +99,12 @@ class Vulcan extends Discord.Client {
 
         return chainPrint('Discord & Vulcan Events', this);
     }
-    
+
     dbConnect () {
         const credentialsFile = fs.readFileSync(global.Defaults.files.dbcredentials.location, 'utf8');
-        const credentials     = YAML.safeLoad(credentialsFile);
+        const credentials     = yaml.safeLoad(credentialsFile);
 
-        this.databaseManager = new databaseManager();
+        this.databaseManager = new DatabaseManager();
         this.databaseManager.connect(credentials.username, credentials.password);
 
         return chainPrint('Database Connection', this);
@@ -134,16 +136,16 @@ class Vulcan extends Discord.Client {
 
     getOnlineStatistics () {
         return {
-            guildCount:   this.guilds.size,
+            guildCount: this.guilds.size,
             channelCount: this.channels.size,
-            userCount:    this.users.size,
+            userCount: this.users.size
         };
     }
 
     getMachineStatistics () {
         return {
             cpuUsage: os.loadavg()[1],
-            memUsage: process.memoryUsage().rss / 1024 / 1024,
+            memUsage: process.memoryUsage().rss / 1024 / 1024
         }
     }
 

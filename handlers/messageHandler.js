@@ -1,7 +1,7 @@
-const DISCORD_ARGS_REGULAR_EXPRESSION = /'+([^;]*)'+|{+([^;]*)}+|`+([^;]*)`+|\[([^;]*)\]|\S+/g;
+const discordArgsRegularExpression = /'+([^;]*)'+|{+([^;]*)}+|`+([^;]*)`+|\[([^;]*)\]|\S+/g;
 
 let parseStringToDataTypes = (targetText) => {
-    let matches      = targetText.match(DISCORD_ARGS_REGULAR_EXPRESSION);
+    let matches      = targetText.match(discordArgsRegularExpression);
     let parsedValues = [];
 
     if (matches === null)
@@ -24,8 +24,8 @@ let parseStringToDataTypes = (targetText) => {
         } catch (e) {
             parsedValues[i] = null;
         }
-        
-        parsedValues[i] = match.startsWith('"') && match.endsWith('"') ? match.substring(1, match.length-1) : match
+
+        parsedValues[i] = match.startsWith('"') && match.endsWith('"') ? match.substring(1, match.length - 1) : match
         parsedValues[i] = parsedValues[i].replaceAll('%"', '"');
     }
 
@@ -34,7 +34,7 @@ let parseStringToDataTypes = (targetText) => {
 
 module.exports = (vulcan, message) => {
     let raw       = message.content;
-    let matches   = raw.match(DISCORD_ARGS_REGULAR_EXPRESSION);
+    let matches   = raw.match(discordArgsRegularExpression);
     let firstword = matches[0].slice(1);
 
     let command = vulcan.commands[firstword];
@@ -47,14 +47,14 @@ module.exports = (vulcan, message) => {
 
     let args      = matches; args.shift();
     let argString = args.join(' ').trim();
-    
-    if (vulcan.configuration.parsingType == global.ParsingTypes.COMPLEX) {
+
+    if (vulcan.configuration.parsingType === global.ParsingTypes.COMPLEX) {
         args = parseStringToDataTypes(argString);
     }
 
     console.log(args, '<<< parsed values');
-    console.log(`[MESSAGE PARSER DEBUG] => Matches: [${matches}]`, 
-        `Arguments Array: [${args}](wrong types check above spew)`, 
+    console.log(`[MESSAGE PARSER DEBUG] => Matches: [${matches}]`,
+        `Arguments Array: [${args}](wrong types check above spew)`,
         `Argument String: ${argString}`, `Parsed Name: ${firstword}`
     );
 
@@ -65,4 +65,3 @@ module.exports = (vulcan, message) => {
         message: null
     };
 }
-

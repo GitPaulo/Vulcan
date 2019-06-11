@@ -1,10 +1,11 @@
 const fs   = xrequire('fs');
 const path = xrequire('path');
-const YAML = xrequire('js-yaml');
+const yaml = xrequire('js-yaml');
 
-const PRINT_PREFIX = '[DEFAULTS]';
-const ROOT_PATH    = __basedir;
-const PARSING_TYPES = {
+const printPrefix  = '[DEFAULTS]';
+const rootPath     = __basedir;
+const parsingTypes = {
+    // eslint-disable-next-line indent
     COMPLEX: 1,
     SIMPLE: 2
 };
@@ -15,39 +16,39 @@ let DefaultFile = function (location, data) {
 }
 
 let log = (...args) => {
-    console.log(PRINT_PREFIX, ...args);
+    console.log(printPrefix, ...args);
 }
 
 let writeToDefaultFile = (object, path) => {
-    let data = YAML.safeDump(object);
+    let data = yaml.safeDump(object);
 
     fs.writeFileSync(path, data, function (err) {
         if (err) throw err;
     });
 }
 
-global.ParsingTypes = PARSING_TYPES;
+global.ParsingTypes = parsingTypes;
 global.Defaults = {
     folders: ['settings', 'data'],
     files: {
         'configuration': new DefaultFile(
-            path.join(ROOT_PATH, 'settings', 'config.yaml'), {
+            path.join(rootPath, 'settings', 'config.yaml'), {
                 prefixes: ['!', '>'],
                 devsID: ['166176374036365312', '207606117159796737'], // Please don't change this
-                parsingType: [PARSING_TYPES.SIMPLE],
+                parsingType: [parsingTypes.SIMPLE]
             }
         ),
         'privatedata': new DefaultFile(
-            path.join(ROOT_PATH, 'settings', 'noleakdata.yaml'), {
+            path.join(rootPath, 'settings', 'noleakdata.yaml'), {
                 token: `'PLEASE ADD YOUR DISCORD TOKEN HERE'`,
                 githubAuth: {
-                    username: "GitPaulo",
-                    password: "KONO DIO DA"
+                    username: 'GitPaulo',
+                    password: 'KONO DIO DA'
                 }
             }
         ),
         'dbcredentials': new DefaultFile(
-            path.join(ROOT_PATH, 'settings', 'dbcredentials.yaml'), {
+            path.join(rootPath, 'settings', 'dbcredentials.yaml'), {
                 username: 'ur_mom_gay',
                 password: 'no_u'
             }
@@ -70,7 +71,7 @@ global.Defaults = {
         let folderName    = path.dirname(filePath).split(path.sep).pop();
 
         // Check folder
-        if (!Defaults.folders.includes(folderName)){
+        if (!Defaults.folders.includes(folderName)) {
             throw new Error('Default folders are not valid!');
         }
 
@@ -80,8 +81,8 @@ global.Defaults = {
             writeToDefaultFile(defaultObject.data, filePath);
         } else { // check if contents are proper
             let defaultFile       = fs.readFileSync(filePath, 'utf8');
-            let parsedObject      = YAML.safeLoad(defaultFile);
-            let missingProperties = Object.keys(defaultObject.data).filter(x=>!Object.keys(parsedObject).includes(x));
+            let parsedObject      = yaml.safeLoad(defaultFile);
+            let missingProperties = Object.keys(defaultObject.data).filter(x => !Object.keys(parsedObject).includes(x));
 
             if (missingProperties.length > 0) {
                 for (let rootProperty of missingProperties) {

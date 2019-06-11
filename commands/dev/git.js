@@ -1,8 +1,8 @@
-const Command       = xrequire('./structures/classes/Command');
-const githubAPI     = xrequire('github-api');
+const Command   = xrequire('./structures/classes/Command');
+const GithubAPI = xrequire('github-api');
 
 class Git extends Command {
-    constructor(type) {
+    constructor (type) {
         super(type, {
             name: 'git',
             aliases: ['updatefiles', 'pullgit'],
@@ -14,24 +14,24 @@ class Git extends Command {
             embed: {
                 color: 0x761CFF,
                 title: `Git - Pull Operation`,
-                image: './assets/media/images/commands/GitPull.gif',
+                image: './assets/media/images/commands/GitPull.gif'
             }
         });
 
-        this.client = new githubAPI({
+        this.client = new GithubAPI({
             username: 'FOO',
             password: 'NotFoo'
-        }); 
+        });
     }
 
     // eslint-disable-next-line no-unused-vars
-    async validate(message) {
+    async validate (message) {
         return true; // if true execute() will run
     }
 
     // eslint-disable-next-line no-unused-vars
-    async execute(message) {
-        
+    async execute (message) {
+
     }
 }
 

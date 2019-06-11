@@ -3,7 +3,7 @@ const Command         = xrequire('./structures/classes/Command.js');
 const mathematics     = xrequire('./modules/utility/mathematics');
 const messageEmbeds   = xrequire('./modules/utility/messageEmbeds');
 class Eval extends Command {
-    constructor(type) {
+    constructor (type) {
         super(type, {
             name: 'eval',
             aliases: ['js', 'runjs', 'jsrun'],
@@ -15,23 +15,23 @@ class Eval extends Command {
                 {
                     key: 'text',
                     prompt: 'Code to be evaluated.',
-                    type: 'string',
+                    type: 'string'
                 }
             ],
             embed: {
                 color: 0xFFCE6D,
                 title: `JavaScript - Expression Evaluation`,
-                image: './assets/media/images/commands/Eval.gif',
+                image: './assets/media/images/commands/Eval.gif'
             }
         });
     }
 
     // eslint-disable-next-line no-unused-vars
-    async validate(message) {
+    async validate (message) {
         return true; // if true execute() will run
     }
 
-    async execute(message) {
+    async execute (message) {
         let returnValue;
         let t = performance.now();
 
@@ -45,11 +45,11 @@ class Eval extends Command {
 
         let embed = messageEmbeds.reply(
             {
-                replyeeMessage : message, 
-                title: `\`${message.args[0]}\``, 
-                fields: [ 
+                replyeeMessage: message,
+                title: `\`${message.args[0]}\``,
+                fields: [
                     { name: 'Performance Benchmark', value: `${t}ms` },
-                    { name: 'Output',                value:  `${returnValue}` }
+                    { name: 'Output',                value: `${returnValue}` }
                 ]
             }
         );

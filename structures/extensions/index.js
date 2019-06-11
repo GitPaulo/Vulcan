@@ -1,4 +1,4 @@
-/* 
+/*
 * Files on this dir are of type: <DiscordJS_Class>.js
 * Will have the module.exports methods added to the Discord JS class prototype.
 */
@@ -15,8 +15,8 @@ module.exports = () => {
     files.forEach(function (file) {
         if (file === 'index.js')
             return;
-        
-        let t     = performance.now();    
+
+        let t     = performance.now();
         let parts = file.split('.');
 
         if (parts < 2 || parts > 2)
@@ -32,7 +32,7 @@ module.exports = () => {
             throw Error(`Invalid extensions file name class (not part of Discord structures) for: ${file}`);
 
         let properties = xrequire(path.join(__dirname, file));
-        
+
         for (let property in properties) {
             let propertyValue = properties[property];
             discordClassFunction.prototype[property] = propertyValue;
