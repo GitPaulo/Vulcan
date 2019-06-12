@@ -26,9 +26,9 @@ module.exports = async message => {
 
     if (message.isCommand) {
         // check permissions, then check arguments are valid
-        let cmd        = message.command;     
+        let cmd = message.command;     
         
-        if(!cmd.validatePermissions(message)) {
+        if (!cmd.validatePermissions(message)) {
             message.channel.send(messageEmbeds.warning(
                 {
                     authorName: message.author.username,
@@ -40,7 +40,6 @@ module.exports = async message => {
         }
 
         let argumentsValidation = cmd.validateMessageArguments(message); // Returns an object: { isValid: (boolean), list: (array) } // list: array with entries related to index of the invalid arg
-        
         if (!argumentsValidation.isValid) {
             let invalidArguments = validation.list.toString();
             await message.channel.send(messageEmbeds.warning(

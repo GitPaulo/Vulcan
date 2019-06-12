@@ -21,11 +21,11 @@ const privatedata       = YAML.safeLoad(privatedataFile);
 const permissions       = YAML.safeLoad(permissionsFile);
 
 // Heroku ENV token
-if(process.env.BOT_TOKEN)
+if (process.env.BOT_TOKEN)
     privatedata.token = process.env.BOT_TOKEN;
 
 // Instantiate & export vulcan client
-let vulcan = module.exports = new Vulcan(configuration, privatedata);
+let vulcan = module.exports = new Vulcan(configuration, privatedata, permissions);
 
 // Load vulcan (do NOT chain of instantiation)
 vulcan.loadCommands()

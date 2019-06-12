@@ -154,7 +154,7 @@ class Vulcan extends Discord.Client {
         return String(process.uptime()).toHHMMSS();
     }
 
-    getUserPermissions(ID) {
+    getUserPermissions (ID) {
         if (this.permissions.roots.includes(ID)) return 1;
         else if (this.permissions.admins.includes(ID)) return 2;
         return 3;
