@@ -1,5 +1,4 @@
 // Initialisation
-require('./modules/scripts/globals.js');
 xrequire('./modules/scripts/initscript');
 xrequire('./modules/scripts/defaults');
 
@@ -22,7 +21,8 @@ const privatedata       = YAML.safeLoad(privatedataFile);
 const permissions       = YAML.safeLoad(permissionsFile);
 
 // Heroku ENV token
-privatedata.token = process.env.BOT_TOKEN;
+if(process.env.BOT_TOKEN)
+    privatedata.token = process.env.BOT_TOKEN;
 
 // Instantiate & export vulcan client
 module.exports = vulcan = new Vulcan(configuration, privatedata, permissions)
