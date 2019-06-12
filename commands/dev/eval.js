@@ -8,9 +8,9 @@ class Eval extends Command {
         super(type, {
             name: 'eval',
             aliases: ['js', 'runjs', 'jsrun'],
-            group: 'group2',
-            description: 'Evaluates javascript code using an internal environment.',
-            examples: ['eval 1+1'],
+            group: 'GROUP_SYSTEM_SOON_TM',
+            description: 'Evaluates JavaScript code using the internal environment.',
+            examples: ['eval 1+1', 'eval console.log(\'hello world!\');'],
             throttling: 2000,
             args: [
                 {
@@ -21,7 +21,7 @@ class Eval extends Command {
             ],
             embed: {
                 color: 0xFFCE6D,
-                title: `JavaScript - Expression Evaluation`,
+                title: `(JavaScript) Code Evaluation`,
                 image: './assets/media/images/commands/Eval.gif'
             }
         });
@@ -38,8 +38,8 @@ class Eval extends Command {
 
         try {
             returnValue = await eval(message.args[0]);
-        } catch (e) {
-            returnValue = e.toString();
+        } catch (err) {
+            returnValue = err.toString();
         }
 
         t = mathematics.round(performance.now() - t, 2);
@@ -50,7 +50,8 @@ class Eval extends Command {
                 title: `\`${message.args[0]}\``,
                 fields: [
                     { name: 'Performance Benchmark', value: `${t}ms` },
-                    { name: 'Output',                value: `${returnValue}` }
+                    { name: 'Expression Return',                value: `${returnValue}` },
+                    { name: 'Stream Output',                value: `${global.printHistory[global.printHistory.length - 1]}` }
                 ]
             }
         );

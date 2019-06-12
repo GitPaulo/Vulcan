@@ -12,7 +12,7 @@ class Gif extends Command {
         super(type, {
             name: 'gif',
             aliases: ['GIF'],
-            group: 'group2',
+            group: 'GROUP_SYSTEM_SOON_TM',
             description: 'Retrieves a Gif from the database',
             examples: ['gif store somegif http://somegif.jpg', 'gif get somegif', 'gif all'],
             throttling: 2000,
@@ -43,7 +43,7 @@ class Gif extends Command {
         let channel    = message.channel;
         let replyEmbedData = {
             replyeeMessage: message,
-            title: `Gif request received: **${cmd}**`,
+            title: `**Gif** request received: **${cmd}**`,
             fields: [
                 {
                     name: 'Arguments',

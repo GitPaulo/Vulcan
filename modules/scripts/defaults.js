@@ -41,16 +41,11 @@ global.Defaults = {
         'privatedata': new DefaultFile(
             path.join(rootPath, 'settings', 'noleakdata.yaml'), {
                 token: `'PLEASE ADD YOUR DISCORD TOKEN HERE'`,
-                githubAuth: {
-                    username: 'GitPaulo',
-                    password: 'KONO DIO DA'
+                githubOAuth: `'PLEASE ADD YOUR DISCORD TOKEN HERE'`,
+                dbCredentials: {
+                    username: 'ur_mom_gay',
+                    password: 'no_u'
                 }
-            }
-        ),
-        'dbcredentials': new DefaultFile(
-            path.join(rootPath, 'settings', 'dbcredentials.yaml'), {
-                username: 'ur_mom_gay',
-                password: 'no_u'
             }
         )
     }

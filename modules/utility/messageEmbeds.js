@@ -31,7 +31,6 @@ messageEmbeds.reply = function (
         ]
     }
 ) {
-    console.log(imgName, imgPath, thumbnail, files)
     return {
         embed: {
             color,
