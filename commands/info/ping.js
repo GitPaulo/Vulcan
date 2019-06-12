@@ -10,7 +10,7 @@ class Ping extends Command {
                 group: 'group2',
                 description: 'Pings the bot and wait for a reply displaying the latency in ms.',
                 examples: ['ping'],
-                throttling: 2000,
+                throttling: 5000,
                 args: [],
                 embed: {
                     color: 0xFF0000,

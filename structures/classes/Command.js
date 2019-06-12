@@ -17,7 +17,7 @@ class Command {
         this.examples      = properties.examples || [];
         this.throttling    = properties.throttling || 1;
         this.embed         = properties.embed;
-        this.lastUserCalls = {};
+        this.lastUserCalls = new Map();
     }
 
     validate () {
@@ -28,18 +28,26 @@ class Command {
         throw new Error('This method has not been implemented!');
     }
 
-    checkTimeout (author) {
+    isSpamming (author) {
+        let curTime = Date.now();
+
         if (!(author.id in this.lastUserCalls)) {
-            this.lastUserCalls[author.id] = new Date();
+            this.lastUserCalls[author.id] = curTime;
+            this.lastUserCalls.forEach((id, lastCall) => { // prune map
+                if (curTime - lastCall > this.throttling)
+                    this.lastUserCalls.delete(id);
+            });
             return false;
-        } else {
-            let currentDate = new Date();
-            let timeDiff = currentDate.getTime() - this.lastUserCalls[author.id].getTime();
-            if (timeDiff > this.throttling) {
-                this.lastUserCalls[author.id] = currentDate;
-                return false;
-            }
         }
+
+        let currentTime = curTime;
+        let timeDiff    = currentTime - this.lastUserCalls[author.id];
+
+        if (timeDiff > this.throttling) {
+            this.lastUserCalls[author.id] = currentTime;
+            return false;
+        }
+
         return true;
     }
 

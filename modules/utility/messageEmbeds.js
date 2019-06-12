@@ -3,35 +3,35 @@ module.exports = messageEmbeds = {};
 messageEmbeds.reply = function (
     {
         replyeeMessage,
-        cmd    = replyeeMessage.command,
-        color  = cmd.embed.color,
-        title  = cmd.embed.title,
-        author = {
-            name: 'Replying@' + replyeeMessage.author.username,
+        imgPath     = replyeeMessage.command.embed.image,
+        imgName     = imgPath.substring(imgPath.lastIndexOf('/') + 1),
+        cmd         = replyeeMessage.command,
+        color       = cmd.embed.color,
+        title       = cmd.embed.title,
+        author      = {
+            name: `Replying@${replyeeMessage.author.username}`,
             icon_url: replyeeMessage.author.avatarURL,
             url: replyeeMessage.url
         },
-        description = '',
+        description = `Replying to a request from **${replyeeMessage.author.username}** for command **${replyeeMessage.command.name}**.`,
+        thumbnail   = {
+            url: `attachment://${imgName}`
+        },
         fields      = [],
         timestamp   = new Date(),
         footer      = {
-            text: `Vulcan's reply to a command request!`
+            text: `[Command] Vulcan's reply to a command request.`
         },
         url         = '',
-        extraFiles  = []
+        files       =  [
+            {
+                attachment: imgPath,
+                name: imgName
+            }
+        ]
     }
 ) {
-    let imgPath   = replyeeMessage.command.embed.image;
-    let imgName   = imgPath.substring(imgPath.lastIndexOf('/') + 1);
-    let thumbnail = { url: 'attachment://' + imgName };
-    let files     = [
-        {
-            attachment: imgPath,
-            name: imgName
-        },
-        ...extraFiles
-    ];
-
+    console.log(imgName, imgPath, thumbnail, files)
     return {
         embed: {
             color,
@@ -51,12 +51,10 @@ messageEmbeds.reply = function (
 messageEmbeds.error = function (
     {
         title       = `Error`,
-        description = '',
+        description = `An error has been detected by Vulcan.`,
         color       = 0xFF0000, // red
-        authorName  = '',
-        author      = {
-            name: authorName,
-            icon_url: `attachment://error.png`
+        thumbnail   = {
+            url: `attachment://error.png`
         },
         timestamp   = new Date(),
         footer      = {
@@ -71,7 +69,7 @@ messageEmbeds.error = function (
             title,
             description,
             color,
-            author,
+            thumbnail,
             timestamp,
             footer,
             fields,
@@ -89,12 +87,10 @@ messageEmbeds.error = function (
 messageEmbeds.warning = function (
     {
         title       = `Warning`,
-        description = '',
-        color       = 0xff8d00, // orange
-        authorName  = '',
-        author      = {
-            name: authorName,
-            icon_url: `attachment://warning.png`
+        description = 'Vulcan has detected unexpected behaviour.',
+        color       =  0xFFFF00, // orange
+        thumbnail   = {
+            url: `attachment://warning.png`
         },
         timestamp   = new Date(),
         footer      = {
@@ -109,10 +105,10 @@ messageEmbeds.warning = function (
             title,
             description,
             color,
-            author,
+            thumbnail,
             timestamp,
-            fields,
             footer,
+            fields,
             url
         },
         files: [
@@ -127,12 +123,10 @@ messageEmbeds.warning = function (
 messageEmbeds.info = function (
     {
         title       = `Information`,
-        description = '',
+        description = 'Vulcan has something to say?',
         color       = 0x89CFF0, // bblue
-        authorName  = '',
-        author      = {
-            name: authorName,
-            icon_url: `attachment://warning.png`
+        thumbnail   = {
+            url: `attachment://info.png`
         },
         timestamp   = new Date(),
         footer      = {
@@ -147,7 +141,7 @@ messageEmbeds.info = function (
             title,
             description,
             color,
-            author,
+            thumbnail,
             timestamp,
             footer,
             fields,
