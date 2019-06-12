@@ -19,11 +19,13 @@ const configuration     = YAML.safeLoad(configurationFile);
 const privatedata       = YAML.safeLoad(privatedataFile);
 
 // Instantiate & export vulcan client
-module.exports = vulcan = new Vulcan(configuration, privatedata)
-    .loadCommands()
-    .loadEvents()
-    .dbConnect()
-    .connect();
+let vulcan = module.exports = new Vulcan(configuration, privatedata);
+
+// Load vulcan (do NOT chain of instantiation)
+vulcan.loadCommands()
+      .loadEvents()
+      .dbConnect()
+      .connect();
 
 // Log
 logger.log(`Vulcan start-up has completed! Time taken: ${vulcan.uptime()}`);
