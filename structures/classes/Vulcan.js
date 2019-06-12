@@ -3,6 +3,7 @@ const { performance } = xrequire('perf_hooks');
 const os              = xrequire('os');
 const fs              = xrequire('fs');
 const path            = xrequire('path');
+const yaml            = xrequire('js-yaml');
 const DatabaseManager = xrequire('./managers/DatabaseManager');
 const mathematics     = xrequire('./modules/utility/mathematics');
 const fileFunctions   = xrequire('./modules/utility/fileFunctions');
@@ -29,12 +30,8 @@ class Vulcan extends Discord.Client {
         // Seal these properties! :)
         Object.defineProperties(this, {
             configuration: { value: configuration,  writable: false, enumerable: false, configurable: false },
-<<<<<<< HEAD
             privatedata:   { value: privatedata,    writable: false, enumerable: false, configurable: false },
             permissions:   { value: permissions,    writable: false, enumerable: false, configurable: false }
-=======
-            privatedata: { value: privatedata,    writable: false, enumerable: false, configurable: false }
->>>>>>> master
         });
 
         // Vulcan is here!
@@ -105,8 +102,11 @@ class Vulcan extends Discord.Client {
     }
 
     dbConnect () {
+        const credentialsFile = fs.readFileSync(global.Defaults.files.dbcredentials.location, 'utf8');
+        const credentials     = yaml.safeLoad(credentialsFile);
+
         this.databaseManager = new DatabaseManager();
-        this.databaseManager.connect(this.privatedata.dbCredentials.username, this.privatedata.dbCredentials.password);
+        this.databaseManager.connect(credentials.username, credentials.password);
 
         return chainPrint('Database Connection', this);
     }
