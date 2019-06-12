@@ -25,11 +25,13 @@ if(process.env.BOT_TOKEN)
     privatedata.token = process.env.BOT_TOKEN;
 
 // Instantiate & export vulcan client
-module.exports = vulcan = new Vulcan(configuration, privatedata, permissions)
-    .loadCommands()
-    .loadEvents()
-    .dbConnect()
-    .connect();
+let vulcan = module.exports = new Vulcan(configuration, privatedata);
+
+// Load vulcan (do NOT chain of instantiation)
+vulcan.loadCommands()
+      .loadEvents()
+      .dbConnect()
+      .connect();
 
 // Log
 logger.log(`Vulcan start-up has completed! Time taken: ${vulcan.uptime()}`);

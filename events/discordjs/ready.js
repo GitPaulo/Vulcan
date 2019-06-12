@@ -1,3 +1,4 @@
+const vulcan = xrequire('./bot.js');
 const pjson  = xrequire('./package.json');
 const logger = xrequire('./managers/LogManager').getInstance();
 

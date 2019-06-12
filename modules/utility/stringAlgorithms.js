@@ -1,4 +1,4 @@
-module.exports = stringAlgorithms = {};
+const stringAlgorithms = module.exports = {};
 
 stringAlgorithms.isURL = function (str) {
     var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol

@@ -3,7 +3,6 @@ const { performance } = xrequire('perf_hooks');
 const os              = xrequire('os');
 const fs              = xrequire('fs');
 const path            = xrequire('path');
-const yaml            = xrequire('js-yaml');
 const DatabaseManager = xrequire('./managers/DatabaseManager');
 const mathematics     = xrequire('./modules/utility/mathematics');
 const fileFunctions   = xrequire('./modules/utility/fileFunctions');
@@ -106,11 +105,8 @@ class Vulcan extends Discord.Client {
     }
 
     dbConnect () {
-        const credentialsFile = fs.readFileSync(global.Defaults.files.dbcredentials.location, 'utf8');
-        const credentials     = yaml.safeLoad(credentialsFile);
-
         this.databaseManager = new DatabaseManager();
-        this.databaseManager.connect(credentials.username, credentials.password);
+        this.databaseManager.connect(this.privatedata.dbCredentials.username, this.privatedata.dbCredentials.password);
 
         return chainPrint('Database Connection', this);
     }

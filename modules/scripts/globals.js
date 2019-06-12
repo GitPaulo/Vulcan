@@ -24,4 +24,12 @@ global.xrequire.resolve.paths = request => {
     return require.resolve.paths(request);
 };
 
-global.print = console.log;
+global.oldLog       = console.log;
+global.printHistory = [];
+global.print        = console.log = function () {
+    if (global.printHistory > 100)
+        global.printHistory = [];
+
+    global.printHistory.push([...arguments].join(', '));
+    global.oldLog.apply(console, arguments);
+}

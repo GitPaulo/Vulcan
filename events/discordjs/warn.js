@@ -1,1 +1,1 @@
-module.exports = info => logger.warn(info);
+module.exports = info => xrequire('./managers/LogManager').getInstance().warn(info);
