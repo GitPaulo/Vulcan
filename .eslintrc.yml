@@ -8,6 +8,9 @@ globals:
   oldLog: readonly
   printHistory: readonly
   print: readonly
+  __basedir: readonly
+  ParsingTypes: readonly
+  Defaults: readonly
 parserOptions:
   ecmaVersion: 2018
 rules: 

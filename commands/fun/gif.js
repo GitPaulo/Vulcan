@@ -6,6 +6,7 @@ const http             = xrequire('http');
 const Command          = xrequire('./structures/classes/Command');
 const messageEmbeds    = xrequire('./modules/utility/messageEmbeds');
 const stringAlgorithms = xrequire('./modules/utility/stringAlgorithms');
+const logger           = xrequire('./managers/LogManager').getInstance();
 
 class Gif extends Command {
     constructor (type) { // type = root folder name (passed on by command loader)
@@ -64,7 +65,7 @@ class Gif extends Command {
             case 'upload':
             case 'put':
                 if (numArgs < 3)
-                    return message.client.emit('invalidCommandCall', `Expected 3 arguments got ${n}.`, message);
+                    return message.client.emit('invalidCommandCall', `Expected 3 arguments got ${numArgs}.`, message);
                 if (stringAlgorithms.isURL(message.args[2])) {
                     this.storeImageFromURL(message.args[1], message.args[2], async (result) => {
                         replyEmbedData.fields[1].value = result;
@@ -73,11 +74,11 @@ class Gif extends Command {
                 } else { // its file upload
                     let messageWithImage;
                     try {
-                        messageWithImage = await message.channel.fetchMessage(String(data));
+                        messageWithImage = await message.channel.fetchMessage(String(message.args[2]));
                     } catch (err) {
-                        return message.client.emit('invalidCommandCall', 'The message with id: **' + data + '** was not found in the list of messages from this channel.', message);
+                        return message.client.emit('invalidCommandCall', 'The message with id: **' + message.args[2] + '** was not found in the list of messages from this channel.', message);
                     }
-                    this.storeImageFromMessage(keyword, messageWithImage, async (result) => {
+                    this.storeImageFromMessage(message.args[1], messageWithImage, async (result) => {
                         replyEmbedData.fields[1].value = result;
                         firstReply.edit(messageEmbeds.reply(replyEmbedData));
                     });
@@ -86,8 +87,8 @@ class Gif extends Command {
             case 'get':
             case 'fetch':
                 if (numArgs < 3)
-                    return message.client.emit('invalidCommandCall', `Expected 2 arguments got ${n}.`, message);
-                this.fetchImage(potentialKeyword, async (result) => {
+                    return message.client.emit('invalidCommandCall', `Expected 2 arguments got ${numArgs}.`, message);
+                this.fetchImage(message.args[1], async (result) => {
                     replyEmbedData.fields[1].value = result;
                     firstReply.edit(messageEmbeds.reply(replyEmbedData));
                     await message.channel.send({

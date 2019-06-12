@@ -2,7 +2,11 @@ const logger        = xrequire('./managers/LogManager').getInstance();
 const messageEmbeds = xrequire('./modules/utility/messageEmbeds');
 
 module.exports = async message => {
-    // message.client === vulcan
+    let vulcan = message.client;
+
+    if (!vulcan)
+        return logger.error('Vulcan client not defined in message!');
+
     logger.info('[GUILD: ' + message.guild.name + '] => [MESSAGE][' + message.author.username + '][' + message.channel.name + ']: ' + message.content);
 
     // Don't respond to self - bad recursion can happen LULW

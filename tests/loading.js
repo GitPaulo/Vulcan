@@ -31,10 +31,13 @@ const configuration     = yaml.safeLoad(configurationFile);
 const privatedata       = yaml.safeLoad(privatedataFile);
 
 // Instantiate & export vulcan client
-module.exports = vulcan = new Vulcan(configuration, privatedata)
-    .loadCommands()
-    .loadEvents()
-    .dbConnect();
+let vulcan = module.exports = new Vulcan(configuration, privatedata);
+
+// Load vulcan (do NOT chain of instantiation)
+vulcan.loadCommands()
+      .loadEvents()
+      .dbConnect()
+      .connect();
 
 logger.plain(
 `=======================================

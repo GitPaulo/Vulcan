@@ -2,7 +2,7 @@
 const fs   = xrequire('fs');
 const path = xrequire('path');
 
-module.exports = fileFunctions = {};
+const fileFunctions = module.exports = {};
 
 fileFunctions.allDirFiles = function (dir, fileTypes = '.js') {
     var filesToReturn = [];

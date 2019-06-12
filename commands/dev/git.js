@@ -1,5 +1,6 @@
-const Command   = xrequire('./structures/classes/Command');
-const GithubAPI = xrequire('github-api');
+const Command       = xrequire('./structures/classes/Command');
+const GithubAPI     = xrequire('github-api')
+const messageEmbeds = xrequire('./modules/utility/messageEmbeds');
 
 class Git extends Command {
     constructor (type) {
