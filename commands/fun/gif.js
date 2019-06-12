@@ -1,3 +1,5 @@
+/* eslint-disable standard/no-callback-literal */
+// TODO - FIX ABOVE
 const fs               = xrequire('fs');
 const path             = xrequire('path');
 const http             = xrequire('http');
@@ -6,7 +8,7 @@ const messageEmbeds    = xrequire('./modules/utility/messageEmbeds');
 const stringAlgorithms = xrequire('./modules/utility/stringAlgorithms');
 
 class Gif extends Command {
-    constructor(type) { // type = root folder name (passed on by command loader)
+    constructor (type) { // type = root folder name (passed on by command loader)
         super(type, {
             name: 'gif',
             aliases: ['GIF'],
@@ -18,7 +20,7 @@ class Gif extends Command {
             embed: {
                 color: 0x666666,
                 title: `Gif`,
-                image: './assets/media/images/commands/Gif.gif',
+                image: './assets/media/images/commands/Gif.gif'
             }
         });
 
@@ -32,11 +34,11 @@ class Gif extends Command {
     }
 
     // eslint-disable-next-line no-unused-vars
-    async validate(message) {
+    async validate (message) {
         return true;
     }
 
-    async execute(message) {
+    async execute (message) {
         let cmd        = message.args[0];
         let channel    = message.channel;
         let replyEmbedData = {
@@ -86,7 +88,7 @@ class Gif extends Command {
                 if (numArgs < 3)
                     return message.client.emit('invalidCommandCall', `Expected 2 arguments got ${n}.`, message);
                 this.fetchImage(potentialKeyword, async (result) => {
-                    replyEmbedData.fields[1].value = result, 
+                    replyEmbedData.fields[1].value = result;
                     firstReply.edit(messageEmbeds.reply(replyEmbedData));
                     await message.channel.send({
                         files: [result]
@@ -96,6 +98,8 @@ class Gif extends Command {
             case 'list':
             case 'all':
                 this.getImages(async (err, files) => {
+                    if (err)
+                        return logger.error(err);
                     replyEmbedData.fields[1].value = files.join(', ');
                     firstReply.edit(messageEmbeds.reply(replyEmbedData));
                 });
@@ -105,30 +109,30 @@ class Gif extends Command {
         }
     }
 
-    getImages(callback) {
+    getImages (callback) {
         fs.readdir(this.folderPath, callback);
     }
 
-    storeImageFromMessage(fileName, message, callback) {
+    storeImageFromMessage (fileName, message, callback) {
         let attachments = message.attachments;
         let i = 0;
 
         attachments.forEach(attachment => {
-            this.storeImageFromURL(fileName + (i>0 ? i++ : i++, ""), attachment.proxyURL);
+            this.storeImageFromURL(fileName + (i > 0 ? i++ : i++, ''), attachment.proxyURL);
         });
 
         if (callback)
-            callback("completed!");
+            callback('completed!');
     }
 
-    storeImageFromURL(fileName, url, callback) {
+    storeImageFromURL (fileName, url, callback) {
         // Only 'http' allowed with GET
         url = url.replace('https://', 'http://');
 
         let extension = url.substr(url.lastIndexOf('.'));
         if (!this.allowedExtensions.includes(extension)) {
             if (callback)
-                callback("Invalid extension!");
+                callback('Invalid extension!');
             return;
         }
 
@@ -139,9 +143,9 @@ class Gif extends Command {
             http.get(url, function (response) {
                 response.pipe(file);
                 file.on('finish', function () {
-                    file.close(); 
+                    file.close();
                     if (callback)
-                        callback("File stored!");
+                        callback('File stored!');
                 });
             }).on('error', function (err) { // Handle errors
                 fs.unlink(this.folderPath); // Delete the file async. (But we don't check the result)
@@ -154,7 +158,7 @@ class Gif extends Command {
         }
     }
 
-    fetchImage(keyword, callback) {
+    fetchImage (keyword, callback) {
         fs.readdir(this.folderPath, (err, files) => {
             if (err) {
                 if (callback)
