@@ -1,6 +1,6 @@
 # Vulcan 
 [![Build Status](https://travis-ci.org/GitPaulo/Vulcan.svg?branch=master)](https://travis-ci.org/GitPaulo/Vulcan)
-[![dependencies Status](https://david-dm.org/GitPaulo/vulcan/status.svg)](https://david-dm.org/GitPaulo/vulcan)
+[![dependencies Status](https://david-dm.org/GitPaulo/Vulcan/status.svg)](https://david-dm.org/GitPaulo/vulcan)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f7e68b17b25b4f43b2bfd74756e488fb)](https://www.codacy.com/app/GitPaulo/Vulcan?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GitPaulo/Vulcan&amp;utm_campaign=Badge_Grade)
 [![js-standard-style](https://img.shields.io/badge/codestyle-derived--standard-success.svg)](http://standardjs.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
