@@ -33,7 +33,7 @@ const consoleColors = {
 
 const logLevels = {
     error: 'error',
-    warn: 'WARNING',
+    warn: 'warning',
     info: 'info',
     debug: 'debug'
 };

@@ -1,8 +1,8 @@
 module.exports = {
-    initCommand: function (command, argString, args, raw, parsedName) {
+    initCommand: function (command, argsString, args, raw, parsedName) {
         this.isCommand  = true;
         this.command    = command;
-        this.argString  = argString;
+        this.argsString = argsString;
         this.args       = args;
         this.raw        = raw;
         this.parsedName = parsedName;

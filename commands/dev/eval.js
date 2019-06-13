@@ -1,7 +1,7 @@
 const { performance } = xrequire('perf_hooks');
 const Command         = xrequire('./structures/classes/Command.js');
-const mathematics     = xrequire('./modules/utility/mathematics');
 const messageEmbeds   = xrequire('./modules/utility/messageEmbeds');
+const logger          = xrequire('./managers/LogManager').getInstance();
 
 class Eval extends Command {
     constructor (type) {
@@ -25,6 +25,15 @@ class Eval extends Command {
                 image: './assets/media/images/commands/Eval.gif'
             }
         });
+
+        this.historyMax = 100;
+        this.history    = [];
+    }
+
+    historySave (data) {
+        if (this.history.length > this.historyMax)
+            this.history.shift();
+        this.history.push(data);
     }
 
     // eslint-disable-next-line no-unused-vars
@@ -33,30 +42,60 @@ class Eval extends Command {
     }
 
     async execute (message) {
-        let returnValue;
-        let t = performance.now();
+        let returnValue = '[NULL]';
+        let t           = performance.now();
+        let code        = message.argsString;
+
+        const marker = '%MARKER%';
+        global.printHistory.push(marker);
 
         try {
-            returnValue = await eval(message.args[0]);
+            returnValue = await eval(code);
         } catch (err) {
-            returnValue = err.toString();
+            returnValue = err.message;
         }
 
-        t = mathematics.round(performance.now() - t, 2);
+        t = Math.round(performance.now() - t, 2);
 
-        let embed = messageEmbeds.reply(
+        let output      = [];
+        let foundMarker = -1;
+
+        for (let i = 0; i < global.printHistory.length; i++) {
+            let printData = global.printHistory[i];
+            if (printData === marker) {
+                foundMarker = i;
+                break;
+            }
+        }
+
+        if (!foundMarker) {
+            logger.warn('Marker was not found for eval command. Possible spam of output stream in eval code?');
+            output = global.printHistory;
+        } else {
+            for (let i = 0; i < global.printHistory.length - foundMarker; i++)
+                output.push(global.printHistory.pop());
+        }
+
+        this.historySave({
+            authorid: message.author.id,
+            authorname: message.author.username,
+            code: code,
+            execTime: t,
+            return: returnValue,
+            output: output
+        });
+
+        await message.channel.send(messageEmbeds.reply(
             {
                 replyeeMessage: message,
-                title: `\`${message.args[0]}\``,
                 fields: [
+                    { name: 'Code',                  value: `\`${code}\`` },
                     { name: 'Performance Benchmark', value: `${t}ms` },
-                    { name: 'Expression Return',                value: `${returnValue}` },
-                    { name: 'Stream Output',                value: `${global.printHistory[global.printHistory.length - 1]}` }
+                    { name: 'Expression Return',     value: `\`${returnValue}\`` },
+                    { name: 'Stream Output',         value: `\`${output.join('\n')}\`` }
                 ]
             }
-        );
-
-        await message.channel.send(embed);
+        ));
     }
 }
 

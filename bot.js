@@ -19,7 +19,7 @@ const configuration     = YAML.safeLoad(configurationFile);
 const privatedata       = YAML.safeLoad(privatedataFile);
 
 // Instantiate & export vulcan client
-let vulcan = module.exports = new Vulcan(configuration, privatedata);
+const vulcan = module.exports = new Vulcan(configuration, privatedata);
 
 // Load vulcan (do NOT chain of instantiation)
 vulcan.loadCommands()
