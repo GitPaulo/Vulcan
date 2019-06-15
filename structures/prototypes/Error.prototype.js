@@ -4,4 +4,4 @@ module.exports = {
         let stack = err.stack.split('\n');
         return `(${err.name}): ${err.message}\n\t[LOCATION] => '${stack[0]}'`;
     }
-}
+};

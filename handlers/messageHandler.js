@@ -8,7 +8,7 @@ let parseStringToDataTypes = (targetText) => {
         return parsedValues;
 
     for (let i = 0; i < matches.length; i++) {
-        let match       = matches[i]
+        let match       = matches[i];
         parsedValues[i] = parseInt(match);
 
         if (!isNaN(parsedValues[i]))
@@ -25,12 +25,12 @@ let parseStringToDataTypes = (targetText) => {
             parsedValues[i] = null;
         }
 
-        parsedValues[i] = match.startsWith('"') && match.endsWith('"') ? match.substring(1, match.length - 1) : match
+        parsedValues[i] = match.startsWith('"') && match.endsWith('"') ? match.substring(1, match.length - 1) : match;
         parsedValues[i] = parsedValues[i].replaceAll('%"', '"');
     }
 
     return parsedValues;
-}
+};
 
 module.exports = (vulcan, message) => {
     let raw       = message.content;
@@ -64,4 +64,4 @@ module.exports = (vulcan, message) => {
         error: false,
         value: matches
     };
-}
+};

@@ -4,4 +4,4 @@ module.exports = {
             return a.indexOf(i) < 0;
         });
     }
-}
+};

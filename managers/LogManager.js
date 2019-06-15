@@ -25,7 +25,7 @@ const LogManager = (function () {
             'log'     : chalk.green,
             'warning' : chalk.yellowBright,
             'error'   : chalk.redBright
-        }
+        };
 
         var blueprint   = [
             {
@@ -43,14 +43,14 @@ const LogManager = (function () {
                 path.join(nFolderPath, fileBlueprint.fileName),
                 `[LOG '${fileBlueprint.fileName}' FILE CREATED (${Date.now()})]\n`
             );
-        }
+        };
 
         var applyModifiers = function (text) {
             for (let modifier of modifiers) {
                 text = chalk[modifier](text);
             }
             return text;
-        }
+        };
 
         var blueprintsFromLogType = function (logType) {
             let blueprints = [];
@@ -60,11 +60,11 @@ const LogManager = (function () {
                 }
             }
             return blueprints;
-        }
+        };
 
         var shouldLog = function () {
             return true; // currently not used (but could be in future!)
-        }
+        };
 
         var store = function (logType, str) {
             if (!logTypes[logType])
@@ -73,7 +73,7 @@ const LogManager = (function () {
             const blueprints = blueprintsFromLogType(logType);
 
             for (let fileBlueprint of blueprints) {
-                let logFilePath = path.join(nFolderPath, fileBlueprint.fileName)
+                let logFilePath = path.join(nFolderPath, fileBlueprint.fileName);
                 let stats       = fs.statSync(logFilePath);
                 // File too big! Copy file to old logs and then overwrite it!
                 if (stats.size >= maxFileSize) {
@@ -96,7 +96,7 @@ const LogManager = (function () {
 
                 fs.appendFileSync(logFilePath, str + '\n');
             }
-        }
+        };
 
         var write = function (logType, ...args) {
             let colorFunc = logTypes[logType];
@@ -113,7 +113,7 @@ const LogManager = (function () {
 
             console.log(text);
             store(logType, text);
-        }
+        };
 
         if (!fs.existsSync(nFolderPath)) {
             fs.mkdirSync(nFolderPath);
@@ -165,13 +165,13 @@ const LogManager = (function () {
                             text
                         )
                     )
-                )
+                );
             },
             // alias
-            debug: function () { this.write(...arguments) },
-            log:   function () { this.write(...arguments) },
-            warn:  function () { this.write(...arguments) },
-            error: function () { this.write(...arguments) }
+            debug: function () { this.write(...arguments); },
+            log:   function () { this.write(...arguments); },
+            warn:  function () { this.write(...arguments); },
+            error: function () { this.write(...arguments); }
         };
     }
 

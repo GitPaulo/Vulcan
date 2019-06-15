@@ -1,5 +1,5 @@
 const Command       = xrequire('./structures/classes/Command');
-const GithubAPI     = xrequire('github-api')
+const GithubAPI     = xrequire('github-api');
 const messageEmbeds = xrequire('./modules/utility/messageEmbeds');
 
 class Git extends Command {
@@ -74,7 +74,7 @@ class Git extends Command {
                 let list2     = response2.data;
                 let carray2   = [];
                 list2.forEach(commitData => {
-                    console.log(commitData)
+                    console.log(commitData);
                     carray2.push(`url: ${commitData.url}\nauthor: ${commitData.commit.author.name}\nmessage: ${commitData.commit.message}\n`);
                 });
                 carray2 = carray2.slice(-maxcs);

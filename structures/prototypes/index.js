@@ -50,4 +50,4 @@ module.exports = () => {
 
         logger.log(`Sucessfully loaded prototypes file '${file}'. (took ${Math.round(performance.now() - t)}ms)`);
     });
-}
+};

@@ -1,13 +1,13 @@
 module.exports = {
     'methodNames': function () {
         let obj = this;
-        let properties = new Set()
+        let properties = new Set();
         let currentObj = obj;
 
         do {
-            Object.getOwnPropertyNames(currentObj).map(item => properties.add(item))
-        } while ((currentObj = Object.getPrototypeOf(currentObj)))
+            Object.getOwnPropertyNames(currentObj).map(item => properties.add(item));
+        } while ((currentObj = Object.getPrototypeOf(currentObj)));
 
-        return [...properties.keys()].filter(item => typeof obj[item] === 'function')
+        return [...properties.keys()].filter(item => typeof obj[item] === 'function');
     }
-}
+};

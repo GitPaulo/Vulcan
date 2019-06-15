@@ -12,12 +12,12 @@ const parsingTypes = {
 
 let DefaultFile = function (location, data) {
     this.location = location;
-    this.data = data
-}
+    this.data = data;
+};
 
 let log = (...args) => {
     console.log(printPrefix, ...args);
-}
+};
 
 let writeToDefaultFile = (object, path) => {
     let data = yaml.safeDump(object);
@@ -25,7 +25,7 @@ let writeToDefaultFile = (object, path) => {
     fs.writeFileSync(path, data, function (err) {
         if (err) throw err;
     });
-}
+};
 
 global.ParsingTypes = parsingTypes;
 global.Defaults = {

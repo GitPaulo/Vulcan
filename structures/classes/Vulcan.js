@@ -118,7 +118,7 @@ class Vulcan extends Discord.Client {
         }
 
         this.login(this.privatedata.token).then((token) => {
-            logger.log(`Sucessfully logged in to discord servers with token: ${token}`)
+            logger.log(`Sucessfully logged in to discord servers with token: ${token}`);
         }).catch((err) => {
             throw err;
         });
@@ -142,7 +142,7 @@ class Vulcan extends Discord.Client {
         return {
             cpuUsage: os.loadavg()[1],
             memUsage: process.memoryUsage().rss / 1024 / 1024
-        }
+        };
     }
 
     uptime () {

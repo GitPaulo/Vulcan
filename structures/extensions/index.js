@@ -40,4 +40,4 @@ module.exports = () => {
 
         logger.log(`Sucessfully loaded extensions file '${file}'. (took ${Math.round(performance.now() - t)}ms)`);
     });
-}
+};

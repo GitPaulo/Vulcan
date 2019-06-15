@@ -7,4 +7,4 @@ let exampleSchema = new Schema({
     id: Number
 });
 
-module.exports = mongoose.model('Example', exampleSchema)
+module.exports = mongoose.model('Example', exampleSchema);

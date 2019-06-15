@@ -29,4 +29,4 @@ module.exports = (description, message) => {
     )).catch((err) => {
         logger.error(err.message);
     });
-}
+};

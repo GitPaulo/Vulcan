@@ -8,7 +8,7 @@ stringAlgorithms.isURL = function (str) {
         '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
         '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
     return pattern.test(str);
-}
+};
 
 stringAlgorithms.editDistance = function (s1, s2) {
     s1 = s1.toLowerCase();
@@ -38,7 +38,7 @@ stringAlgorithms.editDistance = function (s1, s2) {
     }
 
     return costs[s2.length];
-}
+};
 
 stringAlgorithms.levenshteinSimilarity = function (s1, s2) {
     var longer = s1;
@@ -56,4 +56,4 @@ stringAlgorithms.levenshteinSimilarity = function (s1, s2) {
     }
 
     return (longerLength - stringAlgorithms.editDistance(longer, shorter)) / parseFloat(longerLength);
-}
+};
