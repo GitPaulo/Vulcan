@@ -6,7 +6,8 @@ const logger = xrequire('./managers/LogManager').getInstance();
  */
 process.on('unhandledRejection', (err, promise) => {
     logger.error(
-        `Unhandeled Rejection: ${err.message}` +
+        `Unhandeled Rejection => ${err}\n` +
+        `Stack: ${err.stack}\n` +
         `Promise: ${promise}`
     );
 });
@@ -17,8 +18,9 @@ process.on('unhandledRejection', (err, promise) => {
  */
 process.on('uncaughtException', (err, origin) => {
     logger.error(
-        `Caught exception: ${err.message}\n` +
-        `File Descriptor: ${process.stderr.fd}\n`   +
+        `Uncaught exception => ${err}\n` +
+        `Stack: ${err.stack}\n` +
+        `File Descriptor: ${process.stderr.fd}\n` +
         `Exception origin: ${origin}`
     );
     process.exit(1);

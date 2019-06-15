@@ -21,3 +21,5 @@ logger.plain(
    Time: ${performance.now() - t0}ms
 =======================================`
 );
+
+process.exit(0);

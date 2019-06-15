@@ -1,5 +1,4 @@
 const Command       = xrequire('./structures/classes/Command');
-const mathematics   = xrequire('./modules/utility/mathematics');
 const messageEmbeds = xrequire('./modules/utility/messageEmbeds');
 
 class Ping extends Command {
@@ -36,14 +35,12 @@ class Ping extends Command {
     }
 
     async execute (message) {
-        let ping       = mathematics.round(message.client.ping, 2);
         let preMessage = await message.channel.send(this.phrases[Math.floor(Math.random() * this.phrases.length)]);
         let reply      = messageEmbeds.reply({
             replyeeMessage: message,
             title: 'Pong!',
             fields: [
-                { name: 'Server Latency', value: `${preMessage.createdTimestamp - message.createdTimestamp}ms` },
-                { name: 'API Latency',    value: `${ping}ms` }
+                { name: 'API Latency',    value: `${preMessage.createdTimestamp - message.createdTimestamp}ms` }
             ]
         });
 

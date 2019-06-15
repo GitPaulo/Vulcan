@@ -19,8 +19,12 @@ class DatabaseManager {
         useNewUrlParser: true
     }) {
         const dbURL = 'mongodb://' + username + ':' + password + '@ds125125.mlab.com:25125/vulcan';
-
-        await mongoose.connect(dbURL, settings);
+        
+        try {
+            await mongoose.connect(dbURL, settings);
+        } catch (err) {
+            logger.error(err.message);
+        }
 
         // If the Node process ends, close the Mongoose connection
         process.on('SIGINT', function () {
