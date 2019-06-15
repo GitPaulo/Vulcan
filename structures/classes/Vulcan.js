@@ -33,7 +33,7 @@ class Vulcan extends Discord.Client {
         });
 
         // Vulcan is here!
-        logger.plain('red', couldnt_have_forged_it_better_myself);
+        logger.plain(couldnt_have_forged_it_better_myself, 'red');
     }
 
     /******************

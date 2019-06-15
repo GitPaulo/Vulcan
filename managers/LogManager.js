@@ -154,7 +154,7 @@ const LogManager = (function () {
                 if (shouldLog(...arguments))
                     write(this.write.caller.name, ...arguments);
             },
-            plain: function (color, text) {
+            plain: function (text, color = 'white') {
                 let colorFunc = chalk[color];
                 if (!colorFunc)
                     throw new Error(`Invalid color '${color}' for 'logger.plain'!`);
