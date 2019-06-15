@@ -173,7 +173,7 @@ const LogManager = (function () {
             warn:  function () { this.write(...arguments) },
             error: function () { this.write(...arguments) }
         };
-    };
+    }
 
     return {
         getInstance: function () {
