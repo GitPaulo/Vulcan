@@ -1,13 +1,14 @@
-const Discord         = xrequire('discord.js');
-const { performance } = xrequire('perf_hooks');
-const os              = xrequire('os');
-const fs              = xrequire('fs');
-const path            = xrequire('path');
-const yaml            = xrequire('js-yaml');
-const DatabaseManager = xrequire('./managers/DatabaseManager');
-const mathematics     = xrequire('./modules/utility/mathematics');
-const fileFunctions   = xrequire('./modules/utility/fileFunctions');
-const logger          = xrequire('./managers/LogManager').getInstance();
+const Discord            = xrequire('discord.js');
+const { performance }    = xrequire('perf_hooks');
+const os                 = xrequire('os');
+const fs                 = xrequire('fs');
+const path               = xrequire('path');
+const yaml               = xrequire('js-yaml');
+const DatabaseManager    = xrequire('./managers/DatabaseManager');
+const PermissionManager = xrequire('./managers/PermissionManager');
+const mathematics        = xrequire('./modules/utility/mathematics');
+const fileFunctions      = xrequire('./modules/utility/fileFunctions');
+const logger             = xrequire('./managers/LogManager').getInstance();
 
 /****************************************************************/
 // eslint-disable-next-line camelcase
@@ -131,6 +132,12 @@ class Vulcan extends Discord.Client {
         return chainPrint('Discord Connection', this);
     }
 
+    enablePermissions () {
+        this.permissionManager = new PermissionManager(this.permissions);
+
+        return chainPrint('Permission system', this);
+    }
+
     /**********************
      * Accessors & Others *
      **********************/
@@ -152,12 +159,6 @@ class Vulcan extends Discord.Client {
 
     uptime () {
         return String(process.uptime()).toHHMMSS();
-    }
-
-    getUserPermissions (ID) {
-        if (this.permissions.roots.includes(ID)) return 1;
-        else if (this.permissions.admins.includes(ID)) return 2;
-        return 3;
     }
 }
 

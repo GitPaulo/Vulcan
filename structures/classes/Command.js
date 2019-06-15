@@ -81,8 +81,9 @@ class Command {
     }
 
     validatePermissions (message) {
+        let permissionManager = message.client.permissionManager;
         let vulcan = message.client;
-        let authorPermission = vulcan.getUserPermissions(message.author.id);
+        let authorPermission = permissionManager.getUserPermissions(message.author.id);
         if (authorPermission <= this.group) return true;
         return false;
     }

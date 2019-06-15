@@ -1,4 +1,5 @@
 // Initialisation
+require('./modules/scripts/globals'); // remove after debug
 xrequire('./modules/scripts/coreEvents');
 xrequire('./modules/scripts/defaults');
 
@@ -8,14 +9,13 @@ xrequire('./structures/extensions')();
 
 // File requires
 const fs     = xrequire('fs');
-const yaml   = xrequire('js-yaml');
+const YAML   = xrequire('js-yaml');
 const Vulcan = xrequire('./structures/classes/Vulcan');
 const logger = xrequire('./managers/LogManager').getInstance();
 
 // Load Data
 const configurationFile = fs.readFileSync('./settings/config.yaml', 'utf8');
 const privatedataFile   = fs.readFileSync('./settings/noleakdata.yaml', 'utf8');
-<<<<<<< HEAD
 const permissionsFile   = fs.readFileSync('./settings/user_permissions.yaml', 'utf8');
 const configuration     = YAML.safeLoad(configurationFile);
 const privatedata       = YAML.safeLoad(privatedataFile);
@@ -31,7 +31,8 @@ const vulcan = module.exports = new Vulcan(configuration, privatedata, permissio
 // Load vulcan (do NOT chain of instantiation)
 vulcan.loadCommands()
       .loadEvents()
-      .dbConnect()
+      //.dbConnect()
+      .enablePermissions()
       .connect();
 
 // Log
