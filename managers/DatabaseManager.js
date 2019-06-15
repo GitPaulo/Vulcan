@@ -7,9 +7,9 @@ class DatabaseManager {
     constructor () {
         this.db = mongoose.connection;
         this.db.on('error', logger.error.bind(logger, 'MongoDB connection error!'));
-        this.db.on('disconnected', logger.info.bind(logger, 'MongoDB connection has been lost!'));
-        this.db.on('reconnected', logger.info.bind(logger, 'MongoDB connection has been restablished!'));
-        this.db.on('close', logger.info.bind(logger, 'MongoDB connection has been closed!'));
+        this.db.on('disconnected', logger.log.bind(logger, 'MongoDB connection has been lost!'));
+        this.db.on('reconnected', logger.log.bind(logger, 'MongoDB connection has been restablished!'));
+        this.db.on('close', logger.log.bind(logger, 'MongoDB connection has been closed!'));
     }
 
     async connect (username, password, settings = {

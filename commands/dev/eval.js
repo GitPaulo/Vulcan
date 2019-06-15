@@ -46,7 +46,7 @@ class Eval extends Command {
         let t           = performance.now();
         let code        = message.argsString;
 
-        const marker = '%MARKER%';
+        const marker = '%EMPTY%';
         global.printHistory.push(marker);
 
         try {

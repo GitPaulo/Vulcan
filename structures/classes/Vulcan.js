@@ -17,7 +17,7 @@ const couldnt_have_forged_it_better_myself = `\\ \\    / /   | |
     \\/  \\__,_|_|\\___\\__,_|_| |_| by Pas-kun & Tacos-sama`;
 /****************************************************************/
 
-let chainPrint = (category, chainee) => (logger.info('Initialised => ' +
+let chainPrint = (category, chainee) => (logger.log('Initialised => ' +
     category
 // eslint-disable-next-line no-sequences
 ), chainee);
@@ -33,7 +33,7 @@ class Vulcan extends Discord.Client {
         });
 
         // Vulcan is here!
-        logger.printc('FgRed', couldnt_have_forged_it_better_myself);
+        logger.plain('red', couldnt_have_forged_it_better_myself);
     }
 
     /******************
@@ -62,7 +62,7 @@ class Vulcan extends Discord.Client {
                 }
 
                 t = mathematics.round(performance.now() - t, 2);
-                logger.info(`Loaded command ${cmdName} from ${commandPath} (took ${t}ms)`);
+                logger.log(`Loaded command ${cmdName} from ${commandPath} (took ${t}ms)`);
             } catch (err) {
                 console.log(err.code, err.stack);
                 logger.error(err.shortMessage());
@@ -86,14 +86,14 @@ class Vulcan extends Discord.Client {
             let t     = performance.now();
             let event = eventFile.replace(/\.js$/i, '');
             this.on(event, xrequire(path.join(discordjsEventsPath, eventFile)));
-            logger.info(`Finished loading (DiscordJS) event file '${eventFile}' (took ${mathematics.round(performance.now() - t, 2)}ms).`);
+            logger.log(`Finished loading (DiscordJS) event file '${eventFile}' (took ${mathematics.round(performance.now() - t, 2)}ms).`);
         }
 
         for (let eventFile of vulcanEvents) {
             let t     = performance.now();
             let event = eventFile.replace(/\.js$/i, '');
             this.on(event, xrequire(path.join(vulcanEventsPath, eventFile)));
-            logger.info(`Finished loading (Vulcan) event file '${eventFile}' (took ${mathematics.round(performance.now() - t, 2)}ms).`);
+            logger.log(`Finished loading (Vulcan) event file '${eventFile}' (took ${mathematics.round(performance.now() - t, 2)}ms).`);
         }
 
         return chainPrint('Discord & Vulcan Events', this);
@@ -107,7 +107,7 @@ class Vulcan extends Discord.Client {
     }
 
     connect () {
-        logger.info('Attempting to connect to discord servers...');
+        logger.log('Attempting to connect to discord servers...');
 
         if (this.privatedata.token === global.Defaults.files.privatedata.data.token) {
             logger.warn(`>>> Default token detected, please change @'${Defaults.files.privatedata.location}'`);
@@ -118,7 +118,7 @@ class Vulcan extends Discord.Client {
         }
 
         this.login(this.privatedata.token).then((token) => {
-            logger.info(`Sucessfully logged in to discord servers with token: ${token}`)
+            logger.log(`Sucessfully logged in to discord servers with token: ${token}`)
         }).catch((err) => {
             throw err;
         });

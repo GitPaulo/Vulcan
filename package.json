@@ -27,6 +27,7 @@
     },
     "homepage": "https://github.com/GitPaulo/Vulcan#readme",
     "dependencies": {
+        "chalk": "^2.4.2",
         "discord.js": "~11.5.1",
         "github-api": "^3.2.0",
         "js-yaml": "^3.13.1",

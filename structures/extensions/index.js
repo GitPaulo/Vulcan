@@ -38,6 +38,6 @@ module.exports = () => {
             discordClassFunction.prototype[property] = propertyValue;
         }
 
-        logger.info(`Sucessfully loaded extensions file '${file}'. (took ${Math.round(performance.now() - t)}ms)`);
+        logger.log(`Sucessfully loaded extensions file '${file}'. (took ${Math.round(performance.now() - t)}ms)`);
     });
 }

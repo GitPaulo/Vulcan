@@ -7,7 +7,7 @@ module.exports = async message => {
     if (!vulcan)
         return logger.error('Vulcan client not defined in message!');
 
-    logger.info('[GUILD: ' + message.guild.name + '] => [MESSAGE][' + message.author.username + '][' + message.channel.name + ']: ' + message.content);
+    logger.log('[GUILD: ' + message.guild.name + '] => [MESSAGE][' + message.author.username + '][' + message.channel.name + ']: ' + message.content);
 
     // Don't respond to self - bad recursion can happen LULW
     if (message.author.bot) return;
