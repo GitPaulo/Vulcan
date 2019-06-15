@@ -32,4 +32,4 @@ global.print        = console.log = function () {
 
     global.printHistory.push([...arguments].join(', '));
     global.oldLog.apply(console, arguments);
-}
+};

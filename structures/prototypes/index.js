@@ -48,6 +48,6 @@ module.exports = () => {
             });
         }
 
-        logger.info(`Sucessfully loaded prototypes file '${file}'. (took ${Math.round(performance.now() - t)}ms)`);
+        logger.log(`Sucessfully loaded prototypes file '${file}'. (took ${Math.round(performance.now() - t)}ms)`);
     });
-}
+};

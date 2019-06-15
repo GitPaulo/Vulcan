@@ -2,7 +2,15 @@ env:
   browser: false
   commonjs: true
   es6: true
-extends: 'standard'
+  node: true
+  worker: true
+  mongo: true
+plugins:
+  - 'security'
+extends: 
+  - 'eslint:recommended'
+  - 'standard'
+  # 'plugin:security/recommended'
 globals:
   xrequire: readonly
   oldLog: readonly
@@ -13,12 +21,14 @@ globals:
   Defaults: readonly
 parserOptions:
   ecmaVersion: 2018
-rules: 
+rules:
+  no-case-declarations: 'off'
   no-console: 'off'
+  no-eval: 'off'
   no-useless-escape: 'off'
   no-inline-comments: 'off'
-  indent: 'off'
-  semi: 'off'
   no-multi-spaces: 'off'
+  semi: [2, "always"]
+  indent: 'off'
   curly: 'off'
-  no-eval: 'off'
+

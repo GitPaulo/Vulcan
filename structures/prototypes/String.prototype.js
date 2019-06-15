@@ -25,4 +25,4 @@ module.exports = {
         var target = this;
         return target.split(search).join(replacement);
     }
-}
+};

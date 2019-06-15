@@ -1,5 +1,5 @@
 // Initialisation
-xrequire('./modules/scripts/initscript');
+xrequire('./modules/scripts/coreEvents');
 xrequire('./modules/scripts/defaults');
 
 // Vulcan init structures (via index.js)
@@ -8,13 +8,14 @@ xrequire('./structures/extensions')();
 
 // File requires
 const fs     = xrequire('fs');
-const YAML   = xrequire('js-yaml');
+const yaml   = xrequire('js-yaml');
 const Vulcan = xrequire('./structures/classes/Vulcan');
 const logger = xrequire('./managers/LogManager').getInstance();
 
 // Load Data
 const configurationFile = fs.readFileSync('./settings/config.yaml', 'utf8');
 const privatedataFile   = fs.readFileSync('./settings/noleakdata.yaml', 'utf8');
+<<<<<<< HEAD
 const permissionsFile   = fs.readFileSync('./settings/user_permissions.yaml', 'utf8');
 const configuration     = YAML.safeLoad(configurationFile);
 const privatedata       = YAML.safeLoad(privatedataFile);
@@ -25,7 +26,7 @@ if (process.env.BOT_TOKEN)
     privatedata.token = process.env.BOT_TOKEN;
 
 // Instantiate & export vulcan client
-let vulcan = module.exports = new Vulcan(configuration, privatedata, permissions);
+const vulcan = module.exports = new Vulcan(configuration, privatedata, permissions);
 
 // Load vulcan (do NOT chain of instantiation)
 vulcan.loadCommands()

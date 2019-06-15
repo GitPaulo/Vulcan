@@ -8,4 +8,4 @@ let gifSchema = new Schema({
     owner: Number
 });
 
-module.exports = mongoose.model('gifs', gifSchema)
+module.exports = mongoose.model('gifs', gifSchema);

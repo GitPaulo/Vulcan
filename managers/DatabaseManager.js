@@ -7,9 +7,9 @@ class DatabaseManager {
     constructor () {
         this.db = mongoose.connection;
         this.db.on('error', logger.error.bind(logger, 'MongoDB connection error!'));
-        this.db.on('disconnected', logger.info.bind(logger, 'MongoDB connection has been lost!'));
-        this.db.on('reconnected', logger.info.bind(logger, 'MongoDB connection has been restablished!'));
-        this.db.on('close', logger.info.bind(logger, 'MongoDB connection has been closed!'));
+        this.db.on('disconnected', logger.log.bind(logger, 'MongoDB connection has been lost!'));
+        this.db.on('reconnected', logger.log.bind(logger, 'MongoDB connection has been restablished!'));
+        this.db.on('close', logger.log.bind(logger, 'MongoDB connection has been closed!'));
     }
 
     async connect (username, password, settings = {
@@ -19,8 +19,12 @@ class DatabaseManager {
         useNewUrlParser: true
     }) {
         const dbURL = 'mongodb://' + username + ':' + password + '@ds125125.mlab.com:25125/vulcan';
-
-        await mongoose.connect(dbURL, settings);
+        
+        try {
+            await mongoose.connect(dbURL, settings);
+        } catch (err) {
+            logger.error(err.message);
+        }
 
         // If the Node process ends, close the Mongoose connection
         process.on('SIGINT', function () {

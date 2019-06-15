@@ -8,7 +8,7 @@ let parseStringToDataTypes = (targetText) => {
         return parsedValues;
 
     for (let i = 0; i < matches.length; i++) {
-        let match       = matches[i]
+        let match       = matches[i];
         parsedValues[i] = parseInt(match);
 
         if (!isNaN(parsedValues[i]))
@@ -25,12 +25,12 @@ let parseStringToDataTypes = (targetText) => {
             parsedValues[i] = null;
         }
 
-        parsedValues[i] = match.startsWith('"') && match.endsWith('"') ? match.substring(1, match.length - 1) : match
+        parsedValues[i] = match.startsWith('"') && match.endsWith('"') ? match.substring(1, match.length - 1) : match;
         parsedValues[i] = parsedValues[i].replaceAll('%"', '"');
     }
 
     return parsedValues;
-}
+};
 
 module.exports = (vulcan, message) => {
     let raw       = message.content;
@@ -41,27 +41,27 @@ module.exports = (vulcan, message) => {
 
     if (!command)
         return {
-            error: false,
-            message: null
+            err: new Error(`Received a command parse request for: ${command}. This command was not found in the list of commands!`),
+            value: matches
         };
 
-    let args      = matches; args.shift();
-    let argString = args.join(' ').trim();
+    let args       = matches; args.shift();
+    let argsString = args.join(' ').trim();
 
     if (vulcan.configuration.parsingType === global.ParsingTypes.COMPLEX) {
-        args = parseStringToDataTypes(argString);
+        args = parseStringToDataTypes(argsString);
     }
 
     console.log(args, '<<< parsed values');
     console.log(`[MESSAGE PARSER DEBUG] => Matches: [${matches}]`,
         `Arguments Array: [${args}](wrong types check above spew)`,
-        `Argument String: ${argString}`, `Parsed Name: ${firstword}`
+        `Argument String: ${argsString}`, `Parsed Name: ${firstword}`
     );
 
-    message.initCommand(command, argString, args, raw, firstword);
+    message.initCommand(command, argsString, args, raw, firstword);
 
     return {
         error: false,
-        message: null
+        value: matches
     };
-}
+};

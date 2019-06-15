@@ -7,7 +7,7 @@ module.exports = async message => {
     if (!vulcan)
         return logger.error('Vulcan client not defined in message!');
 
-    logger.info('[GUILD: ' + message.guild.name + '] => [MESSAGE][' + message.author.username + '][' + message.channel.name + ']: ' + message.content);
+    logger.log('[GUILD: ' + message.guild.name + '] => [MESSAGE][' + message.author.username + '][' + message.channel.name + ']: ' + message.content);
 
     // Don't respond to self - bad recursion can happen LULW
     if (message.author.bot) return;
@@ -19,10 +19,11 @@ module.exports = async message => {
 
     if (!found) return; // Before we parse, we must check that it's worth parsing!
 
-    let parseError = xrequire('./handlers/messageHandler')(vulcan, message);
+    let parseResult = xrequire('./handlers/messageHandler')(vulcan, message);
 
-    if (parseError.hasError)
-        await message.channel.send(messageEmbeds.error(message.author.username, 'Command Validation', `Command Parse error: \`${parseError.message}\``));
+    if (parseResult.err) {
+        logger.warn(parseResult.err.message);
+    }
 
     if (message.isCommand) {
         // check permissions, then check arguments are valid
@@ -51,8 +52,8 @@ module.exports = async message => {
             return;
         }
 
-        let isSpamming        = cmd.isSpamming(message.author);
         let isExternallyValid = await cmd.validate(message);
+        let isSpamming        = cmd.isSpamming(message.author);
         let canExecute        = !isSpamming && isExternallyValid;
 
         if (canExecute) {

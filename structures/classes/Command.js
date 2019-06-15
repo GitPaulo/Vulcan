@@ -1,8 +1,8 @@
 const assert = xrequire('assert');
 var rassert = (exp, msg) => {
-    assert(exp, msg)
+    assert(exp, msg);
     return exp;
-}
+};
 
 class Command {
     constructor (type, properties) {
@@ -77,7 +77,7 @@ class Command {
         return {
             isValid: hasValidArguments,
             list: invalidArgsPositions
-        }
+        };
     }
 
     validatePermissions (message) {

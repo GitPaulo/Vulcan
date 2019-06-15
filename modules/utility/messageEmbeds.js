@@ -45,7 +45,7 @@ messageEmbeds.reply = function (
         },
         files
     };
-}
+};
 
 messageEmbeds.error = function (
     {
@@ -80,8 +80,8 @@ messageEmbeds.error = function (
                 name: 'error.png'
             }
         ]
-    }
-}
+    };
+};
 
 messageEmbeds.warning = function (
     {
@@ -116,8 +116,8 @@ messageEmbeds.warning = function (
                 name: 'warning.png'
             }
         ]
-    }
-}
+    };
+};
 
 messageEmbeds.info = function (
     {
@@ -152,5 +152,5 @@ messageEmbeds.info = function (
                 name: 'info.png'
             }
         ]
-    }
-}
+    };
+};

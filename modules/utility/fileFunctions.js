@@ -22,4 +22,4 @@ fileFunctions.allDirFiles = function (dir, fileTypes = '.js') {
     walkDir(dir);
 
     return filesToReturn;
-}
+};
