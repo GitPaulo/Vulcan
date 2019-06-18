@@ -6,22 +6,22 @@ class PermissionManager {
         this.permissions = permissions;
         this.filePath = path.join(__basedir, 'settings', 'user_permissions.yaml');
         this.extensiveForm = {
-            '1' : 'root',
-            '2' : 'admin',
-            '3' : 'pleb'
+            '1': 'root',
+            '2': 'admin',
+            '3': 'pleb'
         };
     }
 
     changePermissionLevel (userID, targetUserID, permissionLevel) {
         let currentPermission = this.getUserPermissions(targetUserID);
         if (this.getUserPermissions(userID) > 1)        throw new Error('Only roots may change permissions');
-        if (currentPermission === 1)                    throw new Error('You may not remove a root using a chat command')
+        if (currentPermission === 1)                    throw new Error('You may not remove a root using a chat command');
         if (currentPermission === permissionLevel)      throw new Error('User already has this permission level');
         if (permissionLevel < 1 || permissionLevel > 3) throw new Error('Invalid permission level');
         
         // remove current permission
         if (currentPermission !== 3)
-            this.permissions = this.permissions.filter(e => e != targetUserID);
+            this.permissions = this.permissions.filter(e => e !== targetUserID);
         
         switch (permissionLevel) {
             case 1:
@@ -33,7 +33,6 @@ class PermissionManager {
             default:
                 break;
         }
-
         this.updatePermissionsFile();
     }
     

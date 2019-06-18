@@ -31,8 +31,8 @@ class Vulcan extends Discord.Client {
         // Seal these properties! :)
         Object.defineProperties(this, {
             configuration: { value: configuration,  writable: false, enumerable: false, configurable: false },
-            privatedata:   { value: privatedata,    writable: false, enumerable: false, configurable: false },
-            permissions:   { value: permissions,    writable: false, enumerable: false, configurable: false }
+            privatedata: { value: privatedata,    writable: false, enumerable: false, configurable: false },
+            permissions: { value: permissions,    writable: false, enumerable: false, configurable: false }
         });
 
         // Vulcan is here!

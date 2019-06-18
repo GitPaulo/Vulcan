@@ -1,6 +1,5 @@
 const Command         = xrequire('./structures/classes/Command.js');
 const messageEmbeds   = xrequire('./modules/utility/messageEmbeds');
-const logger          = xrequire('./managers/LogManager').getInstance();
 
 class Permission extends Command {
     constructor (type) {
@@ -42,7 +41,6 @@ class Permission extends Command {
             ]
         };
         let premessage = await message.channel.send(messageEmbeds.reply(replyEmbedData));
-        
         if (argsLength < 1) {
             return message.client.emit('invalidCommandCall', `Expected at least 1 argument.`, message);
         } else {
