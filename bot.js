@@ -31,7 +31,7 @@ const vulcan = module.exports = new Vulcan(configuration, privatedata, permissio
 // Load vulcan (do NOT chain of instantiation)
 vulcan.loadCommands()
       .loadEvents()
-      //.dbConnect()
+      .dbConnect()
       .enablePermissions()
       .connect();
 

@@ -4,31 +4,32 @@ const path   = xrequire('path');
 class PermissionManager {
     constructor (permissions) {
         this.permissions = permissions;
-        this.filePath = path.join(__basedir, "settings", "user_permissions.yaml");
+        this.filePath = path.join(__basedir, 'settings', 'user_permissions.yaml');
         this.extensiveForm = {
-            "1" : "root",
-            "2" : "admin",
-            "3" : "pleb"
-        }
+            '1' : 'root',
+            '2' : 'admin',
+            '3' : 'pleb'
+        };
     }
 
     changePermissionLevel (userID, targetUserID, permissionLevel) {
         let currentPermission = this.getUserPermissions(targetUserID);
-        if (this.getUserPermissions(userID) > 1)        throw new Error("Only roots may change permissions");
-        if (currentPermission == 1)                     throw new Error("You may not remove a root using a chat command")
-        if (currentPermission == permissionLevel)       throw new Error("User already has this permission level");
-        if (permissionLevel < 1 || permissionLevel > 3) throw new Error("Invalid permission level")
+        if (this.getUserPermissions(userID) > 1)        throw new Error('Only roots may change permissions');
+        if (currentPermission === 1)                    throw new Error('You may not remove a root using a chat command')
+        if (currentPermission === permissionLevel)      throw new Error('User already has this permission level');
+        if (permissionLevel < 1 || permissionLevel > 3) throw new Error('Invalid permission level');
         
-        //remove current permission
-        if(currentPermission != 3)
-            permissions = permissions.filter(e => e != targetUserID);
+        // remove current permission
+        if (currentPermission !== 3)
+            this.permissions = this.permissions.filter(e => e != targetUserID);
         
         switch (permissionLevel) {
             case 1:
-                permissions.roots.push(userID);
+                this.permissions.roots.push(userID);
                 break;
             case 2:
-                permissions.admins.push(userID)
+                this.permissions.admins.push(userID);
+                break;
             default:
                 break;
         }
@@ -38,15 +39,14 @@ class PermissionManager {
     
     updatePermissionsFile () {
         let newFile = yaml.safeDump(this.permissions);
-        fs.writeFileSync(filePath, newFile, "utf8");
+        fs.writeFileSync(this.filePath, newFile, 'utf8');
     }
     
     getUserPermissions (ID, extensive = false) {
         let permission = 3;
         if (this.permissions.roots.includes(ID)) permission = 1;
         else if (this.permissions.admins.includes(ID)) permission = 2;
-        
-        if(extensive) return this.getExtensiveForm(permission);
+        if (extensive) return this.getExtensiveForm(permission);
 
         return permission;
     }

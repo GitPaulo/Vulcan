@@ -33,7 +33,7 @@ class Permission extends Command {
             fields: [
                 {
                     name: 'Arguments',
-                    value: ((message.args.length == 0)? "none" : message.args.join(', '))
+                    value: ((message.args.length === 0) ? 'none' : message.args.join(', '))
                 },
                 {
                     name: 'Output',
@@ -47,14 +47,13 @@ class Permission extends Command {
             return message.client.emit('invalidCommandCall', `Expected at least 1 argument.`, message);
         } else {
             switch (message.args[0]) {
-                case "check":
+                case 'check':
                     if (!message.args[1]) return message.client.emit('invalidCommandCall', `Expected 2 arguments.`, message);
                     let id = message.args[1].slice(3, -1);
                     let permission = permissionManager.getUserPermissions(id, true);
                     replyEmbedData.fields[1].value = permission;
                     premessage.edit(messageEmbeds.reply(replyEmbedData));
                     break;
-            
                 default:
                     break;
             }
