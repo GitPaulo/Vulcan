@@ -13,7 +13,7 @@ class Gif extends Command {
         super(type, {
             name: 'gif',
             aliases: ['GIF'],
-            group: 'GROUP_SYSTEM_SOON_TM',
+            group: 3,
             description: 'Retrieves a Gif from the database',
             examples: ['gif store somegif http://somegif.jpg', 'gif get somegif', 'gif all'],
             throttling: 2000,

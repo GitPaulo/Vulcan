@@ -8,8 +8,8 @@ class Eval extends Command {
         super(type, {
             name: 'eval',
             aliases: ['js', 'runjs', 'jsrun'],
-            group: 'GROUP_SYSTEM_SOON_TM',
-            description: 'Evaluates JavaScript code using the internal environment.',
+            group: 3,
+            description: 'Evaluates javascript code using an internal environment.',
             examples: ['eval 1+1', 'eval console.log(\'hello world!\');'],
             throttling: 2000,
             args: [

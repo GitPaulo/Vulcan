@@ -1,5 +1,4 @@
 const assert = xrequire('assert');
-
 var rassert = (exp, msg) => {
     assert(exp, msg);
     return exp;
@@ -79,6 +78,13 @@ class Command {
             isValid: hasValidArguments,
             list: invalidArgsPositions
         };
+    }
+
+    validatePermissions (message) {
+        let permissionManager = message.client.permissionManager;
+        let authorPermission = permissionManager.getUserPermissions(message.author.id);
+        if (authorPermission <= this.group) return true;
+        return false;
     }
 }
 

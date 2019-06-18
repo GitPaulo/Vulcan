@@ -26,11 +26,22 @@ module.exports = async message => {
     }
 
     if (message.isCommand) {
-        let cmd        = message.command;
-        let validation = cmd.validateMessageArguments(message); // Returns an object: { isValid: (boolean), list: (array) } // list: array with entries related to index of the invalid arg
+        // check permissions, then check arguments are valid
+        let cmd = message.command;
+        if (!cmd.validatePermissions(message)) {
+            message.channel.send(messageEmbeds.warning(
+                {
+                    authorName: message.author.username,
+                    title: 'Command Permissions',
+                    description: `You do not have permission to run this command!`
+                }
+            ));
+            return;
+        }
 
-        if (!validation.isValid) {
-            let invalidArguments = validation.list.toString();
+        let argumentsValidation = cmd.validateMessageArguments(message); // Returns an object: { isValid: (boolean), list: (array) } // list: array with entries related to index of the invalid arg
+        if (!argumentsValidation.isValid) {
+            let invalidArguments = argumentsValidation.list.toString();
             await message.channel.send(messageEmbeds.warning(
                 {
                     title: 'Command: Argument Validation',

@@ -6,7 +6,7 @@ class Ping extends Command {
         super(type, {
                 name: 'ping',
                 aliases: ['pingpong', 'latency'],
-                group: 'GROUP_SYSTEM_SOON_TM',
+                group: 1,
                 description: 'Pings the bot and wait for a reply displaying the latency in ms.',
                 examples: ['ping'],
                 throttling: 5000,

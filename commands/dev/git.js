@@ -7,7 +7,7 @@ class Git extends Command {
         super(type, {
             name: 'git',
             aliases: ['updatefiles', 'pullgit'],
-            group: 'GROUP_SYSTEM_SOON_TM',
+            group: 1,
             description: 'Automatically updates files from github',
             examples: ['gitpull'],
             throttling: 2000,
