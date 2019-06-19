@@ -44,6 +44,15 @@ global.VulcanDefaults = {
                     password: 'no_u'
                 }
             }
+        },
+        // Commands will have 3 groups. Group 1 only roots can use. Group 2 only admin and above can use. Group 3 everyone can use.
+        // Everyone not in this file is a pleb by default.
+        'permissions': {
+            location: path.join(__basedir, 'settings', 'permissions.yml'),
+            data: {
+                roots: [], // configuration.devIDs are roots by default
+                admins: []
+            }
         }
     }
 };

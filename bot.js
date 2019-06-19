@@ -15,15 +15,18 @@ const logger = xrequire('./managers/LogManager').getInstance();
 // Load Data
 const configurationFile = fs.readFileSync(global.VulcanDefaults.files.configuration.location, 'utf8');
 const credentialsFile   = fs.readFileSync(global.VulcanDefaults.files.credentials.location, 'utf8');
+const permissionsFile   = fs.readFileSync(global.VulcanDefaults.files.permissions.location, 'utf8');
 const configuration     = yaml.safeLoad(configurationFile);
 const credentials       = yaml.safeLoad(credentialsFile);
+const permissions       = yaml.safeLoad(permissionsFile);
 
 // Instantiate & export vulcan client
 const vulcan = module.exports = new Vulcan(
     // Vulcan Options
     {
         configuration,
-        credentials
+        credentials,
+        permissions
     },
     // Discord.js Options
     {
@@ -42,6 +45,7 @@ const vulcan = module.exports = new Vulcan(
 vulcan.loadCommands()
       .loadEvents()
       .dbConnect()
+      .enablePermissions()
       .loadCLI()
       .connect();
 

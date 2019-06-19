@@ -9,18 +9,18 @@ const fs         = xrequire('fs');
 const path       = xrequire('path');
 const chalk      = xrequire('chalk');
 const LogManager = (function () {
-    var instance; // reference to the Singleton
+    let instance; // reference to the Singleton
 
     function loggerConstructor () { // 'private' properties
-        var folderName  = 'logs';
-        var rootPath    = __basedir;
-        var maxFileSize = 1 * 1024 * 1024; // 1Mb
-        var nFolderPath = path.join(rootPath, folderName);
-        var oFolderPath = path.join(nFolderPath, 'past_logs');
+        let folderName  = 'logs';
+        let rootPath    = __basedir;
+        let maxFileSize = 1 * 1024 * 1024; // 1Mb
+        let nFolderPath = path.join(rootPath, folderName);
+        let oFolderPath = path.join(nFolderPath, 'past_logs');
         // eslint-disable-next-line no-unused-vars
-        var modifiers   = [];
+        let modifiers   = [];
 
-        var logTypes    = {
+        let logTypes    = {
             'debug'    : chalk.blue,
             'log'      : chalk.green,
             'warning'  : chalk.yellowBright,
@@ -28,7 +28,7 @@ const LogManager = (function () {
             'terminal' : chalk.magenta
         };
 
-        var blueprint   = [
+        let blueprint   = [
             {
                 fileName: 'logs.txt',
                 logTypes: ['debug', 'log', 'warning', 'error', 'terminal']
@@ -39,21 +39,21 @@ const LogManager = (function () {
             }
         ];
 
-        var initFile = function (fileBlueprint) {
+        let initFile = function (fileBlueprint) {
             fs.writeFileSync(
                 path.join(nFolderPath, fileBlueprint.fileName),
                 `[LOG '${fileBlueprint.fileName}' FILE CREATED (${Date.now()})]\n`
             );
         };
 
-        var applyModifiers = function (text) {
+        let applyModifiers = function (text) {
             for (let modifier of modifiers) {
                 text = chalk[modifier](text);
             }
             return text;
         };
 
-        var blueprintsFromLogType = function (logType) {
+        let blueprintsFromLogType = function (logType) {
             let blueprints = [];
             for (let fileBlueprint of blueprint) {
                 if (fileBlueprint.logTypes.includes(logType)) {
@@ -63,11 +63,11 @@ const LogManager = (function () {
             return blueprints;
         };
 
-        var shouldLog = function () {
+        let shouldLog = function () {
             return true; // currently not used (but could be in future!)
         };
 
-        var store = function (logType, str) {
+        let store = function (logType, str) {
             if (!logTypes[logType])
                 throw new Error(`Log type '${logType}' not valid for 'write' function!`);
 
@@ -83,7 +83,7 @@ const LogManager = (function () {
 
                     let files = fs.readdirSync(oFolderPath);
 
-                    for (var file of files) {
+                    for (let file of files) {
                         if (file.includes(fstr))
                             numberOfRepeats++;
                     }
@@ -99,16 +99,22 @@ const LogManager = (function () {
             }
         };
 
-        var write = function (logType, ...args) {
+        let write = function (logType, ...args) {
             let colorFunc = logTypes[logType];
             if (!colorFunc)
                 throw new Error(`Log type '${logType}' not valid for 'write' function!`);
+
+            // Convert all arguments to proper strings
+            let buffer = [];
+            for (let arg of args) {
+                buffer.push((typeof arg === 'object') ? JSON.stringify(arg) : arg.toString());
+            }
 
             let text = applyModifiers(
                 colorFunc(
                     `(${new Date().toLocaleString()})` +
                     `[${logType}] => ` +
-                    [...args].join('\t')
+                    buffer.join(' ')
                 )
             );
 
@@ -134,7 +140,7 @@ const LogManager = (function () {
 
         return { // 'public' properties
             removeModifier: function (modID) {
-                var index = modifiers.indexOf(modID);
+                let index = modifiers.indexOf(modID);
                 if (index < -1)
                     throw new Error(`Modifier '${modID}' not found in exisiting modifiers!`);
                 modifiers.splice(index, 1);

@@ -14,7 +14,7 @@ ping:
   - a
   - b
   - c
-  group: GROUP_SYSTEM_SOON_TM
+  group: 3
   throttling: 5000
   embed:
     color: 0xFF0000
@@ -31,7 +31,7 @@ eval:
   - a
   - b
   - c
-  group: GROUP_SYSTEM_SOON_TM
+  group: 1
   throttling: 2000
   embed:
     color: 0xFFCE6D
@@ -47,7 +47,7 @@ git:
   - a
   - b
   - c
-  group: GROUP_SYSTEM_SOON_TM
+  group: 1
   throttling: 2000
   embed:
     color: 0xFF0000
@@ -57,14 +57,28 @@ git:
 gif:
   aliases:
   - imagestorage
-  description: '???'
+  description: "??"
   examples:
   - a
   - b
   - c
-  group: GROUP_SYSTEM_SOON_TM
+  group: 3
   throttling: 2000
   embed:
     color: 0x666666
     title: Gif
     image: "./assets/media/images/commands/discord/Gif.gif"
+### New Command [Permission] ###
+permission:
+  aliases:
+  - 'perm'
+  description: 'Interface to the permission system'
+  group: 1
+  examples:
+  - '!permission [username]'
+  - '!permission change [username] 2'
+  throttling: 2000
+  embed:
+    color: 0xFFCE6D
+    title: 'Permission System'
+    image: './assets/media/images/commands/Gif.gif'

@@ -1,12 +1,13 @@
-const Discord         = xrequire('discord.js');
-const { performance } = xrequire('perf_hooks');
-const os              = xrequire('os');
-const fs              = xrequire('fs');
-const path            = xrequire('path');
-const DatabaseManager = xrequire('./managers/DatabaseManager');
-const TerminalManager = xrequire('./managers/TerminalManager');
-const mathematics     = xrequire('./plugins/libs/mathematics');
-const logger          = xrequire('./managers/LogManager').getInstance();
+const Discord           = xrequire('discord.js');
+const { performance }   = xrequire('perf_hooks');
+const os                = xrequire('os');
+const fs                = xrequire('fs');
+const path              = xrequire('path');
+const mathematics       = xrequire('./plugins/libs/mathematics');
+const DatabaseManager   = xrequire('./managers/DatabaseManager');
+const TerminalManager   = xrequire('./managers/TerminalManager');
+const PermissionManager = xrequire('./managers/PermissionManager');
+const logger            = xrequire('./managers/LogManager').getInstance();
 
 /****************************************************************/
 // eslint-disable-next-line camelcase
@@ -29,20 +30,28 @@ class Vulcan extends Discord.Client {
         super(options);
 
         // Seal these properties! :)
-        Object.defineProperties(this, {
-            configuration: {
-                value: settings.configuration,
-                writable: false,
-                enumerable: false,
-                configurable: false
-            },
-            credentials: {
-                value: settings.credentials,
-                writable: false,
-                enumerable: false,
-                configurable: false
+        Object.defineProperties(this,
+            {
+                configuration: {
+                    value: settings.configuration,
+                    writable: false,
+                    enumerable: false,
+                    configurable: false
+                },
+                credentials: {
+                    value: settings.credentials,
+                    writable: false,
+                    enumerable: false,
+                    configurable: false
+                },
+                permissions: {
+                    value: settings.permissions,
+                    writable: false,
+                    enumerable: false,
+                    configurable: false
+                }
             }
-        });
+        );
 
         // Vulcan is here!
         logger.plain(couldnt_have_forged_it_better_myself, 'red');
@@ -128,6 +137,18 @@ class Vulcan extends Discord.Client {
         });
 
         return chainPrint('Discord Connection', this);
+    }
+
+    enablePermissions () {
+        // Dev ids => roots by default
+        for (let devID of this.configuration.devsID)
+            this.permissions.roots.push(devID);
+
+        this.permissionManager = new PermissionManager(this.permissions);
+        logger.debug('######### Permissions Enabled ##########');
+        logger.debug(this.permissionManager.permissions);
+
+        return chainPrint('Permission system', this);
     }
 
     /**********************

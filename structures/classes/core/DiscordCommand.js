@@ -29,6 +29,12 @@ class DiscordCommand extends Command {
     isSpamming (author) {
         return this.underThrottling(author.id);
     }
+
+    validatePermissions (message) {
+        let permissionManager = message.client.permissionManager;
+        let authorPermission  = permissionManager.getUserPermissions(message.author.id);
+        return (authorPermission <= this.group);
+    }
 }
 
 module.exports = DiscordCommand;
