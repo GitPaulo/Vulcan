@@ -1,5 +1,5 @@
 module.exports = {
-    'methodNames': function () {
+    methodNames: function () {
         let obj = this;
         let properties = new Set();
         let currentObj = obj;

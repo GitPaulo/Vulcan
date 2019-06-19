@@ -21,16 +21,17 @@ const LogManager = (function () {
         var modifiers   = [];
 
         var logTypes    = {
-            'debug'   : chalk.magenta,
-            'log'     : chalk.green,
-            'warning' : chalk.yellowBright,
-            'error'   : chalk.redBright
+            'debug'    : chalk.blue,
+            'log'      : chalk.green,
+            'warning'  : chalk.yellowBright,
+            'error'    : chalk.redBright,
+            'terminal' : chalk.magenta
         };
 
         var blueprint   = [
             {
                 fileName: 'logs.txt',
-                logTypes: ['debug', 'log', 'warning', 'error']
+                logTypes: ['debug', 'log', 'warning', 'error', 'terminal']
             },
             {
                 fileName: 'dump.txt',
@@ -168,10 +169,11 @@ const LogManager = (function () {
                 );
             },
             // alias
-            debug: function () { this.write(...arguments); },
-            log:   function () { this.write(...arguments); },
-            warn:  function () { this.write(...arguments); },
-            error: function () { this.write(...arguments); }
+            debug:    function () { this.write(...arguments); },
+            log:      function () { this.write(...arguments); },
+            warning:  function () { this.write(...arguments); },
+            error:    function () { this.write(...arguments); },
+            terminal: function () { this.write(...arguments); }
         };
     }
 

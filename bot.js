@@ -1,6 +1,6 @@
 // Initialisation
-xrequire('./modules/scripts/coreEvents');
-xrequire('./modules/scripts/defaults');
+xrequire('./plugins/scripts/coreEvents');
+xrequire('./plugins/scripts/defaults');
 
 // Vulcan init structures (via index.js)
 xrequire('./structures/prototypes')();
@@ -9,22 +9,40 @@ xrequire('./structures/extensions')();
 // File requires
 const fs     = xrequire('fs');
 const yaml   = xrequire('js-yaml');
-const Vulcan = xrequire('./structures/classes/Vulcan');
+const Vulcan = xrequire('./structures/classes/core/Vulcan');
 const logger = xrequire('./managers/LogManager').getInstance();
 
 // Load Data
-const configurationFile = fs.readFileSync('./settings/config.yaml', 'utf8');
-const privatedataFile   = fs.readFileSync('./settings/noleakdata.yaml', 'utf8');
+const configurationFile = fs.readFileSync(global.VulcanDefaults.files.configuration.location, 'utf8');
+const credentialsFile   = fs.readFileSync(global.VulcanDefaults.files.credentials.location, 'utf8');
 const configuration     = yaml.safeLoad(configurationFile);
-const privatedata       = yaml.safeLoad(privatedataFile);
+const credentials       = yaml.safeLoad(credentialsFile);
 
 // Instantiate & export vulcan client
-const vulcan = module.exports = new Vulcan(configuration, privatedata);
+const vulcan = module.exports = new Vulcan(
+    // Vulcan Options
+    {
+        configuration,
+        credentials
+    },
+    // Discord.js Options
+    {
+        disabledEvents: [
+            'USER_NOTE_UPDATE',
+            'TYPING_START',
+            'RELATIONSHIP_ADD',
+            'RELATIONSHIP_REMOVE'
+        ],
+        disableEveryone: true,
+        messageCacheMaxSize: 1000
+    }
+);
 
 // Load vulcan (do NOT chain of instantiation)
 vulcan.loadCommands()
       .loadEvents()
       .dbConnect()
+      .loadCLI()
       .connect();
 
 // Log

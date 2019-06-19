@@ -4,9 +4,11 @@
     "description": "Collaboration discord bot by Paulo & Carlos, using discord.js.",
     "main": "vulcan.js",
     "scripts": {
-        "start": "node --require ./modules/scripts/globals.js bot.js",
-        "dev": "nodemon --require ./modules/scripts/globals.js bot.js",
-        "test": "node --require ./modules/scripts/globals.js tests/loading.js"
+        "start": "node --require ./plugins/scripts/globals.js bot.js",
+        "dev": "nodemon --require ./plugins/scripts/globals.js bot.js",
+        "test": "node --require ./plugins/scripts/globals.js tests/loading.js",
+        "linter": "./node_modules/.bin/eslint .",
+        "linter:fix": "./node_modules/.bin/eslint . --fix"
     },
     "repository": {
         "type": "git",
@@ -28,7 +30,7 @@
     "homepage": "https://github.com/GitPaulo/Vulcan#readme",
     "dependencies": {
         "chalk": "^2.4.2",
-        "discord.js": "github:discordjs/discord.js",
+        "discord.js": "discordjs/discord.js",
         "github-api": "^3.2.0",
         "js-yaml": "^3.13.1",
         "mongoose": "^5.6.0"

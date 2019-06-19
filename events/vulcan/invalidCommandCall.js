@@ -7,13 +7,13 @@
  *      - etc...
  */
 
-const messageEmbeds = xrequire('./modules/utility/messageEmbeds');
+const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
 const logger        = xrequire('./managers/LogManager').getInstance();
 
 module.exports = (description, message) => {
     message.channel.send(messageEmbeds.warning(
         {
-            title: '[Invalid Command Call] ' + message.command.name,
+            title: '[Invalid Command Call] ' + message.command.id,
             description,
             fields: [
                 {

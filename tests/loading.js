@@ -1,7 +1,7 @@
 // Remember to offset paths by their parent since we are in ./tests/
 const { performance } = xrequire('perf_hooks');
 const logger          = xrequire('./managers/LogManager').getInstance();
-const Vulcan          = xrequire('./structures/classes/Vulcan');
+const Vulcan          = xrequire('./structures/classes/core/Vulcan');
 
 // Hack connect *dab*
 Vulcan.prototype.connect = () => console.log('[DISCORD CONNECT REMOVED DURING LOAD TESTING]');
@@ -13,7 +13,7 @@ logger.plain(
 );
 
 let t0 = performance.now();
-xrequire('./bot.js');
+xrequire('./bot');
 
 logger.plain(
 `=======================================

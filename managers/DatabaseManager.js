@@ -4,8 +4,9 @@ const logger   = xrequire('./managers/LogManager').getInstance();
 mongoose.Promise = global.Promise;
 
 class DatabaseManager {
-    constructor () {
-        this.db = mongoose.connection;
+    constructor (vulcan) {
+        this.vulcan = vulcan;
+        this.db     = mongoose.connection;
         this.db.on('error', logger.error.bind(logger, 'MongoDB connection error!'));
         this.db.on('disconnected', logger.log.bind(logger, 'MongoDB connection has been lost!'));
         this.db.on('reconnected', logger.log.bind(logger, 'MongoDB connection has been restablished!'));
@@ -19,7 +20,7 @@ class DatabaseManager {
         useNewUrlParser: true
     }) {
         const dbURL = 'mongodb://' + username + ':' + password + '@ds125125.mlab.com:25125/vulcan';
-        
+
         try {
             await mongoose.connect(dbURL, settings);
         } catch (err) {

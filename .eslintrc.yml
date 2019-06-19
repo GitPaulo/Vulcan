@@ -13,12 +13,12 @@ extends:
   # 'plugin:security/recommended'
 globals:
   xrequire: readonly
-  oldLog: readonly
-  printHistory: readonly
-  print: readonly
   __basedir: readonly
+  oldLog: readonly
+  print: readonly
+  PrintHistory: readonly
   ParsingTypes: readonly
-  Defaults: readonly
+  VulcanDefaults: readonly
 parserOptions:
   ecmaVersion: 2018
 rules:

@@ -1,12 +1,31 @@
-module.exports = {
-    initCommand: function (command, argsString, args, raw, parsedName) {
-        this.isCommand  = true;
-        this.command    = command;
-        this.argsString = argsString;
-        this.args       = args;
-        this.raw        = raw;
-        this.parsedName = parsedName;
+const DiscordCommand = xrequire('./structures/classes/core/DiscordCommand');
 
-        return this;
+module.exports = {
+    isDirectMessage: function () {
+        return !this.guild;
+    },
+    setParsed: function (
+        {
+            command,
+            raw,
+            args,
+            tags,
+            head,
+            tail,
+            cmdName,
+            argsStr
+        }
+    ) {
+        this.isCommand  = (command instanceof DiscordCommand);
+        this.command    = command;
+        this.parsed     = {
+            raw,
+            args,
+            tags,
+            head,
+            tail,
+            cmdName,
+            argsStr
+        };
     }
 };
