@@ -34,7 +34,7 @@ module.exports = (folderPath) => {
             let command = new CommandClass(commandDefinition);
             commands.addCommand(command);
 
-            logger.log(`Loaded CLI Terminal command '${command.id}' from ${fileName} (took ${mathematics.round(performance.now() - t, 2)}ms)`);
+            logger.log(`Loaded (${folderPath}) command '${command.id}' from ${fileName} (took ${mathematics.round(performance.now() - t, 2)}ms)`);
         } catch (err) {
             logger.error(
                 `Command Loader Error => ${err.message}\n` +

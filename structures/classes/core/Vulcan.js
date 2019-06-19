@@ -62,10 +62,10 @@ class Vulcan extends Discord.Client {
      ******************/
     loadCLI () {
         this.terminalManager = new TerminalManager();
+        this.terminalManager.loadCommands();
 
         this.on('ready', () => {
             logger.log(`Starting CLI...`);
-            this.terminalManager.loadCommands();
             this.terminalManager.start(this);
         });
 
