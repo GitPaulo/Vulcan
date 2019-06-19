@@ -4,7 +4,8 @@ node_js:
   - node
 
 install:
-  - npm ci
+  - rm -rf node_modules/
+  - npm install
 
 script: 
   - npm test
@@ -18,6 +19,11 @@ after_success:
   - ./send.sh success $WEBHOOK_URL_SHOGUNATE
 
 after_failure:
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh failure $WEBHOOK_URL_SHOGUNATE
+
+after_error:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
   - ./send.sh failure $WEBHOOK_URL_SHOGUNATE
