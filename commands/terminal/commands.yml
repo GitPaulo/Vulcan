@@ -6,9 +6,9 @@
 ### New Command ###
 uptime:
   aliases:
-  - timeup
+    - 'timeup'
   description: '???'
   examples:
-  - a
-  group: GROUP_SYSTEM_SOON_TM
+    - 'a'
+  group: 'GROUP_SYSTEM_SOON_TM'
   throttling: 1000

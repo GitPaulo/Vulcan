@@ -7,67 +7,67 @@
 ### New Command [Ping] ###  
 ping:
   aliases:
-  - pingpong
-  - latency
+  - 'pingpong'
+  - 'latency'
   description: '???'
   examples:
-  - a
-  - b
-  - c
+  - 'a'
+  - 'b'
+  - 'c'
   group: 3
   throttling: 5000
   embed:
     color: 0xFF0000
-    title: Ping...
-    image: "./assets/media/images/commands/discord/Ping.gif"
+    title: 'Ping...'
+    image: './assets/media/images/commands/discord/Ping.gif'
 ### New Command [Eval] ###
 eval:
   aliases:
-  - js
-  - runjs
-  - jsrun
+  - 'js'
+  - 'runjs'
+  - 'jsrun'
   description: '???'
   examples:
-  - a
-  - b
-  - c
+  - 'a'
+  - 'b'
+  - 'c'
   group: 1
   throttling: 2000
   embed:
     color: 0xFFCE6D
-    title: (JavaScript) Code Evaluation
-    image: "./assets/media/images/commands/discord/Eval.gif"
+    title: '(JavaScript) Code Evaluation'
+    image: './assets/media/images/commands/discord/Eval.gif'
 ### New Command [Git] ###
 git:
   aliases:
-  - github
-  - repo
+  - 'github'
+  - 'repo'
   description: '???'
   examples:
-  - a
-  - b
-  - c
+  - 'a'
+  - 'b'
+  - 'c'
   group: 1
   throttling: 2000
   embed:
     color: 0xFF0000
-    title: Git
-    image: "./assets/media/images/commands/discord/Git.gif"
+    title: 'Git'
+    image: './assets/media/images/commands/discord/Git.gif'
 ### New Command [Gif] ###
 gif:
   aliases:
-  - imagestorage
-  description: "??"
+  - 'imagestorage'
+  description: '??'
   examples:
-  - a
-  - b
-  - c
+  - 'a'
+  - 'b'
+  - 'c'
   group: 3
   throttling: 2000
   embed:
     color: 0x666666
-    title: Gif
-    image: "./assets/media/images/commands/discord/Gif.gif"
+    title: 'Gif'
+    image: './assets/media/images/commands/discord/Gif.gif'
 ### New Command [Permission] ###
 permission:
   aliases:

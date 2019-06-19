@@ -6,11 +6,10 @@ env:
   worker: true
   mongo: true
 plugins:
-  - 'security'
-extends: 
+  - security
+extends:
   - 'eslint:recommended'
-  - 'standard'
-  # 'plugin:security/recommended'
+  - standard
 globals:
   xrequire: readonly
   __basedir: readonly
@@ -22,13 +21,14 @@ globals:
 parserOptions:
   ecmaVersion: 2018
 rules:
-  no-case-declarations: 'off'
-  no-console: 'off'
-  no-eval: 'off'
-  no-useless-escape: 'off'
-  no-inline-comments: 'off'
-  no-multi-spaces: 'off'
-  semi: [2, "always"]
-  indent: 'off'
-  curly: 'off'
-
+  no-case-declarations: off
+  no-console: off
+  no-eval: off
+  no-useless-escape: off
+  no-inline-comments: off
+  no-multi-spaces: off
+  semi:
+    - 2
+    - always
+  indent: off
+  curly: off
