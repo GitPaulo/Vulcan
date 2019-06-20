@@ -37,15 +37,15 @@ class Connect4 extends DiscordCommand {
         while(!win) {
             await gameMessage.awaitReactions(filter, { max: 1, time: 20000, errors: ['time'] })
                 .then(collected => {
-                    let move = parseInt(collected.first().emoji.identifier.slice(0, 1));
+                    let reaction = collected.first();
+                    let move = parseInt(reaction.emoji.identifier.slice(0, 1));
                     console.log(move);
                     try {
                         win = board.makeMoveAndCheckWin(turn, move).win;
                         gameMessage.edit('```' + board.toString() + '```');
-                        collected.first().remove(players[turn-1]);
+                        console.log(reaction.remove(players[turn-1]));
                     } catch (e) {
                         console.log(e);
-                        win = true;
                     }
                 })
                 .catch(() => {
@@ -63,7 +63,7 @@ class Connect4 extends DiscordCommand {
     async setControls (message, emojis) {
         for (let emoji of emojis) {
             try {
-                message.react(emoji);
+                await message.react(emoji);
             }
             catch (error) {
                 console.log(error);
