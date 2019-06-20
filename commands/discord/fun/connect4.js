@@ -26,6 +26,7 @@ class Connect4 extends DiscordCommand {
         }
         let turn = 1;
         let win = false;
+        let exit = false;
         let gameMessage = null;
         let turnMessage = null;
         let filter = (reaction, user) => {
@@ -34,7 +35,7 @@ class Connect4 extends DiscordCommand {
         await message.channel.send('```' + board.toString() + '```').then(async boardMessage => gameMessage = boardMessage);
         await this.setControls(gameMessage, emojiPlays);
         await message.channel.send(`${players[turn-1].username}'s turn`).then(async m => turnMessage = m);
-        while(!win) {
+        while(!win || exit) {
             await gameMessage.awaitReactions(filter, { max: 1, time: 20000, errors: ['time'] })
                 .then(collected => {
                     let reaction = collected.first();
@@ -46,18 +47,19 @@ class Connect4 extends DiscordCommand {
                         console.log(reaction.remove(players[turn-1]));
                     } catch (e) {
                         console.log(e);
+                        exit = true;
                     }
                 })
                 .catch(() => {
                     message.channel.send(`Took too long to make a move.`);
-                    win = true;
+                    exit = true;
                     return;
                 });
             if(!win) turn = (turn === 1 ? 2 : 1);
             turnMessage.edit(`${players[turn-1].username}'s turn`);
         }
         await message.channel.send('```' + board.toString() + '```')
-        message.channel.send(`${players[turn - 1].username} WINS!`);
+        if (win) message.channel.send(`${players[turn - 1].username} WINS!`);
     }
 
     async setControls (message, emojis) {
