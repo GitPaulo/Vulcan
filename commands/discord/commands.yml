@@ -81,4 +81,21 @@ permission:
   embed:
     color: 0xFFCE6D
     title: 'Permission System'
-    image: './assets/media/images/commands/Gif.gif'
+    image: './assets/media/images/commands/discord/Gif.gif'
+
+### New Command [Connect4] ###
+connect4:
+  aliases:
+  - 'connect'
+  - 'c4'
+  description: 'A connect4 game'
+  group: 3
+  examples:
+  - '!Connect4 [username]'
+  - '!Connect4 bot'
+  throttling: 5000
+  embed:
+    color: 0xFFCE6D
+    title: 'Connect4'
+    image: './assets/media/images/commands/discord/Gif.gif'
+

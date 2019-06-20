@@ -1,4 +1,5 @@
 // Initialisation
+require('./plugins/scripts/globals');
 xrequire('./plugins/scripts/coreEvents');
 xrequire('./plugins/scripts/defaults');
 
