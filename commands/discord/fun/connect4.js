@@ -34,8 +34,8 @@ class Connect4 extends DiscordCommand {
         } 
         await message.channel.send('```' + board.toString() + '```').then(async boardMessage => gameMessage = boardMessage);
         await this.setControls(gameMessage, emojiPlays);
-        await message.channel.send(`${players[turn-1].username}'s turn`).then(async m => turnMessage = m);
-        while(!win || exit) {
+        await message.channel.send(`<@${players[turn-1].id}>'s turn`).then(async m => turnMessage = m);
+        while(!win && !exit) {
             await gameMessage.awaitReactions(filter, { max: 1, time: 20000, errors: ['time'] })
                 .then(collected => {
                     let reaction = collected.first();
@@ -56,10 +56,10 @@ class Connect4 extends DiscordCommand {
                     return;
                 });
             if(!win) turn = (turn === 1 ? 2 : 1);
-            turnMessage.edit(`${players[turn-1].username}'s turn`);
+            turnMessage.edit(`<@${players[turn-1].id}>'s turn`);
         }
-        await message.channel.send('```' + board.toString() + '```')
-        if (win) message.channel.send(`${players[turn - 1].username} WINS!`);
+        await gameMessage.edit('```' + board.toString() + '```');
+        if (win) turnMessage.edit(`<@${players[turn - 1].id}> WINS!`);
     }
 
     async setControls (message, emojis) {
