@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![codebeat badge](https://codebeat.co/badges/f520f33c-38f6-4d1e-b0b9-49c6049a16a0)](https://codebeat.co/projects/github-com-gitpaulo-vulcan-master-6c3e8013-7c4e-4992-9d1d-a8fa4b77d934)
 
-**Vulcan** is a multi-purpose discord bot build with (discord.js)[https://github.com/discordjs/discord.js] created to administrate the discord server of our group of friends. This bot has been made in collaboration with [this man](https://github.com/CarlosGomes98).
+**Vulcan** is a multi-purpose discord bot build with [discord.js](https://github.com/discordjs/discord.js) created to administrate the discord server of our group of friends. This bot has been made in collaboration with [this man](https://github.com/CarlosGomes98).
   
 This repository is currently **under-development**.
 _All of the code present is subject to change_.
