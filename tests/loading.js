@@ -3,7 +3,7 @@ const { performance } = xrequire('perf_hooks');
 const logger          = xrequire('./managers/LogManager').getInstance();
 const Vulcan          = xrequire('./structures/classes/core/Vulcan');
 
-// Hack connect *dab*
+// Disable connect
 Vulcan.prototype.connect = () => console.log('[DISCORD CONNECT REMOVED DURING LOAD TESTING]');
 
 logger.plain(

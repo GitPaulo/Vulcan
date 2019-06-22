@@ -6,13 +6,13 @@ xrequire('./plugins/scripts/defaults');
 xrequire('./structures/prototypes')();
 xrequire('./structures/extensions')();
 
-// File requires
+// Modules
 const fs     = xrequire('fs');
 const yaml   = xrequire('js-yaml');
 const Vulcan = xrequire('./structures/classes/core/Vulcan');
 const logger = xrequire('./managers/LogManager').getInstance();
 
-// Load Data
+// Load [settings] data
 const configurationFile = fs.readFileSync(global.VulcanDefaults.files.configuration.location, 'utf8');
 const credentialsFile   = fs.readFileSync(global.VulcanDefaults.files.credentials.location, 'utf8');
 const permissionsFile   = fs.readFileSync(global.VulcanDefaults.files.permissions.location, 'utf8');
@@ -41,11 +41,13 @@ const vulcan = module.exports = new Vulcan(
     }
 );
 
-// Load vulcan (do NOT chain of instantiation)
-vulcan.loadCommands()
+// Load Vulcan [.connect must be last]
+// (do NOT chain of instantiation)
+vulcan.loadDatabase()
+      .loadCommands()
       .loadEvents()
-      .dbConnect()
-      .enablePermissions()
+      .loadPermissions()
+      .loadMusicManager()
       .loadCLI()
       .connect();
 

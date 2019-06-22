@@ -31,12 +31,9 @@ module.exports = () => {
         if (!discordClassFunction)
             throw Error(`Invalid extensions file name class (not part of Discord structures) for: ${file}`);
 
-        let properties = xrequire(path.join(__dirname, file));
-
-        for (let property in properties) {
-            let propertyValue = properties[property];
-            discordClassFunction.prototype[property] = propertyValue;
-        }
+        Discord.Structures.extend(discordClassName,
+            parent => xrequire(path.join(__dirname, file))
+        );
 
         logger.log(`Sucessfully loaded extensions file '${file}'. (took ${Math.round(performance.now() - t)}ms)`);
     });

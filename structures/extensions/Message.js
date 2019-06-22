@@ -1,10 +1,11 @@
 const DiscordCommand = xrequire('./structures/classes/core/DiscordCommand');
 
-module.exports = {
-    isDirectMessage: function () {
+module.exports = class _Message extends xrequire('discord.js').Message {
+    isDirectMessage () {
         return !this.guild;
-    },
-    setParsed: function (
+    }
+
+    setParsed (
         {
             command,
             raw,

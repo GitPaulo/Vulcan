@@ -4,6 +4,7 @@ const os                = xrequire('os');
 const fs                = xrequire('fs');
 const path              = xrequire('path');
 const mathematics       = xrequire('./plugins/libs/mathematics');
+const MusicManager      = xrequire('./managers/MusicManager');
 const DatabaseManager   = xrequire('./managers/DatabaseManager');
 const TerminalManager   = xrequire('./managers/TerminalManager');
 const PermissionManager = xrequire('./managers/PermissionManager');
@@ -57,9 +58,10 @@ class Vulcan extends Discord.Client {
         logger.plain(couldnt_have_forged_it_better_myself, 'red');
     }
 
-    /******************
-     * Chain methods. *
-     ******************/
+    /*****************
+     * Chain methods *
+     *****************/
+
     loadCLI () {
         this.terminalManager = new TerminalManager();
         this.terminalManager.loadCommands();
@@ -103,7 +105,7 @@ class Vulcan extends Discord.Client {
         return chainPrint('Discord & Vulcan Events', this);
     }
 
-    dbConnect () {
+    loadDatabase () {
         this.databaseManager = new DatabaseManager(this);
 
         const username = this.credentials.dbCredentials.username;
@@ -118,6 +120,24 @@ class Vulcan extends Discord.Client {
         this.databaseManager.connect(username, password);
 
         return chainPrint('Database Connection', this);
+    }
+
+    loadPermissions () {
+        // Dev ids => roots by default
+        for (let devID of this.configuration.devsID)
+            this.permissions.roots.push(devID);
+
+        this.permissionManager = new PermissionManager(this.permissions);
+        logger.debug('######### Permissions Enabled ##########');
+        logger.debug(this.permissionManager.permissions);
+
+        return chainPrint('Permission system', this);
+    }
+
+    loadMusicManager () {
+        this.musicManager = new MusicManager();
+
+        return chainPrint('Muisc Manager', this);
     }
 
     connect () {
@@ -137,18 +157,6 @@ class Vulcan extends Discord.Client {
         });
 
         return chainPrint('Discord Connection', this);
-    }
-
-    enablePermissions () {
-        // Dev ids => roots by default
-        for (let devID of this.configuration.devsID)
-            this.permissions.roots.push(devID);
-
-        this.permissionManager = new PermissionManager(this.permissions);
-        logger.debug('######### Permissions Enabled ##########');
-        logger.debug(this.permissionManager.permissions);
-
-        return chainPrint('Permission system', this);
     }
 
     /**********************
