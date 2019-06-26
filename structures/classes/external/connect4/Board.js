@@ -12,6 +12,28 @@ class Board {
         }
     }
 
+    static clone(board) {
+        let newBoard = new Board(board.getHeight(), board.getWidth());
+        newBoard.setState(board);
+        return newBoard;
+    }
+
+    setState(board) {
+        this.state = board.getState().map( (arr) => arr.slice() );
+    }
+
+    getState() {
+        return this.state;
+    }
+
+    getWidth () {
+        return this.width;
+    }
+
+    getHeight () {
+        return this.height;
+    }
+
     getPieceAt (height, width) {
         return this.state[height][width];
     }
@@ -19,6 +41,14 @@ class Board {
     isValidMove (column) {
         return column >= 0 && column < this.width 
         &&     this.state[this.height - 1][column] === 0;
+    }
+
+    getAllowedMoves () {
+        let allowedMoves = [];
+        for (let i = 0; i < this.width; i++) {
+            if (this.isValidMove(i)) allowedMoves.push(i);
+        }
+        return allowedMoves;
     }
 
     withinBoard (y, x) {
@@ -50,10 +80,19 @@ class Board {
             'diag-down'    : [-1, 1]
         }
 
+        if (this.checkDraw()) {
+            return {
+                "win"       : false,
+                "draw"      : true,
+                "direction" : "nan"
+            }
+        }
+
         for (let direction in increments) {
             if (1 + this.countInLine(increments[direction], y, x, player) + this.countInLine(increments[direction].map(x => -x), y, x, player) >= 4) {
                 return {
                     "win"       : true,
+                    "draw"      : false,
                     "direction" : direction
                 }
             }
@@ -61,8 +100,17 @@ class Board {
 
         return {
             "win"       : false,
+            "draw"      : false,
             "direction" : "nan"
         }
+    }
+
+    checkDraw () {
+        for (let i = 0; i < this.height; i++) {
+            if (this.state[this.height - 1][i] === 0)
+                return false;
+        }
+        return true;
     }
 
     countInLine (increment, y, x, player) {
@@ -93,7 +141,6 @@ class Board {
         }
 
         return result;
-
     }
 }
 
