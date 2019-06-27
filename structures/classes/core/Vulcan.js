@@ -3,8 +3,7 @@ const { performance }   = xrequire('perf_hooks');
 const os                = xrequire('os');
 const fs                = xrequire('fs');
 const path              = xrequire('path');
-const mathematics       = xrequire('./plugins/libs/mathematics');
-const MusicManager      = xrequire('./managers/MusicManager');
+const mathFunctions     = xrequire('./plugins/libs/mathFunctions');
 const DatabaseManager   = xrequire('./managers/DatabaseManager');
 const TerminalManager   = xrequire('./managers/TerminalManager');
 const PermissionManager = xrequire('./managers/PermissionManager');
@@ -92,14 +91,14 @@ class Vulcan extends Discord.Client {
             let t     = performance.now();
             let event = eventFile.replace(/\.js$/i, '');
             this.on(event, xrequire(path.join(discordjsEventsPath, eventFile)));
-            logger.log(`Finished loading (DiscordJS) event file '${eventFile}' (took ${mathematics.round(performance.now() - t, 2)}ms).`);
+            logger.log(`Finished loading (DiscordJS) event file '${eventFile}' (took ${mathFunctions.round(performance.now() - t, 2)}ms).`);
         }
 
         for (let eventFile of vulcanEvents) {
             let t     = performance.now();
             let event = eventFile.replace(/\.js$/i, '');
             this.on(event, xrequire(path.join(vulcanEventsPath, eventFile)));
-            logger.log(`Finished loading (Vulcan) event file '${eventFile}' (took ${mathematics.round(performance.now() - t, 2)}ms).`);
+            logger.log(`Finished loading (Vulcan) event file '${eventFile}' (took ${mathFunctions.round(performance.now() - t, 2)}ms).`);
         }
 
         return chainPrint('Discord & Vulcan Events', this);
@@ -132,12 +131,6 @@ class Vulcan extends Discord.Client {
         logger.debug(this.permissionManager.permissions);
 
         return chainPrint('Permission system', this);
-    }
-
-    loadMusicManager () {
-        this.musicManager = new MusicManager();
-
-        return chainPrint('Muisc Manager', this);
     }
 
     connect () {

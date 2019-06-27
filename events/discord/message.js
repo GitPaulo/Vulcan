@@ -36,12 +36,16 @@ module.exports = async message => {
         // Parse message and initialise message.command & parse data
         message.setParsed(await parser(message));
 
+        // Check if message was a valid command
+        if (!message.isCommand)
+            return message.client.emit('channelWarning', message.channel, `The command request \`${message.content}\` is invalid.`);
+
         // Call Appropriate message handler
         await (message.isDirectMessage() ? mdHandler : mgHandler)(message);
 
         // Register Recent Call for command [throttling]
         message.command.addCall(message.author);
     } catch (err) {
-        logger.error(err.message);
+        message.client.emit('channelError', err, message.channel);
     }
 };

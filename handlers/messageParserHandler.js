@@ -8,10 +8,10 @@ module.exports = async (message) => {
     let vulcan  = message.client;
     let cmdName = head.slice(1);
     let command = vulcan.commands.get(cmdName);
-    let argsStr = null;
+    let argsString = null;
 
     args.shift();
-    argsStr = args.join(' ').trim();
+    argsString = args.join(' ').trim();
 
     return {
         command,
@@ -21,6 +21,6 @@ module.exports = async (message) => {
         head,
         tail,
         cmdName,
-        argsStr
+        argsString
     };
 };

@@ -25,7 +25,7 @@ class Eval extends DiscordCommand {
     async execute (message) {
         let returnValue = '[NULL]';
         let t           = performance.now();
-        let code        = message.argsString;
+        let code        = message.parsed.argsString;
 
         const marker = '%EMPTY%';
         global.PrintHistory.push(marker);
@@ -70,7 +70,7 @@ class Eval extends DiscordCommand {
             {
                 replyeeMessage: message,
                 fields: [
-                    { name: 'Code',                  value: `\`${code}\`` },
+                    { name: 'Code',                  value: `\`\`\`js\n${code}\`\`\`` },
                     { name: 'Performance Benchmark', value: `${t}ms` },
                     { name: 'Expression Return',     value: `\`${returnValue}\`` },
                     { name: 'Stream Output',         value: `\`${output.join('\n')}\`` }

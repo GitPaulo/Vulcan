@@ -69,7 +69,7 @@ const LogManager = (function () {
 
         let store = function (logType, str) {
             if (!logTypes[logType])
-                throw new Error(`Log type '${logType}' not valid for 'write' function!`);
+                throw Error(`Log type '${logType}' not valid for 'write' function!`);
 
             const blueprints = blueprintsFromLogType(logType);
 
@@ -102,7 +102,7 @@ const LogManager = (function () {
         let write = function (logType, ...args) {
             let colorFunc = logTypes[logType];
             if (!colorFunc)
-                throw new Error(`Log type '${logType}' not valid for 'write' function!`);
+                throw Error(`Log type '${logType}' not valid for 'write' function!`);
 
             // Convert all arguments to proper strings
             let buffer = [];
@@ -142,7 +142,7 @@ const LogManager = (function () {
             removeModifier: function (modID) {
                 let index = modifiers.indexOf(modID);
                 if (index < -1)
-                    throw new Error(`Modifier '${modID}' not found in exisiting modifiers!`);
+                    throw Error(`Modifier '${modID}' not found in exisiting modifiers!`);
                 modifiers.splice(index, 1);
             },
             addModifier: function (modID) {
@@ -151,7 +151,7 @@ const LogManager = (function () {
             },
             setModifiers: function (mods) {
                 if (!Array.isArray(mods))
-                    throw new Error('Expected log modifiers in array format!');
+                    throw Error('Expected log modifiers in array format!');
                 modifiers = mods;
             },
             clearModifiers: function () {
@@ -164,7 +164,7 @@ const LogManager = (function () {
             plain: function (text, color = 'white') {
                 let colorFunc = chalk[color];
                 if (!colorFunc)
-                    throw new Error(`Invalid color '${color}' for 'logger.plain'!`);
+                    throw Error(`Invalid color '${color}' for 'logger.plain'!`);
 
                 console.log(
                     applyModifiers(

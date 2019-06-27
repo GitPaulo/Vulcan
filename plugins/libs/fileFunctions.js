@@ -4,7 +4,7 @@ const path = xrequire('path');
 
 const fileFunctions = module.exports = {};
 
-fileFunctions.allDirFiles = function (dir, fileTypes = '.js') {
+fileFunctions.allDirFiles = (dir, fileTypes = '.js') => {
     var filesToReturn = [];
 
     function walkDir (currentPath) {

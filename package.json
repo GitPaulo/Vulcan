@@ -38,6 +38,9 @@
         "js-yaml": "^3.13.1",
         "mongoose": "^5.6.0",
         "opusscript": "0.0.6",
+        "request": "^2.88.0",
+        "request-promise": "^4.2.4",
+        "ytdl-core": "^0.29.2",
         "ytdl-core-discord": "^1.0.3"
     },
     "devDependencies": {

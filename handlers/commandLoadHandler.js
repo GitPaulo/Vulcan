@@ -2,7 +2,7 @@ const { performance } = xrequire('perf_hooks');
 const path            = xrequire('path');
 const fs              = xrequire('fs');
 const yaml            = xrequire('js-yaml');
-const mathematics     = xrequire('./plugins/libs/mathematics');
+const mathFunctions     = xrequire('./plugins/libs/mathFunctions');
 const fileFunctions   = xrequire('./plugins/libs/fileFunctions');
 const CommandMap      = xrequire('./structures/classes/core/CommandMap');
 const logger          = xrequire('./managers/LogManager').getInstance();
@@ -29,12 +29,12 @@ module.exports = (folderPath) => {
             commandDefinition.id = commandID;
 
             if (!commandDefinition)
-                throw new Error(`Command definition not found for \nID: ${commandID}\nPATH: ${fullPath}`);
+                throw Error(`Command definition not found for \nID: ${commandID}\nPATH: ${fullPath}`);
 
             let command = new CommandClass(commandDefinition);
             commands.addCommand(command);
 
-            logger.log(`Loaded (${folderPath}) command '${command.id}' from ${fileName} (took ${mathematics.round(performance.now() - t, 2)}ms)`);
+            logger.log(`Loaded (${commandDefinition.type}) command '${command.id}' from ${fileName} (took ${mathFunctions.round(performance.now() - t, 2)}ms)`);
         } catch (err) {
             logger.error(
                 `Command Loader Error => ${err.message}\n` +

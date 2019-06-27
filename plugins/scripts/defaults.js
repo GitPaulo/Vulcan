@@ -73,7 +73,7 @@ global.VulcanDefaults = {
 
         // Check folder
         if (!VulcanDefaults.folders.includes(folderName)) {
-            throw new Error('Default folders are not valid!');
+            throw Error('Default folders are not valid!');
         }
 
         // Check files

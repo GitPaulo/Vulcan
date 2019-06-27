@@ -23,11 +23,11 @@ class Command {
     }
 
     validate () {
-        throw new Error('This method has not been implemented!');
+        throw Error('This method has not been implemented!');
     }
 
     execute () {
-        throw new Error('This method has not been implemented!');
+        throw Error('This method has not been implemented!');
     }
 
     addCall (id) {
@@ -41,7 +41,7 @@ class Command {
         );
     }
 
-    getCall (id) {
+    resolveCall (id) {
         return this.callMap.get(id);
     }
 
@@ -50,7 +50,7 @@ class Command {
     }
 
     underThrottling (id) {
-        return (Date.now() - (this.getCall(id) || 0)) < this.throttling;
+        return (Date.now() - (this.resolveCall(id) || 0)) < this.throttling;
     }
 }
 

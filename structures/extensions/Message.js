@@ -14,7 +14,7 @@ module.exports = class _Message extends xrequire('discord.js').Message {
             head,
             tail,
             cmdName,
-            argsStr
+            argsString
         }
     ) {
         this.isCommand  = (command instanceof DiscordCommand);
@@ -26,7 +26,7 @@ module.exports = class _Message extends xrequire('discord.js').Message {
             head,
             tail,
             cmdName,
-            argsStr
+            argsString
         };
     }
 };

@@ -1,6 +1,6 @@
 const messageEmbeds = module.exports = {};
 
-messageEmbeds.reply = function (
+messageEmbeds.reply = (
     {
         replyeeMessage,
         imgPath     = replyeeMessage.command.embed.image,
@@ -30,7 +30,7 @@ messageEmbeds.reply = function (
             }
         ]
     }
-) {
+) => {
     return {
         embed: {
             color,
@@ -47,7 +47,7 @@ messageEmbeds.reply = function (
     };
 };
 
-messageEmbeds.error = function (
+messageEmbeds.error = (
     {
         title       = `Error`,
         description = `An error has been detected by Vulcan.`,
@@ -62,7 +62,7 @@ messageEmbeds.error = function (
         fields      = [],
         url         = ''
     }
-) {
+) => {
     return {
         embed: {
             title,
@@ -83,7 +83,7 @@ messageEmbeds.error = function (
     };
 };
 
-messageEmbeds.warning = function (
+messageEmbeds.warning = (
     {
         title       = `Warning`,
         description = 'Vulcan has detected unexpected behaviour.',
@@ -98,7 +98,7 @@ messageEmbeds.warning = function (
         fields      = [],
         url         = ''
     }
-) {
+) => {
     return {
         embed: {
             title,
@@ -119,7 +119,7 @@ messageEmbeds.warning = function (
     };
 };
 
-messageEmbeds.info = function (
+messageEmbeds.info = (
     {
         title       = `Information`,
         description = 'Vulcan has something to say?',
@@ -134,7 +134,7 @@ messageEmbeds.info = function (
         fields      = [],
         url         = ''
     }
-) {
+) => {
     return {
         embed: {
             title,

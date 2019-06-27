@@ -47,7 +47,6 @@ vulcan.loadDatabase()
       .loadCommands()
       .loadEvents()
       .loadPermissions()
-      .loadMusicManager()
       .loadCLI()
       .connect();
 

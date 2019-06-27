@@ -10,7 +10,7 @@ class CommandMap extends Map {
 
         for (let alias of allAlias) {
             if (this.get(alias))
-                throw new Error(`Command alias '${alias}' of command '${command.id}' has already been declared in the command map!`);
+                throw Error(`Command alias '${alias}' of command '${command.id}' has already been declared in the command map!`);
             this.set(alias, command);
         }
     }

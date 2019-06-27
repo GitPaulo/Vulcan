@@ -11,7 +11,7 @@ class Git extends DiscordCommand {
     /* TODO: IMPROVE ALL CODE HERE - THIS WAS JUST A TEST */
     // eslint-disable-next-line no-unused-vars
     async execute (message) {
-        let cmd            = message.args[0];
+        let cmd            = message.parsed.args[0];
         let channel        = message.channel;
         let replyEmbedData = {
             replyeeMessage: message,
@@ -19,7 +19,7 @@ class Git extends DiscordCommand {
             fields: [
                 {
                     name: 'Arguments',
-                    value: message.args.join(', ')
+                    value: message.parsed.args.join(', ')
                 },
                 {
                     name: 'Output',

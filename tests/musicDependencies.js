@@ -1,7 +1,7 @@
-const pjson           = xrequire('./package.json');
-const ytdl            = xrequire('ytdl-core-discord');
-const Vulcan          = xrequire('./structures/classes/core/Vulcan');
-const logger          = xrequire('./managers/LogManager').getInstance();
+const pjson  = xrequire('./package.json');
+const ytdl   = xrequire('ytdl-core-discord');
+const Vulcan = xrequire('./structures/classes/core/Vulcan');
+const logger = xrequire('./managers/LogManager').getInstance();
 
 // Disable unwanted load options
 [
@@ -41,3 +41,5 @@ vulcan.on('ready', () => {
         });
     });
 });
+
+process.exit(0);

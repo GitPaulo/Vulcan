@@ -4,7 +4,7 @@ const fs               = xrequire('fs');
 const path             = xrequire('path');
 const http             = xrequire('http');
 const messageEmbeds    = xrequire('./plugins/libs/messageEmbeds');
-const stringAlgorithms = xrequire('./plugins/libs/stringAlgorithms');
+const stringFunctions = xrequire('./plugins/libs/stringFunctions');
 const logger           = xrequire('./managers/LogManager').getInstance();
 const DiscordCommand   = xrequire('./structures/classes/core/DiscordCommand');
 
@@ -27,7 +27,7 @@ class Gif extends DiscordCommand {
     }
 
     async execute (message) {
-        let cmd        = message.args[0];
+        let cmd        = message.parsed.args[0];
         let channel    = message.channel;
         let replyEmbedData = {
             replyeeMessage: message,
@@ -45,7 +45,7 @@ class Gif extends DiscordCommand {
         };
 
         let firstReply = await channel.send(messageEmbeds.reply(replyEmbedData));
-        let numArgs    = message.args.length;
+        let numArgs    = message.parsed.args.length;
 
         switch (cmd) {
             case 'store':
@@ -53,19 +53,19 @@ class Gif extends DiscordCommand {
             case 'put':
                 if (numArgs < 3)
                     return message.client.emit('invalidCommandCall', `Expected 3 arguments got ${numArgs}.`, message);
-                if (stringAlgorithms.isURL(message.args[2])) {
-                    this.storeImageFromURL(message.args[1], message.args[2], async (result) => {
+                if (stringFunctions.isURL(message.parsed.args[2])) {
+                    this.storeImageFromURL(message.parsed.args[1], message.parsed.args[2], async (result) => {
                         replyEmbedData.fields[1].value = result;
                         firstReply.edit(messageEmbeds.reply(replyEmbedData));
                     });
                 } else { // its file upload
                     let messageWithImage;
                     try {
-                        messageWithImage = await message.channel.fetchMessage(String(message.args[2]));
+                        messageWithImage = await message.channel.fetchMessage(String(message.parsed.args[2]));
                     } catch (err) {
-                        return message.client.emit('invalidCommandCall', 'The message with id: **' + message.args[2] + '** was not found in the list of messages from this channel.', message);
+                        return message.client.emit('invalidCommandCall', 'The message with id: **' + message.parsed.args[2] + '** was not found in the list of messages from this channel.', message);
                     }
-                    this.storeImageFromMessage(message.args[1], messageWithImage, async (result) => {
+                    this.storeImageFromMessage(message.parsed.args[1], messageWithImage, async (result) => {
                         replyEmbedData.fields[1].value = result;
                         firstReply.edit(messageEmbeds.reply(replyEmbedData));
                     });
@@ -75,7 +75,7 @@ class Gif extends DiscordCommand {
             case 'fetch':
                 if (numArgs < 3)
                     return message.client.emit('invalidCommandCall', `Expected 2 arguments got ${numArgs}.`, message);
-                this.fetchImage(message.args[1], async (result) => {
+                this.fetchImage(message.parsed.args[1], async (result) => {
                     replyEmbedData.fields[1].value = result;
                     firstReply.edit(messageEmbeds.reply(replyEmbedData));
                     await message.channel.send({
@@ -157,7 +157,7 @@ class Gif extends DiscordCommand {
             let hvalue   = 0;
 
             files.forEach(function (file) {
-                let cvalue = stringAlgorithms.levenshteinSimilarity(keyword, file);
+                let cvalue = stringFunctions.levenshteinSimilarity(keyword, file);
                 if (cvalue > hvalue) {
                     filePath = file;
                     hvalue   = cvalue;

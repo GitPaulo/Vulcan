@@ -1,6 +1,6 @@
-const stringAlgorithms = module.exports = {};
+const stringFunctions = module.exports = {};
 
-stringAlgorithms.isURL = function (str) {
+stringFunctions.isURL = (str) => {
     var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
         '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
         '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
@@ -10,7 +10,7 @@ stringAlgorithms.isURL = function (str) {
     return pattern.test(str);
 };
 
-stringAlgorithms.editDistance = function (s1, s2) {
+stringFunctions.editDistance = (s1, s2) => {
     s1 = s1.toLowerCase();
     s2 = s2.toLowerCase();
 
@@ -40,7 +40,7 @@ stringAlgorithms.editDistance = function (s1, s2) {
     return costs[s2.length];
 };
 
-stringAlgorithms.levenshteinSimilarity = function (s1, s2) {
+stringFunctions.levenshteinSimilarity = (s1, s2) => {
     var longer = s1;
     var shorter = s2;
 
@@ -55,5 +55,5 @@ stringAlgorithms.levenshteinSimilarity = function (s1, s2) {
         return 1.0;
     }
 
-    return (longerLength - stringAlgorithms.editDistance(longer, shorter)) / parseFloat(longerLength);
+    return (longerLength - stringFunctions.editDistance(longer, shorter)) / parseFloat(longerLength);
 };
