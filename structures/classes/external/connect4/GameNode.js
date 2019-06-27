@@ -31,6 +31,13 @@ class GameNode {
         this.expanded = true;
     }
 
+    getWinningPlay () {
+        if(!this.expanded) this.expand();
+        for (let child of this.children) {
+            if (child.winner > 0) return child.getOriginatingPlay();
+        }
+        return -1;
+    }
     
     isExpanded () {
         return this.expanded;
@@ -61,6 +68,10 @@ class GameNode {
     getOtherPlayer () {
         return this.player === 1 ? 2 : 1;
     }
+
+    getPlayer () {
+        return this.player;
+    }
     
     getChildren () {
         return this.children;
@@ -84,6 +95,10 @@ class GameNode {
 
     getPlayoutCount () {
         return this.playouts;
+    }
+
+    getWinner () {
+        return winner;
     }
 
     getOriginatingPlay () {

@@ -6,8 +6,8 @@ const numberEmojiSuffix = '%E2%83%A3';
 class Connect4 extends DiscordCommand {
     constructor (commandDefinition) {
         super(commandDefinition);
-        this.boardWidth = 6;
-        this.boardHeight = 7;
+        this.boardWidth = 7;
+        this.boardHeight = 6;
         this.emojiPlays = []; 
         for (let i = 0; i < this.boardWidth; i++) {
             this.emojiPlays.push(i + numberEmojiSuffix);

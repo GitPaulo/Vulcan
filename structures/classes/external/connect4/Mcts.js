@@ -4,6 +4,8 @@ const C = Math.sqrt(2);
     
 function getPlay (board, player) {
     let node = new gameNode(board, player);
+    let winningPlay = node.getWinningPlay();
+    if (winningPlay >= 0) return winningPlay;
     mcts(node, player);
     let bestNode = node.getBestChild();
     return bestNode.getOriginatingPlay();
@@ -35,6 +37,9 @@ function simulate (node, player) {
 function playout (node, player) {
     let currentNode = node;
     while (!currentNode.isTerminal()) {
+        if (currentNode.getWinningPlay() >= 0) {
+            return currentNode.getPlayer() === player ? 1 : -1;
+        }
         currentNode = currentNode.getRandomChild();
     }
     return currentNode.getPayoff(player);

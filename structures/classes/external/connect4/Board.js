@@ -12,17 +12,17 @@ class Board {
         }
     }
 
-    static clone(board) {
+    static clone (board) {
         let newBoard = new Board(board.getHeight(), board.getWidth());
         newBoard.setState(board);
         return newBoard;
     }
 
-    setState(board) {
+    setState (board) {
         this.state = board.getState().map( (arr) => arr.slice() );
     }
 
-    getState() {
+    getState () {
         return this.state;
     }
 
