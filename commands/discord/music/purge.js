@@ -17,8 +17,8 @@ class Purge extends DiscordCommand {
                 replyeeMessage: message,
                 title: 'Purged Music Player',
                 fields: [
-                    { name: 'Is Playing?', value: musicController.playing },
-                    { name: 'Queue Size',  value: musicController.queue.length }
+                    { name: 'Is Playing?', value: musicController.playing || 'No' },
+                    { name: 'Queue Size',  value: musicController.queue.length || '0' }
                 ]
             }
         ));

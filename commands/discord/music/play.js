@@ -23,7 +23,7 @@ class Play extends DiscordCommand {
             await musicController.joinVoice(message.member.voice.channel);
 
         // Queue song
-        await musicController.enqueue(request, message.channel, message.author);
+        await musicController.loadItem(request, message.channel, message.author);
         await message.channel.send(messageEmbeds.reply(
             {
                 replyeeMessage: message,

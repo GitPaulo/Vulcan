@@ -8,10 +8,10 @@ class Repeat extends DiscordCommand {
     }
 
     async execute (message) {
-        let bool = Boolean(message.parse.args[0]);
+        let bool = Boolean(message.parsed.args[0]);
 
         const musicController = message.guild.musicController;
-        musicController.setRepeat(bool);
+        musicController.setRepeatSong(bool);
 
         await message.channel.send(messageEmbeds.reply(
             {

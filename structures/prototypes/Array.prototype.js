@@ -1,7 +1,10 @@
 module.exports = {
-    difference: function (a) {
+    difference: function (array) {
         return this.filter(function (i) {
-            return a.indexOf(i) < 0;
+            return array.indexOf(i) < 0;
         });
+    },
+    shuffle: function () {
+        this.sort(() => Math.random() - 0.5);
     }
 };

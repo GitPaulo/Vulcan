@@ -1,13 +1,24 @@
 const stringFunctions = module.exports = {};
 
 stringFunctions.isURL = (str) => {
-    var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+    var pattern = new RegExp('^(https?:\\/\\/)?'            + // protocol
         '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-        '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+        '((\\d{1,3}\\.){3}\\d{1,3}))'                       + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'                   + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?'                          + // query string
+        '(\\#[-a-z\\d_]*)?$', 'i');                         // fragment locator
     return pattern.test(str);
+};
+
+stringFunctions.isYoutubePlaylist = (str) => {
+    var regExp = /^.*(youtu.be\/|list=)([^#\&\?]*).*/;
+    var match  = str.match(regExp);
+
+    if (match && match[2]) {
+        return match[2];
+    }
+
+    return null;
 };
 
 stringFunctions.editDistance = (s1, s2) => {

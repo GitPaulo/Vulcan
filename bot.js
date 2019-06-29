@@ -6,16 +6,17 @@ xrequire('./plugins/scripts/defaults');
 xrequire('./structures/prototypes')();
 xrequire('./structures/extensions')();
 
-// Modules
+// Required modules
 const fs     = xrequire('fs');
 const yaml   = xrequire('js-yaml');
 const Vulcan = xrequire('./structures/classes/core/Vulcan');
 const logger = xrequire('./managers/LogManager').getInstance();
 
-// Load [settings] data
-const configurationFile = fs.readFileSync(global.VulcanDefaults.files.configuration.location, 'utf8');
-const credentialsFile   = fs.readFileSync(global.VulcanDefaults.files.credentials.location, 'utf8');
-const permissionsFile   = fs.readFileSync(global.VulcanDefaults.files.permissions.location, 'utf8');
+// Load settings & configuration data
+const defautlFiles      = global.VulcanDefaults.files;
+const configurationFile = fs.readFileSync(defautlFiles.configuration.location, 'utf8');
+const credentialsFile   = fs.readFileSync(defautlFiles.credentials.location, 'utf8');
+const permissionsFile   = fs.readFileSync(defautlFiles.permissions.location, 'utf8');
 const configuration     = yaml.safeLoad(configurationFile);
 const credentials       = yaml.safeLoad(credentialsFile);
 const permissions       = yaml.safeLoad(permissionsFile);
@@ -41,14 +42,13 @@ const vulcan = module.exports = new Vulcan(
     }
 );
 
-// Load Vulcan [.connect must be last]
-// (do NOT chain of instantiation)
+// Load Vulcan (do NOT chain of instantiation)
 vulcan.loadDatabase()
       .loadCommands()
       .loadEvents()
       .loadPermissions()
       .loadCLI()
-      .connect();
+      .connect(); // [must be last or omitted]
 
 // Log
 logger.log(`Vulcan start-up has completed! Time taken: ${vulcan.uptime()}`);

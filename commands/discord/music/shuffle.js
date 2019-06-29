@@ -1,7 +1,7 @@
 const messageEmbeds  = xrequire('./plugins/libs/messageEmbeds');
 const DiscordCommand = xrequire('./structures/classes/core/DiscordCommand');
 
-class Autoplay extends DiscordCommand {
+class Shuffle extends DiscordCommand {
     // eslint-disable-next-line no-unused-vars
     async validate (message) {
         return true; // if true execute() will run
@@ -11,14 +11,14 @@ class Autoplay extends DiscordCommand {
         let bool = Boolean(message.parsed.args[0]);
 
         const musicController = message.guild.musicController;
-        musicController.setAutoplay(bool);
+        musicController.setShuffle(bool);
 
         await message.channel.send(messageEmbeds.reply(
             {
                 replyeeMessage: message,
                 fields: [
                     {
-                        name: 'Autoplay Status',
+                        name: 'Shuffle Status',
                         value: bool.toString()
                     }
                 ]
@@ -27,4 +27,4 @@ class Autoplay extends DiscordCommand {
     }
 }
 
-module.exports = Autoplay;
+module.exports = Shuffle;

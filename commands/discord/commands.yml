@@ -213,6 +213,19 @@ resume:
     color: 0xFFA500
     title: 'Resume'
     image: './assets/media/images/commands/discord/Music.gif'
+### New Command [.commands/discord/music/shuffle.js] ###
+shuffle:
+  aliases:
+  - 'musicshuffle'
+  description: 'Shuffles queue.'
+  group: 3
+  examples:
+  - '!shuffle [boolean]'
+  throttling: 1000
+  embed:
+    color: 0xFFA500
+    title: 'Shuffle'
+    image: './assets/media/images/commands/discord/Music.gif'
 ### New Command [.commands/discord/music/skip.js] ###
 skip:
   aliases:

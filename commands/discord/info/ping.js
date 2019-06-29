@@ -25,7 +25,10 @@ class Ping extends DiscordCommand {
             replyeeMessage: message,
             title: 'Pong!',
             fields: [
-                { name: 'API Latency',    value: `${preMessage.createdTimestamp - message.createdTimestamp}ms` }
+                {
+                    name: 'API Latency',
+                    value: `${preMessage.createdTimestamp - message.createdTimestamp}ms`
+                }
             ]
         });
 
