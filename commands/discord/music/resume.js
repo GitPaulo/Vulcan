@@ -11,8 +11,9 @@ class Resume extends DiscordCommand {
     async execute (message) {
         const musicController = message.guild.musicController;
 
-        if (musicController.playing)
+        if (musicController.playing) {
             return message.client.emit('channelInfo', message.channel, 'Music is already playing. Therefore cannot resume.');
+        }
 
         musicController.resume();
 

@@ -13,23 +13,27 @@ module.exports = () => {
     let files = fs.readdirSync(__dirname);
 
     files.forEach(function (file) {
-        if (file === 'index.js')
+        if (file === 'index.js') {
             return;
+        }
 
         let t     = performance.now();
         let parts = file.split('.');
 
-        if (parts < 2 || parts > 2)
+        if (parts < 2 || parts > 2) {
             throw Error(`Invalid extensions file name format for: ${file}`);
+        }
 
-        if (parts[1] !== 'js')
+        if (parts[1] !== 'js') {
             throw Error(`Invalid extensions file extenstion for: ${file}`);
+        }
 
         let discordClassName     = parts[0];
         let discordClassFunction = Discord[discordClassName];
 
-        if (!discordClassFunction)
+        if (!discordClassFunction) {
             throw Error(`Invalid extensions file name class (not part of Discord structures) for: ${file}`);
+        }
 
         Discord.Structures.extend(discordClassName,
             parent => xrequire(path.join(__dirname, file))

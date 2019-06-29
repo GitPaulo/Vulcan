@@ -8,14 +8,17 @@ class DiscordCommand extends Command {
             commandDefinition.throttling
         );
 
-        if (typeof commandDefinition.type !== 'string')
-            throw new TypeError(`Essential command 'type' property is undefined.`);
+        if (typeof commandDefinition.type !== 'string') {
+            throw TypeError(`Essential command 'type' property is undefined.`);
+        }
 
-        if (!commandDefinition.group)
-            throw new TypeError(`Essential command 'group' property is undefined!`);
+        if (!commandDefinition.group) {
+            throw TypeError(`Essential command 'group' property is undefined!`);
+        }
 
-        if (typeof commandDefinition.embed !== 'object')
-            throw new TypeError(`Essential command 'embed' property is undefined!`);
+        if (typeof commandDefinition.embed !== 'object') {
+            throw TypeError(`Essential command 'embed' property is undefined!`);
+        }
 
         this.type  = commandDefinition.type;
         this.group = commandDefinition.group;

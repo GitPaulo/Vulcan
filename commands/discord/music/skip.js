@@ -13,8 +13,9 @@ class Skip extends DiscordCommand {
 
         let force = Boolean(message.parsed.args[0]);
 
-        if (musicController.isQueueEmpty())
+        if (musicController.isQueueEmpty()) {
             return message.client.emit('channelInfo', message.channel, 'Cannot skip because queue is empty!');
+        }
 
         let lsName = Discord.Util.escapeMarkdown(musicController.loadedSong.name);
         musicController.skip(force);

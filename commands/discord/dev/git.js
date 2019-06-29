@@ -32,10 +32,11 @@ class Git extends DiscordCommand {
         // let numArgs    = message.args.length;
 
         // kinda scuffed but
-        if (!this.git)
+        if (!this.git) {
             this.git = new GithubAPI({
                 token: message.client.credentials.githubOAuth
             });
+        }
 
         // Currently only commands about vulcan repo
         let vulcanRepo = this.git.getRepo('GitPaulo', 'Vulcan');

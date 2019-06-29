@@ -16,20 +16,24 @@ module.exports = async message => {
         );
 
         // Filter contents of message
-        if (await filter(message))
+        if (await filter(message)) {
             return;
+        }
 
         // Prohibit parsing of self messages or from other bots
-        if (message.author.bot)
+        if (message.author.bot) {
             return;
+        }
 
         // Validate prefix [FIX] + random console outputs
-        if (message.content.match(new RegExp(`^(${vulcan.configuration.prefixes.join('|')})`, 'i')) === null)
+        if (message.content.match(new RegExp(`^(${vulcan.configuration.prefixes.join('|')})`, 'i')) === null) {
             return;
+        }
 
         // Check if Vulcan can respond
-        if (message.channel.type === 'text' && !message.guild.me.hasPermission('SEND_MESSAGES'))
+        if (message.channel.type === 'text' && !message.guild.me.hasPermission('SEND_MESSAGES')) {
             return;
+        }
 
         /* if (author is blacklisted){} TODO */
 
@@ -37,8 +41,9 @@ module.exports = async message => {
         message.setParsed(await parser(message));
 
         // Check if message was a valid command
-        if (!message.isCommand)
+        if (!message.isCommand) {
             return message.client.emit('channelWarning', message.channel, `The command request \`${message.content}\` is invalid.`);
+        }
 
         // Call Appropriate message handler
         await (message.isDirectMessage() ? mdHandler : mgHandler)(message);

@@ -28,8 +28,9 @@ module.exports = (folderPath) => {
             commandDefinition.type = path.dirname(fullPath).split(path.sep).slice(-1).pop(); // add type (folder name)
             commandDefinition.id = commandID;
 
-            if (!commandDefinition)
+            if (!commandDefinition) {
                 throw Error(`Command definition not found for \nID: ${commandID}\nPATH: ${fullPath}`);
+            }
 
             let command = new CommandClass(commandDefinition);
             commands.addCommand(command);

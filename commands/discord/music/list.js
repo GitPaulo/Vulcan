@@ -10,8 +10,9 @@ class List extends DiscordCommand {
     async execute (message) {
         const musicController = message.guild.musicController;
 
-        if (musicController.isQueueEmpty())
+        if (musicController.isQueueEmpty()) {
             return message.client.emit('channelInfo', message.channel, 'Music player queue is empty!');
+        }
 
         await message.channel.send(messageEmbeds.reply(
             {

@@ -51,8 +51,9 @@ class Gif extends DiscordCommand {
             case 'store':
             case 'upload':
             case 'put':
-                if (numArgs < 3)
+                if (numArgs < 3) {
                     return message.client.emit('invalidCommandCall', `Expected 3 arguments got ${numArgs}.`, message);
+                }
                 if (stringFunctions.isURL(message.parsed.args[2])) {
                     this.storeImageFromURL(message.parsed.args[1], message.parsed.args[2], async (result) => {
                         replyEmbedData.fields[1].value = result;
@@ -73,8 +74,9 @@ class Gif extends DiscordCommand {
                 break;
             case 'get':
             case 'fetch':
-                if (numArgs < 3)
+                if (numArgs < 3) {
                     return message.client.emit('invalidCommandCall', `Expected 2 arguments got ${numArgs}.`, message);
+                }
                 this.fetchImage(message.parsed.args[1], async (result) => {
                     replyEmbedData.fields[1].value = result;
                     firstReply.edit(messageEmbeds.reply(replyEmbedData));
@@ -86,8 +88,9 @@ class Gif extends DiscordCommand {
             case 'list':
             case 'all':
                 this.getImages(async (err, files) => {
-                    if (err)
+                    if (err) {
                         return logger.error(err);
+                    }
                     replyEmbedData.fields[1].value = files.join(', ');
                     firstReply.edit(messageEmbeds.reply(replyEmbedData));
                 });
@@ -109,8 +112,9 @@ class Gif extends DiscordCommand {
             this.storeImageFromURL(fileName + (i > 0 ? i++ : i++, ''), attachment.proxyURL);
         });
 
-        if (callback)
+        if (callback) {
             callback('completed!');
+        }
     }
 
     storeImageFromURL (fileName, url, callback) {
@@ -119,8 +123,9 @@ class Gif extends DiscordCommand {
 
         let extension = url.substr(url.lastIndexOf('.'));
         if (!this.allowedExtensions.includes(extension)) {
-            if (callback)
+            if (callback) {
                 callback('Invalid extension!');
+            }
             return;
         }
 
@@ -132,25 +137,29 @@ class Gif extends DiscordCommand {
                 response.pipe(file);
                 file.on('finish', function () {
                     file.close();
-                    if (callback)
+                    if (callback) {
                         callback('File stored!');
+                    }
                 });
             }).on('error', function (err) { // Handle errors
                 fs.unlink(this.folderPath); // Delete the file async. (But we don't check the result)
-                if (callback)
+                if (callback) {
                     callback(err.message);
+                }
             });
         } catch (err) {
-            if (callback)
+            if (callback) {
                 callback(err.message);
+            }
         }
     }
 
     fetchImage (keyword, callback) {
         fs.readdir(this.folderPath, (err, files) => {
             if (err) {
-                if (callback)
+                if (callback) {
                     callback(err.message);
+                }
             }
 
             let filePath = 'N/A';
@@ -164,8 +173,9 @@ class Gif extends DiscordCommand {
                 }
             });
 
-            if (callback)
+            if (callback) {
                 callback(path.join(this.folderPath, filePath));
+            }
         });
     }
 }

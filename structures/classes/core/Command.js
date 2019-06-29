@@ -6,14 +6,17 @@ class Command {
         aliases     = [],
         throttling  = 500
     ) {
-        if (typeof id !== 'string')
-            throw new TypeError(`Command must have valid String id.`);
+        if (typeof id !== 'string') {
+            throw TypeError(`Command must have valid String id.`);
+        }
 
-        if (!Array.isArray(aliases))
-            throw new TypeError(`Command ${id} must have an array type for aliases.`);
+        if (!Array.isArray(aliases)) {
+            throw TypeError(`Command ${id} must have an array type for aliases.`);
+        }
 
-        if (typeof throttling !== 'number')
-            throw new TypeError(`Command ${id} must have an number type for throttling.`);
+        if (typeof throttling !== 'number') {
+            throw TypeError(`Command ${id} must have an number type for throttling.`);
+        }
 
         this.id         = id;
         this.aliases    = aliases;

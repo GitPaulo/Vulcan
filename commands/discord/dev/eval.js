@@ -14,8 +14,9 @@ class Eval extends DiscordCommand {
     }
 
     historySave (data) {
-        if (this.history.length > this.historyMax)
+        if (this.history.length > this.historyMax) {
             this.history.shift();
+        }
         this.history.push(data);
     }
 
@@ -55,8 +56,9 @@ class Eval extends DiscordCommand {
 
         t = Math.round(performance.now() - t, 2);
 
-        if (returnValue === outputValue)
+        if (returnValue === outputValue) {
             returnValue = 'undefined';
+        }
 
         this.historySave({
             authorid: message.author.id,

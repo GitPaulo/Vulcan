@@ -110,11 +110,13 @@ class Vulcan extends Discord.Client {
         const username = this.credentials.dbCredentials.username;
         const password = this.credentials.dbCredentials.password;
 
-        if (username === global.VulcanDefaults.files.credentials.data.dbCredentials.username)
+        if (username === global.VulcanDefaults.files.credentials.data.dbCredentials.username) {
             logger.warning(`Database username (${username}) has matched the default.\n\tThis is likely to be wrong and is unrecommended.`);
+        }
 
-        if (password === global.VulcanDefaults.files.credentials.data.dbCredentials.password)
+        if (password === global.VulcanDefaults.files.credentials.data.dbCredentials.password) {
             logger.warning(`Database password (${'*'.repeat(password.length)}) has matched the default.\n\tThis is likely to be wrong and is unrecommended.`);
+        }
 
         this.databaseManager.connect(username, password);
 
@@ -123,8 +125,9 @@ class Vulcan extends Discord.Client {
 
     loadPermissions () {
         // Dev ids => roots by default
-        for (let devID of this.configuration.devsID)
+        for (let devID of this.configuration.devsID) {
             this.permissions.roots.push(devID);
+        }
 
         this.permissionManager = new PermissionManager(this.permissions);
         logger.debug('######### Permissions Enabled ##########');

@@ -25,8 +25,9 @@ class TerminalManager {
     onCTRLC (vulcan) {
         this.log('Terminal: <ctrl>-C detected!');
         this.cli.question('Are you sure you want to exit the CLI? [yes/no] ', (answer) => {
-            if (answer.match(/^y(es)?$/i))
+            if (answer.match(/^y(es)?$/i)) {
                 this.stop();
+            }
         });
     }
 

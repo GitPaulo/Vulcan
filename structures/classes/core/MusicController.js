@@ -80,8 +80,9 @@ class MusicController {
 
     async onPlayEvent (isSpeaking) {
         // Neccessary because dispatcher.pause calls this before updating state.
-        if (this.shouldPause)
+        if (this.shouldPause) {
             return this.log(`Song paused!`);
+        }
 
         // Dequeue when loadedSong is over. Queue next if possible.
         if (!isSpeaking && !this.paused && !this.isQueueEmpty()) {
@@ -176,15 +177,17 @@ class MusicController {
             this.log(`Joined voice channel '${voiceChannel.name}'.`);
         })
         .catch((err) => {
-            if (String(err).includes('ECONNRESET'))
+            if (String(err).includes('ECONNRESET')) {
                 throw Error('There was an issue connecting to the voice channel, please try again.');
+            }
             throw err;
         });
     }
 
     async leaveVoice () {
-        if (!this.voiceChannel)
+        if (!this.voiceChannel) {
             throw Error('Vulcan is not in voice thus he cannot leave.');
+        }
 
         await this.voiceChannel.leave();
 
@@ -193,14 +196,17 @@ class MusicController {
     }
 
     async loadItem (idOrURL, requestChannel, requestAuthor) {
-        if (typeof idOrURL !== 'string')
+        if (typeof idOrURL !== 'string') {
             throw Error(`Request must be of type string!`);
+        }
 
-        if (!(requestChannel instanceof Discord.TextChannel))
+        if (!(requestChannel instanceof Discord.TextChannel)) {
             throw Error('Invalid text channel of request! (May happen if channel was deleted)');
+        }
 
-        if (!((requestAuthor instanceof Discord.User) || (typeof requestAuthor === 'string')))
+        if (!((requestAuthor instanceof Discord.User) || (typeof requestAuthor === 'string'))) {
             throw Error('Invalid request author!');
+        }
 
         // Transform ID to UR (for now all playlist to be given as URL only)
         const url = stringFunctions.isURL(idOrURL) ? idOrURL : `https://www.youtube.com/watch?v=${idOrURL}`;
@@ -252,8 +258,9 @@ class MusicController {
     }
 
     async enqueue (url, requestAuthor) {
-        if (!ytdl.validateURL(url))
+        if (!ytdl.validateURL(url)) {
             throw Error('URL is not parsable by the youtube download library.');
+        }
 
         const ytdldata = await ytdl.getInfoAsync(url);
 
@@ -286,11 +293,13 @@ class MusicController {
     }
 
     async play () {
-        if (!this.voiceChannel)
+        if (!this.voiceChannel) {
             throw Error('Vulcan is not in any voice channel');
+        }
 
-        if (this.isQueueEmpty())
+        if (this.isQueueEmpty()) {
             throw Error('Queue is empty!');
+        }
 
         const loadedSong = this.queue[0];
         const stream     = await ytdlcd(loadedSong.url);
@@ -319,8 +328,9 @@ class MusicController {
         // Update history
         const max = 100;
 
-        if (this.history.length > max)
+        if (this.history.length > max) {
             this.history = [];
+        }
 
         this.history.push(loadedSong);
 
@@ -342,8 +352,9 @@ class MusicController {
     skip (force = false) {
         this.dispatcher.end();
 
-        if (force)
+        if (force) {
             this.dispatcher.destroy();
+        }
 
         this.log(`Skipping current song. Force: ${force}`);
     }
@@ -354,8 +365,9 @@ class MusicController {
     }
 
     purge () {
-        if (this.dispatcher)
+        if (this.dispatcher) {
             this.dispatcher.end();
+        }
 
         // Reset init properties
         this.history = [];

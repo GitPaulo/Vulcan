@@ -31,8 +31,9 @@ class Permission extends DiscordCommand {
         } else {
             switch (message.parsed.args[0]) {
                 case 'check':
-                    if (!message.parsed.args[1])
+                    if (!message.parsed.args[1]) {
                         return message.client.emit('invalidCommandCall', `Expected 2 arguments.`, message);
+                    }
 
                     let id         = message.parsed.args[1].slice(3, -1);
                     let permission = permissionManager.getUserPermissions(id, true);

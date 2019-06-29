@@ -68,8 +68,9 @@ const LogManager = (function () {
         };
 
         let store = function (logType, str) {
-            if (!logTypes[logType])
+            if (!logTypes[logType]) {
                 throw Error(`Log type '${logType}' not valid for 'write' function!`);
+            }
 
             const blueprints = blueprintsFromLogType(logType);
 
@@ -84,8 +85,9 @@ const LogManager = (function () {
                     let files = fs.readdirSync(oFolderPath);
 
                     for (let file of files) {
-                        if (file.includes(fstr))
+                        if (file.includes(fstr)) {
                             numberOfRepeats++;
+                        }
                     }
 
                     let oldLogFileName = fstr + (numberOfRepeats + 1);
@@ -101,8 +103,9 @@ const LogManager = (function () {
 
         let write = function (logType, ...args) {
             let colorFunc = logTypes[logType];
-            if (!colorFunc)
+            if (!colorFunc) {
                 throw Error(`Log type '${logType}' not valid for 'write' function!`);
+            }
 
             // Convert all arguments to proper strings
             let buffer = [];
@@ -141,8 +144,9 @@ const LogManager = (function () {
         return { // 'public' properties
             removeModifier: function (modID) {
                 let index = modifiers.indexOf(modID);
-                if (index < -1)
+                if (index < -1) {
                     throw Error(`Modifier '${modID}' not found in exisiting modifiers!`);
+                }
                 modifiers.splice(index, 1);
             },
             addModifier: function (modID) {
@@ -150,21 +154,24 @@ const LogManager = (function () {
                 this.log(`Modifier added to logger: ${modID}`);
             },
             setModifiers: function (mods) {
-                if (!Array.isArray(mods))
+                if (!Array.isArray(mods)) {
                     throw Error('Expected log modifiers in array format!');
+                }
                 modifiers = mods;
             },
             clearModifiers: function () {
                 modifiers = [];
             },
             write: function () {
-                if (shouldLog(...arguments))
+                if (shouldLog(...arguments)) {
                     write(this.write.caller.name, ...arguments);
+                }
             },
             plain: function (text, color = 'white') {
                 let colorFunc = chalk[color];
-                if (!colorFunc)
+                if (!colorFunc) {
                     throw Error(`Invalid color '${color}' for 'logger.plain'!`);
+                }
 
                 console.log(
                     applyModifiers(

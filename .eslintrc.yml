@@ -16,14 +16,12 @@ globals:
   oldLog: readonly
   print: readonly
   PrintHistory: readonly
-  ParsingTypes: readonly
   VulcanDefaults: readonly
 parserOptions:
   ecmaVersion: 2018
 rules:
   no-case-declarations: off
   no-console: off
-  no-eval: off
   no-useless-escape: off
   no-inline-comments: off
   no-multi-spaces: off
@@ -31,4 +29,3 @@ rules:
     - 2
     - always
   indent: off
-  curly: off

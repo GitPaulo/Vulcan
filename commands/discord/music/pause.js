@@ -11,8 +11,9 @@ class Pause extends DiscordCommand {
     async execute (message) {
         const musicController = message.guild.musicController;
 
-        if (!musicController.playing)
+        if (!musicController.playing) {
             return message.client.emit('channelInfo', message.channel, 'No music is playing. Therefore cannot pause.');
+        }
 
         musicController.pause();
 

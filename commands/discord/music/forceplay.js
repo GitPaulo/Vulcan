@@ -12,12 +12,14 @@ class ForcePlay extends DiscordCommand {
 
         let request = message.parsed.args[0];
 
-        if (!request)
+        if (!request) {
             return message.client.emit('invalidCommandCall', `Expected 1 argument (song source), instead got nothing!`, message);
+        }
 
         // Join voice if not already in
-        if (!musicController.voiceChannel)
+        if (!musicController.voiceChannel) {
             await musicController.joinVoice(message.member.voice.channel);
+        }
 
         await musicController.forcePlay(request, message.channel, message.author);
         await message.channel.send(messageEmbeds.reply(

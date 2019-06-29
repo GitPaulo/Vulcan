@@ -19,23 +19,27 @@ module.exports = () => {
     let files = fs.readdirSync(__dirname);
 
     files.forEach(function (file) {
-        if (file === 'index.js')
+        if (file === 'index.js') {
             return;
+        }
 
         let t     = performance.now();
         let parts = file.split('.');
         let ext   = 'js';
 
-        if (parts.length < 2 || parts.length > 3)
+        if (parts.length < 2 || parts.length > 3) {
             throw Error(`Invalid prototypes file name: ${file}`);
+        }
 
-        if (parts[parts.length - 1] !== ext)
+        if (parts[parts.length - 1] !== ext) {
             throw Error(`Invalid prototypes file extension: ${file}`);
+        }
 
         let globalObject = global[parts[0]];
 
-        if (!globalObject)
+        if (!globalObject) {
             throw Error(`Invalid object from file name: ${globalObject} from ${file}`);
+        }
 
         let targetObject = parts[1] === 'prototype' ? globalObject.prototype : globalObject;
         let properties   = xrequire(path.join(__dirname, file));
