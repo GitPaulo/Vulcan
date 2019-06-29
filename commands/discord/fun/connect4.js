@@ -36,9 +36,9 @@ class Connect4 extends DiscordCommand {
         let gameMessage = null;
         let turnMessage = null;
 
-        await message.channel.send('```' + board.toString() + '```').then(async function(boardMessage) {gameMessage = boardMessage});
+        await message.channel.send('```' + board.toString() + '```').then(async function (boardMessage) { gameMessage = boardMessage });
         await this.setControls(gameMessage, this.emojiPlays);
-        await message.channel.send(`<@${players[turn - 1].id}>'s turn`).then(async function(m) {turnMessage = m});
+        await message.channel.send(`<@${players[turn - 1].id}>'s turn`).then(async function (m) { turnMessage = m });
         while (!win && !draw && !exit) {
             let move = await this.getMove(turn, board, players, gameMessage);
             try {
