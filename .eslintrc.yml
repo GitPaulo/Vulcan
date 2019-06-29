@@ -21,14 +21,14 @@ globals:
 parserOptions:
   ecmaVersion: 2018
 rules:
-  no-case-declarations: off
-  no-console: off
-  no-eval: off
-  no-useless-escape: off
-  no-inline-comments: off
-  no-multi-spaces: off
+  no-case-declarations: 0
+  no-console: 0
+  no-eval: 0
+  no-useless-escape: 0
+  no-inline-comments: 0
+  no-multi-spaces: 0
   semi:
     - 2
     - always
-  indent: off
-  curly: off
+  indent: 0
+  curly: 0
