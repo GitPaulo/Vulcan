@@ -90,7 +90,8 @@ const LogManager = (function () {
                         }
                     }
 
-                    let oldLogFileName = fstr + (numberOfRepeats + 1);
+                    // Hack was added here for the old log file name extension - TODO: FIX!
+                    let oldLogFileName = fstr.substring(0, fstr.length - 4) + (numberOfRepeats + 1) + '.txt';
                     let oldLogFilePath = path.join(oFolderPath, oldLogFileName);
 
                     fs.copyFileSync(logFilePath, oldLogFilePath);

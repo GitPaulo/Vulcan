@@ -25,6 +25,7 @@ rules:
   no-useless-escape: off
   no-inline-comments: off
   no-multi-spaces: off
+  standard/object-curly-even-spacing: off
   semi:
     - 2
     - always

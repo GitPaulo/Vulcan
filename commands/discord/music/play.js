@@ -8,13 +8,15 @@ class Play extends DiscordCommand {
     }
 
     async execute (message) {
-        const musicController = message.guild.musicController;
+        // Requester must be in a voice channel
+        const voiceChannelToJoin = message.member.voice.channel;
 
-        let request = message.parsed.args[0];
-
-        if (!message.member.voice.channel) {
+        if (!voiceChannelToJoin) {
             return message.client.emit('channelInfo', message.channel, `Play requester (${message.author.tag}) must be in a voice channel!`);
         }
+
+        const musicController = message.guild.musicController;
+        const request         = message.parsed.args[0];
 
         // If no URL/ID is provided restart playing song or play whatever is at front of queue.
         if (!request) {
@@ -26,27 +28,32 @@ class Play extends DiscordCommand {
             return musicController.play();
         }
 
-        // Join voice if not already in
-        if (!musicController.voiceChannel) {
-            await musicController.joinVoice(message.member.voice.channel);
+        // Join voice if it does not match with requesters
+        if (musicController.voiceChannel !== voiceChannelToJoin) {
+            await musicController.joinVoice(voiceChannelToJoin);
         }
 
         // Queue song
         await musicController.loadItem(request, message.channel, message.author);
-        await message.channel.send(messageEmbeds.reply(
-            {
-                replyeeMessage: message,
-                title: 'Music Play',
-                fields: [
-                    { name: 'Queued Song', value: request },
-                    { name: 'Queue Size',  value: musicController.queue.length }
-                ]
-            }
-        ));
 
-        // If nothing is playing and the song was queued
-        if (musicController.idle) {
-            await musicController.play();
+        if (!musicController.isQueueEmpty()) {
+            await message.channel.send(messageEmbeds.reply(
+                {
+                    replyeeMessage: message,
+                    description: 'Queued an item to the music player.',
+                    fields: [
+                        { name: 'Queued Song', value: request },
+                        { name: 'Queue Size',  value: musicController.queue.length }
+                    ]
+                }
+            ));
+
+            // If nothing is playing and the song was queued
+            if (!musicController.playing) {
+                await musicController.play();
+            }
+        } else {
+            return message.client.emit('channelWarning', message.channel, 'Music player was unable to queue the request!');
         }
     }
 }

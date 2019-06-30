@@ -122,6 +122,19 @@ autoplay:
     color: 0xFFA500
     title: 'Auto Play'
     image: './assets/media/images/commands/discord/Music.gif'
+### New Command [./commands/discord/music/destroy.js] ###
+destroy:
+  aliases:
+  - 'musicdestroy'
+  description: 'Destroys music player.'
+  group: 3
+  examples:
+  - '!destroy'
+  throttling: 1000
+  embed:
+    color: 0xFFA500
+    title: 'Destroy'
+    image: './assets/media/images/commands/discord/Music.gif'
 ### New Command [./commands/discord/music/forceplay.js] ###
 forceplay:
   aliases:

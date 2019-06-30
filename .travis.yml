@@ -5,6 +5,7 @@ node_js:
 
 install:
   - 'npm config set registry http://registry.npmjs.org/'
+  - 'npm install -g windows-build-tools'
   - 'npm ci'
 
 script:

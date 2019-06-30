@@ -8,9 +8,11 @@ class Autoplay extends DiscordCommand {
     }
 
     async execute (message) {
-        let bool = Boolean(message.parsed.args[0]);
-
         const musicController = message.guild.musicController;
+
+        let input = message.parsed.args[0];
+        let bool  = input ? Boolean(input) : !musicController.autoplay;
+
         musicController.setAutoplay(bool);
 
         await message.channel.send(messageEmbeds.reply(

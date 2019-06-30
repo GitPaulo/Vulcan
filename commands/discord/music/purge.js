@@ -10,12 +10,12 @@ class Purge extends DiscordCommand {
     async execute (message) {
         const musicController = message.guild.musicController;
 
-        // Report purge
         musicController.purge();
+
         await message.channel.send(messageEmbeds.reply(
             {
                 replyeeMessage: message,
-                title: 'Purged Music Player',
+                description: 'Purged music player queue.',
                 fields: [
                     { name: 'Is Playing?', value: musicController.playing || 'No' },
                     { name: 'Queue Size',  value: musicController.queue.length || '0' }

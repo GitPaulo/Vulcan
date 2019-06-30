@@ -13,8 +13,8 @@ class Skip extends DiscordCommand {
 
         let force = Boolean(message.parsed.args[0]);
 
-        if (musicController.isQueueEmpty()) {
-            return message.client.emit('channelInfo', message.channel, 'Cannot skip because queue is empty!');
+        if (musicController.isQueueEmpty() && !musicController.playing) {
+            return message.client.emit('channelInfo', message.channel, 'Cannot skip because queue is empty and there is nothing playing!');
         }
 
         let lsName = Discord.Util.escapeMarkdown(musicController.loadedSong.name);
@@ -29,7 +29,7 @@ class Skip extends DiscordCommand {
                         value: lsName
                     },
                     {
-                        name: 'Forced?',
+                        name: 'Was Forced?',
                         value: force.toString()
                     }
                 ]

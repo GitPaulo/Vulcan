@@ -1,4 +1,4 @@
-const got             = require('got');
+const got             = xrequire('got');
 const { promisify }   = xrequire('util');
 const cheerio         = xrequire('cheerio');
 const Discord         = xrequire('discord.js');
@@ -35,16 +35,39 @@ class MusicController {
      * Accessors & Mutators *
     *************************/
 
-    get playing () {
-        return this.dispatcher && !this.dispatcher.paused;
+    get voiceConnected () {
+        return this.connection && this.voiceChannel;
     }
 
     get paused () {
-        return !this.playing;
+        return this.dispatcher && this.dispatcher.paused;
     }
 
     get idle () {
-        return this.isQueueEmpty() || !this.dispatcher;
+        return this.voiceConnected && !this.dispatcher;
+    }
+
+    get playing () {
+        return this.dispatcher && !this.paused;
+    }
+
+    isQueueEmpty () {
+        return this.queue.length <= 0;
+    }
+
+    setRepeatSong (bool) {
+        this.repeat = bool;
+        this.log('Repeat set to: ' + bool);
+    }
+
+    setAutoplay (bool) {
+        this.autoplay = bool;
+        this.log('Autoplay set to: ' + bool);
+    }
+
+    setShuffle (bool) {
+        this.shuffle = bool;
+        this.log('Shuffle set to: ' + bool);
     }
 
     /********************
@@ -66,50 +89,67 @@ class MusicController {
     async onStartPlaying () {
         await this.requestChannel.send(messageEmbeds.info(
             {
-                title: `Song Information [Now Playing]`,
+                title: `Now Playing :musical_note: :musical_note:`,
                 description: `Music Controller started playing a song.`,
                 fields: [
-                    { name: 'Song name',       value: this.loadedSong.name },
-                    { name: 'Request Author',  value: this.loadedSong.requestAuthor },
-                    { name: 'Duration',        value: this.loadedSong.seconds + '(s)' },
-                    { name: 'URL',             value: this.loadedSong.url }
+                    { name: 'Song name',       value: this.loadedSong.name,          inline: false },
+                    { name: 'Request Author',  value: this.loadedSong.requestAuthor, inline: true  },
+                    { name: 'Upload Author',   value: this.loadedSong.author,        inline: true  },
+                    { name: 'Duration',        value: this.loadedSong.seconds + 's', inline: true  },
+                    { name: 'Age Restricted',  value: this.loadedSong.ageRestricted, inline: true  },
+                    { name: 'URL',             value: this.loadedSong.url,           inline: false }
                 ]
             }
         ));
     }
 
-    async onPlayEvent (isSpeaking) {
-        // Neccessary because dispatcher.pause calls this before updating state.
-        if (this.shouldPause) {
-            return this.log(`Song paused!`);
+    async onFinishPlaying () {
+        // Destroy current dispatcher
+        if (this.dispatcher) {
+            this.dispatcher.destroy();
         }
 
-        // Dequeue when loadedSong is over. Queue next if possible.
-        if (!isSpeaking && !this.paused && !this.isQueueEmpty()) {
-            if (!this.repeat) {
-                if (this.shuffle) {
-                    this.queue.shuffle();
-                    this.log(`Shuffled queue!`);
-                } else {
-                    this.queue.shift();
-                }
-            } else {
-                this.log(`Repeat is on. Queue did not shift!`);
+        this.dispatcher = null;
+
+        // Sort out repeat
+        if (this.repeat) {
+            this.queue.unshift(this.loadedSong); // Queue back in
+            this.play();
+            return;
+        }
+
+        // If there are more songs to play...
+        if (!this.isQueueEmpty()) {
+            // Sort out shuffle [maybe guarantee no repeats?]
+            if (this.shuffle) {
+                this.queue.shuffle();
+                this.log(`Shuffled queue!`);
             }
 
-            if (!this.isQueueEmpty() && this.autoplay) {
+            // Play next song if autoplay
+            if (this.autoplay) {
                 this.log(`Playing next song... '${this.queue[0].url}'`);
-                this.play(this.requestChannel);
+                this.play();
             } else {
-                this.dispatcher.destroy();
-                this.dispatcher = null;
-                this.log(`No more songs to play. Destroying dispatcher...`);
+                this.log(`Autoplay is off and there are songs to play!`);
             }
+        } else { // No more songs to play...
+            this.guild.client.emit(
+                'channelInfo',
+                this.requestChannel,
+                `No more songs to play. Leaving voice channel.`
+            );
+            await this.leaveVoice();
+            this.log(`No more songs to play. Purged and left voice channel.`);
         }
     }
 
-    /*******************
-     * Utility methods *
+    async onSpeakEvent (isPlaying) {
+
+    }
+
+    /********************
+     * Internal methods *
     ********************/
 
     log (str) {
@@ -119,19 +159,16 @@ class MusicController {
     loadPlaylistToArray (data, opt) {
         const url   = 'https://youtube.com/watch?v=';
         const str   = data;
-        const split = str.indexOf('watch') === -1 ? str : `https://www.youtube.com/playlist?list=${str.split('&list=')[1].split('&t=')[0]}`;
-        const tag   = {
-            name: 'data-title',
-            url: 'data-video-id',
-            id: 'data-video-id'
-        };
+        const tag   = { name: 'data-title', url: 'data-video-id', id: 'data-video-id' };
+        const split = str.indexOf('watch') === -1
+                    ? str
+                    : `https://www.youtube.com/playlist?list=${str.split('&list=')[1].split('&t=')[0]}`;
 
         return got(split).then(res => {
             const $     = cheerio.load(res.body);
             const thumb = $('tr');
-            const arr   = {
-                playlist: []
-            };
+
+            let playlist = [];
 
             if (!opt) {
                 opt = Object.keys(tag);
@@ -145,10 +182,11 @@ class MusicController {
 
             const multipleDetails = Array.isArray(opt);
 
-            arr.playlist = thumb.map((index, el) => {
+            playlist = thumb.map((index, el) => {
                 if (multipleDetails) {
                     return opt.reduce((prev, holder) => {
-                        prev[holder] = prefixUrl(holder, holder === 'duration' ? getDuration(el) : el.attribs[tag[holder]]);
+                        prev[holder] = prefixUrl(holder, holder === 'duration'
+                            ? getDuration(el) : el.attribs[tag[holder]]);
                         return prev;
                     }, {});
                 }
@@ -158,17 +196,70 @@ class MusicController {
                 return prefixUrl(opt, el.attribs[tag[opt]]);
             }).get();
 
-            return {
-                data: arr
-            };
+            return playlist;
         });
     }
 
-    /*****************
-     * Class methods *
-    ******************/
+    enqueue (url, requestAuthor) {
+        if (!ytdl.validateURL(url)) {
+            throw Error('URL is not parsable by the youtube download library.');
+        }
+
+        const cpos = this.queue.length;
+
+        // Do not await for metadata fetch or else load will be slow! [might be buggy tho]
+        ytdl.getInfoAsync(url).then((data) => {
+            if (!this.queue[cpos]) {
+                return Error(
+                    `Async song data fetch could not find song.` +
+                    +`\n\tQueue was probably purged during load sequence.`
+                );
+            }
+
+            this.queue[cpos].name          = data.title;
+            this.queue[cpos].loudness      = data.loudness;
+            this.queue[cpos].author        = data.author.name;
+            this.queue[cpos].ageRestricted = data.age_restricted;
+            this.queue[cpos].seconds       = parseInt(data.length_seconds);
+        }).catch((err) => {
+            this.requestChannel.guild.emit('channelError', this.requestChannel, err.message);
+        });
+
+        this.queue.push(
+            {
+                name: '(loading)',
+                url: url,
+                author: '(loading)',
+                // eslint-disable-next-line no-mixed-operators
+                requestAuthor: (typeof requestAuthor === 'string') && requestAuthor || requestAuthor.tag,
+                loudness: 0,
+                seconds: 0
+            }
+        );
+
+        logger.log(`Enqueued song: '${url}' requested by '${requestAuthor.tag}'.`);
+    }
+
+    queueString () {
+        const escmd    = Discord.Util.escapeMarkdown;
+        let buildCache = [];
+
+        this.queue.forEach(next => {
+            buildCache.push(`**[${buildCache.length + 1}]**: ${escmd(next.name)} => ${escmd(next.url)}\n`);
+        });
+
+        return buildCache.join('\n');
+    }
+
+    /*******************
+     * Control methods *
+    ********************/
 
     async joinVoice (voiceChannel) {
+        if (!(voiceChannel instanceof Discord.VoiceChannel)) {
+            throw Error(`joinVoice received an invalid voice channel!`);
+        }
+
         return voiceChannel
         .join()
         .then((connection) => {
@@ -192,7 +283,7 @@ class MusicController {
         await this.voiceChannel.leave();
 
         // Reset the status
-        this.purge();
+        this.destroy();
     }
 
     async loadItem (idOrURL, requestChannel, requestAuthor) {
@@ -211,21 +302,33 @@ class MusicController {
         // Transform ID to UR (for now all playlist to be given as URL only)
         const url = stringFunctions.isURL(idOrURL) ? idOrURL : `https://www.youtube.com/watch?v=${idOrURL}`;
 
+        // If not playlist then queue song, else load playlist
         if (!stringFunctions.isYoutubePlaylist(url)) {
             await this.enqueue(url, requestAuthor);
         } else {
-            const playlist  = (await this.loadPlaylistToArray(url)).data.playlist;
+            const playlist  = await this.loadPlaylistToArray(url);
             const queueSize = this.queue.length;
-            const estimate  = 0.6;
+            const estimate  = 0.125;
+
+            if (playlist.length === 0) {
+                return this.guild.client.emit(
+                    'channelInfo',
+                    requestChannel,
+                    `Unable to load playlist ${url}\n\tLikely due to youtube API reasons?`
+                );
+            }
+
+            // pn = playlist's length!!!!
+            const pn = playlist.length;
 
             const embedWrap = messageEmbeds.info({
                 description: `Playlist detected. Loaded playlist into queue.`,
                 fields: [
-                    { name: 'Playlist', value: url },
-                    { name: 'Playlist Size', value: playlist.length || 'NaN' },
-                    { name: 'Queue Size', value: queueSize || 'NaN' },
-                    { name: 'Estimated Load Time', value: `${Math.round(estimate * playlist.length)} seconds` },
-                    { name: 'Load Progress', value: `0/${playlist.length} (songs loaded)` }
+                    { name: 'Playlist',            value: url,                             inline: false },
+                    { name: 'Playlist Size',       value: playlist.length,                 inline: true  },
+                    { name: 'Queue Size',          value: queueSize,                       inline: true  },
+                    { name: 'Estimated Load Time', value: `${Math.round(estimate * pn)}s`, inline: true  },
+                    { name: 'Load Progress',       value: `0/${pn} songs`,                 inline: true  }
                 ]
             });
 
@@ -234,19 +337,23 @@ class MusicController {
 
             // Status edit
             let loadedSongs = 0;
-            let step        = Math.round(playlist.length * 0.10);
+            let step        = Math.round(pn * 0.20);
 
             for (let song of playlist) {
                 if (song.name === '[Deleted video]') {
-                    requestChannel.client.emit('channelInfo', requestChannel, `Encountered deleted video on playlist: ${song.url}`);
+                    requestChannel.client.emit(
+                        'channelInfo',
+                        requestChannel,
+                        `Encountered deleted video on playlist: ${song.url}`
+                    );
                 } else {
                     await this.enqueue(song.url, requestAuthor);
                 }
 
                 loadedSongs++;
 
-                if (loadedSongs % step === 0) {
-                    embedWrap.embed.fields[4].value = `${loadedSongs}/${playlist.length} (songs loaded)`;
+                if ((loadedSongs % step) === 0 || loadedSongs === pn) {
+                    embedWrap.embed.fields[4].value = `${loadedSongs}/${pn} songs`;
                     await message.edit(embedWrap);
                 }
             }
@@ -257,37 +364,19 @@ class MusicController {
         this.requestChannel = requestChannel;
     }
 
-    async enqueue (url, requestAuthor) {
-        if (!ytdl.validateURL(url)) {
-            throw Error('URL is not parsable by the youtube download library.');
+    async forcePlay (idOrURL, requestChannel, requestAuthor) {
+        if (stringFunctions.isYoutubePlaylist(idOrURL)) {
+            return requestChannel.client.emit(
+                'channelWarning',
+                requestChannel,
+                `Force play is not compatible with playlists!`
+            );
         }
 
-        const ytdldata = await ytdl.getInfoAsync(url);
-
-        this.queue.push(
-            {
-                name: ytdldata.title,
-                url: url,
-                // eslint-disable-next-line no-mixed-operators
-                requestAuthor: ((typeof requestAuthor === 'string') && requestAuthor || requestAuthor.tag),
-                /* author: metadata.author,
-                authorUrl: metadata.author_url,
-                thumbnailUrl: metadata.thumbnail_url, */
-                loudness: ytdldata.loudness,
-                seconds: parseInt(ytdldata.length_seconds)
-            }
-        );
-
-        logger.log(`Enqueued song: '${url}' requested by '${requestAuthor.tag}'.`);
-    }
-
-    async forcePlay (idOrURL, requestChannel, requestAuthor) {
         await this.loadItem(idOrURL, requestChannel, requestAuthor);
 
-        if (this.queue.length > 0) {
-            const forceSong = this.queue.pop();
-            this.queue.splice(0, 0, forceSong);
-        }
+        const forceSong = this.queue.pop();
+        this.queue.splice(0, 0, forceSong);
 
         this.play();
     }
@@ -317,13 +406,19 @@ class MusicController {
 
         // We can now safely state we are playing!
         this.loadedSong = loadedSong;
+        this.queue.shift();
+
+        // Debug
+        console.log(this.dispatcher && this.connection && this.loadedSong, '<<<<<< true?');
 
         // Setup events for song dispatcher
-        this.dispatcher.on('start', this.onStartPlaying.bind(this));
-        this.dispatcher.on('volumeChange', this.onVolumeChange.bind(this));
-        this.dispatcher.on('speaking', this.onPlayEvent.bind(this));
         this.dispatcher.on('error', (e) => logger.error(e));
         this.dispatcher.on('debug', (d) => logger.debug(d));
+
+        this.dispatcher.on('start', this.onStartPlaying.bind(this));
+        this.dispatcher.on('speaking', this.onSpeakEvent.bind(this));
+        this.dispatcher.on('finish', this.onFinishPlaying.bind(this));
+        this.dispatcher.on('volumeChange', this.onVolumeChange.bind(this));
 
         // Update history
         const max = 100;
@@ -365,52 +460,34 @@ class MusicController {
     }
 
     purge () {
+        this.queue = [];
+        this.log(`Destroyed queue.`);
+    }
+
+    destroy () {
         if (this.dispatcher) {
             this.dispatcher.end();
         }
 
-        // Reset init properties
-        this.history = [];
-        this.queue   = [];
+        // Purge
+        this.purge();
 
-        // Reset method assigned properties
-        this.requestChannel = null;
-        this.voiceChannel   = null;
-        this.connection     = null;
-        this.dispatcher     = null;
-        this.loadedSong     = null;
+        // Reset to defaults
+        this.autoplay    = true;
+        this.repeat      = false;
+        this.shouldPause = false;
+        this.shuffle     = false;
 
-        this.log(`Purged music controller state.`);
-    }
+        // Clean these up at the end of event loop
+        setTimeout(() => {
+            this.requestChannel = null;
+            this.voiceChannel   = null;
+            this.connection     = null;
+            this.dispatcher     = null;
+            this.loadedSong     = null;
+        }, 0);
 
-    isQueueEmpty () {
-        return this.queue.length <= 0;
-    }
-
-    queueString () {
-        const escmd    = Discord.Util.escapeMarkdown;
-        let buildCache = [];
-
-        this.queue.forEach(next => {
-            buildCache.push(`**[${buildCache.length + 1}]**: ${escmd(next.name)} => ${escmd(next.url)}\n`);
-        });
-
-        return buildCache.join('\n');
-    }
-
-    setRepeatSong (bool) {
-        this.repeat = bool;
-        this.log('Repeat set to: ' + bool);
-    }
-
-    setAutoplay (bool) {
-        this.autoplay = bool;
-        this.log('Autoplay set to: ' + bool);
-    }
-
-    setShuffle (bool) {
-        this.shuffle = bool;
-        this.log('Shuffle set to: ' + bool);
+        this.log(`Destroyed music controller state.`);
     }
 }
 
