@@ -3,7 +3,7 @@ const logger = xrequire('./managers/LogManager').getInstance();
 module.exports = message => {
     const vulcan = message.client;
 
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         try {
             // Check for content from 'credentials'
             let filteredContent = message.content;
@@ -22,17 +22,20 @@ module.exports = message => {
             let hasFiltered = filteredContent !== message.content;
 
             if (hasFiltered) {
-                await message.delete();
-                await message.channel.send({
-                    embed: {
-                        color: 0x0099ff,
-                        title: 'Message Filtered',
-                        author: {
-                            name: `Message by: ${message.author.tag}`,
-                            icon_url: message.author.defaultAvatarURL
-                        },
-                        description: filteredContent
-                    }
+                message.delete().then(() => {
+                    return message.channel.send({
+                        embed: {
+                            color: 0x0099ff,
+                            title: 'Message Filtered',
+                            author: {
+                                name: `Message by: ${message.author.tag}`,
+                                icon_url: message.author.defaultAvatarURL
+                            },
+                            description: filteredContent
+                        }
+                    });
+                }).catch((err) => {
+                    vulcan.emit('channelError', message.channel, err);
                 });
             }
 

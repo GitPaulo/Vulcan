@@ -51,6 +51,6 @@ module.exports = async message => {
         // Register Recent Call for command [throttling]
         message.command.addCall(message.author);
     } catch (err) {
-        message.client.emit('channelError', err, message.channel);
+        message.client.emit('channelError', message.channel, err);
     }
 };

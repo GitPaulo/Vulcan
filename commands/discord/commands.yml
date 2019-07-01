@@ -105,6 +105,19 @@ gif:
     color: 0x666666
     title: 'Gif'
     image: './assets/media/images/commands/discord/Gif.gif'
+### New Command [./commands/discord/fun/connect4.js] ###
+connect4:
+  aliases:
+  - 'c4'
+  description: 'Connect 4 game in vulcan!'
+  examples:
+  - '!c4 @someone'
+  group: 3
+  throttling: 2000
+  embed:
+    color: 0x666666
+    title: 'Connect 4'
+    image: './assets/media/images/commands/discord/Connect4.gif'
 
 #######################
 #   'music' folder    #

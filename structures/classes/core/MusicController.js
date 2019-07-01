@@ -222,7 +222,7 @@ class MusicController {
             this.queue[cpos].ageRestricted = data.age_restricted;
             this.queue[cpos].seconds       = parseInt(data.length_seconds);
         }).catch((err) => {
-            this.requestChannel.guild.emit('channelError', this.requestChannel, err.message);
+            this.requestChannel.guild.emit('channelError', this.requestChannel, err);
         });
 
         this.queue.push(

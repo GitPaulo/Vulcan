@@ -6,8 +6,8 @@ const logger        = xrequire('./managers/LogManager').getInstance();
 *  due to some action requested in a text channel.
 */
 module.exports = (
-    err,
     channel,
+    err,
     description = 'Internal error has occured due to an action originating from this channel.'
 ) => {
     logger.error(`[${channel.name}] => ${description}\n\tError message: ${err.message}\n\tStack: ${err.stack}`);

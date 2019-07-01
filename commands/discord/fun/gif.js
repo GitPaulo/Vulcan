@@ -4,7 +4,7 @@ const fs               = xrequire('fs');
 const path             = xrequire('path');
 const http             = xrequire('http');
 const messageEmbeds    = xrequire('./plugins/libs/messageEmbeds');
-const stringFunctions = xrequire('./plugins/libs/stringFunctions');
+const stringFunctions  = xrequire('./plugins/libs/stringFunctions');
 const logger           = xrequire('./managers/LogManager').getInstance();
 const DiscordCommand   = xrequire('./structures/classes/core/DiscordCommand');
 
