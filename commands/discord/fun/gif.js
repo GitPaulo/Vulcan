@@ -9,7 +9,7 @@ const logger           = xrequire('./managers/LogManager').getInstance();
 const DiscordCommand   = xrequire('./structures/classes/core/DiscordCommand');
 
 class Gif extends DiscordCommand {
-    constructor (commandDefinition) { // type = root folder name (passed on by command loader)
+    constructor (commandDefinition) {
         super(commandDefinition);
 
         this.folderPath        = path.join(__basedir, 'data', 'gifs');

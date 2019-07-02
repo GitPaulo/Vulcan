@@ -182,12 +182,15 @@ const LogManager = (function () {
                     )
                 );
             },
-            // alias
+            // helper
             debug:    function () { this.write(...arguments); },
             log:      function () { this.write(...arguments); },
             warning:  function () { this.write(...arguments); },
             error:    function () { this.write(...arguments); },
-            terminal: function () { this.write(...arguments); }
+            terminal: function () { this.write(...arguments); },
+            // alias of helper
+            warn: function () { this.warning(...arguments); },
+            err:  function () { this.error(...arguments); }
         };
     }
 

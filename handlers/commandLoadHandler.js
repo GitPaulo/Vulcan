@@ -2,7 +2,7 @@ const { performance } = xrequire('perf_hooks');
 const path            = xrequire('path');
 const fs              = xrequire('fs');
 const yaml            = xrequire('js-yaml');
-const mathFunctions    = xrequire('./plugins/libs/mathFunctions');
+const mathFunctions   = xrequire('./plugins/libs/mathFunctions');
 const fileFunctions   = xrequire('./plugins/libs/fileFunctions');
 const CommandMap      = xrequire('./structures/classes/core/CommandMap');
 const logger          = xrequire('./managers/LogManager').getInstance();
@@ -25,12 +25,27 @@ module.exports = (folderPath) => {
             let CommandClass = xrequire(fullPath);
 
             let commandDefinition  = commandsDefinition[commandID];
-            commandDefinition.type = path.dirname(fullPath).split(path.sep).slice(-1).pop(); // add type (folder name)
-            commandDefinition.id   = commandID;
 
             if (!commandDefinition) {
                 throw Error(`Command definition not found for \nID: ${commandID}\nPATH: ${fullPath}`);
             }
+
+            Object.defineProperties(commandDefinition,
+                {
+                    type: {
+                        value: path.dirname(fullPath).split(path.sep).slice(-1).pop(), // add type (folder name)
+                        writable: false,
+                        enumerable: false,
+                        configurable: false
+                    },
+                    id: {
+                        value: commandID,
+                        writable: false,
+                        enumerable: false,
+                        configurable: false
+                    }
+                }
+            );
 
             let command = new CommandClass(commandDefinition);
             commands.addCommand(command);
@@ -38,8 +53,7 @@ module.exports = (folderPath) => {
             logger.log(`Loaded (${commandDefinition.type}) command '${command.id}' from ${fileName} (took ${mathFunctions.round(performance.now() - t, 2)}ms)`);
         } catch (err) {
             logger.error(
-                `Command Loader Error => ${err.message}\n` +
-                `Stack: ${err.stack}`
+                `[Command Loader Error]\n${err.stack}`
             );
         }
     }

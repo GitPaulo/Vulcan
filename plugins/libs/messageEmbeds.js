@@ -47,6 +47,42 @@ messageEmbeds.reply = (
     };
 };
 
+messageEmbeds.critical = (
+    {
+        title       = `Critical Error`,
+        description = `A Critical Error has been detected by Vulcan.`,
+        color       = 0x000000, // black
+        thumbnail   = {
+            url: `attachment://critical.png`
+        },
+        timestamp   = new Date(),
+        footer      = {
+            text: '[Error] This is bad. MAZUI! Vulcan will shutdown!'
+        },
+        fields      = [],
+        url         = ''
+    }
+) => {
+    return {
+        embed: {
+            title,
+            description,
+            color,
+            thumbnail,
+            timestamp,
+            footer,
+            fields,
+            url
+        },
+        files: [
+            {
+                attachment: './assets/media/images/general/critical.png',
+                name: 'critical.png'
+            }
+        ]
+    };
+};
+
 messageEmbeds.error = (
     {
         title       = `Error`,

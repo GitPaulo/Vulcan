@@ -19,6 +19,8 @@ const logger = xrequire('./managers/LogManager').getInstance();
 });
 
 const vulcan    = xrequire('./bot');
+
+// [DEVELOPERS GUILD ID AND CHANNEL ID]
 const guildID   = '208029113682886660';
 const channelID = '516326465386577923';
 

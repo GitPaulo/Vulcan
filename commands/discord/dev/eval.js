@@ -1,5 +1,5 @@
-const vm              = require('vm');
-const util            = require('util');
+const vm              = xrequire('vm');
+const util            = xrequire('util');
 const { performance } = xrequire('perf_hooks');
 const messageEmbeds   = xrequire('./plugins/libs/messageEmbeds');
 const logger          = xrequire('./managers/LogManager').getInstance();

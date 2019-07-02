@@ -2,7 +2,7 @@ const messageEmbeds  = xrequire('./plugins/libs/messageEmbeds');
 const DiscordCommand = xrequire('./structures/classes/core/DiscordCommand');
 
 class Ping extends DiscordCommand {
-    constructor (commandDefinition) { // type = root folder name (passed on by command loader)
+    constructor (commandDefinition) {
         super(commandDefinition);
         this.phrases = [
             `Imagine pinging vulcan...`,

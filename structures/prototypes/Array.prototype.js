@@ -6,5 +6,10 @@ module.exports = {
     },
     shuffle: function () {
         this.sort(() => Math.random() - 0.5);
+    },
+    asyncForEach: async function (callback) {
+        for (let index = 0; index < this.length; index++) {
+            await callback(this[index], index, this);
+        }
     }
 };

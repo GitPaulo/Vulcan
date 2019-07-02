@@ -1,5 +1,5 @@
 // Initialisation
-require('./plugins/scripts/globals');
+xrequire('./plugins/scripts/globals');
 xrequire('./plugins/scripts/coreEvents');
 xrequire('./plugins/scripts/defaults');
 
@@ -14,10 +14,10 @@ const Vulcan = xrequire('./structures/classes/core/Vulcan');
 const logger = xrequire('./managers/LogManager').getInstance();
 
 // Load settings & configuration data
-const defautlFiles      = global.VulcanDefaults.files;
-const configurationFile = fs.readFileSync(defautlFiles.configuration.location, 'utf8');
-const credentialsFile   = fs.readFileSync(defautlFiles.credentials.location, 'utf8');
-const permissionsFile   = fs.readFileSync(defautlFiles.permissions.location, 'utf8');
+const defaultFiles      = global.VulcanDefaults.files;
+const configurationFile = fs.readFileSync(defaultFiles.configuration.location, 'utf8');
+const credentialsFile   = fs.readFileSync(defaultFiles.credentials.location, 'utf8');
+const permissionsFile   = fs.readFileSync(defaultFiles.permissions.location, 'utf8');
 const configuration     = yaml.safeLoad(configurationFile);
 const credentials       = yaml.safeLoad(credentialsFile);
 const permissions       = yaml.safeLoad(permissionsFile);

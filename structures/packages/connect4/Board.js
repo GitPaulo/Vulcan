@@ -62,7 +62,7 @@ class Board {
 
     makeMoveAndCheckWin (player, column) {
         if (!this.isValidMove(column)) {
-            throw new Error('Move is not valid');
+            throw Error('Move is not valid');
         }
 
         let row       = this.addPieceAndReturnY(player, column);
@@ -73,9 +73,17 @@ class Board {
 
     addPieceAndReturnY (player, column) {
         let y = 0;
-        while (y < this.height && this.state[y][column] !== 0) y++;
-        if (y >= this.height) return new Error('Move not valid, column already full');
+
+        while (y < this.height && this.state[y][column] !== 0) {
+            y++;
+        }
+
+        if (y >= this.height) {
+            return Error('Move not valid, column already full');
+        }
+
         this.state[y][column] = player;
+
         return y;
     }
 
@@ -137,10 +145,12 @@ class Board {
 
     toString () {
         let result = '';
+
         // print array from bottom to top
         for (let i = this.state.length - 1; i >= 0; i--) {
             let row = this.state[i];
             result += '|';
+
             for (let column of row) {
                 let symbol = ' ';
 
@@ -152,6 +162,7 @@ class Board {
 
                 result += '  ' + symbol + '  |';
             }
+
             result += '\n';
         }
 
