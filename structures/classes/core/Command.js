@@ -25,12 +25,8 @@ class Command {
         this.lastCall   = null;
     }
 
-    validate () {
-        throw Error('This method has not been implemented!');
-    }
-
     execute () {
-        throw Error('This method has not been implemented!');
+        throw Error(`Essential 'execute' method for ${this.id} has not been implemented!`);
     }
 
     addCall (id) {

@@ -49,11 +49,6 @@ class TerminalManager {
         }
 
         try {
-            if (!command.validate(vulcan)) {
-                this.log(`Command execution was blocked.`, 'warning');
-                return;
-            }
-
             command.execute(vulcan);
         } catch (err) {
             this.log(`CLI Command Error: ${err.message}\nStack: ${err.stack}`);

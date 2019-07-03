@@ -10,7 +10,7 @@ process.exit = async (code = 0, message = 'Unknown') => {
         return global._exit(1);
     }
 
-    let vulcan  = xrequire('./bot.js');
+    let vulcan = global.__loaded && xrequire('./bot.js');
 
     if (!vulcan) {
         logger.error(`Vulcan client was invalid before process exit!\n\tMessage: ${message}'`);

@@ -16,6 +16,22 @@
 #     title: 'Title of reply message'
 #     image: 'some path in assets folder'
 
+###########################
+#  'configuration' folder #
+###########################
+botchannel:
+  aliases:
+  - 'botc'
+  description: 'Set botchannel of guild.'
+  examples:
+  - '!botchannel'
+  group: 3
+  throttling: 2000
+  embed:
+    color: 0xAACE6D
+    title: 'Botchannel Set'
+    image: './assets/media/images/commands/discord/Configuration.gif'
+
 #######################
 #    'dev' folder     #
 #######################

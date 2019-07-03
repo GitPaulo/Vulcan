@@ -53,3 +53,6 @@ vulcan.loadDatabase()
 
 // Log
 logger.log(`Vulcan start-up has completed! Time taken: ${vulcan.uptime()}`);
+
+// Load Complete Flag
+global.__loaded = true;
