@@ -29,7 +29,7 @@ class Connect4 extends DiscordCommand {
 
     async execute (message) {
         if (message.parsed.args.length < 1) {
-            return message.client.emit('invalidCommandCall', `Expected at least 1 argument.`, message);
+            return message.client.emit('invalidCommandCall', `You need to challenge someone.`, message.args.length);
         }
 
         // Sort out challenge request
@@ -47,7 +47,7 @@ class Connect4 extends DiscordCommand {
             try {
                 await message.channel.awaitMessages(
                     m => m.content.startsWith('I accept') && m.author === challengee,
-                    { max: 1, time: 6000, errors: ['time'] }
+                    { max: 1, time: 20000, errors: ['time'] }
                 );
             } catch (warn) {
                 return message.channel.client.emit(
