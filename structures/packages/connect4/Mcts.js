@@ -12,9 +12,9 @@ function getPlay (board, player) {
     }
 
     mcts(node, player);
-    let bestNode = node.getBestChild();
+    let bestNode = node.bestChild;
 
-    return bestNode.getOriginatingPlay();
+    return bestNode.originatingPlay;
 }
 
 function mcts (node, player) {
@@ -28,7 +28,7 @@ function mcts (node, player) {
 function simulate (node, player) {
     let result = null;
 
-    if (!node.isExpanded()) {
+    if (!node.expanded) {
         node.expand();
 
         let playoutResult = playout(node, player);
@@ -56,25 +56,25 @@ function playout (node, player) {
 
     while (!currentNode.isTerminal()) {
         if (currentNode.getWinningPlay() >= 0) {
-            return currentNode.getPlayer() === player ? 1 : -1;
+            return currentNode.player === player ? 1 : -1;
         }
 
-        currentNode = currentNode.getRandomChild();
+        currentNode = currentNode.randomChild;
     }
 
     return currentNode.getPayoff(player);
 }
 
 function select (node) {
-    let bestNode  = node.getChildren()[0];
-    let bestScore = bestNode.getScore();
+    let bestNode  = node.children[0];
+    let bestScore = bestNode.score;
 
-    for (let child of node.getChildren()) {
-        if (child.getPlayoutCount() === 0) {
+    for (let child of node.children) {
+        if (child.playouts === 0) {
             return child;
         }
 
-        let score = calculateUCT(child, node.getPlayoutCount());
+        let score = calculateUCT(child, node.playouts);
 
         if (score > bestScore) {
             bestScore = score;
@@ -87,10 +87,10 @@ function select (node) {
 
 function calculateUCT (node, parentPlayoutCount) {
     let logOfPlayoutCount  = Math.log(parentPlayoutCount);
-    let childPlayoutsRatio = logOfPlayoutCount / node.getPlayoutCount();
+    let childPlayoutsRatio = logOfPlayoutCount / node.playouts;
     let rootOfRatio        = Math.sqrt(childPlayoutsRatio);
     let rootTimesC         = C * rootOfRatio;
-    let totalScore         = node.getScore() + rootTimesC;
+    let totalScore         = node.score + rootTimesC;
 
     return totalScore;
 }

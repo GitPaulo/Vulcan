@@ -1,5 +1,4 @@
-const messageEmbeds  = xrequire('./plugins/libs/messageEmbeds');
-const Mcts           = xrequire('./structures/packages/connect4/Mcts');
+const mcts           = xrequire('./structures/packages/connect4/Mcts');
 const Board          = xrequire('./structures/packages/connect4/Board');
 const logger         = xrequire('./managers/LogManager').getInstance();
 const DiscordCommand = xrequire('./structures/classes/core/DiscordCommand');
@@ -47,7 +46,7 @@ class Connect4 extends DiscordCommand {
         } else { // Send out challenge and wait for it!
             try {
                 await message.channel.awaitMessages(
-                    m => m.content.startsWith('I accept') && m.author == challengee,
+                    m => m.content.startsWith('I accept') && m.author === challengee,
                     { max: 1, time: 6000, errors: ['time'] }
                 );
             } catch (warn) {
@@ -64,46 +63,66 @@ class Connect4 extends DiscordCommand {
             // Properties
             board: new Board(outerScope.boardHeight, outerScope.boardWidth),
             players: [challenger, challengee],
-            boardMessage: await message.channel.send("Initializing..."),
-            turnMessage: await message.channel.send("Initializing..."),
+            boardMessage: await message.channel.send('Initializing...'),
+            turnMessage: await message.channel.send('Initializing...'),
             turn: 1,
-            win: false,
-            draw: false,
+            state: {
+                win: false,
+                draw: false
+            },
             exit: false,
             // Methods
-            updateTurn: async function (str) {
-                await this.turnMessage.edit(str || `<@${game.players[game.turn - 1].id}>'s turn`);
+            get gameOver () {
+                return game.state.win || game.state.draw || game.state.exit;
             },
-            updateBoard: async function (str) {
-                await this.boardMessage.edit(`\`\`\`${game.board.toString()}\`\`\``);
+            get currentPlayer () {
+                return this.players[this.turn - 1];
+            },
+            get nonCurrentPlayer () {
+                return this.getOtherPlayer(this.currentPlayer);
+            },
+            getOtherPlayer: function (player) {
+                return player === this.players[0] ? this.players[1] : this.players[0];
             },
             nextMove: async function () {
                 let move = -1;
-                if (this.players[this.turn - 1].bot) {
-                    move = Mcts(this.board, this.turn);
+                if (game.players[game.turn - 1].bot) {
+                    move = mcts(game.board, game.turn);
                 } else {
                     let filter = (reaction, user) => {
-                        return this.players[this.turn - 1].id === user.id && outerScope.emojiPlays.includes(reaction.emoji.identifier);
+                        return game.currentPlayer.id === user.id && outerScope.emojiPlays.includes(reaction.emoji.identifier);
                     };
 
-                    let collected = await this.boardMessage.awaitReactions(filter, { max: 1 });
+                    let collected = await game.boardMessage.awaitReactions(filter, { max: 1 });
                     let reaction  = collected.first();
 
                     move = parseInt(reaction.emoji.identifier.slice(0, 1), 10);
-                    await reaction.users.remove(this.players[this.turn - 1].id);
-
-                    return move;
+                    await reaction.users.remove(game.currentPlayer.id);
+                    console.log(move);
+                }
+                return move;
+            },
+            makeMove: (move) => game.board.makeMoveAndCheckWin(game.turn, move),
+            updateTurnMessage: async function (str) {
+                await game.turnMessage.edit(str || `<@${game.currentPlayer.id}>'s turn`);
+            },
+            updateBoardMessage: async function (str) {
+                await game.boardMessage.edit(str || `\`\`\`${game.board.toString()}\`\`\``);
+            },
+            updateState: async function (state = { win: false, draw: false }) {
+                game.state = state;
+                if (!game.win && !game.draw) {
+                    game.turn = (game.turn === 1 ? 2 : 1);
                 }
             },
-            updateAll: async function () {
-                return Promise.all(
-                    [this.updateTurn(), this.updateBoard()]
-                );
+            updateView: async function () {
+                await game.updateBoardMessage();
+                await game.updateTurnMessage();
             }
         };
 
         // Push new game and update embed
-        const gameID          = this.games.push(game);
+        const gameID = this.games.push(game);
         logger.debug(`New connect 4 game (ID: ${gameID}) has started.`, game);
 
         // Set up emojis for game message
@@ -116,34 +135,27 @@ class Connect4 extends DiscordCommand {
         }
 
         // First turn!
-        await game.updateAll();
+        await game.updateView();
 
         // Game Event Loop
-        while (!game.win && !game.draw && !game.exit) {
-            let move = await game.nextMove();
-
+        while (!game.gameOver) {
             try {
-                let state = game.board.makeMoveAndCheckWin(game.turn, move);
-                game.win  = state.win;
-                game.draw = state.draw;
-
-                await game.updateBoard();
+                let move = await game.nextMove();
+                let state = game.makeMove(move);
+                await game.updateState(state);
+                await game.updateView();
             } catch (err) {
                 game.boardMessage.client.emit('channelError', game.boardMessage.channel, err);
                 game.exit = true;
             }
-
-            if (!game.win && !game.draw) {
-                game.turn = (game.turn === 1 ? 2 : 1);
-            }
         }
 
         // Final update
-        await game.updateBoard();
-        await game.updateTurn('Game finished.');
+        await game.updateBoardMessage();
+        await game.updateTurnMessage('Game finished.');
 
         // Results Message
-        await game.turnMessage.channel.send(`Game #${gameID} has ended\n\t${game.win ? `<@${game.players[game.turn - 1].id}> WINS` : `Game ended in draw!`}`);
+        await game.turnMessage.channel.send(`Game #${gameID} has ended\n\t${game.state.win ? `<@${game.nonCurrentPlayer.id}> WINS` : `Game ended in draw!`}`);
     }
 }
 
