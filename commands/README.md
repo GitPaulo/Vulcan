@@ -1,7 +1,7 @@
 ## Command Structure
 There currently exist **two** interfaces for commands in vulcan.
   - [Discord Commands](./discord/)
-  - [Terminal Commands](./termina/)
+  - [Terminal Commands](./terminal/)
 
 Discord commands are the commands executed via the discord API. In other words, the relevant ones which typical users may interact with. Furthermore, vulcan also has Terminal Comamnds. These commands are parsed and executed via the vulcan CLI interface and are typically only of use to the developers or the host of vulcan.
 
@@ -14,7 +14,7 @@ Each directory, representing a command interface, must contain the file 'command
   3. Inside the folder of your command type, create a .js file. The name of this file will be your **command id** and **must be unique.**
   4. Add the descriptor for your command in the appropriate command.yml file.
 
-### Discord Command Template [./discord/mytype/mycommand.js]
+### Discord Command Template (./discord/mytype/mycommand.js)
 ```js
 const mycommand = module.exports;
 
@@ -30,7 +30,7 @@ mycommand.execute = async (message) => {
 };
 ```
 
-### Terminal Command Template [./terminal/mytype/mycommand.js]
+### Terminal Command Template (./terminal/mytype/mycommand.js)
 ```js
 const mycommand = module.exports;
 
@@ -41,7 +41,7 @@ mycommand.load = (vulcan, commandDescriptor) => {
 };
 
 mycommand.execute = (vulcan) => {
-    // 'vulcan' is the object representing the vulcan client
+    // 'vulcan' is a reference to the Vulcan client object (like in .load())
     console.log('Hello world!');
 };
 ```
