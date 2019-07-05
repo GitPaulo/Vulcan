@@ -1,16 +1,16 @@
-const _eval           = module.exports; // eval is taken D: DAMN U ESLINT
+const evaluate        = module.exports;
 const vm              = xrequire('vm');
 const util            = xrequire('util');
 const { performance } = xrequire('perf_hooks');
 const messageEmbeds   = xrequire('./plugins/libs/messageEmbeds');
 const logger          = xrequire('./managers/LogManager').getInstance();
 
-_eval.load = (commandDefinition) => {
+evaluate.load = (vulcan, commandDefinition) => {
     this.historyMax = 100;
     this.history    = [];
 };
 
-_eval.execute = async (message) => {
+evaluate.execute = async (message) => {
     let returnValue = '';
     let outputValue = '';
     let code        = message.parsed.argsString;
@@ -35,7 +35,7 @@ _eval.execute = async (message) => {
             )
         );
     } catch (err) {
-        logger.warning(`[EVAL COMMAND ERROR] => {${err.message}}`);
+        logger.warning(`[Evaluate Command][Error] => {${err.message}}`);
         returnValue = err.message;
     }
 
@@ -56,12 +56,13 @@ _eval.execute = async (message) => {
 
     await message.channel.send(messageEmbeds.reply(
         {
-            replyeeMessage: message,
+            message: message,
             fields: [
-                { name: 'Code',                  value: '```js\n' + code + '\n```' }, //  new lines so '`' in code does not interfere.
-                { name: 'Performance Benchmark', value: `${t}ms` },
-                { name: 'Expression Return',     value: `\`${returnValue}\`` },
-                { name: 'Stream Output',         value: `\`${outputValue}\`` }
+                { name: 'Code',              value: '```js\n' + code + '\n```'             }, // \n stops .md break
+                { name: 'Benchmark',         value: `${t}ms`, inline: true                 },
+                { name: 'Size',              value: `${code.length} (chars)`, inline: true },
+                { name: 'Expression Return', value: `\`${returnValue}\``,     inline: true },
+                { name: 'Stream Output',     value: `\`${outputValue}\``,     inline: true }
             ]
         }
     ));
@@ -71,7 +72,7 @@ _eval.execute = async (message) => {
  *  Extra Methods  *
 *******************/
 
-_eval.historySave = (data) => {
+evaluate.historySave = (data) => {
     if (this.history.length > this.historyMax) {
         this.history.shift();
     }

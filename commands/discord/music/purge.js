@@ -8,7 +8,7 @@ purge.execute = async (message) => {
 
     await message.channel.send(messageEmbeds.reply(
         {
-            replyeeMessage: message,
+            message,
             description: 'Purged music player queue.',
             fields: [
                 { name: 'Is Playing?', value: musicController.playing || 'No' },

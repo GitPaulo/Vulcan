@@ -14,7 +14,7 @@ const dirToClass     = {
     'discord': 'DiscordCommand'
 };
 
-module.exports = (folderPath) => {
+module.exports = (vulcan, folderPath) => {
     // Command Map <ID, DiscordCommand/TerminalCommand>
     const commands         = new CommandMap();
     const dirPath          = path.join(__basedir, folderPath);
@@ -80,7 +80,7 @@ module.exports = (folderPath) => {
 
             // Call load command if defined
             if (command.load) {
-                command.load(commandDefinition);
+                command.load(vulcan, commandDefinition);
             }
 
             // Add to map

@@ -35,7 +35,7 @@ process.exit = async (code = 0, message = 'Unknown') => {
                         },
                         {
                             name: 'Vulcan Uptime',
-                            value: vulcan.uptime(),
+                            value: vulcan.uptime,
                             inline: true
                         }
                     ]

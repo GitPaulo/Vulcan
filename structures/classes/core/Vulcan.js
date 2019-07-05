@@ -74,7 +74,7 @@ class Vulcan extends Discord.Client {
     }
 
     loadCommands (folderPath = './commands/discord/') {
-        this.commands = xrequire('./handlers/commandLoadHandler')(folderPath);
+        this.commands = xrequire('./handlers/commandLoadHandler')(this, folderPath);
 
         return chainPrint('Discord Commands', this);
     }
@@ -155,11 +155,11 @@ class Vulcan extends Discord.Client {
         return chainPrint('Discord Connection', this);
     }
 
-    /**********************
-     * Accessors & Others *
-     **********************/
+    /************************
+     * Accessors & Mutators *
+     ***********************/
 
-    getOnlineStatistics () {
+    get statistics () {
         return {
             guildCount: this.guilds.size,
             channelCount: this.channels.size,
@@ -167,14 +167,14 @@ class Vulcan extends Discord.Client {
         };
     }
 
-    getMachineStatistics () {
+    get performance () {
         return {
             cpuUsage: os.loadavg()[1],
             memUsage: process.memoryUsage().rss / 1024 / 1024
         };
     }
 
-    uptime () {
+    get uptime () {
         return String(process.uptime()).toHHMMSS();
     }
 }

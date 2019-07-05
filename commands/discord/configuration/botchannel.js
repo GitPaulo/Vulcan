@@ -1,17 +1,18 @@
-const botchannel     = module.exports;
-const messageEmbeds  = xrequire('./plugins/libs/messageEmbeds');
+const botchannel    = module.exports;
+const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
 
 botchannel.execute = async (message) => {
-    const bc = message.guild.botChannel = message.channel;
-
-    await message.channel.send(messageEmbeds.reply({
-        replyeeMessage: message,
+    const botChannel = message.guild.botChannel = message.channel;
+    const embedWrap  = messageEmbeds.reply({
+        message,
         description: 'Guild bot channel changed.',
         fields: [
             {
                 name: 'Bot Channel',
-                value: `${bc.name}(${bc.id})`
+                value: `${botChannel.name}(${botChannel.id})`
             }
         ]
-    }));
+    });
+
+    await message.channel.send(embedWrap);
 };

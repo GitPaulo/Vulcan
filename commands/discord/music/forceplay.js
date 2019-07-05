@@ -18,7 +18,7 @@ forceplay.execute = async (message) => {
     await musicController.forcePlay(request, message.channel, message.author);
     await message.channel.send(messageEmbeds.reply(
         {
-            replyeeMessage: message,
+            message,
             decription: 'Force played a song.\nWill play on top of queue without affecting queue state.',
             fields: [
                 { name: 'Forced Song', value: request },

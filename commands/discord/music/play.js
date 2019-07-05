@@ -33,7 +33,7 @@ play.execute = async (message) => {
     if (!musicController.isQueueEmpty()) {
         await message.channel.send(messageEmbeds.reply(
             {
-                replyeeMessage: message,
+                message,
                 description: 'Queued an item to the music player.',
                 fields: [
                     { name: 'Queued Song', value: request },

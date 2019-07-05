@@ -11,18 +11,19 @@ const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
 const logger        = xrequire('./managers/LogManager').getInstance();
 
 module.exports = (description, message) => {
+    console.log(message.command);
     message.channel.send(messageEmbeds.warning(
         {
-            title: '[Invalid Command Call] ' + message.command.id,
+            title: `Invalid Command Call (${message.command.id})`,
             description,
             fields: [
                 {
-                  name: '[Command Help] Description',
+                  name: 'Help Description',
                   value: message.command.description
                 },
                 {
-                    name: '[Command Help] Examples',
-                    value: message.command.examples.join('\n')
+                    name: 'Examples',
+                    value: `\`\`\`\n${message.command.examples.join('\n')}\n\`\`\``
                 }
             ]
         }

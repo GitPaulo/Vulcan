@@ -1,43 +1,49 @@
-const permission     = module.exports;
-const messageEmbeds  = xrequire('./plugins/libs/messageEmbeds');
+const permission    = module.exports;
+const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
 
 permission.execute = async (message) => {
-    let permissionManager = message.client.permissionManager;
-    let argsLength        = message.parsed.args.length;
-    let replyEmbedData    = {
-        replyeeMessage: message,
+    const argsLength = message.parsed.args.length;
+
+    if (argsLength < 1) {
+        return message.client.emit('invalidCommandCall', `Expected at least 1 argument.`, message);
+    }
+
+    const cmd               = message.parsed.args[0];
+    const permissionManager = message.client.permissionManager;
+    const embedWrap         = messageEmbeds.reply({
+        message,
         title: `Permissions request received`,
         fields: [
             {
                 name: 'Arguments',
-                value: ((message.parsedargs.length === 0) ? 'none' : message.parsedargs.join(', '))
+                value: ((argsLength === 0) ? 'none' : message.parsed.args.join(', '))
             },
             {
                 name: 'Output',
                 value: 'Processing...'
             }
         ]
-    };
+    });
 
-    let premessage = await message.channel.send(messageEmbeds.reply(replyEmbedData));
+    const reply = await message.channel.send(embedWrap);
 
-    if (argsLength < 1) {
-        return message.client.emit('invalidCommandCall', `Expected at least 1 argument.`, message);
-    } else {
-        switch (message.parsed.args[0]) {
-            case 'check':
-                if (!message.parsed.args[1]) {
-                    return message.client.emit('invalidCommandCall', `Expected 2 arguments.`, message);
-                }
+    switch (cmd) {
+        case 'check':
+            if (!message.parsed.args[1]) {
+                return message.client.emit('invalidCommandCall', `Expected 2 arguments.`, message);
+            }
 
-                let id         = message.parsed.args[1].slice(3, -1);
-                let permission = permissionManager.getUserPermissions(id, true);
+            let id         = message.parsed.args[1].slice(3, -1);
+            let permission = permissionManager.getUserPermissions(id, true);
 
-                replyEmbedData.fields[1].value = permission;
-                premessage.edit(messageEmbeds.reply(replyEmbedData));
-                break;
-            default:
-                break;
-        }
+            embedWrap.embed.fields[1].value = permission;
+            reply.edit(embedWrap);
+            break;
+        default:
+            return message.client.emit(
+                'invalidCommandCall',
+                `The command **${cmd}** was not found in the list of sub-commands for this operation.`,
+                message
+            );
     }
 };

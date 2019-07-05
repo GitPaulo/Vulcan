@@ -1,16 +1,22 @@
-const git            = module.exports;
-const GithubAPI      = xrequire('github-api');
-const messageEmbeds  = xrequire('./plugins/libs/messageEmbeds');
+const git           = module.exports;
+const GithubAPI     = xrequire('github-api');
+const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
+
+git.load = (vulcan, commandDescriptor) => {
+    this.git = new GithubAPI({
+        token: vulcan.credentials.githubOAuth
+    });
+};
 
 git.execute = async (message) => {
-    let cmd            = message.parsed.args[0];
-    let channel        = message.channel;
-    let replyEmbedData = {
-        replyeeMessage: message,
+    const cmd       = message.parsed.args[0];
+    const channel   = message.channel;
+    const embedWrap = messageEmbeds.reply({
+        message,
         title: `**Git** request received: **${cmd}**`,
         fields: [
             {
-                name: 'Arguments',
+                name: 'Subcommand',
                 value: message.parsed.args.join(', ')
             },
             {
@@ -18,46 +24,57 @@ git.execute = async (message) => {
                 value: 'Processing...'
             }
         ]
-    };
+    });
 
-    let firstReply = await channel.send(messageEmbeds.reply(replyEmbedData));
-    // let numArgs    = message.args.length;
-
-    // kinda scuffed but
-    if (!this.git) {
-        this.git = new GithubAPI({
-            token: message.client.credentials.githubOAuth
-        });
-    }
+    const reply = await channel.send(embedWrap);
 
     // Currently only commands about vulcan repo
     let vulcanRepo = this.git.getRepo('GitPaulo', 'Vulcan');
 
     switch (cmd) {
         case 'collaborators':
-            var response1 = await vulcanRepo.getCollaborators();
-            var list1     = response1.data;
-            var carray1   = [];
-            list1.forEach(collaboratorData => {
-                carray1.push(collaboratorData.login);
-            });
-            replyEmbedData.fields[1].value = carray1.join(', ');
-            firstReply.edit(messageEmbeds.reply(replyEmbedData));
+            const collabsArray = await this.fetchCollaborators(vulcanRepo);
+            embedWrap.embed.fields[1].value = collabsArray.join(', ');
             break;
         case 'commits':
-            const maxcs  = 4;
-            let response2 = await vulcanRepo.listCommits();
-            let list2     = response2.data;
-            let carray2   = [];
-            list2.forEach(commitData => {
-                console.log(commitData);
-                carray2.push(`url: ${commitData.url}\nauthor: ${commitData.commit.author.name}\nmessage: ${commitData.commit.message}\n`);
-            });
-            carray2 = carray2.slice(-maxcs);
-            replyEmbedData.fields[1].value = `\`${carray2.join('\n')}\``;
-            firstReply.edit(messageEmbeds.reply(replyEmbedData));
+            const numCommits   = message.parsed.args[1];
+            const commitsArray = await this.fetchCommits(vulcanRepo, numCommits);
+            embedWrap.embed.fields[1].value = commitsArray.join('\n');
             break;
         default:
             return message.client.emit('invalidCommandCall', `The command **${cmd}** was not found in the list of sub-commands for this operation.`, message);
     }
+
+    await reply.edit(embedWrap);
+};
+
+/*******************
+ *  Extra Methods  *
+*******************/
+
+this.fetchCollaborators = async (repo) => {
+    var response = await repo.getCollaborators();
+    var list     = response.data;
+    var carray   = [];
+
+    list.forEach(collaboratorData => {
+        carray.push(collaboratorData.login);
+    });
+
+    return carray;
+};
+
+this.fetchCommits = async (repo, number = 4) => {
+    let response  = await repo.listCommits();
+    let list      = response.data.slice(0, number);
+    let carray    = [];
+
+    list.forEach(commitData => {
+        const dataStr = `Date: "${commitData.commit.author.date}"\nAuthor: "${commitData.commit.author.name}"\nMessage: "${commitData.commit.message}"\n`;
+        carray.push(`\`\`\`yml\n${dataStr}\n\`\`\``);
+    });
+
+    carray.push(`[https://github.com/GitPaulo/Vulcan/commits/master]`);
+
+    return carray;
 };

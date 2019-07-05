@@ -62,7 +62,7 @@ class TerminalManager {
     }
 
     loadCommands (folderPath = './commands/terminal') {
-        this.commands = xrequire('./handlers/commandLoadHandler')(folderPath);
+        this.commands = xrequire('./handlers/commandLoadHandler')(this, folderPath);
     }
 
     start (vulcan) {

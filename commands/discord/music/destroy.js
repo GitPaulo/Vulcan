@@ -8,7 +8,7 @@ destroy.execute = async (message) => {
 
     await message.channel.send(messageEmbeds.reply(
         {
-            replyeeMessage: message,
+            message,
             description: 'Destroyed the music player.',
             fields: [
                 { name: 'Is Playing?', value: musicController.playing || 'No' },

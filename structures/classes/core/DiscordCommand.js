@@ -4,6 +4,8 @@ class DiscordCommand extends Command {
     constructor (commandDefinition) {
         super(
             commandDefinition.id,
+            commandDefinition.description,
+            commandDefinition.examples,
             commandDefinition.aliases,
             commandDefinition.throttling
         );

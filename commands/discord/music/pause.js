@@ -13,7 +13,7 @@ pause.execute = async (message) => {
 
     await message.channel.send(messageEmbeds.reply(
         {
-            replyeeMessage: message,
+            message,
             fields: [
                 {
                     name: 'Paused Song',

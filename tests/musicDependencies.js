@@ -40,8 +40,7 @@ vulcan.on('ready', () => {
     vc.join().then((connection) => {
         ytdl('https://www.youtube.com/watch?v=KQ0_0bBARq8').then((r) => {
             connection.play(r, { type: 'opus' });
+            connection.dispatcher.on('finish', () => process.exit(0));
         });
     });
 });
-
-process.exit(0);
