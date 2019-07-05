@@ -1,5 +1,5 @@
-## Information about command structure.
-There currently exists **two** interfaces for commands in vulcan.
+## Command Structure
+There currently exist **two** interfaces for commands in vulcan.
   - [Discord Commands](./discord/)
   - [Terminal Commands](./termina/)
 
@@ -18,7 +18,8 @@ Each directory, representing a command interface, must contain the file 'command
 ```js
 const mycommand = module.exports;
 
-mycommand.load = (commandDescriptor) => {
+mycommand.load = (vulcan, commandDescriptor) => {
+    // 'vulcan' is a reference to the Vulcan client object
     // 'commandDescriptor' is a JSON object representing the entry for this command in commands.yaml
     // this code is ran once before any call of execute()
 };
@@ -33,7 +34,8 @@ mycommand.execute = async (message) => {
 ```js
 const mycommand = module.exports;
 
-mycommand.load = (commandDescriptor) => {
+mycommand.load = (vulcan, commandDescriptor) => {
+    // 'vulcan' is a reference to the Vulcan client object
     // 'commandDescriptor' is a JSON object representing the entry for this command in commands.yaml
     // this code is ran once before any call of execute()
 };
