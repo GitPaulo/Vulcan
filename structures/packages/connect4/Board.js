@@ -44,8 +44,9 @@ class Board {
     }
 
     withinBoard (y, x) {
-        return y < this.height && y >= 0 &&
-            x < this.width && x >= 0;
+        return y < this.height
+            && y >= 0
+            && x < this.width && x >= 0;
     }
 
     makeMoveAndCheckWin (player, column) {
@@ -85,26 +86,26 @@ class Board {
 
         if (this.checkDraw()) {
             return {
-                'win': false,
-                'draw': true,
-                'direction': 'nan'
+                win: false,
+                draw: true,
+                direction: 'nan'
             };
         }
 
         for (let direction in increments) {
-            if (1 + this.countInLine(increments[direction], y, x, player) + this.countInLine(increments[direction].map(x => -x), y, x, player) >= 4) {
+            if (1 + this.countInLine(increments[direction], y, x, player) + this.countInLine(increments[direction].map((x) => -x), y, x, player) >= 4) {
                 return {
-                    'win': true,
-                    'draw': false,
-                    'direction': direction
+                    win: true,
+                    draw: false,
+                    direction
                 };
             }
         }
 
         return {
-            'win': false,
-            'draw': false,
-            'direction': 'nan'
+            win: false,
+            draw: false,
+            direction: 'nan'
         };
     }
 

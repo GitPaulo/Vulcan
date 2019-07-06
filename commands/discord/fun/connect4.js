@@ -6,7 +6,7 @@ const DiscordCommand = xrequire('./structures/classes/core/DiscordCommand');
 const numberEmojiSuffix = '%E2%83%A3';
 
 class Connect4 extends DiscordCommand {
-    constructor (commandDefinition) {
+    constructor (vulcan, commandDefinition) {
         super(commandDefinition);
 
         // Default board size
@@ -46,7 +46,7 @@ class Connect4 extends DiscordCommand {
         } else { // Send out challenge and wait for it!
             try {
                 await message.channel.awaitMessages(
-                    m => m.content.startsWith('I accept') && m.author === challengee,
+                    (m) => m.content.startsWith('I accept') && m.author === challengee,
                     { max: 1, time: 20000, errors: ['time'] }
                 );
             } catch (warn) {
@@ -73,7 +73,7 @@ class Connect4 extends DiscordCommand {
             exit: false,
             // Methods
             get gameOver () {
-                return game.state.win || game.state.draw || game.state.exit;
+                return this.state.win || this.state.draw || this.state.exit;
             },
             get currentPlayer () {
                 return this.players[this.turn - 1];
@@ -81,43 +81,40 @@ class Connect4 extends DiscordCommand {
             get nonCurrentPlayer () {
                 return this.getOtherPlayer(this.currentPlayer);
             },
-            getOtherPlayer: function (player) {
+            getOtherPlayer (player) {
                 return player === this.players[0] ? this.players[1] : this.players[0];
             },
-            nextMove: async function () {
+            async nextMove () {
                 let move = -1;
-                if (game.players[game.turn - 1].bot) {
-                    move = mcts(game.board, game.turn);
+                if (this.players[this.turn - 1].bot) {
+                    move = mcts(this.board, this.turn);
                 } else {
-                    let filter = (reaction, user) => {
-                        return game.currentPlayer.id === user.id && outerScope.emojiPlays.includes(reaction.emoji.identifier);
-                    };
-
-                    let collected = await game.boardMessage.awaitReactions(filter, { max: 1 });
+                    let filter    = (reaction, user) => this.currentPlayer.id === user.id && outerScope.emojiPlays.includes(reaction.emoji.identifier);
+                    let collected = await this.boardMessage.awaitReactions(filter, { max: 1 });
                     let reaction  = collected.first();
 
                     move = parseInt(reaction.emoji.identifier.slice(0, 1), 10);
-                    await reaction.users.remove(game.currentPlayer.id);
+                    await reaction.users.remove(this.currentPlayer.id);
                     console.log(move);
                 }
                 return move;
             },
-            makeMove: (move) => game.board.makeMoveAndCheckWin(game.turn, move),
-            updateTurnMessage: async function (str) {
-                await game.turnMessage.edit(str || `<@${game.currentPlayer.id}>'s turn`);
+            makeMove: (move) => this.board.makeMoveAndCheckWin(this.turn, move),
+            async updateTurnMessage (str) {
+                await this.turnMessage.edit(str || `<@${this.currentPlayer.id}>'s turn`);
             },
-            updateBoardMessage: async function (str) {
-                await game.boardMessage.edit(str || `\`\`\`${game.board.toString()}\`\`\``);
+            async updateBoardMessage (str) {
+                await this.boardMessage.edit(str || `\`\`\`${this.board.toString()}\`\`\``);
             },
-            updateState: async function (state = { win: false, draw: false }) {
-                game.state = state;
-                if (!game.win && !game.draw) {
-                    game.turn = (game.turn === 1 ? 2 : 1);
+            async updateState (state = { win: false, draw: false }) {
+                this.state = state;
+                if (!this.win && !this.draw) {
+                    this.turn = (this.turn === 1 ? 2 : 1);
                 }
             },
-            updateView: async function () {
-                await game.updateBoardMessage();
-                await game.updateTurnMessage();
+            async updateView () {
+                await this.updateBoardMessage();
+                await this.updateTurnMessage();
             }
         };
 

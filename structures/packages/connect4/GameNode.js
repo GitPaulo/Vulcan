@@ -17,9 +17,9 @@ class GameNode {
         let state    = newBoard.makeMoveAndCheckWin(this.player, move);
         let newNode  = new GameNode(newBoard, this.otherPlayer, move);
 
-        if (state['draw']) {
+        if (state.draw) {
             newNode.winner = 0;
-        } else if (state['win']) {
+        } else if (state.win) {
             newNode.winner = this.player;
         }
 

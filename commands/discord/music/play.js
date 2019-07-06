@@ -14,7 +14,7 @@ play.execute = async (message) => {
 
     // If no URL/ID is provided restart playing song or play whatever is at front of queue.
     if (!request) {
-        if (musicController.isQueueEmpty()) {
+        if (musicController.queueEmpty) {
             return message.client.emit('channelWarning', message.channel, 'Queue is empty and no URL/ID was passed!');
         }
 
@@ -30,7 +30,7 @@ play.execute = async (message) => {
     // Queue song
     await musicController.loadItem(request, message.channel, message.author);
 
-    if (!musicController.isQueueEmpty()) {
+    if (!musicController.queueEmpty) {
         await message.channel.send(messageEmbeds.reply(
             {
                 message,

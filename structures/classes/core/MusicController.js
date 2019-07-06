@@ -51,23 +51,23 @@ class MusicController {
         return this.dispatcher && !this.paused;
     }
 
-    isQueueEmpty () {
-        return this.queue.length <= 0;
-    }
-
-    setRepeatSong (bool) {
+    set repeat (bool) {
         this.repeat = bool;
         this.log('Repeat set to: ' + bool);
     }
 
-    setAutoplay (bool) {
+    set autoplay (bool) {
         this.autoplay = bool;
         this.log('Autoplay set to: ' + bool);
     }
 
-    setShuffle (bool) {
+    set shuffle (bool) {
         this.shuffle = bool;
         this.log('Shuffle set to: ' + bool);
+    }
+
+    get queueEmpty () {
+        return this.queue.length <= 0;
     }
 
     /********************
@@ -119,7 +119,7 @@ class MusicController {
         }
 
         // If there are more songs to play...
-        if (!this.isQueueEmpty()) {
+        if (!this.queueEmpty) {
             // Sort out shuffle [maybe guarantee no repeats?]
             if (this.shuffle) {
                 this.queue.shuffle();
@@ -387,7 +387,7 @@ class MusicController {
             throw Error('Vulcan is not in any voice channel');
         }
 
-        if (this.isQueueEmpty()) {
+        if (this.queueEmpty) {
             throw Error('Queue is empty!');
         }
 

@@ -4,7 +4,7 @@ const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
 list.execute = async (message) => {
     const musicController = message.guild.musicController;
 
-    if (musicController.isQueueEmpty()) {
+    if (musicController.queueEmpty) {
         return message.client.emit('channelInfo', message.channel, 'Music player queue is empty!');
     }
 

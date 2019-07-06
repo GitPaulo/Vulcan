@@ -7,7 +7,7 @@ skip.execute = async (message) => {
 
     let force = Boolean(message.parsed.args[0]);
 
-    if (musicController.isQueueEmpty() && !musicController.playing) {
+    if (musicController.queueEmpty && !musicController.playing) {
         return message.client.emit('channelInfo', message.channel, 'Cannot skip because queue is empty and there is nothing playing!');
     }
 
