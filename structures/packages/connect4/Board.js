@@ -16,25 +16,13 @@ class Board {
     }
 
     static clone (board) {
-        let newBoard = new Board(board.getHeight(), board.getWidth());
+        let newBoard = new Board(board.height, board.width);
         newBoard.setState(board);
         return newBoard;
     }
 
     setState (board) {
-        this.state = board.getState().map((arr) => arr.slice());
-    }
-
-    getState () {
-        return this.state;
-    }
-
-    getWidth () {
-        return this.width;
-    }
-
-    getHeight () {
-        return this.height;
+        this.state = board.state.map((arr) => arr.slice());
     }
 
     getPieceAt (height, width) {
@@ -45,7 +33,7 @@ class Board {
         return column >= 0 && column < this.width && this.state[this.height - 1][column] === 0;
     }
 
-    getAllowedMoves () {
+    get allowedMoves () {
         let allowedMoves = [];
         for (let i = 0; i < this.width; i++) {
             if (this.isValidMove(i)) {

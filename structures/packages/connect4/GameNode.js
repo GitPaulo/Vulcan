@@ -15,7 +15,7 @@ class GameNode {
     getNodeAfterMove (move) {
         let newBoard = Board.clone(this.board);
         let state    = newBoard.makeMoveAndCheckWin(this.player, move);
-        let newNode  = new GameNode(newBoard, this.getOtherPlayer(), move);
+        let newNode  = new GameNode(newBoard, this.otherPlayer, move);
 
         if (state['draw']) {
             newNode.winner = 0;
@@ -27,7 +27,7 @@ class GameNode {
     }
 
     expand () {
-        for (let i = 0; i < this.board.getWidth(); i++) {
+        for (let i = 0; i < this.board.width; i++) {
             if (this.board.isValidMove(i)) {
                 let newNode = this.getNodeAfterMove(i);
                 this.children.push(newNode);
@@ -43,15 +43,11 @@ class GameNode {
 
         for (let child of this.children) {
             if (child.winner > 0) {
-                return child.getOriginatingPlay();
+                return child.originatingPlay;
             }
         }
 
         return -1;
-    }
-
-    isExpanded () {
-        return this.expanded;
     }
 
     update (score) {
@@ -63,39 +59,17 @@ class GameNode {
         return this.winner !== -1;
     }
 
-    getBestChild () {
+    get bestChild () {
         let bestChild = this.children[0];
-        let bestScore = bestChild.getScore();
+        let bestScore = bestChild.score;
 
         for (let child of this.children) {
-            if (child.getScore() > bestScore) {
+            if (child.score > bestScore) {
                 bestChild = child;
-                bestScore = child.getScore();
+                bestScore = child.score;
             }
         }
         return bestChild;
-    }
-
-    getOtherPlayer () {
-        return this.player === 1 ? 2 : 1;
-    }
-
-    getPlayer () {
-        return this.player;
-    }
-
-    getChildren () {
-        return this.children;
-    }
-
-    getRandomChild () {
-        let allowedMoves = this.board.getAllowedMoves();
-        let randomMove   = allowedMoves[Math.floor(Math.random() * allowedMoves.length)];
-        return this.getNodeAfterMove(randomMove);
-    }
-
-    getScore () {
-        return this.cumulativeScore / this.playouts;
     }
 
     getPayoff (player) {
@@ -106,20 +80,21 @@ class GameNode {
         if (this.winner === player) {
             return 1;
         }
-
         return -1;
     }
 
-    getPlayoutCount () {
-        return this.playouts;
+    get otherPlayer () {
+        return this.player === 1 ? 2 : 1;
     }
 
-    getWinner () {
-        return this.winner;
+    get randomChild () {
+        let allowedMoves = this.board.allowedMoves;
+        let randomMove   = allowedMoves[Math.floor(Math.random() * allowedMoves.length)];
+        return this.getNodeAfterMove(randomMove);
     }
 
-    getOriginatingPlay () {
-        return this.originatingPlay;
+    get score () {
+        return this.cumulativeScore / this.playouts;
     }
 }
 
