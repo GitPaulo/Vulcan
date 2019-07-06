@@ -163,7 +163,7 @@ const LogManager = (function () {
             clearModifiers () {
                 modifiers = [];
             },
-            write () {
+            write: function () {  /* eslint-disable-line object-shorthand */ // if not like this it errors because of strict mode??
                 if (shouldLog(...arguments)) {
                     write(this.write.caller.name, ...arguments);
                 }
