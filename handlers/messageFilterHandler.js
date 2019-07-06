@@ -1,6 +1,6 @@
 const logger = xrequire('./managers/LogManager').getInstance();
 
-module.exports = message => {
+module.exports = (message) => {
     const vulcan = message.client;
 
     return new Promise((resolve, reject) => {
@@ -22,19 +22,19 @@ module.exports = message => {
             let hasFiltered = filteredContent !== message.content;
 
             if (hasFiltered) {
-                message.delete().then(() => {
-                    return message.channel.send({
+                message.delete().then(() => (
+                    message.channel.send({
                         embed: {
                             color: 0x0099ff,
                             title: 'Message Filtered',
                             author: {
                                 name: `Message by: ${message.author.tag}`,
-                                icon_url: message.author.defaultAvatarURL
+                                icon_url: message.author.defaultAvatarURL /* eslint-disable-line camelcase */
                             },
                             description: filteredContent
                         }
-                    });
-                }).catch((err) => {
+                    })
+                )).catch((err) => {
                     vulcan.emit('channelError', message.channel, err);
                 });
             }

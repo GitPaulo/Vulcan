@@ -10,8 +10,8 @@ const logger          = xrequire('./managers/LogManager').getInstance();
 // Constants
 const definitionFile = 'commands.yml';
 const dirToClass     = {
-    'terminal': 'TerminalCommand',
-    'discord': 'DiscordCommand'
+    terminal: 'TerminalCommand',
+    discord: 'DiscordCommand'
 };
 
 module.exports = (vulcan, folderPath) => {

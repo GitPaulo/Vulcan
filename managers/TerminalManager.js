@@ -18,10 +18,12 @@ class TerminalManager {
         logger[type](`[CLI] => ${message}`);
     }
 
+    // eslint-disable-next-line no-unused-vars
     onCTRLZ (vulcan) {
         this.log('Terminal: <ctrl>-Z detected!');
     }
 
+    // eslint-disable-next-line no-unused-vars
     onCTRLC (vulcan) {
         this.log('Terminal: <ctrl>-C detected!');
         this.cli.question('Are you sure you want to exit the CLI? [yes/no] ', (answer) => {
@@ -31,6 +33,7 @@ class TerminalManager {
         });
     }
 
+    // eslint-disable-next-line no-unused-vars
     onStreamPause (vulcan) {
         this.log(`CLI input stream paused. (or received SIGCONT)`, 'warning');
         this.log(`Terminal paused.`);

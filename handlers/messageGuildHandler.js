@@ -13,10 +13,10 @@ module.exports = async (message) => {
             {
                 title: 'Command: Execution Blocked',
                 description: isSpamming
-                                ? `Potential spamming has been detected.\nCommand '${cmd.id}' was **blocked**.`
-                                : isAuthorised
-                                    ? `Not authorised to run command.\n\t(Lacking Vulcan Permissions)`
-                                    : `Not authorised and you are spamming D:<!`,
+                    ? `Potential spamming has been detected.\nCommand '${cmd.id}' was **blocked**.`
+                    : isAuthorised
+                        ? `Not authorised to run command.\n\t(Lacking Vulcan Permissions)`
+                        : `Not authorised and you are spamming D:<!`,
                 fields: [
                     {
                         name: 'Throttle Value',

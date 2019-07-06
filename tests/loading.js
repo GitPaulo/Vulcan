@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+
 // Remember to offset paths by their parent since we are in ./tests/
 const { performance } = xrequire('perf_hooks');
 const logger          = xrequire('./managers/LogManager').getInstance();

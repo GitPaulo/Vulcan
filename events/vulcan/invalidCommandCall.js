@@ -18,8 +18,8 @@ module.exports = (description, message) => {
             description,
             fields: [
                 {
-                  name: 'Help Description',
-                  value: message.command.description
+                    name: 'Help Description',
+                    value: message.command.description
                 },
                 {
                     name: 'Examples',

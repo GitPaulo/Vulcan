@@ -21,11 +21,11 @@ const LogManager = (function () {
         let modifiers   = [];
 
         let logTypes    = {
-            'debug'    : chalk.blue,
-            'log'      : chalk.green,
-            'warning'  : chalk.yellowBright,
-            'error'    : chalk.redBright,
-            'terminal' : chalk.magenta
+            debug    : chalk.blue,
+            log      : chalk.green,
+            warning  : chalk.yellowBright,
+            error    : chalk.redBright,
+            terminal : chalk.magenta
         };
 
         let blueprint   = [
@@ -116,9 +116,9 @@ const LogManager = (function () {
 
             let text = applyModifiers(
                 colorFunc(
-                    `(${new Date().toLocaleString()})` +
-                    `[${logType}] => ` +
-                    buffer.join(' ')
+                    `(${new Date().toLocaleString()})`
+                    + `[${logType}] => `
+                    + buffer.join(' ')
                 )
             );
 
@@ -143,32 +143,32 @@ const LogManager = (function () {
         }
 
         return { // 'public' properties
-            removeModifier: function (modID) {
+            removeModifier (modID) {
                 let index = modifiers.indexOf(modID);
                 if (index < -1) {
                     throw Error(`Modifier '${modID}' not found in exisiting modifiers!`);
                 }
                 modifiers.splice(index, 1);
             },
-            addModifier: function (modID) {
+            addModifier (modID) {
                 modifiers.push(modID);
                 this.log(`Modifier added to logger: ${modID}`);
             },
-            setModifiers: function (mods) {
+            setModifiers (mods) {
                 if (!Array.isArray(mods)) {
                     throw Error('Expected log modifiers in array format!');
                 }
                 modifiers = mods;
             },
-            clearModifiers: function () {
+            clearModifiers () {
                 modifiers = [];
             },
-            write: function () {
+            write () {
                 if (shouldLog(...arguments)) {
                     write(this.write.caller.name, ...arguments);
                 }
             },
-            plain: function (text, color = 'white') {
+            plain (text, color = 'white') {
                 let colorFunc = chalk[color];
                 if (!colorFunc) {
                     throw Error(`Invalid color '${color}' for 'logger.plain'!`);
@@ -182,20 +182,20 @@ const LogManager = (function () {
                     )
                 );
             },
-            // helper
-            debug:    function () { this.write(...arguments); },
-            log:      function () { this.write(...arguments); },
-            warning:  function () { this.write(...arguments); },
-            error:    function () { this.write(...arguments); },
-            terminal: function () { this.write(...arguments); },
-            // alias of helper
-            warn: function () { this.warning(...arguments); },
-            err:  function () { this.error(...arguments); }
+            // Helper
+            debug ()    { this.write(...arguments); },
+            log ()      { this.write(...arguments); },
+            warning ()  { this.write(...arguments); },
+            error ()    { this.write(...arguments); },
+            terminal () { this.write(...arguments); },
+            // Alias of helper
+            warn () { this.warning(...arguments); },
+            err ()  { this.error(...arguments); }
         };
     }
 
     return {
-        getInstance: function () {
+        getInstance () {
             if (!instance) {
                 instance = loggerConstructor();
             }

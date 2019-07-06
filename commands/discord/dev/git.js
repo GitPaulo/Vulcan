@@ -2,6 +2,7 @@ const git           = module.exports;
 const GithubAPI     = xrequire('github-api');
 const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
 
+// eslint-disable-next-line no-unused-vars
 git.load = (vulcan, commandDescriptor) => {
     this.git = new GithubAPI({
         token: vulcan.credentials.githubOAuth
@@ -53,11 +54,11 @@ git.execute = async (message) => {
 *******************/
 
 this.fetchCollaborators = async (repo) => {
-    var response = await repo.getCollaborators();
-    var list     = response.data;
-    var carray   = [];
+    let response = await repo.getCollaborators();
+    let list     = response.data;
+    let carray   = [];
 
-    list.forEach(collaboratorData => {
+    list.forEach((collaboratorData) => {
         carray.push(collaboratorData.login);
     });
 
@@ -69,7 +70,7 @@ this.fetchCommits = async (repo, number = 4) => {
     let list      = response.data.slice(0, number);
     let carray    = [];
 
-    list.forEach(commitData => {
+    list.forEach((commitData) => {
         const dataStr = `Date: "${commitData.commit.author.date}"\nAuthor: "${commitData.commit.author.name}"\nMessage: "${commitData.commit.message}"\n`;
         carray.push(`\`\`\`yml\n${dataStr}\n\`\`\``);
     });

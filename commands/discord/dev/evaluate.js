@@ -5,6 +5,7 @@ const { performance } = xrequire('perf_hooks');
 const messageEmbeds   = xrequire('./plugins/libs/messageEmbeds');
 const logger          = xrequire('./managers/LogManager').getInstance();
 
+// eslint-disable-next-line no-unused-vars
 evaluate.load = (vulcan, commandDefinition) => {
     this.historyMax = 100;
     this.history    = [];
@@ -39,24 +40,24 @@ evaluate.execute = async (message) => {
         returnValue = err.message;
     }
 
-    t = Math.round(performance.now() - t, 2);
+    let execTime = Math.round(performance.now() - t, 2);
 
     if (returnValue === outputValue) {
         returnValue = 'undefined';
     }
 
     this.historySave({
-        authorid: message.author.id,
-        authorname: message.author.tag,
-        code: code,
-        execTime: t,
-        return: returnValue,
-        output: outputValue
+        code,
+        execTime,
+        returnValue,
+        outputValue,
+        authorID: message.author.id,
+        authorTag: message.author.tag
     });
 
     await message.channel.send(messageEmbeds.reply(
         {
-            message: message,
+            message,
             fields: [
                 { name: 'Code',              value: '```js\n' + code + '\n```'             }, // \n stops .md break
                 { name: 'Benchmark',         value: `${t}ms`, inline: true                 },

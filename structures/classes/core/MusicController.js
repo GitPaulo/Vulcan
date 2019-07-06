@@ -161,10 +161,10 @@ class MusicController {
         const str   = data;
         const tag   = { name: 'data-title', url: 'data-video-id', id: 'data-video-id' };
         const split = str.indexOf('watch') === -1
-                    ? str
-                    : `https://www.youtube.com/playlist?list=${str.split('&list=')[1].split('&t=')[0]}`;
+            ? str
+            : `https://www.youtube.com/playlist?list=${str.split('&list=')[1].split('&t=')[0]}`;
 
-        return got(split).then(res => {
+        return got(split).then((res) => {
             const $     = cheerio.load(res.body);
             const thumb = $('tr');
 
@@ -175,18 +175,19 @@ class MusicController {
             }
 
             const prefixUrl   = (holder, marks) => holder === 'url' ? `${url}${marks}` : marks;
-            const getDuration = el => {
+            const getDuration = (el) => {
                 const raw = $(el).find('.timestamp').text().split(':');
                 return (parseInt(raw[0], 10) * 60) + parseInt(raw[1], 10);
             };
 
             const multipleDetails = Array.isArray(opt);
 
-            playlist = thumb.map((index, el) => {
+            playlist = thumb.map((_index, el) => {
                 if (multipleDetails) {
                     return opt.reduce((prev, holder) => {
                         prev[holder] = prefixUrl(holder, holder === 'duration'
-                            ? getDuration(el) : el.attribs[tag[holder]]);
+                            ? getDuration(el)
+                            : el.attribs[tag[holder]]);
                         return prev;
                     }, {});
                 }
@@ -211,8 +212,8 @@ class MusicController {
         ytdl.getInfoAsync(url).then((data) => {
             if (!this.queue[cpos]) {
                 return Error(
-                    `Async song data fetch could not find song.` +
-                    +`\n\tQueue was probably purged during load sequence.`
+                    `Async song data fetch could not find song.`
+                    + `\n\tQueue was probably purged during load sequence.`
                 );
             }
 
@@ -220,15 +221,15 @@ class MusicController {
             this.queue[cpos].loudness      = data.loudness;
             this.queue[cpos].author        = data.author.name;
             this.queue[cpos].ageRestricted = data.age_restricted;
-            this.queue[cpos].seconds       = parseInt(data.length_seconds);
+            this.queue[cpos].seconds       = parseInt(data.length_seconds, 10);
         }).catch((err) => {
             this.requestChannel.guild.emit('channelError', this.requestChannel, err);
         });
 
         this.queue.push(
             {
+                url,
                 name: '(loading)',
-                url: url,
                 author: '(loading)',
                 // eslint-disable-next-line no-mixed-operators
                 requestAuthor: (typeof requestAuthor === 'string') && requestAuthor || requestAuthor.tag,
@@ -244,7 +245,7 @@ class MusicController {
         const escmd    = Discord.Util.escapeMarkdown;
         let buildCache = [];
 
-        this.queue.forEach(next => {
+        this.queue.forEach((next) => {
             buildCache.push(`**[${buildCache.length + 1}]**: ${escmd(next.name)} => ${escmd(next.url)}\n`);
         });
 
@@ -261,18 +262,18 @@ class MusicController {
         }
 
         return voiceChannel
-        .join()
-        .then((connection) => {
-            this.voiceChannel = voiceChannel;
-            this.connection   = connection;
-            this.log(`Joined voice channel '${voiceChannel.name}'.`);
-        })
-        .catch((err) => {
-            if (String(err).includes('ECONNRESET')) {
-                throw Error('There was an issue connecting to the voice channel, please try again.');
-            }
-            throw err;
-        });
+            .join()
+            .then((connection) => {
+                this.voiceChannel = voiceChannel;
+                this.connection   = connection;
+                this.log(`Joined voice channel '${voiceChannel.name}'.`);
+            })
+            .catch((err) => {
+                if (String(err).includes('ECONNRESET')) {
+                    throw Error('There was an issue connecting to the voice channel, please try again.');
+                }
+                throw err;
+            });
     }
 
     async leaveVoice () {

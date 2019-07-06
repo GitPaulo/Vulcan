@@ -7,9 +7,9 @@ class PermissionManager {
         this.permissions   = permissions;
         this.filePath      = global.VulcanDefaults.files.permissions.location;
         this.extensiveForm = {
-            '1': 'root',
-            '2': 'admin',
-            '3': 'pleb'
+            1: 'root',
+            2: 'admin',
+            3: 'pleb'
         };
     }
 
@@ -34,7 +34,7 @@ class PermissionManager {
 
         // Remove current permission
         if (currentPermission !== 3) {
-            this.permissions = this.permissions.filter(e => e !== targetUserID);
+            this.permissions = this.permissions.filter((e) => e !== targetUserID);
         }
 
         switch (permissionLevel) {

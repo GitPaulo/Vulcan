@@ -18,7 +18,7 @@ process.exit = async (code = 0, message = 'Unknown') => {
     }
 
     if (code !== 0) {
-        await vulcan.guilds.array().asyncForEach(async guild => {
+        await vulcan.guilds.array().asyncForEach(async (guild) => {
             await guild.botChannel.send(messageEmbeds.critical(
                 {
                     description: `Vulcan process is exiting.`,
@@ -64,9 +64,9 @@ process.exit = async (code = 0, message = 'Unknown') => {
  */
 process.on('unhandledRejection', (err, promise) => {
     logger.error(
-        `Unhandeled Rejection => ${err}\n` +
-        `Stack: ${err.stack}\n` +
-        `Promise: ${promise}`
+        `Unhandeled Rejection => ${err}\n`
+        + `Stack: ${err.stack}\n`
+        + `Promise: ${promise}`
     );
     process.exit(1);
 });
@@ -77,10 +77,10 @@ process.on('unhandledRejection', (err, promise) => {
  */
 process.on('uncaughtException', (err, origin) => {
     logger.error(
-        `Uncaught exception => ${err}\n` +
-        `Stack: ${err.stack}\n` +
-        `File Descriptor: ${process.stderr.fd}\n` +
-        `Exception origin: ${origin}`
+        `Uncaught exception => ${err}\n`
+        + `Stack: ${err.stack}\n`
+        + `File Descriptor: ${process.stderr.fd}\n`
+        + `Exception origin: ${origin}`
     );
     process.exit(1);
 });

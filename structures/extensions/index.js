@@ -12,7 +12,7 @@ const logger          = xrequire('./managers/LogManager').getInstance();
 module.exports = () => {
     let files = fs.readdirSync(__dirname);
 
-    files.forEach(function (file) {
+    files.forEach((file) => {
         if (file === 'index.js') {
             return;
         }
@@ -36,7 +36,7 @@ module.exports = () => {
         }
 
         Discord.Structures.extend(discordClassName,
-            parent => xrequire(path.join(__dirname, file))
+            (parent) => xrequire(path.join(__dirname, file))
         );
 
         logger.log(`Sucessfully loaded extensions file '${file}'. (took ${Math.round(performance.now() - t)}ms)`);

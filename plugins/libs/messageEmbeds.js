@@ -10,7 +10,7 @@ messageEmbeds.reply = (
         title       = cmd.embed.title,
         author      = {
             name: `Replying@${message.author.tag}`,
-            icon_url: message.author.displayAvatarURL(),
+            icon_url: message.author.displayAvatarURL(), /* eslint-disable-line camelcase */
             url: message.author.displayAvatarURL()
         },
         description = `Replying to a request from **${message.author.tag}** for command **${message.command.id}**.`,
@@ -30,22 +30,20 @@ messageEmbeds.reply = (
             }
         ]
     }
-) => {
-    return {
-        embed: {
-            color,
-            author,
-            title,
-            description,
-            thumbnail,
-            fields,
-            timestamp,
-            footer,
-            url
-        },
-        files
-    };
-};
+) => ({
+    embed: {
+        color,
+        author,
+        title,
+        description,
+        thumbnail,
+        fields,
+        timestamp,
+        footer,
+        url
+    },
+    files
+});
 
 messageEmbeds.critical = (
     {
@@ -62,26 +60,24 @@ messageEmbeds.critical = (
         fields      = [],
         url         = ''
     }
-) => {
-    return {
-        embed: {
-            title,
-            description,
-            color,
-            thumbnail,
-            timestamp,
-            footer,
-            fields,
-            url
-        },
-        files: [
-            {
-                attachment: './assets/media/images/general/critical.png',
-                name: 'critical.png'
-            }
-        ]
-    };
-};
+) => ({
+    embed: {
+        title,
+        description,
+        color,
+        thumbnail,
+        timestamp,
+        footer,
+        fields,
+        url
+    },
+    files: [
+        {
+            attachment: './assets/media/images/general/critical.png',
+            name: 'critical.png'
+        }
+    ]
+});
 
 messageEmbeds.error = (
     {
@@ -98,26 +94,24 @@ messageEmbeds.error = (
         fields      = [],
         url         = ''
     }
-) => {
-    return {
-        embed: {
-            title,
-            description,
-            color,
-            thumbnail,
-            timestamp,
-            footer,
-            fields,
-            url
-        },
-        files: [
-            {
-                attachment: './assets/media/images/general/error.png',
-                name: 'error.png'
-            }
-        ]
-    };
-};
+) => ({
+    embed: {
+        title,
+        description,
+        color,
+        thumbnail,
+        timestamp,
+        footer,
+        fields,
+        url
+    },
+    files: [
+        {
+            attachment: './assets/media/images/general/error.png',
+            name: 'error.png'
+        }
+    ]
+});
 
 messageEmbeds.warning = (
     {
@@ -134,26 +128,24 @@ messageEmbeds.warning = (
         fields      = [],
         url         = ''
     }
-) => {
-    return {
-        embed: {
-            title,
-            description,
-            color,
-            thumbnail,
-            timestamp,
-            footer,
-            fields,
-            url
-        },
-        files: [
-            {
-                attachment: './assets/media/images/general/warning.png',
-                name: 'warning.png'
-            }
-        ]
-    };
-};
+) => ({
+    embed: {
+        title,
+        description,
+        color,
+        thumbnail,
+        timestamp,
+        footer,
+        fields,
+        url
+    },
+    files: [
+        {
+            attachment: './assets/media/images/general/warning.png',
+            name: 'warning.png'
+        }
+    ]
+});
 
 messageEmbeds.info = (
     {
@@ -170,23 +162,21 @@ messageEmbeds.info = (
         fields      = [],
         url         = ''
     }
-) => {
-    return {
-        embed: {
-            title,
-            description,
-            color,
-            thumbnail,
-            timestamp,
-            footer,
-            fields,
-            url
-        },
-        files: [
-            {
-                attachment: './assets/media/images/general/info.png',
-                name: 'info.png'
-            }
-        ]
-    };
-};
+) => ({
+    embed: {
+        title,
+        description,
+        color,
+        thumbnail,
+        timestamp,
+        footer,
+        fields,
+        url
+    },
+    files: [
+        {
+            attachment: './assets/media/images/general/info.png',
+            name: 'info.png'
+        }
+    ]
+});

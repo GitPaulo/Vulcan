@@ -4,15 +4,15 @@ const parser    = xrequire('./handlers/messageParserHandler');
 const filter    = xrequire('./handlers/messageFilterHandler');
 const logger    = xrequire('./managers/LogManager').getInstance();
 
-module.exports = async message => {
+module.exports = async (message) => {
     try {
         const vulcan = message.client;
         logger.log(
-            `[${message.isDirectMessage() ? 'Direct Message' : message.guild.name}@${message.channel.name}]` +
-            ` => ` +
-            `[${message.author.tag}(${message.author.id})]` +
-            ` => ` +
-            `"${message.content || 'Empty?'}"`
+            `[${message.isDirectMessage() ? 'Direct Message' : message.guild.name}@${message.channel.name}]`
+            + ` => `
+            + `[${message.author.tag}(${message.author.id})]`
+            + ` => `
+            + `"${message.content || 'Empty?'}"`
         );
 
         // Filter contents of message

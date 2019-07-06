@@ -5,7 +5,7 @@
     "main": "bot.js",
     "scripts": {
         "_COMMENT0": " ============================ BUILD SCRIPTS  ============================",
-        "wintools": "npm install -g windows-build-tools", 
+        "wintools": "npm install -g windows-build-tools",
         "_COMMENT1": " ============================ RUN SCRIPTS  ============================",
         "start": "node --require ./plugins/scripts/globals.js bot.js",
         "dev": "nodemon --require ./plugins/scripts/globals.js bot.js",
@@ -14,6 +14,7 @@
         "test:music": "node --require ./plugins/scripts/globals.js tests/musicDependencies.js",
         "_COMMENT3": " ============================ CODE ENV SCRIPTS  ============================",
         "linter": "./node_modules/.bin/eslint .",
+        "linter:errors-only": "./node_modules/.bin/eslint . --quiet",
         "linter:setup": "npm install eslint --save-dev",
         "linter:init": "./node_modules/.bin/eslint --init",
         "linter:fix": "./node_modules/.bin/eslint . --fix"
@@ -53,12 +54,8 @@
     },
     "devDependencies": {
         "eslint": "^6.0.1",
-        "eslint-config-standard": "^12.0.0",
-        "eslint-plugin-import": "^2.18.0",
-        "eslint-plugin-node": "^9.1.0",
-        "eslint-plugin-promise": "^4.2.1",
+        "eslint-config-mudamuda": "^1.0.6",
         "eslint-plugin-security": "^1.4.0",
-        "eslint-plugin-standard": "^4.0.0",
         "nodemon": "^1.19.1"
     }
 }

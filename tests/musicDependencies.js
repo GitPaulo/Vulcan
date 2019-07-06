@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+
 const pjson  = xrequire('./package.json');
 const ytdl   = xrequire('ytdl-core-discord');
 const Vulcan = xrequire('./structures/classes/core/Vulcan');
@@ -11,7 +13,7 @@ const logger = xrequire('./managers/LogManager').getInstance();
     'loadPermissions',
     'loadMusicManager',
     'loadCLI'
-].forEach(identifier => {
+].forEach((identifier) => {
     Vulcan.prototype[identifier] = function () {
         logger.debug(`Vulcan method '${identifier}' disabled for testing`);
         return this;

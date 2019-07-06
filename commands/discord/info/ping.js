@@ -1,6 +1,7 @@
 const ping          = module.exports;
 const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
 
+// eslint-disable-next-line no-unused-vars
 ping.load = (vulcan, commandDefinition) => {
     this.phrases = [
         `Imagine pinging vulcan...`,

@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+
 // Initialisation
 xrequire('./plugins/scripts/globals');
 xrequire('./plugins/scripts/coreEvents');
@@ -43,7 +45,7 @@ const vulcan = module.exports = new Vulcan(
     }
 );
 
-// Load Vulcan (do NOT chain of instantiation)
+// Vulcan (do NOT chain of instantiation)*/
 vulcan.loadDatabase()
       .loadCommands()
       .loadEvents()

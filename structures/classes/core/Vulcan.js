@@ -19,10 +19,7 @@ const couldnt_have_forged_it_better_myself = `\\ \\    / /   | |
 /****************************************************************/
 
 // Dumb function : )
-let chainPrint = (category, chainee) => (logger.log('Initialised => ' +
-    category
-// eslint-disable-next-line no-sequences
-), chainee);
+let chainPrint = (category, chainee) => (logger.log('Initialised => ' + category), chainee);
 
 class Vulcan extends Discord.Client {
     constructor (settings, options = {}) {
@@ -84,8 +81,8 @@ class Vulcan extends Discord.Client {
         const vulcanEventsPath    = path.join(eventsPath, 'vulcan');
         const discordjsEventsPath = path.join(eventsPath, 'discord');
 
-        let discordEvents = fs.readdirSync(discordjsEventsPath).filter(file => file.endsWith('.js'));
-        let vulcanEvents  = fs.readdirSync(vulcanEventsPath).filter(file => file.endsWith('.js'));
+        let discordEvents = fs.readdirSync(discordjsEventsPath).filter((file) => file.endsWith('.js'));
+        let vulcanEvents  = fs.readdirSync(vulcanEventsPath).filter((file) => file.endsWith('.js'));
 
         for (let eventFile of discordEvents) {
             let t     = performance.now();

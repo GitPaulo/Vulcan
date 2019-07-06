@@ -5,12 +5,12 @@ const path = xrequire('path');
 const fileFunctions = module.exports = {};
 
 fileFunctions.allDirFiles = (dir, fileTypes = '.js') => {
-    var filesToReturn = [];
+    let filesToReturn = [];
 
     function walkDir (currentPath) {
-        var files = fs.readdirSync(currentPath);
-        for (var i in files) {
-            var curFile = path.join(currentPath, files[i]);
+        let files = fs.readdirSync(currentPath);
+        for (let i in files) {
+            let curFile = path.join(currentPath, files[i]);
             if (fs.statSync(curFile).isFile() && fileTypes.indexOf(path.extname(curFile)) !== -1) {
                 filesToReturn.push(curFile.replace(dir, ''));
             } else if (fs.statSync(curFile).isDirectory()) {

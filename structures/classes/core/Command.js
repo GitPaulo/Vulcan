@@ -57,7 +57,7 @@ class Command {
     }
 
     hasCalled (id) {
-        return Boolean(this.getRecentCall());
+        return Boolean(this.resolveCall(id));
     }
 
     underThrottling (id) {

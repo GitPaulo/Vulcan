@@ -10,31 +10,34 @@ let log = (message) => {
 let writeToDefaultFile = (object, path) => {
     let data = yaml.safeDump(object);
 
-    fs.writeFileSync(path, data, function (err) {
-        if (err) throw err;
+    fs.writeFileSync(path, data, (err) => {
+        if (err) {
+            throw err;
+        }
     });
 };
 
 global.VulcanDefaults = {
     folders: [
-            'settings',
-            'data'
-        ],
+        'settings',
+        'data'
+    ],
     files: {
-        'configuration': {
+        configuration: {
             location: path.join(__basedir, 'settings', 'config.yml'),
             data: {
                 prefixes: [
                     '!',
                     '>'
                 ],
-                devsID: [ // Please don't change this
+                devsID: [
+                    // Please don't change this
                     '166176374036365312',
                     '207606117159796737'
                 ]
             }
         },
-        'credentials': {
+        credentials: {
             location: path.join(__basedir, 'settings', 'credentials.yml'),
             data: {
                 token: `PLEASE ADD YOUR DISCORD TOKEN HERE`,
@@ -47,7 +50,7 @@ global.VulcanDefaults = {
         },
         // Commands will have 3 groups. Group 1 only roots can use. Group 2 only admin and above can use. Group 3 everyone can use.
         // Everyone not in this file is a pleb by default.
-        'permissions': {
+        permissions: {
             location: path.join(__basedir, 'settings', 'permissions.yml'),
             data: {
                 roots: [], // configuration.devIDs are roots by default
@@ -83,7 +86,7 @@ global.VulcanDefaults = {
         } else { // check if contents are proper
             let defaultFile       = fs.readFileSync(filePath, 'utf8');
             let parsedObject      = yaml.safeLoad(defaultFile);
-            let missingProperties = Object.keys(defaultObject.data).filter(x => !Object.keys(parsedObject).includes(x));
+            let missingProperties = Object.keys(defaultObject.data).filter((x) => !Object.keys(parsedObject).includes(x));
 
             if (missingProperties.length > 0) {
                 for (let rootProperty of missingProperties) {

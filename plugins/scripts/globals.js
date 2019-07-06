@@ -22,7 +22,7 @@ global.xrequire.resolve = (request, options = null) => {
     return require.resolve(request, options);
 };
 
-global.xrequire.resolve.paths = request => {
+global.xrequire.resolve.paths = (request) => {
     if (request.startsWith('.')) {
         return require.resolve.paths(path.resolve(request));
     }

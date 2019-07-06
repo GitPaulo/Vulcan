@@ -8,8 +8,7 @@ env:
 plugins:
   - security
 extends:
-  - 'eslint:recommended'
-  - standard
+  - 'mudamuda/node' # superior rule set
 globals:
   xrequire: readonly
   __basedir: readonly
@@ -17,16 +16,3 @@ globals:
   print: readonly
   PrintHistory: readonly
   VulcanDefaults: readonly
-parserOptions:
-  ecmaVersion: 2018
-rules:
-  no-case-declarations: off
-  no-console: off
-  no-useless-escape: off
-  no-inline-comments: off
-  no-multi-spaces: off
-  standard/object-curly-even-spacing: off
-  semi:
-    - 2
-    - always
-  indent: off

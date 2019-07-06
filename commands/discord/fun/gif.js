@@ -10,6 +10,7 @@ const stringFunctions  = xrequire('./plugins/libs/stringFunctions');
 // Promisify fs functions
 const readdir = util.promisify(fs.readdir);
 
+// eslint-disable-next-line no-unused-vars
 gif.load = (vulcan, commandDefinition) => {
     this.folderPath        = path.join(__basedir, 'data', 'gifs');
     this.allowedExtensions = ['.png', '.jpg', '.mp4', '.gif'];
@@ -25,7 +26,7 @@ gif.execute = async (message) => {
 
     const channel   = message.channel;
     const embedWrap = messageEmbeds.reply({
-        message: message,
+        message,
         title: `**Gif** request received: **${cmd}**`,
         fields: [
             {
@@ -119,7 +120,7 @@ gif.storeImageFromMessage = (fileName, message) => {
     let attachments = message.attachments;
     let i = 0;
 
-    attachments.forEach(attachment => {
+    attachments.forEach((attachment) => {
         this.storeImageFromURL(attachment.proxyURL, fileName + (i > 0 ? i++ : i++, ''));
     });
 };
@@ -138,9 +139,9 @@ gif.storeImageFromURL = async (url, fileName) => {
     let file     = fs.createWriteStream(filePath);
 
     try {
-        await http.get(url, function (response) {
+        await http.get(url, (response) => {
             response.pipe(file);
-            file.on('finish', function () {
+            file.on('finish', () => {
                 file.close();
             });
         });
@@ -156,7 +157,7 @@ gif.fetchImage = async (keyword) => {
     let filePath = 'N/A';
     let hvalue   = 0;
 
-    files.forEach(function (file) {
+    files.forEach((file) => {
         let cvalue = stringFunctions.levenshteinSimilarity(keyword, file);
         if (cvalue > hvalue) {
             filePath = file;

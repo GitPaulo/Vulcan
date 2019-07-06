@@ -5,9 +5,9 @@ module.exports = (error, description, channel) => {
         channel.send(
             {
                 title: `WebSocket Error`,
-                description: description
+                description
             }
-        ).catch(err => {
+        ).catch((err) => {
             channel.client.log.error(err);
         });
     }
