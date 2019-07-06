@@ -7,7 +7,7 @@ shuffle.execute = async (message) => {
     let input = message.parsed.args[0];
     let bool  = input ? Boolean(input) : !musicController.shuffle;
 
-    musicController.setShuffle(bool);
+    musicController.shuffle = bool;
 
     await message.channel.send(messageEmbeds.reply(
         {

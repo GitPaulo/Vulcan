@@ -7,7 +7,7 @@ autoplay.execute = async (message) => {
     let input = message.parsed.args[0];
     let bool  = input ? Boolean(input) : !musicController.autoplay;
 
-    musicController.setAutoplay(bool);
+    musicController.autoplay = bool;
 
     await message.channel.send(messageEmbeds.reply(
         {

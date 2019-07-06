@@ -7,7 +7,7 @@ repeat.execute = async (message) => {
     let input = message.parsed.args[0];
     let bool  = input ? Boolean(input) : !musicController.repeat;
 
-    musicController.setRepeatSong(bool);
+    musicController.repeat = bool;
 
     await message.channel.send(messageEmbeds.reply(
         {

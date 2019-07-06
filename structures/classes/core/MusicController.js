@@ -51,21 +51,6 @@ class MusicController {
         return this.dispatcher && !this.paused;
     }
 
-    set repeat (bool) {
-        this.repeat = bool;
-        this.log('Repeat set to: ' + bool);
-    }
-
-    set autoplay (bool) {
-        this.autoplay = bool;
-        this.log('Autoplay set to: ' + bool);
-    }
-
-    set shuffle (bool) {
-        this.shuffle = bool;
-        this.log('Shuffle set to: ' + bool);
-    }
-
     get queueEmpty () {
         return this.queue.length <= 0;
     }
