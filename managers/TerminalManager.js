@@ -49,11 +49,6 @@ class TerminalManager {
         }
 
         try {
-            if (!command.validate(vulcan)) {
-                this.log(`Command execution was blocked.`, 'warning');
-                return;
-            }
-
             command.execute(vulcan);
         } catch (err) {
             this.log(`CLI Command Error: ${err.message}\nStack: ${err.stack}`);
@@ -67,7 +62,7 @@ class TerminalManager {
     }
 
     loadCommands (folderPath = './commands/terminal') {
-        this.commands = xrequire('./handlers/commandLoadHandler')(folderPath);
+        this.commands = xrequire('./handlers/commandLoadHandler')(this, folderPath);
     }
 
     start (vulcan) {

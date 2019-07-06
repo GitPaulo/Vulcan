@@ -1,34 +1,25 @@
-const Discord        = xrequire('discord.js');
-const messageEmbeds  = xrequire('./plugins/libs/messageEmbeds');
-const DiscordCommand = xrequire('./structures/classes/core/DiscordCommand');
+const pause         = module.exports;
+const Discord       = xrequire('discord.js');
+const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
 
-class Pause extends DiscordCommand {
-    // eslint-disable-next-line no-unused-vars
-    async validate (message) {
-        return true; // if true execute() will run
+pause.execute = async (message) => {
+    const musicController = message.guild.musicController;
+
+    if (!musicController.playing) {
+        return message.client.emit('channelInfo', message.channel, 'No music is playing. Therefore cannot pause.');
     }
 
-    async execute (message) {
-        const musicController = message.guild.musicController;
+    musicController.pause();
 
-        if (!musicController.playing) {
-            return message.client.emit('channelInfo', message.channel, 'No music is playing. Therefore cannot pause.');
+    await message.channel.send(messageEmbeds.reply(
+        {
+            message,
+            fields: [
+                {
+                    name: 'Paused Song',
+                    value: Discord.Util.escapeMarkdown(musicController.loadedSong.name)
+                }
+            ]
         }
-
-        musicController.pause();
-
-        await message.channel.send(messageEmbeds.reply(
-            {
-                replyeeMessage: message,
-                fields: [
-                    {
-                        name: 'Paused Song',
-                        value: Discord.Util.escapeMarkdown(musicController.loadedSong.name)
-                    }
-                ]
-            }
-        ));
-    }
-}
-
-module.exports = Pause;
+    ));
+};

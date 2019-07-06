@@ -1,32 +1,23 @@
-const messageEmbeds  = xrequire('./plugins/libs/messageEmbeds');
-const DiscordCommand = xrequire('./structures/classes/core/DiscordCommand');
+const shuffle       = module.exports;
+const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
 
-class Shuffle extends DiscordCommand {
-    // eslint-disable-next-line no-unused-vars
-    async validate (message) {
-        return true; // if true execute() will run
-    }
+shuffle.execute = async (message) => {
+    const musicController = message.guild.musicController;
 
-    async execute (message) {
-        const musicController = message.guild.musicController;
+    let input = message.parsed.args[0];
+    let bool  = input ? Boolean(input) : !musicController.shuffle;
 
-        let input = message.parsed.args[0];
-        let bool  = input ? Boolean(input) : !musicController.shuffle;
+    musicController.setShuffle(bool);
 
-        musicController.setShuffle(bool);
-
-        await message.channel.send(messageEmbeds.reply(
-            {
-                replyeeMessage: message,
-                fields: [
-                    {
-                        name: 'Shuffle Status',
-                        value: bool.toString()
-                    }
-                ]
-            }
-        ));
-    }
-}
-
-module.exports = Shuffle;
+    await message.channel.send(messageEmbeds.reply(
+        {
+            message,
+            fields: [
+                {
+                    name: 'Shuffle Status',
+                    value: bool.toString()
+                }
+            ]
+        }
+    ));
+};

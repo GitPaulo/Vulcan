@@ -1,27 +1,43 @@
 ---
-####### Command Structure
+###############################################
+######  Discord Command Definition File  ######
+###############################################
+
+### [Command Structure]
 # command_id:
-#   aliasses:
+#   aliases:
 #     - alias1
 #     - alias2
 #     - (...)
 #     - aliasN
-#   description: 'Command does XYZ'
+#   description: 'This command does XYZ.'
 #   examples: 
-#     - '!command_id <args>'
-#   group: 1 (check group system)
+#     - '<prefix>command_id <arg1:number> <arg2:string> ... <argn:boolean> '
+#   group: 1 # check group system!
 #   throttling: 2000 
 #   embed:
 #     color: 0x00000
 #     title: 'Title of reply message'
 #     image: 'some path in assets folder'
 
-#######################
-#    'dev' folder     #
-#######################
-### New Command [./commands/discord/dev/eval.js] ###
-eval:
+#
+botchannel:
   aliases:
+  - 'botc'
+  description: 'Set botchannel of guild.'
+  examples:
+  - '<prefix>botchannel'
+  group: 3
+  throttling: 2000
+  embed:
+    color: 0xAACE6D
+    title: 'Botchannel Set'
+    image: './assets/media/images/commands/discord/Configuration.gif'
+
+#
+evaluate: 
+  aliases:
+  - 'eval'
   - 'js'
   - 'runjs'
   - 'jsrun'
@@ -34,9 +50,10 @@ eval:
   throttling: 2000
   embed:
     color: 0xFFCE6D
-    title: '(JavaScript) Code Evaluation'
+    title: 'JavaScript Evaluation'
     image: './assets/media/images/commands/discord/Eval.gif'
-### New Command [./commands/discord/dev/git.js] ###
+
+#
 git:
   aliases:
   - 'github'
@@ -49,28 +66,27 @@ git:
   group: 1
   throttling: 2000
   embed:
-    color: 0xFF0000
+    color: 0x1e5fc7
     title: 'Git'
     image: './assets/media/images/commands/discord/Git.gif'
-### New Command [./commands/discord/dev/permission.js] ###
+
+#
 permission:
   aliases:
   - 'perm'
   description: 'Interface to the permission system'
   group: 1
   examples:
-  - '!permission [username]'
-  - '!permission change [username] 2'
+  - 'a'
+  - 'b'
+  - 'c'
   throttling: 2000
   embed:
-    color: 0xFFCE6D
+    color: 0x8c047c
     title: 'Permission System'
     image: './assets/media/images/commands/discord/Permissions.gif'
 
-#######################
-#    'info' folder    #
-#######################
-### New Command [./commands/discord/info/ping.js] ###  
+#
 ping:
   aliases:
   - 'pingpong'
@@ -87,10 +103,7 @@ ping:
     title: 'Ping...'
     image: './assets/media/images/commands/discord/Ping.gif'
 
-#######################
-#    'fun' folder     #
-#######################
-### New Command [./commands/discord/fun/gif.js] ###
+#
 gif:
   aliases:
   - 'imagestorage'
@@ -105,7 +118,8 @@ gif:
     color: 0x666666
     title: 'Gif'
     image: './assets/media/images/commands/discord/Gif.gif'
-### New Command [./commands/discord/fun/connect4.js] ###
+
+#
 connect4:
   aliases:
   - 'c4'
@@ -119,10 +133,7 @@ connect4:
     title: 'Connect 4'
     image: './assets/media/images/commands/discord/Connect4.gif'
 
-#######################
-#   'music' folder    #
-#######################
-### New Command [./commands/discord/music/autoplay.js] ###
+#
 autoplay:
   aliases:
   - 'musicautoplay'
@@ -135,7 +146,8 @@ autoplay:
     color: 0xFFA500
     title: 'Auto Play'
     image: './assets/media/images/commands/discord/Music.gif'
-### New Command [./commands/discord/music/destroy.js] ###
+
+#
 destroy:
   aliases:
   - 'musicdestroy'
@@ -148,7 +160,8 @@ destroy:
     color: 0xFFA500
     title: 'Destroy'
     image: './assets/media/images/commands/discord/Music.gif'
-### New Command [./commands/discord/music/forceplay.js] ###
+
+#
 forceplay:
   aliases:
   - 'musicforceplay'
@@ -161,7 +174,8 @@ forceplay:
     color: 0xFFA500
     title: 'ForcePlay'
     image: './assets/media/images/commands/discord/Music.gif'
-### New Command [.commands/discord/music/list.js] ###
+
+#
 list:
   aliases:
   - 'musiclist'
@@ -174,7 +188,8 @@ list:
     color: 0xFFA500
     title: 'List'
     image: './assets/media/images/commands/discord/Music.gif'
-### New Command [.commands/discord/music/pause.js] ###
+
+#
 pause:
   aliases:
   - 'musicpause'
@@ -187,7 +202,8 @@ pause:
     color: 0xFFA500
     title: 'Pause'
     image: './assets/media/images/commands/discord/Music.gif'
-### New Command [./commands/discord/music/play.js] ###
+
+#
 play:
   aliases:
   - 'musicplay'
@@ -200,7 +216,8 @@ play:
     color: 0xFFA500
     title: 'Play'
     image: './assets/media/images/commands/discord/Music.gif'
-### New Command [.commands/discord/music/purge.js] ###
+
+#
 purge:
   aliases:
   - 'musicpurge'
@@ -213,7 +230,8 @@ purge:
     color: 0xFFA500
     title: 'Purge'
     image: './assets/media/images/commands/discord/Music.gif'
-### New Command [./commands/discord/music/repeat.js] ###
+
+#
 repeat:
   aliases:
   - 'musicrepeat'
@@ -226,7 +244,8 @@ repeat:
     color: 0xFFA500
     title: 'Repeat'
     image: './assets/media/images/commands/discord/Music.gif'
-### New Command [./commands/discord/music/resume.js] ###
+
+#
 resume:
   aliases:
   - 'musicresume'
@@ -239,7 +258,8 @@ resume:
     color: 0xFFA500
     title: 'Resume'
     image: './assets/media/images/commands/discord/Music.gif'
-### New Command [.commands/discord/music/shuffle.js] ###
+
+#
 shuffle:
   aliases:
   - 'musicshuffle'
@@ -252,7 +272,8 @@ shuffle:
     color: 0xFFA500
     title: 'Shuffle'
     image: './assets/media/images/commands/discord/Music.gif'
-### New Command [.commands/discord/music/skip.js] ###
+
+#
 skip:
   aliases:
   - 'musicskip'

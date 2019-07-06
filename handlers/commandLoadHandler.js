@@ -7,24 +7,51 @@ const fileFunctions   = xrequire('./plugins/libs/fileFunctions');
 const CommandMap      = xrequire('./structures/classes/core/CommandMap');
 const logger          = xrequire('./managers/LogManager').getInstance();
 
-module.exports = (folderPath) => {
-    const commands = new CommandMap();
-    const dirPath  = path.join(__basedir, folderPath);
+// Constants
+const definitionFile = 'commands.yml';
+const dirToClass     = {
+    'terminal': 'TerminalCommand',
+    'discord': 'DiscordCommand'
+};
 
-    // Load Command Definition File
-    const commandsDefinitionFile = fs.readFileSync(path.join(folderPath, 'commands.yml'), 'utf8');
-    const commandsDefinition     = yaml.safeLoad(commandsDefinitionFile);
+module.exports = (vulcan, folderPath) => {
+    // Command Map <ID, DiscordCommand/TerminalCommand>
+    const commands         = new CommandMap();
+    const dirPath          = path.join(__basedir, folderPath);
+    const dirName          = path.basename(dirPath);
+    const commandClassName = dirToClass[dirName];
 
-    // Load Command Class Files
-    for (let fileName of fileFunctions.allDirFiles(dirPath)) {
+    if (!commandClassName) {
+        throw Error(`Invalid command class name coming from: '${dirName}'. Likely bad folder structure.`);
+    }
+
+    // Fetch necessary things
+    const CommandClass           = xrequire(`./structures/classes/core/${commandClassName}`);
+    const commandDefinitionsPath = path.join(folderPath, definitionFile);
+    const commandDefinitionsFile = fs.readFileSync(commandDefinitionsPath, 'utf8');
+    const commandDefinitions     = yaml.safeLoad(commandDefinitionsFile);
+
+    if (Object.entries(commandDefinitions).length === 0 || commandDefinitions.constructor !== Object) {
+        throw Error(`Failed parsing '${definitionFile}' from (${commandDefinitionsPath})`);
+    }
+
+    const commandFiles = fileFunctions.allDirFiles(dirPath);
+
+    let offset = Object.keys(commandDefinitions).length - commandFiles.length;
+    if (offset !== 0) {
+        logger.warn(`The number of commands defined in '${definitionFile}' does not match the coded ones.\n\tOffset: ${offset}`);
+    }
+
+    // Load all commands under 'folderPath'
+    for (let fileName of commandFiles) {
         try {
-            let t            = performance.now();
-            let matches      = fileName.match(/\w*.js/);
-            let commandID    = matches[matches.length - 1].slice(0, -3);
-            let fullPath     = path.join(dirPath, fileName);
-            let CommandClass = xrequire(fullPath);
+            let t         = performance.now();
+            let matches   = fileName.match(/\w*.js/);
+            let commandID = matches[matches.length - 1].slice(0, -3);
+            let fullPath  = path.join(dirPath, fileName);
 
-            let commandDefinition  = commandsDefinition[commandID];
+            // Fetch command deifnition using id & validate
+            let commandDefinition  = commandDefinitions[commandID];
 
             if (!commandDefinition) {
                 throw Error(`Command definition not found for \nID: ${commandID}\nPATH: ${fullPath}`);
@@ -47,9 +74,17 @@ module.exports = (folderPath) => {
                 }
             );
 
-            let command = new CommandClass(commandDefinition);
-            commands.addCommand(command);
+            // Hack the system - make command object instance of appropriate class
+            let commandObject = xrequire(fullPath);
+            const command     = Object.assign(new CommandClass(commandDefinition), commandObject);
 
+            // Call load command if defined
+            if (command.load) {
+                command.load(vulcan, commandDefinition);
+            }
+
+            // Add to map
+            commands.addCommand(command);
             logger.log(`Loaded (${commandDefinition.type}) command '${command.id}' from ${fileName} (took ${mathFunctions.round(performance.now() - t, 2)}ms)`);
         } catch (err) {
             logger.error(

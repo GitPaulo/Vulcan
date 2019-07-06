@@ -2,18 +2,18 @@ const messageEmbeds = module.exports = {};
 
 messageEmbeds.reply = (
     {
-        replyeeMessage,
-        imgPath     = replyeeMessage.command.embed.image,
+        message,
+        imgPath     = message.command.embed.image,
         imgName     = imgPath.substring(imgPath.lastIndexOf('/') + 1),
-        cmd         = replyeeMessage.command,
+        cmd         = message.command,
         color       = cmd.embed.color,
         title       = cmd.embed.title,
         author      = {
-            name: `Replying@${replyeeMessage.author.tag}`,
-            icon_url: replyeeMessage.author.displayAvatarURL(),
-            url: replyeeMessage.author.displayAvatarURL()
+            name: `Replying@${message.author.tag}`,
+            icon_url: message.author.displayAvatarURL(),
+            url: message.author.displayAvatarURL()
         },
-        description = `Replying to a request from **${replyeeMessage.author.tag}** for command **${replyeeMessage.command.id}**.`,
+        description = `Replying to a request from **${message.author.tag}** for command **${message.command.id}**.`,
         thumbnail   = {
             url: `attachment://${imgName}`
         },
