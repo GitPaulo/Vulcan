@@ -11,7 +11,7 @@ Each directory, representing a command interface, must contain the file 'command
 ### Adding a new command?
   1. Navigate to the correct derictory.
   2. Identify the **type** of command you wish to add and navigate to the folder that best describes that type. If your type does not exist or is poorly represented, create a folder for it.
-  3. Inside the folder of your command type, create a .js file. The name of this file will be your **command id** and **must be unique.**
+  3. Inside the folder of your command type, create a .js file. The name of this file will be your **command id** (convention is full lowercase) and **must be unique.**
   4. Add the descriptor for your command in the appropriate command.yml file.
 
 ### Discord Command Template (./discord/mytype/mycommand.js)
@@ -24,9 +24,9 @@ mycommand.load = (vulcan, commandDescriptor) => {
     // this code is ran once before any call of execute()
 };
 
-mycommand.execute = async (message) => { 
+mycommand.execute = async (message) => {
     // 'message' is a discord.js message object
-    await message.channel.send("Hello World!");
+    await message.channel.send('Hello World!');
 };
 ```
 

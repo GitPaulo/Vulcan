@@ -286,3 +286,38 @@ skip:
     color: 0xFFA500
     title: 'Skip'
     image: './assets/media/images/commands/discord/Music.gif'
+
+# 
+smiteroulette:
+  aliases:
+  - 'smitespin'
+  - 'smiter'
+  description: 'Spins a random smite god!'
+  group: 3
+  examples:
+  - '!smiteroulette'
+  - '!smiteroulette <pantheon>'
+  - '!smiteroulette <class>'
+  throttling: 1000
+  embed:
+    color: 0xffa500
+    title: 'Smite God Roulette'
+    image: './assets/media/images/commands/discord/SmiteRoulette.gif'
+
+# 
+overwatchroulette:
+  aliases:
+  - 'overwatchspin'
+  - 'overwatchr'
+  - 'owspin'
+  - 'owroulette'
+  description: 'Spins a random overwatch hero god!'
+  group: 3
+  examples:
+  - '!overwatchroulette'
+  - '!overwatchroulette <class>'
+  throttling: 1000
+  embed:
+    color: 0xffa500
+    title: 'Overwatch Hero Roulette'
+    image: './assets/media/images/commands/discord/OverwatchRoulette.gif'

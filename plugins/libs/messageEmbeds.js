@@ -23,6 +23,7 @@ messageEmbeds.reply = (
             text: `[Command] Vulcan's reply to a command request.`
         },
         url         = '',
+        image       = {},
         files       =  [
             {
                 attachment: imgPath,
@@ -40,7 +41,8 @@ messageEmbeds.reply = (
         fields,
         timestamp,
         footer,
-        url
+        url,
+        image
     },
     files
 });
@@ -73,7 +75,7 @@ messageEmbeds.critical = (
     },
     files: [
         {
-            attachment: './assets/media/images/general/critical.png',
+            attachment: './assets/media/images/embeds/critical.png',
             name: 'critical.png'
         }
     ]
@@ -107,7 +109,7 @@ messageEmbeds.error = (
     },
     files: [
         {
-            attachment: './assets/media/images/general/error.png',
+            attachment: './assets/media/images/embeds/error.png',
             name: 'error.png'
         }
     ]
@@ -141,7 +143,7 @@ messageEmbeds.warning = (
     },
     files: [
         {
-            attachment: './assets/media/images/general/warning.png',
+            attachment: './assets/media/images/embeds/warning.png',
             name: 'warning.png'
         }
     ]
@@ -175,7 +177,7 @@ messageEmbeds.info = (
     },
     files: [
         {
-            attachment: './assets/media/images/general/info.png',
+            attachment: './assets/media/images/embeds/info.png',
             name: 'info.png'
         }
     ]

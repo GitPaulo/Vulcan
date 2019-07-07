@@ -17,7 +17,7 @@ connect4.load = (vulcan, commandDefinition) => {
     for (let i = 0; i < this.boardWidth; i++) {
         this.emojiPlays.push(i + numberEmojiSuffix);
     }
-}
+};
 
 connect4.execute = async (message) => {
     if (message.parsed.args.length < 1) {
@@ -44,72 +44,72 @@ connect4.execute = async (message) => {
         } catch (warn) {
             return message.channel.client.emit(
                 'channelInfo',
-                 message.channel,
+                message.channel,
                 `Time expired for connect 4 challenge between <@${challenger.id}> and <@${challengee.id}>`
             );
         }
     }
-    
+
     // Create new game object literal (class would be overkill? but you could make one)
     const outerScope = this;
     const game       = {
-    	// Properties
-    	board: new Board(outerScope.boardHeight, outerScope.boardWidth),
+        // Properties
+        board: new Board(outerScope.boardHeight, outerScope.boardWidth),
         players: [challenger, challengee],
         boardMessage: await message.channel.send('Initializing...'),
         turnMessage: await message.channel.send('Initializing...'),
         turn: 1,
         state: {
             win: false,
-    	    draw: false
+            draw: false
         },
-     	exit: false,
- 	    // Methods
-	    get gameOver () {
-    	    return this.state.win || this.state.draw || this.state.exit;
+        exit: false,
+        // Methods
+        get gameOver () {
+            return this.state.win || this.state.draw || this.state.exit;
         },
-    	get currentPlayer () {
-	        return this.players[this.turn - 1];
+        get currentPlayer () {
+            return this.players[this.turn - 1];
         },
-    	get nonCurrentPlayer () {
- 	        return this.getOtherPlayer(this.currentPlayer);
+        get nonCurrentPlayer () {
+            return this.getOtherPlayer(this.currentPlayer);
         },
-     	getOtherPlayer (player) {
-	        return player === this.players[0] ? this.players[1] : this.players[0];
+        getOtherPlayer (player) {
+            return player === this.players[0] ? this.players[1] : this.players[0];
         },
-    	async nextMove () {
-	        let move = -1;
-    	    if (this.players[this.turn - 1].bot) {
-		        move = mcts(this.board, this.turn);
+        async nextMove () {
+            let move = -1;
+            if (this.players[this.turn - 1].bot) {
+                move = mcts(this.board, this.turn);
             } else {
                 let filter    = (reaction, user) => this.currentPlayer.id === user.id && outerScope.emojiPlays.includes(reaction.emoji.identifier);
                 let collected = await this.boardMessage.awaitReactions(filter, { max: 1 });
-		        let reaction  = collected.first();
+                let reaction  = collected.first();
 
                 move = parseInt(reaction.emoji.identifier.slice(0, 1), 10);
                 await reaction.users.remove(this.currentPlayer.id);
                 console.log(move);
- 	        }
-      	    return move;
-	    },
-     	makeMove (move) { 
-             this.board.makeMoveAndCheckWin(this.turn, move)
+            }
+            return move;
         },
-	    async updateTurnMessage (str) {
-    	    await this.turnMessage.edit(str || `<@${this.currentPlayer.id}>'s turn`);
+        makeMove (move) {
+            this.board.makeMoveAndCheckWin(this.turn, move);
+        },
+        async updateTurnMessage (str) {
+            await this.turnMessage.edit(str || `<@${this.currentPlayer.id}>'s turn`);
         },
         async updateBoardMessage (str) {
-  	        await this.boardMessage.edit(str || `\`\`\`${this.board.toString()}\`\`\``);
+            await this.boardMessage.edit(str || `\`\`\`${this.board.toString()}\`\`\``);
         },
-	    async updateState (state = { win: false, draw: false }) {
-	        this.state = state;
-    	    if (!this.win && !this.draw) {
-		        this.turn = (this.turn === 1 ? 2 : 1);
-	        }
-	    },
-    	async updateView () {
-	        await this.updateBoardMessage();
-    	    await this.updateTurnMessage();
+        async updateState (state = { win: false, draw: false }) {
+            this.state = state;
+            if (!this.win && !this.draw) {
+                this.turn = (this.turn === 1 ? 2 : 1);
+            }
+        },
+        async updateView () {
+            await this.updateBoardMessage();
+            await this.updateTurnMessage();
         }
     };
 
@@ -133,13 +133,13 @@ connect4.execute = async (message) => {
     while (!game.gameOver) {
         try {
             let move = await game.nextMove();
-    	    let state = game.makeMove(move);
-     	    await game.updateState(state);
-    	    await game.updateView();
-	    } catch (err) {
+            let state = game.makeMove(move);
+            await game.updateState(state);
+            await game.updateView();
+        } catch (err) {
             game.boardMessage.client.emit('channelError', game.boardMessage.channel, err);
-     	    game.exit = true;
-	    }
+            game.exit = true;
+        }
     }
 
     // Final update
