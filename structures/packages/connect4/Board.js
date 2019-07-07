@@ -46,7 +46,8 @@ class Board {
     withinBoard (y, x) {
         return y < this.height
             && y >= 0
-            && x < this.width && x >= 0;
+            && x < this.width 
+            && x >= 0;
     }
 
     makeMoveAndCheckWin (player, column) {
@@ -97,7 +98,7 @@ class Board {
                 return {
                     win: true,
                     draw: false,
-                    direction
+                    direction: direction
                 };
             }
         }
