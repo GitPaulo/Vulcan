@@ -87,9 +87,9 @@ connect4.execute = async (message) => {
             if (this.players[this.turn - 1].bot) {
 		        move = mcts(this.board, this.turn);
             } else {
-                let filter    = (reaction, user) => this.currentPlayer.id === user.id && outerScope.getControlEmojis().includes(reaction.emoji.identifier);
-                let collected = await this.boardMessage.awaitReactions(filter, { max: 1 });
-                let reaction  = collected.first();
+                const filter    = (reaction, user) => this.currentPlayer.id === user.id && outerScope.getControlEmojis().includes(reaction.emoji.identifier);
+                const collected = await this.boardMessage.awaitReactions(filter, { max: 1 });
+                const reaction  = collected.first();
 
                 // console.log(reaction);
 
@@ -135,7 +135,7 @@ connect4.execute = async (message) => {
     };
 
     // Push new game and update embed
-    let gameID = this.games.push(game);
+    const gameID = this.games.push(game);
     logger.debug(`New connect 4 game (ID: ${gameID}) has started.`, game);
 
     // Set up emojis for game message
