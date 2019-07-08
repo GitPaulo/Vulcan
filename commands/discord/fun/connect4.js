@@ -6,6 +6,8 @@ const logger   = xrequire('./managers/LogManager').getInstance();
 const numberEmojiSuffix = '%E2%83%A3';
 const whiteFlagEmoji    = '%F0%9F%8F%B3';
 
+connect4.getControlEmojis = () => this.emojiPlays.concat([whiteFlagEmoji]);
+
 connect4.load = (vulcan, commandDefinition) => {
     // Default board size
     this.boardWidth  = 7;
@@ -67,51 +69,68 @@ connect4.execute = async (message) => {
         },
         exit: false,
         // Methods
-        get gameOver () {
-            return this.state.win || this.state.draw || this.state.exit;
+	    get gameOver () {
+            return this.state.win || this.state.draw || this.exit;
         },
         get currentPlayer () {
-            return this.players[this.turn - 1];
+	        return this.players[this.turn - 1];
         },
         get nonCurrentPlayer () {
             return this.getOtherPlayer(this.currentPlayer);
         },
         getOtherPlayer (player) {
-            return player === this.players[0] ? this.players[1] : this.players[0];
+	        return player === this.players[0] ? this.players[1] : this.players[0];
         },
         async nextMove () {
             let move = -1;
-            if (this.players[this.turn - 1].bot) {
-                move = mcts(this.board, this.turn);
-            } else {
-                let filter    = (reaction, user) => this.currentPlayer.id === user.id && outerScope.getControlEmojis().includes(reaction.emoji.identifier);
-                let collected = await this.boardMessage.awaitReactions(filter, { max: 1 });
-                let reaction  = collected.first();
 
-                move = parseInt(reaction.emoji.identifier.slice(0, 1), 10);
+            if (this.players[this.turn - 1].bot) {
+		        move = mcts(this.board, this.turn);
+            } else {
+                const filter    = (reaction, user) => this.currentPlayer.id === user.id && outerScope.getControlEmojis().includes(reaction.emoji.identifier);
+                const collected = await this.boardMessage.awaitReactions(filter, { max: 1 });
+                const reaction  = collected.first();
+
+                // console.log(reaction);
+
+                if (reaction.emoji.identifier === whiteFlagEmoji) {
+                    move = -1;
+                } else {
+                    move = parseInt(reaction.emoji.identifier.slice(0, 1), 10);
+                }
+
                 await reaction.users.remove(this.currentPlayer.id);
-                console.log(move);
             }
+
             return move;
-        },
+	    },
         makeMove (move) {
-            this.board.makeMoveAndCheckWin(this.turn, move);
+            return this.board.makeMoveAndCheckWin(this.turn, move);
         },
-        async updateTurnMessage (str) {
+        async resetControls () {
+            const reactionsThatNeedRemoving = this.boardMessage.reactions.array().filter((reaction) => reaction.count > 1);
+            for (const reaction of reactionsThatNeedRemoving) {
+                reaction.users.array().filter((user) => user !== this.boardMessage.client.user).forEach((user) => reaction.users.remove(user.id));
+            }
+        },
+	    async updateTurnMessage (str) {
             await this.turnMessage.edit(str || `<@${this.currentPlayer.id}>'s turn`);
         },
         async updateBoardMessage (str) {
             await this.boardMessage.edit(str || `\`\`\`${this.board.toString()}\`\`\``);
         },
-        async updateState (state = { win: false, draw: false }) {
-            this.state = state;
+	    async updateState (state = { win: false, draw: false }) {
+	        this.state = state;
             if (!this.win && !this.draw) {
-                this.turn = (this.turn === 1 ? 2 : 1);
+		        this.turn = (this.turn === 1 ? 2 : 1);
+	        } else if (this.win) {
+                this.winner = this.currentPlayer;
             }
-        },
+	    },
         async updateView () {
             await this.updateBoardMessage();
             await this.updateTurnMessage();
+            this.resetControls();
         }
     };
 
@@ -120,7 +139,7 @@ connect4.execute = async (message) => {
     logger.debug(`New connect 4 game (ID: ${gameID}) has started.`, game);
 
     // Set up emojis for game message
-    for (let emoji of this.getControlEmojis()) {
+    for (const emoji of this.getControlEmojis()) {
         try {
             await game.boardMessage.react(emoji);
         } catch (err) {
@@ -134,14 +153,23 @@ connect4.execute = async (message) => {
     // Game Event Loop
     while (!game.gameOver) {
         try {
-            let move = await game.nextMove();
-            let state = game.makeMove(move);
-            await game.updateState(state);
-            await game.updateView();
-        } catch (err) {
+            const move = await game.nextMove();
+            // Surrender
+            if (move === -1) {
+                game.state = {
+                    win: true,
+                    draw: false
+                };
+                game.winner = game.nonCurrentPlayer;
+            } else {
+                const state = game.makeMove(move);
+                await game.updateState(state);
+                await game.updateView();
+            }
+	    } catch (err) {
             game.boardMessage.client.emit('channelError', game.boardMessage.channel, err);
             game.exit = true;
-        }
+	    }
     }
 
     // Final update
