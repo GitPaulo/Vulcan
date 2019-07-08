@@ -41,7 +41,7 @@ connect4.execute = async (message) => {
     } else { // Send out challenge and wait for it!
         try {
             await message.channel.awaitMessages(
-                (m) => m.content.startsWith('I accept') && m.author === challengee,
+                (m) => m.content.toLowerCase().startsWith('i accept') && m.author === challengee,
                 { max: 1, time: 20000, errors: ['time'] }
             );
         } catch (warn) {
@@ -108,8 +108,8 @@ connect4.execute = async (message) => {
             return this.board.makeMoveAndCheckWin(this.turn, move);
         },
         async resetControls () {
-            const reactionsThatNeedRemoving = this.boardMessage.reactions.array().filter((reaction) => reaction.count > 1);
-            for (const reaction of reactionsThatNeedRemoving) {
+            let reactionsThatNeedRemoving = this.boardMessage.reactions.array().filter((reaction) => reaction.count > 1);
+            for (let reaction of reactionsThatNeedRemoving) {
                 reaction.users.array().filter((user) => user !== this.boardMessage.client.user).forEach((user) => reaction.users.remove(user.id));
             }
         },
@@ -121,16 +121,16 @@ connect4.execute = async (message) => {
         },
 	    async updateState (state = { win: false, draw: false }) {
 	        this.state = state;
-            if (!this.win && !this.draw) {
+            if (!this.state.win && !this.state.draw) {
 		        this.turn = (this.turn === 1 ? 2 : 1);
-	        } else if (this.win) {
+	        } else if (this.state.win) {
                 this.winner = this.currentPlayer;
             }
 	    },
         async updateView () {
             await this.updateBoardMessage();
             await this.updateTurnMessage();
-            this.resetControls();
+            //await this.resetControls();
         }
     };
 
@@ -139,7 +139,7 @@ connect4.execute = async (message) => {
     logger.debug(`New connect 4 game (ID: ${gameID}) has started.`, game);
 
     // Set up emojis for game message
-    for (const emoji of this.getControlEmojis()) {
+    for (let emoji of this.getControlEmojis()) {
         try {
             await game.boardMessage.react(emoji);
         } catch (err) {
@@ -153,7 +153,8 @@ connect4.execute = async (message) => {
     // Game Event Loop
     while (!game.gameOver) {
         try {
-            const move = await game.nextMove();
+            await game.resetControls();
+            let move = await game.nextMove();
             // Surrender
             if (move === -1) {
                 game.state = {
@@ -162,7 +163,7 @@ connect4.execute = async (message) => {
                 };
                 game.winner = game.nonCurrentPlayer;
             } else {
-                const state = game.makeMove(move);
+                let state = game.makeMove(move);
                 await game.updateState(state);
                 await game.updateView();
             }
