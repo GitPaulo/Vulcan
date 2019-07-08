@@ -4,6 +4,7 @@ const Board    = xrequire('./structures/packages/connect4/Board');
 const logger   = xrequire('./managers/LogManager').getInstance();
 
 const numberEmojiSuffix = '%E2%83%A3';
+const whiteFlagEmoji    = '%F0%9F%8F%B3';
 
 connect4.load = (vulcan, commandDefinition) => {
     // Default board size
@@ -28,7 +29,7 @@ connect4.execute = async (message) => {
     const challenger = message.author;
     const challengee = message.mentions.users.first() || message.client.user;
 
-    // let them know we mean business
+    // Let them know we mean business
     const challengeMessage = await message.channel.send(
         `<@${challenger.id}> has challenged <@${challengee.id}> for a connect 4 game!\nChallengee may accept by saying **'I accept'**.`
     );
@@ -56,6 +57,7 @@ connect4.execute = async (message) => {
         // Properties
         board: new Board(outerScope.boardHeight, outerScope.boardWidth),
         players: [challenger, challengee],
+        winner: null,
         boardMessage: await message.channel.send('Initializing...'),
         turnMessage: await message.channel.send('Initializing...'),
         turn: 1,
@@ -82,7 +84,7 @@ connect4.execute = async (message) => {
             if (this.players[this.turn - 1].bot) {
                 move = mcts(this.board, this.turn);
             } else {
-                let filter    = (reaction, user) => this.currentPlayer.id === user.id && outerScope.emojiPlays.includes(reaction.emoji.identifier);
+                let filter    = (reaction, user) => this.currentPlayer.id === user.id && outerScope.getControlEmojis().includes(reaction.emoji.identifier);
                 let collected = await this.boardMessage.awaitReactions(filter, { max: 1 });
                 let reaction  = collected.first();
 
@@ -118,7 +120,7 @@ connect4.execute = async (message) => {
     logger.debug(`New connect 4 game (ID: ${gameID}) has started.`, game);
 
     // Set up emojis for game message
-    for (let emoji of this.emojiPlays) {
+    for (let emoji of this.getControlEmojis()) {
         try {
             await game.boardMessage.react(emoji);
         } catch (err) {
@@ -147,6 +149,6 @@ connect4.execute = async (message) => {
     await game.updateTurnMessage('Game finished.');
 
     // Results Message
-    await game.turnMessage.channel.send(`Game #${gameID} has ended\n\t${game.state.win ? `<@${game.nonCurrentPlayer.id}> WINS` : `Game ended in draw!`}`);
+    await game.turnMessage.channel.send(`Game #${gameID} has ended\n\t${game.state.win ? `<@${game.winner.id}> WINS` : `Game ended in draw!`}`);
 };
 
