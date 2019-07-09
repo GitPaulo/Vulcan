@@ -14,17 +14,17 @@ overwatchroulette.loadHeroCache = async () => {
     const html      = await request('http://www.overbuff.com/heroes');
     const $         = cheerio.load(html);
     const heroTable = $('.table-data tbody tr');
+    const cache     = new HashTable();
 
-    const cache = new HashTable();
     cache.set('ALL', []);
 
     heroTable.each((i, element) => {
-        const el1    = $(element).find('.cell-medium span');
-        let heroName = el1.find('a').text();
-        let typeName = el1.find('small').text().toLowerCase();
+        const el1      = $(element).find('.cell-medium span');
+        let   heroName = el1.find('a').text();
+        let   typeName = el1.find('small').text().toLowerCase();
 
-        const el2  = $(element).find('.cell-icon-small a div img');
-        let imgURL = `http://www.overbuff.com/${el2.attr('src')}`;
+        const el2    = $(element).find('.cell-icon-small a div img');
+        let   imgURL = `http://www.overbuff.com/${el2.attr('src')}`;
 
         const hero      = { name: heroName, type: typeName, icon: imgURL };
         const heroArray = cache.get(typeName);
@@ -74,7 +74,7 @@ overwatchroulette.execute = async (message) => {
         {
             message,
             description: `<@${message.author.id}>'s overwatch hero will be: **${hero.name}**`,
-            image: {
+            image      : {
                 url: hero.icon
             }
         }

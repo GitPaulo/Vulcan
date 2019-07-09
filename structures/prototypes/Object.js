@@ -5,7 +5,7 @@ _.simpleTransverse = function (
     callback
 ) {
     if (typeof callback !== 'function') {
-        throw TypeError('Second argument is expected to be a function and was not.');
+        throw new TypeError('Second argument is expected to be a function and was not.');
     }
 
     if (value !== null && typeof value === 'object') {

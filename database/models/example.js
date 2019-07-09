@@ -7,7 +7,7 @@ let Schema = mongoose.Schema;
 
 let exampleSchema = new Schema({
     name: String,
-    id: Number
+    id  : Number
 });
 
 module.exports = mongoose.model('Example', exampleSchema);

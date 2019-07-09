@@ -1,13 +1,11 @@
-/* eslint-disable indent */
-
 // Initialisation
 xrequire('./plugins/scripts/globals');
 xrequire('./plugins/scripts/coreEvents');
 xrequire('./plugins/scripts/defaults');
 
 // Vulcan init structures (via index.js)
-xrequire('./structures/prototypes')();
-xrequire('./structures/extensions')();
+xrequire('./handlers/prototypeLoadHandler')();
+xrequire('./handlers/extensionLoadHandler')();
 
 // Required modules
 const fs     = xrequire('fs');
@@ -40,21 +38,22 @@ const vulcan = module.exports = new Vulcan(
             'RELATIONSHIP_ADD',
             'RELATIONSHIP_REMOVE'
         ],
-        disableEveryone: true,
+        disableEveryone    : true,
         messageCacheMaxSize: 1000
     }
 );
 
 // Vulcan (do NOT chain of instantiation)*/
-vulcan.loadDatabase()
-      .loadCommands()
-      .loadEvents()
-      .loadPermissions()
-      .loadCLI()
-      .connect(); // [must be last or omitted]
+vulcan
+    .loadDatabase()
+    .loadCommands()
+    .loadEvents()
+    .loadPermissions()
+    .loadCLI()
+    .connect(); // [must be last or omitted]
 
 // Log
-logger.log(`Vulcan start-up has completed! Time taken: ${vulcan.uptime}`);
+logger.log(`Vulcan start-up has completed! Time taken: ${vulcan.loadTime}seconds`);
 
 // Load Complete Flag
 global.__loaded = true;

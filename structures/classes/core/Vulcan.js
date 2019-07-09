@@ -3,15 +3,14 @@ const { performance }   = xrequire('perf_hooks');
 const os                = xrequire('os');
 const fs                = xrequire('fs');
 const path              = xrequire('path');
-const mathFunctions     = xrequire('./plugins/libs/mathFunctions');
 const DatabaseManager   = xrequire('./managers/DatabaseManager');
 const TerminalManager   = xrequire('./managers/TerminalManager');
 const PermissionManager = xrequire('./managers/PermissionManager');
+const mathFunctions     = xrequire('./plugins/libs/mathFunctions');
 const logger            = xrequire('./managers/LogManager').getInstance();
 
 /****************************************************************/
-// eslint-disable-next-line camelcase
-const couldnt_have_forged_it_better_myself = `\\ \\    / /   | |                
+global['couldnt_have_forged_it_better_myself'] = `\\ \\    / /   | |                
  \\ \\  / /   _| | ___ __ _ _ __  
   \\ \\/ / | | | |/ __/ _\` | \'_ \\ 
    \\  /| |_| | | (_| (_| | | | |
@@ -19,7 +18,7 @@ const couldnt_have_forged_it_better_myself = `\\ \\    / /   | |
 /****************************************************************/
 
 // Dumb function : )
-let chainPrint = (category, chainee) => (logger.log('Initialised => ' + category), chainee);
+const chainPrint = (category, chainee) => (logger.log('Initialised => ' + category), chainee);
 
 class Vulcan extends Discord.Client {
     constructor (settings, options = {}) {
@@ -27,31 +26,32 @@ class Vulcan extends Discord.Client {
         super(options);
 
         // Seal these properties! :)
-        Object.defineProperties(this,
+        Object.defineProperties(
+            this,
             {
                 configuration: {
-                    value: settings.configuration,
-                    writable: false,
-                    enumerable: false,
+                    value       : settings.configuration,
+                    writable    : false,
+                    enumerable  : false,
                     configurable: false
                 },
                 credentials: {
-                    value: settings.credentials,
-                    writable: false,
-                    enumerable: false,
+                    value       : settings.credentials,
+                    writable    : false,
+                    enumerable  : false,
                     configurable: false
                 },
                 permissions: {
-                    value: settings.permissions,
-                    writable: false,
-                    enumerable: false,
+                    value       : settings.permissions,
+                    writable    : false,
+                    enumerable  : false,
                     configurable: false
                 }
             }
         );
 
         // Vulcan is here!
-        logger.plain(couldnt_have_forged_it_better_myself, 'red');
+        logger.plain(global.couldnt_have_forged_it_better_myself, 'red');
     }
 
     /*****************
@@ -87,6 +87,7 @@ class Vulcan extends Discord.Client {
         for (let eventFile of discordEvents) {
             let t     = performance.now();
             let event = eventFile.replace(/\.js$/i, '');
+
             this.on(event, xrequire(path.join(discordjsEventsPath, eventFile)));
             logger.log(`Finished loading (DiscordJS) event file '${eventFile}' (took ${mathFunctions.round(performance.now() - t, 2)}ms).`);
         }
@@ -94,6 +95,7 @@ class Vulcan extends Discord.Client {
         for (let eventFile of vulcanEvents) {
             let t     = performance.now();
             let event = eventFile.replace(/\.js$/i, '');
+
             this.on(event, xrequire(path.join(vulcanEventsPath, eventFile)));
             logger.log(`Finished loading (Vulcan) event file '${eventFile}' (took ${mathFunctions.round(performance.now() - t, 2)}ms).`);
         }
@@ -138,6 +140,7 @@ class Vulcan extends Discord.Client {
 
         if (this.credentials.token === global.VulcanDefaults.files.credentials.data.token) {
             logger.error(`Default token detected, please change @'${global.VulcanDefaults.files.credentials.location}'`);
+
             return;
         }
 
@@ -146,6 +149,7 @@ class Vulcan extends Discord.Client {
         }
 
         this.login(this.credentials.token).then((token) => {
+            this.loadTime = process.uptime();
             logger.log(`Sucessfully logged in to discord servers with token: ${token}`);
         });
 
@@ -158,9 +162,12 @@ class Vulcan extends Discord.Client {
 
     get statistics () {
         return {
-            guildCount: this.guilds.size,
-            channelCount: this.channels.size,
-            userCount: this.users.size
+            emojisAccessedCount: this.emojis.array.length,
+            broadcastCount     : this.voice.broadcasts.length,
+            shardCount         : this.shard,
+            guildCount         : this.guilds.size,
+            channelCount       : this.channels.size,
+            userCount          : this.users.size
         };
     }
 
@@ -169,10 +176,6 @@ class Vulcan extends Discord.Client {
             cpuUsage: os.loadavg()[1],
             memUsage: process.memoryUsage().rss / 1024 / 1024
         };
-    }
-
-    get uptime () {
-        return String(process.uptime()).toHHMMSS();
     }
 }
 

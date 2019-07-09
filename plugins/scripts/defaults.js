@@ -3,11 +3,11 @@ const path   = xrequire('path');
 const yaml   = xrequire('js-yaml');
 const logger = xrequire('./managers/LogManager').getInstance();
 
-let log = (message) => {
+const log = (message) => {
     logger.log(`[VulcanDefaults] => ${message}`);
 };
 
-let writeToDefaultFile = (object, path) => {
+const writeToDefaultFile = (object, path) => {
     let data = yaml.safeDump(object);
 
     fs.writeFileSync(path, data, (err) => {
@@ -25,7 +25,7 @@ global.VulcanDefaults = {
     files: {
         configuration: {
             location: path.join(__basedir, 'settings', 'config.yml'),
-            data: {
+            data    : {
                 prefixes: [
                     '!',
                     '>'
@@ -39,9 +39,9 @@ global.VulcanDefaults = {
         },
         credentials: {
             location: path.join(__basedir, 'settings', 'credentials.yml'),
-            data: {
-                token: `PLEASE ADD YOUR DISCORD TOKEN HERE`,
-                githubOAuth: `PLEASE ADD YOUR GITHUB O-AUTH TOKEN HERE`,
+            data    : {
+                token        : `PLEASE ADD YOUR DISCORD TOKEN HERE`,
+                githubOAuth  : `PLEASE ADD YOUR GITHUB O-AUTH TOKEN HERE`,
                 dbCredentials: {
                     username: 'ur_mom_gay',
                     password: 'no_u'
@@ -52,8 +52,8 @@ global.VulcanDefaults = {
         // Everyone not in this file is a pleb by default.
         permissions: {
             location: path.join(__basedir, 'settings', 'permissions.yml'),
-            data: {
-                roots: [], // configuration.devIDs are roots by default
+            data    : {
+                roots : [],   // configuration.devIDs are roots by default
                 admins: []
             }
         }
@@ -64,6 +64,7 @@ global.VulcanDefaults = {
 (() => {
     for (let folderName of global.VulcanDefaults.folders) {
         let folderPath = path.join(__basedir, folderName);
+
         if (!fs.existsSync(folderPath)) {
             fs.mkdirSync(folderPath);
         }
@@ -76,7 +77,7 @@ global.VulcanDefaults = {
 
         // Check folder
         if (!VulcanDefaults.folders.includes(folderName)) {
-            throw Error('Default folders are not valid!');
+            throw new Error('Default folders are not valid!');
         }
 
         // Check files

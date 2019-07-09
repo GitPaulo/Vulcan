@@ -24,17 +24,17 @@ Currently in a volatile state. Details will be posted once consensus has been re
 
 Currently there are no installation wizards. Manual installation is necessary by following these steps:
 
-1. Download and install node.js.
-2. Download and extract the zip repository code.
-3. Open a shell in the directory of the extraced code.
-4. Run the following command: **npm install && npm start**
+ 1. Download and install node.js.
+ 2. Download and extract the zip repository code.
+ 3. Open a shell in the directory of the extraced code.
+ 4. Run the following command: **npm install && npm start**
 
 (closing the shell window will result in the bot shutting down)
 
 ## Deployment
 
 We use [heroko](https://dashboard.heroku.com/) for the deployment of the bot for our own server.
-You may do the same as well. 
+You may do the same as well.
 If you are intereseted, please refer to the ['deployment'](https://github.com/GitPaulo/Vulcan/tree/deployment) branch.
 
 ## FAQ

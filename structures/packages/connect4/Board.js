@@ -16,9 +16,9 @@ class Board {
     }
 
     static clone (board) {
-        let newBoard = new Board(board.height, board.width);
-        newBoard.setState(board);
-        return newBoard;
+        const newBoard = new Board(board.height, board.width);
+
+        return newBoard.setState(board), newBoard;
     }
 
     setState (board) {
@@ -30,32 +30,37 @@ class Board {
     }
 
     isValidMove (column) {
-        return column >= 0 && column < this.width && this.state[this.height - 1][column] === 0;
+        return column >= 0
+            && column < this.width
+            && this.state[this.height - 1][column] === 0;
     }
 
     get allowedMoves () {
-        let allowedMoves = [];
+        const allowedMoves = [];
+
         for (let i = 0; i < this.width; i++) {
             if (this.isValidMove(i)) {
                 allowedMoves.push(i);
             }
         }
+
         return allowedMoves;
     }
 
     withinBoard (y, x) {
         return y < this.height
             && y >= 0
-            && x < this.width 
+            && x < this.width
             && x >= 0;
     }
 
     makeMoveAndCheckWin (player, column) {
         if (!this.isValidMove(column)) {
-            throw Error('Move is not valid');
+            throw new Error('Move is not valid');
         }
 
-        let row       = this.addPieceAndReturnY(player, column);
+        const row = this.addPieceAndReturnY(player, column);
+
         this.lastMove = { row, column };
 
         return this.checkWin(player, row, column);
@@ -80,15 +85,15 @@ class Board {
     checkWin (player, y, x) {
         let increments = {
             'horizontally': [0, 1],
-            'vertically': [1, 0],
-            'diag-up': [1, 1],
-            'diag-down': [-1, 1]
+            'vertically'  : [1, 0],
+            'diag-up'     : [1, 1],
+            'diag-down'   : [-1, 1]
         };
 
         if (this.checkDraw()) {
             return {
-                win: false,
-                draw: true,
+                win      : false,
+                draw     : true,
                 direction: 'nan'
             };
         }
@@ -96,16 +101,16 @@ class Board {
         for (let direction in increments) {
             if (1 + this.countInLine(increments[direction], y, x, player) + this.countInLine(increments[direction].map((x) => -x), y, x, player) >= 4) {
                 return {
-                    win: true,
+                    win : true,
                     draw: false,
-                    direction: direction
+                    direction
                 };
             }
         }
 
         return {
-            win: false,
-            draw: false,
+            win      : false,
+            draw     : false,
             direction: 'nan'
         };
     }
@@ -116,6 +121,7 @@ class Board {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -139,6 +145,7 @@ class Board {
         // print array from bottom to top
         for (let i = this.state.length - 1; i >= 0; i--) {
             let row = this.state[i];
+
             result += '|';
 
             for (let column of row) {

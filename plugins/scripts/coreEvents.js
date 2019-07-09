@@ -7,6 +7,7 @@ global._exit = process.exit;
 process.exit = async (code = 0, message = 'Unknown') => {
     if (!logger || !messageEmbeds) {
         console.err(`Requirements for controlled process.exit are invalid.`);
+
         return global._exit(1);
     }
 
@@ -14,6 +15,7 @@ process.exit = async (code = 0, message = 'Unknown') => {
 
     if (!vulcan) {
         logger.error(`Vulcan client was invalid before process exit!\n\tMessage: ${message}'`);
+
         return global._exit(1);
     }
 
@@ -22,20 +24,20 @@ process.exit = async (code = 0, message = 'Unknown') => {
             await guild.botChannel.send(messageEmbeds.critical(
                 {
                     description: `Vulcan process is exiting.`,
-                    fields: [
+                    fields     : [
                         {
-                            name: 'Message',
-                            value: message,
+                            name  : 'Message',
+                            value : message,
                             inline: false
                         },
                         {
-                            name: 'Exit Code',
-                            value: code,
+                            name  : 'Exit Code',
+                            value : code,
                             inline: true
                         },
                         {
-                            name: 'Vulcan Uptime',
-                            value: vulcan.uptime,
+                            name  : 'Vulcan Uptime',
+                            value : vulcan.uptime,
                             inline: true
                         }
                     ]

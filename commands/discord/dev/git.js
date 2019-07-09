@@ -14,14 +14,14 @@ git.execute = async (message) => {
     const channel   = message.channel;
     const embedWrap = messageEmbeds.reply({
         message,
-        title: `**Git** request received: **${cmd}**`,
+        title : `**Git** request received: **${cmd}**`,
         fields: [
             {
-                name: 'Subcommand',
+                name : 'Subcommand',
                 value: message.parsed.args.join(', ')
             },
             {
-                name: 'Output',
+                name : 'Output',
                 value: 'Processing...'
             }
         ]
@@ -35,12 +35,14 @@ git.execute = async (message) => {
     switch (cmd) {
         case 'collaborators':
             const collabsArray = await this.fetchCollaborators(vulcanRepo);
-            embedWrap.embed.fields[1].value = collabsArray.join(', ');
+
+            embedWrap.embed.fields[1].value     = collabsArray.join(', ');
             break;
         case 'commits':
             const numCommits   = message.parsed.args[1];
             const commitsArray = await this.fetchCommits(vulcanRepo, numCommits);
-            embedWrap.embed.fields[1].value = commitsArray.join('\n');
+
+            embedWrap.embed.fields[1].value     = commitsArray.join('\n');
             break;
         default:
             return message.client.emit('invalidCommandCall', `The command **${cmd}** was not found in the list of sub-commands for this operation.`, message);
@@ -66,12 +68,13 @@ this.fetchCollaborators = async (repo) => {
 };
 
 this.fetchCommits = async (repo, number = 4) => {
-    let response  = await repo.listCommits();
-    let list      = response.data.slice(0, number);
-    let carray    = [];
+    let response = await repo.listCommits();
+    let list     = response.data.slice(0, number);
+    let carray   = [];
 
     list.forEach((commitData) => {
         const dataStr = `Date: "${commitData.commit.author.date}"\nAuthor: "${commitData.commit.author.name}"\nMessage: "${commitData.commit.message}"\n`;
+
         carray.push(`\`\`\`yml\n${dataStr}\n\`\`\``);
     });
 

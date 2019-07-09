@@ -3,31 +3,31 @@ const messageEmbeds = module.exports = {};
 messageEmbeds.reply = (
     {
         message,
-        imgPath     = message.command.embed.image,
-        imgName     = imgPath.substring(imgPath.lastIndexOf('/') + 1),
-        cmd         = message.command,
-        color       = cmd.embed.color,
-        title       = cmd.embed.title,
-        author      = {
-            name: `Replying@${message.author.tag}`,
-            icon_url: message.author.displayAvatarURL(), /* eslint-disable-line camelcase */
-            url: message.author.displayAvatarURL()
+        imgPath = message.command.embed.image,
+        imgName = imgPath.substring(imgPath.lastIndexOf('/') + 1),
+        cmd     = message.command,
+        color   = cmd.embed.color,
+        title   = cmd.embed.title,
+        author  = {
+            name    : `Replying@${message.author.tag}`,
+            icon_url: message.author.displayAvatarURL(),   /* eslint-disable-line camelcase */
+            url     : message.author.displayAvatarURL()
         },
         description = `Replying to a request from **${message.author.tag}** for command **${message.command.id}**.`,
         thumbnail   = {
             url: `attachment://${imgName}`
         },
-        fields      = [],
-        timestamp   = new Date(),
-        footer      = {
+        fields    = [],
+        timestamp = new Date(),
+        footer    = {
             text: `[Command] Vulcan's reply to a command request.`
         },
-        url         = '',
-        image       = {},
-        files       =  [
+        url   = '',
+        image = {},
+        files = [
             {
                 attachment: imgPath,
-                name: imgName
+                name      : imgName
             }
         ]
     }
@@ -51,16 +51,16 @@ messageEmbeds.critical = (
     {
         title       = `Critical Error`,
         description = `A Critical Error has been detected by Vulcan.`,
-        color       = 0x000000, // black
+        color       = 0x000000,                                          // black
         thumbnail   = {
             url: `attachment://critical.png`
         },
-        timestamp   = new Date(),
-        footer      = {
+        timestamp = new Date(),
+        footer    = {
             text: '[Error] This is bad. MAZUI! Vulcan will shutdown!'
         },
-        fields      = [],
-        url         = ''
+        fields = [],
+        url    = ''
     }
 ) => ({
     embed: {
@@ -76,7 +76,7 @@ messageEmbeds.critical = (
     files: [
         {
             attachment: './assets/media/images/embeds/critical.png',
-            name: 'critical.png'
+            name      : 'critical.png'
         }
     ]
 });
@@ -85,16 +85,16 @@ messageEmbeds.error = (
     {
         title       = `Error`,
         description = `An error has been detected by Vulcan.`,
-        color       = 0xFF0000, // red
+        color       = 0xFF0000,                                  // red
         thumbnail   = {
             url: `attachment://error.png`
         },
-        timestamp   = new Date(),
-        footer      = {
+        timestamp = new Date(),
+        footer    = {
             text: '[Error] An exception thrown by vulcan or something bad! Contact devs pls!'
         },
-        fields      = [],
-        url         = ''
+        fields = [],
+        url    = ''
     }
 ) => ({
     embed: {
@@ -110,7 +110,7 @@ messageEmbeds.error = (
     files: [
         {
             attachment: './assets/media/images/embeds/error.png',
-            name: 'error.png'
+            name      : 'error.png'
         }
     ]
 });
@@ -119,16 +119,16 @@ messageEmbeds.warning = (
     {
         title       = `Warning`,
         description = 'Vulcan has detected unexpected behaviour.',
-        color       =  0xFFFF00, // orange
+        color       = 0xFFFF00,                                      // orange
         thumbnail   = {
             url: `attachment://warning.png`
         },
-        timestamp   = new Date(),
-        footer      = {
+        timestamp = new Date(),
+        footer    = {
             text: '[Warning] An unexpected behaviour not controlled by vulcan.'
         },
-        fields      = [],
-        url         = ''
+        fields = [],
+        url    = ''
     }
 ) => ({
     embed: {
@@ -144,7 +144,7 @@ messageEmbeds.warning = (
     files: [
         {
             attachment: './assets/media/images/embeds/warning.png',
-            name: 'warning.png'
+            name      : 'warning.png'
         }
     ]
 });
@@ -153,16 +153,16 @@ messageEmbeds.info = (
     {
         title       = `Information`,
         description = 'Vulcan has something to say?',
-        color       = 0x89CFF0, // bblue
+        color       = 0x89CFF0,                         // bblue
         thumbnail   = {
             url: `attachment://info.png`
         },
-        timestamp   = new Date(),
-        footer      = {
+        timestamp = new Date(),
+        footer    = {
             text: '[Info] Information displayed by vulcan for the users.'
         },
-        fields      = [],
-        url         = ''
+        fields = [],
+        url    = ''
     }
 ) => ({
     embed: {
@@ -178,7 +178,7 @@ messageEmbeds.info = (
     files: [
         {
             attachment: './assets/media/images/embeds/info.png',
-            name: 'info.png'
+            name      : 'info.png'
         }
     ]
 });

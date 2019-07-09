@@ -15,8 +15,11 @@ const path            = xrequire('path');
 const { performance } = xrequire('perf_hooks');
 const logger          = xrequire('./managers/LogManager').getInstance();
 
+// Needs to be absolute REEE fs lib
+const prototypesDir = path.join(__basedir, './structures/prototypes/');
+
 module.exports = () => {
-    let files = fs.readdirSync(__dirname);
+    let files = fs.readdirSync(prototypesDir);
 
     files.forEach((file) => {
         if (file === 'index.js') {
@@ -28,27 +31,28 @@ module.exports = () => {
         let ext   = 'js';
 
         if (parts.length < 2 || parts.length > 3) {
-            throw Error(`Invalid prototypes file name: ${file}`);
+            throw new Error(`Invalid prototypes file name: ${file}`);
         }
 
         if (parts[parts.length - 1] !== ext) {
-            throw Error(`Invalid prototypes file extension: ${file}`);
+            throw new Error(`Invalid prototypes file extension: ${file}`);
         }
 
         let globalObject = global[parts[0]];
 
         if (!globalObject) {
-            throw Error(`Invalid object from file name: ${globalObject} from ${file}`);
+            throw new Error(`Invalid object from file name: ${globalObject} from ${file}`);
         }
 
         let targetObject = parts[1] === 'prototype' ? globalObject.prototype : globalObject;
-        let properties   = xrequire(path.join(__dirname, file));
+        let properties   = xrequire(path.join(prototypesDir, file));
 
         for (let property in properties) {
             let propertyValue = properties[property];
+
             Object.defineProperty(targetObject, property, {
                 enumerable: false,
-                value: propertyValue
+                value     : propertyValue
             });
         }
 

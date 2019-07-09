@@ -4,6 +4,7 @@
 ###############################################
 
 ### [Command Structure]
+# [REQUIRED FIELDS]
 # command_id:
 #   aliases:
 #     - alias1
@@ -15,10 +16,11 @@
 #     - '<prefix>command_id <arg1:number> <arg2:string> ... <argn:boolean> '
 #   group: 1 # check group system!
 #   throttling: 2000 
-#   embed:
+# [OPTIONAL FIELDS]
+#   embed: 
 #     color: 0x00000
 #     title: 'Title of reply message'
-#     image: 'some path in assets folder'
+#     image: 'some path in assets folder' 
 
 #
 botchannel:
@@ -316,6 +318,22 @@ overwatchroulette:
   examples:
   - '!overwatchroulette'
   - '!overwatchroulette <class>'
+  throttling: 1000
+  embed:
+    color: 0xffa500
+    title: 'Overwatch Hero Roulette'
+    image: './assets/media/images/commands/discord/OverwatchRoulette.gif'
+
+# 
+documentation:
+  aliases:
+  - 'docs'
+  - 'help'
+  - 'commands'
+  description: 'Displays documentation about Vulcan usage.'
+  group: 3
+  examples:
+  - '!documentation'
   throttling: 1000
   embed:
     color: 0xffa500

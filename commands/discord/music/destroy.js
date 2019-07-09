@@ -10,7 +10,7 @@ destroy.execute = async (message) => {
         {
             message,
             description: 'Destroyed the music player.',
-            fields: [
+            fields     : [
                 { name: 'Is Playing?', value: musicController.playing || 'No' },
                 { name: 'Queue Size',  value: musicController.queue.length || '0' }
             ]

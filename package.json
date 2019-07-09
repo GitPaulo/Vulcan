@@ -13,11 +13,11 @@
         "test": "node --require ./plugins/scripts/globals.js tests/loading.js",
         "test:music": "node --require ./plugins/scripts/globals.js tests/musicDependencies.js",
         "_COMMENT3": " ============================ CODE ENV SCRIPTS  ============================",
-        "linter": "./node_modules/.bin/eslint .",
-        "linter:errors-only": "./node_modules/.bin/eslint . --quiet",
+        "linter": "eslint .",
+        "linter:errors-only": "eslint . --quiet",
         "linter:setup": "npm install eslint --save-dev",
-        "linter:init": "./node_modules/.bin/eslint --init",
-        "linter:fix": "./node_modules/.bin/eslint . --fix"
+        "linter:init": "eslint --init",
+        "linter:fix": "eslint . --fix"
     },
     "repository": {
         "type": "git",
@@ -41,7 +41,7 @@
         "chalk": "^2.4.2",
         "cheerio": "^1.0.0-rc.3",
         "discord.js": "github:discordjs/discord.js",
-        "ffmpeg-static": "^2.4.0",
+        "ffmpeg-static": "^2.5.0",
         "github-api": "^3.2.2",
         "got": "^9.6.0",
         "js-yaml": "^3.13.1",
@@ -54,7 +54,7 @@
     },
     "devDependencies": {
         "eslint": "^6.0.1",
-        "eslint-config-mudamuda": "^1.0.6",
+        "eslint-config-mudamuda": "^1.0.7",
         "eslint-plugin-security": "^1.4.0",
         "nodemon": "^1.19.1"
     }

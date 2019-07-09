@@ -1,3 +1,4 @@
+const fs      = xrequire('fs');
 const Command = xrequire('./structures/classes/core/Command');
 
 class DiscordCommand extends Command {
@@ -11,20 +12,31 @@ class DiscordCommand extends Command {
         );
 
         if (typeof commandDefinition.type !== 'string') {
-            throw TypeError(`Essential command 'type' property is undefined.`);
+            throw new TypeError(`Essential command 'type' property is undefined.`);
         }
 
         if (!commandDefinition.group) {
-            throw TypeError(`Essential command 'group' property is undefined!`);
+            throw new TypeError(`Essential command 'group' property is undefined!`);
         }
 
         if (typeof commandDefinition.embed !== 'object') {
-            throw TypeError(`Essential command 'embed' property is undefined!`);
+            throw new TypeError(`Essential command 'embed' property is undefined!`);
         }
 
         this.type  = commandDefinition.type;
         this.group = commandDefinition.group;
-        this.embed = commandDefinition.embed;
+        this.embed = commandDefinition.embed || {};
+
+        // Default embed color
+        this.embed.color = this.embed.color || 0x00000;
+
+        // Default embed color
+        this.embed.title = `Command: ${this.id}`;
+
+        // Default embed Image
+        if (!this.embed.image || !fs.existsSync(this.embed.image)) {
+            this.embed.image = './assets/media/images/embeds/Default.gif';
+        }
     }
 
     addCall (author) {
@@ -36,9 +48,9 @@ class DiscordCommand extends Command {
     }
 
     validatePermissions (message) {
-        let permissionManager = message.client.permissionManager;
-        let authorPermission  = permissionManager.getUserPermissions(message.author.id);
-        return (authorPermission <= this.group);
+        const permissionManager = message.client.permissionManager;
+
+        return (permissionManager.getUserPermissions(message.author.id) <= this.group);
     }
 }
 

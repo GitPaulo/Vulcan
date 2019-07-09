@@ -16,6 +16,7 @@ class HashTable {
         // Retrieve the bucket at this particular index in our storage, if one exists
         // [[ [k,v], [k,v], [k,v] ] , [ [k,v], [k,v] ]  [ [k,v] ] ]
         let bucket = this._storage[index];
+
         // Does a bucket exist or do we get undefined when trying to retrieve said index?
         if (!bucket) {
             // Create the bucket
@@ -25,14 +26,16 @@ class HashTable {
         }
 
         let override = false;
+
         // Now iterate through our bucket to see if there are any conflicting
         // Key value pairs within our bucket. If there are any, override them.
         for (let i = 0; i < bucket.length; i++) {
             let tuple = bucket[i];
+
             if (tuple[0] === key) {
                 // Overide value stored at this key
-                tuple[1] = value;
-                override = true;
+                tuple[1]  = value;
+                override  = true;
             }
         }
 
@@ -51,11 +54,12 @@ class HashTable {
                 this.resize(this._limit * 2);
             }
         }
+
         return this;
     }
 
     get (key) {
-        let index = this.hashFunc(key, this._limit);
+        let index  = this.hashFunc(key, this._limit);
         let bucket = this._storage[index];
 
         if (!bucket) {
@@ -64,6 +68,7 @@ class HashTable {
 
         for (let i = 0; i < bucket.length; i++) {
             let tuple = bucket[i];
+
             if (tuple[0] === key) {
                 return tuple[1];
             }
@@ -73,14 +78,17 @@ class HashTable {
     }
 
     remove (key) {
-        let index = this.hashFunc(key, this._limit);
+        let index  = this.hashFunc(key, this._limit);
         let bucket = this._storage[index];
+
         if (!bucket) {
             return null;
         }
+
         // Iterate over the bucket
         for (let i = 0; i < bucket.length; i++) {
             let tuple = bucket[i];
+
             // Check to see if key is inside bucket
             if (tuple[0] === key) {
                 // If it is, get rid of this tuple
@@ -89,6 +97,7 @@ class HashTable {
                 if (this._count < this._limit * 0.25) {
                     this._resize(this._limit / 2);
                 }
+
                 return tuple[1];
             }
         }
@@ -96,27 +105,32 @@ class HashTable {
 
     hashFunc (str, max) {
         let hash = 0;
+
         for (let i = 0; i < str.length; i++) {
             let letter = str[i];
+
             hash = (hash << 5) + letter.charCodeAt(0);
             hash = (hash & hash) % max;
         }
+
         return hash;
     }
 
     resize (newLimit) {
         let oldStorage = this._storage;
 
-        this._limit = newLimit;
-        this._count = 0;
+        this._limit   = newLimit;
+        this._count   = 0;
         this._storage = [];
 
         oldStorage.forEach((bucket) => {
             if (!bucket) {
                 return;
             }
+
             for (let i = 0; i < bucket.length; i++) {
                 let tuple = bucket[i];
+
                 this.set(tuple[0], tuple[1]);
             }
         });

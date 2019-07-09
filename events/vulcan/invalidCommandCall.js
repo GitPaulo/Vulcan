@@ -14,15 +14,15 @@ module.exports = (description, message) => {
     console.log(message.command);
     message.channel.send(messageEmbeds.warning(
         {
-            title: `Invalid Command Call (${message.command.id})`,
+            title : `Invalid Command Call (${message.command.id})`,
             description,
             fields: [
                 {
-                    name: 'Help Description',
+                    name : 'Help Description',
                     value: message.command.description
                 },
                 {
-                    name: 'Examples',
+                    name : 'Examples',
                     value: `\`\`\`\n${message.command.examples.join('\n')}\n\`\`\``
                 }
             ]

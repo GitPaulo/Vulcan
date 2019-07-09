@@ -20,7 +20,7 @@ forceplay.execute = async (message) => {
         {
             message,
             decription: 'Force played a song.\nWill play on top of queue without affecting queue state.',
-            fields: [
+            fields    : [
                 { name: 'Forced Song', value: request },
                 { name: 'Current Queue Size',  value: musicController.queue.length }
             ]

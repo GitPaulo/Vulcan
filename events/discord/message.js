@@ -7,6 +7,7 @@ const logger    = xrequire('./managers/LogManager').getInstance();
 module.exports = async (message) => {
     try {
         const vulcan = message.client;
+
         logger.log(
             `[${message.isDirectMessage() ? 'Direct Message' : message.guild.name}@${message.channel.name}]`
             + ` => `

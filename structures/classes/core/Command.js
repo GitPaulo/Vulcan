@@ -9,23 +9,23 @@ class Command {
         throttling  = 500
     ) {
         if (typeof id !== 'string') {
-            throw TypeError(`Command must have valid string id.`);
+            throw new TypeError(`Command must have valid string id.`);
         }
 
         if (typeof description !== 'string') {
-            throw TypeError(`Command ${id} must have valid string description.`);
+            throw new TypeError(`Command ${id} must have valid string description.`);
         }
 
         if (!Array.isArray(examples)) {
-            throw TypeError(`Command ${id} must have valid array of examples.`);
+            throw new TypeError(`Command ${id} must have valid array of examples.`);
         }
 
         if (!Array.isArray(aliases)) {
-            throw TypeError(`Command ${id} must have an array type for aliases.`);
+            throw new TypeError(`Command ${id} must have an array type for aliases.`);
         }
 
         if (typeof throttling !== 'number') {
-            throw TypeError(`Command ${id} must have an number type for throttling.`);
+            throw new TypeError(`Command ${id} must have an number type for throttling.`);
         }
 
         this.id          = id;
@@ -38,7 +38,7 @@ class Command {
     }
 
     execute () {
-        throw Error(`Essential 'execute' method for ${this.id} has not been implemented!`);
+        throw new Error(`Essential 'execute' method for ${this.id} has not been implemented!`);
     }
 
     addCall (id) {

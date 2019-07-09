@@ -14,7 +14,7 @@ repeat.execute = async (message) => {
             message,
             fields: [
                 {
-                    name: 'Repeat Status',
+                    name : 'Repeat Status',
                     value: bool.toString()
                 }
             ]

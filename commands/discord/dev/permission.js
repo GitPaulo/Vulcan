@@ -12,14 +12,14 @@ permission.execute = async (message) => {
     const permissionManager = message.client.permissionManager;
     const embedWrap         = messageEmbeds.reply({
         message,
-        title: `Permissions request received`,
+        title : `Permissions request received`,
         fields: [
             {
-                name: 'Arguments',
+                name : 'Arguments',
                 value: ((argsLength === 0) ? 'none' : message.parsed.args.join(', '))
             },
             {
-                name: 'Output',
+                name : 'Output',
                 value: 'Processing...'
             }
         ]
@@ -38,6 +38,7 @@ permission.execute = async (message) => {
 
             embedWrap.embed.fields[1].value = permission;
             reply.edit(embedWrap);
+
             break;
         default:
             return message.client.emit(

@@ -1,5 +1,5 @@
-const fs     = xrequire('fs');
-const yaml   = xrequire('js-yaml');
+const fs   = xrequire('fs');
+const yaml = xrequire('js-yaml');
 
 class PermissionManager {
     constructor (permissions) {
@@ -17,19 +17,19 @@ class PermissionManager {
         let currentPermission = this.getUserPermissions(targetUserID);
 
         if (this.getUserPermissions(userID) > 1) {
-            throw Error('Only roots may change permissions');
+            throw new Error('Only roots may change permissions');
         }
 
         if (currentPermission === 1) {
-            throw Error('You may not remove a root using a chat command');
+            throw new Error('You may not remove a root using a chat command');
         }
 
         if (currentPermission === permissionLevel) {
-            throw Error('User already has this permission level');
+            throw new Error('User already has this permission level');
         }
 
         if (permissionLevel < 1 || permissionLevel > 3) {
-            throw Error('Invalid permission level');
+            throw new Error('Invalid permission level');
         }
 
         // Remove current permission
@@ -53,11 +53,13 @@ class PermissionManager {
 
     updatePermissionsFile () {
         let newFile = yaml.safeDump(this.permissions);
+
         fs.writeFileSync(this.filePath, newFile, 'utf8');
     }
 
     getUserPermissions (ID, extensive = false) {
         let permission = 3;
+
         if (this.permissions.roots.includes(ID)) {
             permission = 1;
         } else if (this.permissions.admins.includes(ID)) {

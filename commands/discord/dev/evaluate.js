@@ -14,8 +14,9 @@ evaluate.load = (vulcan, commandDefinition) => {
 evaluate.execute = async (message) => {
     let returnValue = '';
     let outputValue = '';
-    let code        = message.parsed.argsString;
-    let t           = performance.now();
+
+    const code = message.parsed.argsString;
+    const t0   = performance.now();
 
     try {
         returnValue = vm.runInContext(
@@ -26,7 +27,7 @@ evaluate.execute = async (message) => {
                         {   // eslint-disable-next-line no-return-assign
                             log: (...args) => outputValue += (util.format(...args) + '\n')
                         },
-                    __code: code,
+                    __code   : code,
                     __history: this.history,
                     __message: message
                 },
@@ -40,7 +41,7 @@ evaluate.execute = async (message) => {
         returnValue = err.message;
     }
 
-    let execTime = Math.round(performance.now() - t, 2);
+    const execTime = Math.round(performance.now() - t0, 2);
 
     if (returnValue === outputValue) {
         returnValue = 'undefined';
@@ -51,7 +52,7 @@ evaluate.execute = async (message) => {
         execTime,
         returnValue,
         outputValue,
-        authorID: message.author.id,
+        authorID : message.author.id,
         authorTag: message.author.tag
     });
 
@@ -60,7 +61,7 @@ evaluate.execute = async (message) => {
             message,
             fields: [
                 { name: 'Code',              value: '```js\n' + code + '\n```'             }, // \n stops .md break
-                { name: 'Benchmark',         value: `${t}ms`, inline: true                 },
+                { name: 'Benchmark',         value: `${execTime}ms`, inline: true                 },
                 { name: 'Size',              value: `${code.length} (chars)`, inline: true },
                 { name: 'Expression Return', value: `\`${returnValue}\``,     inline: true },
                 { name: 'Stream Output',     value: `\`${outputValue}\``,     inline: true }

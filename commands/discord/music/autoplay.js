@@ -14,7 +14,7 @@ autoplay.execute = async (message) => {
             message,
             fields: [
                 {
-                    name: 'Autoplay Status',
+                    name : 'Autoplay Status',
                     value: bool.toString()
                 }
             ]

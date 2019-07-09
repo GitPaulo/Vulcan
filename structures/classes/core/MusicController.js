@@ -63,7 +63,7 @@ class MusicController {
         await this.requestChannel.send(messageEmbeds.info(
             {
                 description: `Music Controller has changed stream volume.`,
-                field: [
+                field      : [
                     { name: 'Old Volume', value: oldValue },
                     { name: 'Old Volume', value: newValue }
                 ]
@@ -74,9 +74,9 @@ class MusicController {
     async onStartPlaying () {
         await this.requestChannel.send(messageEmbeds.info(
             {
-                title: `Now Playing :musical_note: :musical_note:`,
+                title      : `Now Playing :musical_note: :musical_note:`,
                 description: `Music Controller started playing a song.`,
-                fields: [
+                fields     : [
                     { name: 'Song name',       value: this.loadedSong.name,          inline: false },
                     { name: 'Request Author',  value: this.loadedSong.requestAuthor, inline: true  },
                     { name: 'Upload Author',   value: this.loadedSong.author,        inline: true  },
@@ -100,6 +100,7 @@ class MusicController {
         if (this.repeat) {
             this.queue.unshift(this.loadedSong); // Queue back in
             this.play();
+
             return;
         }
 
@@ -142,12 +143,12 @@ class MusicController {
     }
 
     loadPlaylistToArray (data, opt) {
-        const url   = 'https://youtube.com/watch?v=';
+        const url   = 'http://youtube.com/watch?v=';
         const str   = data;
         const tag   = { name: 'data-title', url: 'data-video-id', id: 'data-video-id' };
-        const split = str.indexOf('watch') === -1
+        const split = (str.indexOf('watch') === -1)
             ? str
-            : `https://www.youtube.com/playlist?list=${str.split('&list=')[1].split('&t=')[0]}`;
+            :  `http://www.youtube.com/playlist?list=${str.split('&list=')[1].split('&t=')[0]}`;
 
         return got(split).then((res) => {
             const $     = cheerio.load(res.body);
@@ -159,9 +160,13 @@ class MusicController {
                 opt = Object.keys(tag);
             }
 
-            const prefixUrl   = (holder, marks) => holder === 'url' ? `${url}${marks}` : marks;
+            const prefixUrl   = (holder, marks) => (holder === 'url')
+                ? `${url}${marks}`
+                : marks;
+
             const getDuration = (el) => {
                 const raw = $(el).find('.timestamp').text().split(':');
+
                 return (parseInt(raw[0], 10) * 60) + parseInt(raw[1], 10);
             };
 
@@ -173,12 +178,15 @@ class MusicController {
                         prev[holder] = prefixUrl(holder, holder === 'duration'
                             ? getDuration(el)
                             : el.attribs[tag[holder]]);
+
                         return prev;
                     }, {});
                 }
+
                 if (opt === 'duration') {
                     return getDuration(el);
                 }
+
                 return prefixUrl(opt, el.attribs[tag[opt]]);
             }).get();
 
@@ -188,7 +196,7 @@ class MusicController {
 
     enqueue (url, requestAuthor) {
         if (!ytdl.validateURL(url)) {
-            throw Error('URL is not parsable by the youtube download library.');
+            throw new Error('URL is not parsable by the youtube download library.');
         }
 
         const cpos = this.queue.length;
@@ -214,12 +222,11 @@ class MusicController {
         this.queue.push(
             {
                 url,
-                name: '(loading)',
-                author: '(loading)',
-                // eslint-disable-next-line no-mixed-operators
+                name         : '(loading)',
+                author       : '(loading)',
                 requestAuthor: (typeof requestAuthor === 'string') && requestAuthor || requestAuthor.tag,
-                loudness: 0,
-                seconds: 0
+                loudness     : 0,
+                seconds      : 0
             }
         );
 
@@ -227,8 +234,8 @@ class MusicController {
     }
 
     queueString () {
-        const escmd    = Discord.Util.escapeMarkdown;
-        let buildCache = [];
+        const escmd      = Discord.Util.escapeMarkdown;
+        let   buildCache = [];
 
         this.queue.forEach((next) => {
             buildCache.push(`**[${buildCache.length + 1}]**: ${escmd(next.name)} => ${escmd(next.url)}\n`);
@@ -243,7 +250,7 @@ class MusicController {
 
     async joinVoice (voiceChannel) {
         if (!(voiceChannel instanceof Discord.VoiceChannel)) {
-            throw Error(`joinVoice received an invalid voice channel!`);
+            throw new Error(`joinVoice received an invalid voice channel!`);
         }
 
         return voiceChannel
@@ -255,7 +262,7 @@ class MusicController {
             })
             .catch((err) => {
                 if (String(err).includes('ECONNRESET')) {
-                    throw Error('There was an issue connecting to the voice channel, please try again.');
+                    throw new Error('There was an issue connecting to the voice channel, please try again.');
                 }
                 throw err;
             });
@@ -263,7 +270,7 @@ class MusicController {
 
     async leaveVoice () {
         if (!this.voiceChannel) {
-            throw Error('Vulcan is not in voice thus he cannot leave.');
+            throw new Error('Vulcan is not in voice thus he cannot leave.');
         }
 
         await this.voiceChannel.leave();
@@ -274,23 +281,24 @@ class MusicController {
 
     async loadItem (idOrURL, requestChannel, requestAuthor) {
         if (typeof idOrURL !== 'string') {
-            throw Error(`Request must be of type string!`);
+            throw new Error(`Request must be of type string!`);
         }
 
         if (!(requestChannel instanceof Discord.TextChannel)) {
-            throw Error('Invalid text channel of request! (May happen if channel was deleted)');
+            throw new Error('Invalid text channel of request! (May happen if channel was deleted)');
         }
 
         if (!((requestAuthor instanceof Discord.User) || (typeof requestAuthor === 'string'))) {
-            throw Error('Invalid request author!');
+            throw new Error('Invalid request author!');
         }
 
         // Transform ID to UR (for now all playlist to be given as URL only)
-        const url = stringFunctions.isURL(idOrURL) ? idOrURL : `https://www.youtube.com/watch?v=${idOrURL}`;
+        const url = stringFunctions.isURL(idOrURL) ? idOrURL : `http://www.youtube.com/watch?v=${idOrURL}`;
 
         // If not playlist then queue song, else load playlist
         if (!stringFunctions.isYoutubePlaylist(url)) {
-            await this.enqueue(url, requestAuthor);
+            // Remove https for now?
+            await this.enqueue(url.replace(/^https:\/\//i, 'http://'), requestAuthor);
         } else {
             const playlist  = await this.loadPlaylistToArray(url);
             const queueSize = this.queue.length;
@@ -309,7 +317,7 @@ class MusicController {
 
             const embedWrap = messageEmbeds.info({
                 description: `Playlist detected. Loaded playlist into queue.`,
-                fields: [
+                fields     : [
                     { name: 'Playlist',            value: url,                             inline: false },
                     { name: 'Playlist Size',       value: playlist.length,                 inline: true  },
                     { name: 'Queue Size',          value: queueSize,                       inline: true  },
@@ -360,20 +368,17 @@ class MusicController {
         }
 
         await this.loadItem(idOrURL, requestChannel, requestAuthor);
-
-        const forceSong = this.queue.pop();
-        this.queue.splice(0, 0, forceSong);
-
+        this.queue.splice(0, 0, this.queue.pop());
         this.play();
     }
 
     async play () {
         if (!this.voiceChannel) {
-            throw Error('Vulcan is not in any voice channel');
+            throw new Error('Vulcan is not in any voice channel');
         }
 
         if (this.queueEmpty) {
-            throw Error('Queue is empty!');
+            throw new Error('Queue is empty!');
         }
 
         const loadedSong = this.queue[0];
@@ -384,9 +389,9 @@ class MusicController {
             stream,
             {
                 bitrate: this.voiceChannel.bitrate / 1000,
-                passes: 5,
-                type: 'opus',
-                volume: false
+                passes : 5,
+                type   : 'opus',
+                volume : false
             }
         );
 

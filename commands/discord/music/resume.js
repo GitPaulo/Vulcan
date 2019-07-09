@@ -16,7 +16,7 @@ resume.execute = async (message) => {
             message,
             fields: [
                 {
-                    name: 'Resumed Song',
+                    name : 'Resumed Song',
                     value: Discord.Util.escapeMarkdown(musicController.loadedSong.name)
                 }
             ]

@@ -14,7 +14,7 @@ shuffle.execute = async (message) => {
             message,
             fields: [
                 {
-                    name: 'Shuffle Status',
+                    name : 'Shuffle Status',
                     value: bool.toString()
                 }
             ]

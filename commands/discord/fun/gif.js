@@ -1,10 +1,10 @@
-const gif              = module.exports;
-const util             = xrequire('util');
-const fs               = xrequire('fs');
-const path             = xrequire('path');
-const http             = xrequire('http');
-const messageEmbeds    = xrequire('./plugins/libs/messageEmbeds');
-const stringFunctions  = xrequire('./plugins/libs/stringFunctions');
+const gif             = module.exports;
+const util            = xrequire('util');
+const fs              = xrequire('fs');
+const path            = xrequire('path');
+const http            = xrequire('http');
+const messageEmbeds   = xrequire('./plugins/libs/messageEmbeds');
+const stringFunctions = xrequire('./plugins/libs/stringFunctions');
 // const logger           = xrequire('./managers/LogManager').getInstance();
 
 // Promisify fs functions
@@ -27,14 +27,14 @@ gif.execute = async (message) => {
     const channel   = message.channel;
     const embedWrap = messageEmbeds.reply({
         message,
-        title: `**Gif** request received: **${cmd}**`,
+        title : `**Gif** request received: **${cmd}**`,
         fields: [
             {
-                name: 'Arguments',
+                name : 'Arguments',
                 value: message.parsed.args.join(', ')
             },
             {
-                name: 'Output',
+                name : 'Output',
                 value: 'Processing...'
             }
         ]
@@ -98,6 +98,7 @@ gif.execute = async (message) => {
         case 'list':
         case 'all':
             const files = await this.getImages();
+
             embedWrap.embed.fields[1].value = `\`\`\`\n${files.join(', ')}\n\`\`\``;
             break;
         default:
@@ -118,7 +119,7 @@ gif.getImages = () => readdir(this.folderPath);
 
 gif.storeImageFromMessage = (fileName, message) => {
     let attachments = message.attachments;
-    let i = 0;
+    let i           = 0;
 
     attachments.forEach((attachment) => {
         this.storeImageFromURL(attachment.proxyURL, fileName + (i > 0 ? i++ : i++, ''));
@@ -159,6 +160,7 @@ gif.fetchImage = async (keyword) => {
 
     files.forEach((file) => {
         let cvalue = stringFunctions.levenshteinSimilarity(keyword, file);
+
         if (cvalue > hvalue) {
             filePath = file;
             hvalue   = cvalue;

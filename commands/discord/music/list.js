@@ -13,7 +13,7 @@ list.execute = async (message) => {
             message,
             fields: [
                 {
-                    name: 'Queue (as list)',
+                    name : 'Queue (as list)',
                     value: musicController.queueString()
                 }
             ]

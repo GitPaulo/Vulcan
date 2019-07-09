@@ -12,6 +12,7 @@ skip.execute = async (message) => {
     }
 
     let lsName = Discord.Util.escapeMarkdown(musicController.loadedSong.name);
+
     musicController.skip(force);
 
     await message.channel.send(messageEmbeds.reply(
@@ -19,11 +20,11 @@ skip.execute = async (message) => {
             message,
             fields: [
                 {
-                    name: 'Skipped Song',
+                    name : 'Skipped Song',
                     value: lsName
                 },
                 {
-                    name: 'Was Forced?',
+                    name : 'Was Forced?',
                     value: force.toString()
                 }
             ]

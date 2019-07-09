@@ -6,9 +6,9 @@ botchannel.execute = async (message) => {
     const embedWrap  = messageEmbeds.reply({
         message,
         description: 'Guild bot channel changed.',
-        fields: [
+        fields     : [
             {
-                name: 'Bot Channel',
+                name : 'Bot Channel',
                 value: `${botChannel.name}(${botChannel.id})`
             }
         ]

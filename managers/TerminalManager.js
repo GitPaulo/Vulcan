@@ -8,7 +8,7 @@ class TerminalManager {
     ) {
         this.cli = readline.createInterface(
             {
-                input: inputStream,
+                input : inputStream,
                 output: outputStream
             }
         );
@@ -42,12 +42,14 @@ class TerminalManager {
     onCommandReceived (line, vulcan) {
         let args = line.split(' ');
         let cmd  = args[0];
+
         args = args.slice(1);
 
         let command = this.commands.get(cmd);
 
         if (!command) {
             this.log(`This CLI command '${cmd}' does not exist!\n\tInput: ${line}`, 'warning');
+
             return;
         }
 
@@ -58,7 +60,7 @@ class TerminalManager {
         }
 
         this.history.push({
-            parse: { line, args, cmd },
+            parse    : { line, args, cmd },
             command,
             timestamp: new Date()
         });

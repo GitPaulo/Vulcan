@@ -14,18 +14,18 @@ const LogManager = (function () {
     function loggerConstructor () { // 'private' properties
         let folderName  = 'logs';
         let rootPath    = __basedir;
-        let maxFileSize = 1 * 1024 * 1024; // 1Mb
+        let maxFileSize = 1 * 1024 * 1024;                      // 1Mb
         let nFolderPath = path.join(rootPath, folderName);
         let oFolderPath = path.join(nFolderPath, 'past_logs');
         // eslint-disable-next-line no-unused-vars
-        let modifiers   = [];
+        let modifiers = [];
 
         let logTypes    = {
-            debug    : chalk.blue,
-            log      : chalk.green,
-            warning  : chalk.yellowBright,
-            error    : chalk.redBright,
-            terminal : chalk.magenta
+            debug   : chalk.blue,
+            log     : chalk.green,
+            warning : chalk.yellowBright,
+            error   : chalk.redBright,
+            terminal: chalk.magenta
         };
 
         let blueprint   = [
@@ -50,16 +50,19 @@ const LogManager = (function () {
             for (let modifier of modifiers) {
                 text = chalk[modifier](text);
             }
+
             return text;
         };
 
         let blueprintsFromLogType = function (logType) {
             let blueprints = [];
+
             for (let fileBlueprint of blueprint) {
                 if (fileBlueprint.logTypes.includes(logType)) {
                     blueprints.push(fileBlueprint);
                 }
             }
+
             return blueprints;
         };
 
@@ -69,7 +72,7 @@ const LogManager = (function () {
 
         let store = function (logType, str) {
             if (!logTypes[logType]) {
-                throw Error(`Log type '${logType}' not valid for 'write' function!`);
+                throw new Error(`Log type '${logType}' not valid for 'write' function!`);
             }
 
             const blueprints = blueprintsFromLogType(logType);
@@ -77,9 +80,10 @@ const LogManager = (function () {
             for (let fileBlueprint of blueprints) {
                 let logFilePath = path.join(nFolderPath, fileBlueprint.fileName);
                 let stats       = fs.statSync(logFilePath);
+
                 // File too big! Copy file to old logs and then overwrite it!
                 if (stats.size >= maxFileSize) {
-                    let fstr = (new Date().toJSON().slice(0, 10)) + '_' + fileBlueprint.fileName;
+                    let fstr            = (new Date().toJSON().slice(0, 10)) + '_' + fileBlueprint.fileName;
                     let numberOfRepeats = 0;
 
                     let files = fs.readdirSync(oFolderPath);
@@ -104,12 +108,14 @@ const LogManager = (function () {
 
         let write = function (logType, ...args) {
             let colorFunc = logTypes[logType];
+
             if (!colorFunc) {
-                throw Error(`Log type '${logType}' not valid for 'write' function!`);
+                throw new Error(`Log type '${logType}' not valid for 'write' function!`);
             }
 
             // Convert all arguments to proper strings
             let buffer = [];
+
             for (let arg of args) {
                 buffer.push((typeof arg === 'object') ? JSON.stringify(arg) : arg.toString());
             }
@@ -145,9 +151,11 @@ const LogManager = (function () {
         return { // 'public' properties
             removeModifier (modID) {
                 let index = modifiers.indexOf(modID);
+
                 if (index < -1) {
-                    throw Error(`Modifier '${modID}' not found in exisiting modifiers!`);
+                    throw new Error(`Modifier '${modID}' not found in exisiting modifiers!`);
                 }
+
                 modifiers.splice(index, 1);
             },
             addModifier (modID) {
@@ -156,8 +164,9 @@ const LogManager = (function () {
             },
             setModifiers (mods) {
                 if (!Array.isArray(mods)) {
-                    throw Error('Expected log modifiers in array format!');
+                    throw new Error('Expected log modifiers in array format!');
                 }
+
                 modifiers = mods;
             },
             clearModifiers () {
@@ -170,8 +179,9 @@ const LogManager = (function () {
             },
             plain (text, color = 'white') {
                 let colorFunc = chalk[color];
+
                 if (!colorFunc) {
-                    throw Error(`Invalid color '${color}' for 'logger.plain'!`);
+                    throw new Error(`Invalid color '${color}' for 'logger.plain'!`);
                 }
 
                 console.log(
@@ -199,6 +209,7 @@ const LogManager = (function () {
             if (!instance) {
                 instance = loggerConstructor();
             }
+
             return instance;
         }
     };

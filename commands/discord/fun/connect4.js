@@ -14,8 +14,8 @@ connect4.load = (vulcan, commandDefinition) => {
     this.boardHeight = 6;
 
     // Command state & emojis
-    this.games       = [];
-    this.emojiPlays  = [];
+    this.games      = [];
+    this.emojiPlays = [];
 
     for (let i = 0; i < this.boardWidth; i++) {
         this.emojiPlays.push(i + numberEmojiSuffix);
@@ -41,7 +41,7 @@ connect4.execute = async (message) => {
     } else { // Send out challenge and wait for it!
         try {
             await message.channel.awaitMessages(
-                (m) => m.content.toLowerCase().startsWith('i accept') && m.author === challengee,
+                (m) => m.content.toLowerCase().startsWith('i accept') && (m.author === challengee),
                 { max: 1, time: 20000, errors: ['time'] }
             );
         } catch (warn) {
@@ -57,35 +57,35 @@ connect4.execute = async (message) => {
     const outerScope = this;
     const game       = {
         // Properties
-        board: new Board(outerScope.boardHeight, outerScope.boardWidth),
-        players: [challenger, challengee],
-        winner: null,
+        board       : new Board(outerScope.boardHeight, outerScope.boardWidth),
+        players     : [challenger, challengee],
+        winner      : null,
         boardMessage: await message.channel.send('Initializing...'),
-        turnMessage: await message.channel.send('Initializing...'),
-        turn: 1,
-        state: {
-            win: false,
+        turnMessage : await message.channel.send('Initializing...'),
+        turn        : 1,
+        state       : {
+            win : false,
             draw: false
         },
         exit: false,
         // Methods
-	    get gameOver () {
+        get gameOver () {
             return this.state.win || this.state.draw || this.exit;
         },
         get currentPlayer () {
-	        return this.players[this.turn - 1];
+            return this.players[this.turn - 1];
         },
         get nonCurrentPlayer () {
             return this.getOtherPlayer(this.currentPlayer);
         },
         getOtherPlayer (player) {
-	        return player === this.players[0] ? this.players[1] : this.players[0];
+            return player === this.players[0] ? this.players[1] : this.players[0];
         },
         async nextMove () {
             let move = -1;
 
             if (this.players[this.turn - 1].bot) {
-		        move = mcts(this.board, this.turn);
+                move = mcts(this.board, this.turn);
             } else {
                 const filter    = (reaction, user) => this.currentPlayer.id === user.id && outerScope.getControlEmojis().includes(reaction.emoji.identifier);
                 const collected = await this.boardMessage.awaitReactions(filter, { max: 1 });
@@ -103,39 +103,41 @@ connect4.execute = async (message) => {
             }
 
             return move;
-	    },
+        },
         makeMove (move) {
             return this.board.makeMoveAndCheckWin(this.turn, move);
         },
         async resetControls () {
             let reactionsThatNeedRemoving = this.boardMessage.reactions.array().filter((reaction) => reaction.count > 1);
+
             for (let reaction of reactionsThatNeedRemoving) {
                 reaction.users.array().filter((user) => user !== this.boardMessage.client.user).forEach((user) => reaction.users.remove(user.id));
             }
         },
-	    async updateTurnMessage (str) {
+        async updateTurnMessage (str) {
             await this.turnMessage.edit(str || `<@${this.currentPlayer.id}>'s turn`);
         },
         async updateBoardMessage (str) {
             await this.boardMessage.edit(str || `\`\`\`${this.board.toString()}\`\`\``);
         },
-	    async updateState (state = { win: false, draw: false }) {
-	        this.state = state;
+        async updateState (state = { win: false, draw: false }) {
+            this.state = state;
             if (!this.state.win && !this.state.draw) {
-		        this.turn = (this.turn === 1 ? 2 : 1);
-	        } else if (this.state.win) {
+                this.turn = (this.turn === 1 ? 2 : 1);
+            } else if (this.state.win) {
                 this.winner = this.currentPlayer;
             }
-	    },
+        },
         async updateView () {
             await this.updateBoardMessage();
             await this.updateTurnMessage();
-            //await this.resetControls();
+            // await this.resetControls();
         }
     };
 
     // Push new game and update embed
     const gameID = this.games.push(game);
+
     logger.debug(`New connect 4 game (ID: ${gameID}) has started.`, game);
 
     // Set up emojis for game message
@@ -155,22 +157,24 @@ connect4.execute = async (message) => {
         try {
             await game.resetControls();
             let move = await game.nextMove();
+
             // Surrender
             if (move === -1) {
                 game.state = {
-                    win: true,
+                    win : true,
                     draw: false
                 };
                 game.winner = game.nonCurrentPlayer;
             } else {
                 let state = game.makeMove(move);
+
                 await game.updateState(state);
                 await game.updateView();
             }
-	    } catch (err) {
+        } catch (err) {
             game.boardMessage.client.emit('channelError', game.boardMessage.channel, err);
             game.exit = true;
-	    }
+        }
     }
 
     // Final update

@@ -14,10 +14,10 @@ class DatabaseManager {
     }
 
     async connect (username, password, settings = {
-        autoReconnect: true,
-        reconnectTries: 10,
+        autoReconnect    : true,
+        reconnectTries   : 10,
         reconnectInterval: 3000,
-        useNewUrlParser: true
+        useNewUrlParser  : true
     }) {
         const dbURL = 'mongodb://' + username + ':' + password + '@ds125125.mlab.com:25125/vulcan';
 

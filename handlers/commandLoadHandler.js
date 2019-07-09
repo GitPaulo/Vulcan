@@ -11,7 +11,7 @@ const logger          = xrequire('./managers/LogManager').getInstance();
 const definitionFile = 'commands.yml';
 const dirToClass     = {
     terminal: 'TerminalCommand',
-    discord: 'DiscordCommand'
+    discord : 'DiscordCommand'
 };
 
 module.exports = (vulcan, folderPath) => {
@@ -22,7 +22,7 @@ module.exports = (vulcan, folderPath) => {
     const commandClassName = dirToClass[dirName];
 
     if (!commandClassName) {
-        throw Error(`Invalid command class name coming from: '${dirName}'. Likely bad folder structure.`);
+        throw new Error(`Invalid command class name coming from: '${dirName}'. Likely bad folder structure.`);
     }
 
     // Fetch necessary things
@@ -32,12 +32,12 @@ module.exports = (vulcan, folderPath) => {
     const commandDefinitions     = yaml.safeLoad(commandDefinitionsFile);
 
     if (Object.entries(commandDefinitions).length === 0 || commandDefinitions.constructor !== Object) {
-        throw Error(`Failed parsing '${definitionFile}' from (${commandDefinitionsPath})`);
+        throw new Error(`Failed parsing '${definitionFile}' from (${commandDefinitionsPath})`);
     }
 
     const commandFiles = fileFunctions.allDirFiles(dirPath);
+    const offset       = Object.keys(commandDefinitions).length - commandFiles.length;
 
-    let offset = Object.keys(commandDefinitions).length - commandFiles.length;
     if (offset !== 0) {
         logger.warn(`The number of commands defined in '${definitionFile}' does not match the coded ones.\n\tOffset: ${offset}`);
     }
@@ -51,32 +51,32 @@ module.exports = (vulcan, folderPath) => {
             let fullPath  = path.join(dirPath, fileName);
 
             // Fetch command deifnition using id & validate
-            let commandDefinition  = commandDefinitions[commandID];
+            let commandDefinition = commandDefinitions[commandID];
 
             if (!commandDefinition) {
-                throw Error(`Command definition not found for \nID: ${commandID}\nPATH: ${fullPath}`);
+                throw new Error(`Command definition not found for \nID: ${commandID}\nPATH: ${fullPath}`);
             }
 
             Object.defineProperties(commandDefinition,
                 {
                     type: {
-                        value: path.dirname(fullPath).split(path.sep).slice(-1).pop(), // add type (folder name)
-                        writable: false,
-                        enumerable: false,
+                        value       : path.dirname(fullPath).split(path.sep).slice(-1).pop(),   // add type (folder name)
+                        writable    : false,
+                        enumerable  : false,
                         configurable: false
                     },
                     id: {
-                        value: commandID,
-                        writable: false,
-                        enumerable: false,
+                        value       : commandID,
+                        writable    : false,
+                        enumerable  : false,
                         configurable: false
                     }
                 }
             );
 
             // Hack the system - make command object instance of appropriate class
-            let commandObject = xrequire(fullPath);
-            const command     = Object.assign(new CommandClass(commandDefinition), commandObject);
+            let   commandObject = xrequire(fullPath);
+            const command       = Object.assign(new CommandClass(commandDefinition), commandObject);
 
             // Call load command if defined
             if (command.load) {

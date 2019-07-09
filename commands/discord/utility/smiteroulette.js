@@ -13,7 +13,7 @@ smiteroulette.loadGodCache = async () => {
     const cache  = new HashTable();
 
     const dynamicInsert = (god, key) => {
-        god[key] = god[key].toLowerCase().trim(); // ok hirez!
+        god[key]        = god[key].toLowerCase().trim(); // ok hirez!
         const dataArray = cache.get(god[key]);
 
         if (dataArray) {
@@ -35,9 +35,11 @@ smiteroulette.loadGodCache = async () => {
         // Make map entry with types (Ranged, magical, ...)
         // They come in a string cuz why not hirez
         const types = god.type.split(',');
+
         for (let i = 0; i < types.length; i++) {
-            const newKey = 'type' + i;
-            god[newKey]  = types[i].trim();
+            const newKey   = 'type' + i;
+
+            god[newKey] = types[i].trim();
             dynamicInsert(god, newKey);
         }
     }
@@ -60,20 +62,22 @@ smiteroulette.execute = async (message) => {
         );
     }
 
-    const input  = message.parsed.args;
-    let selector = null;
-    let sarray   = null;
+    const input    = message.parsed.args;
+    let   selector = null;
+    let   sarray   = null;
 
     if (input.length <= 0) {
         selector = 'ALL';
         sarray   = this.cache.get(selector);
     } else { // Get intersection of selectors
         const selectors = input;
+
         sarray = [];
 
         for (let subselector of selectors) {
             const ssarray = this.cache.get(subselector);
-            sarray = sarray.length <= 0 ? ssarray : sarray.intersection(ssarray);
+
+            sarray  = sarray.length <= 0 ? ssarray : sarray.intersection(ssarray);
         }
 
         selector = message.parsed.argsString;
@@ -100,7 +104,7 @@ smiteroulette.execute = async (message) => {
         {
             message,
             description: `<@${message.author.id}>'s smite god will be: **${god.name} (${god.title})**\n\t Selector: **${selector}**`,
-            image: {
+            image      : {
                 url: god.card
             }
         }

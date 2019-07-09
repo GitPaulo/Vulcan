@@ -1,17 +1,16 @@
 module.exports = async (message) => {
-    let raw  = message.content;
-    let args = raw.match(/'+([^;]*)'+|{+([^;]*)}+|`+([^;]*)`+|\[([^;]*)\]|\S+/g);
-    let tags = raw.match(/<((@!?\d+)|(:.+?:\d+))>/g);
-    let head = args[0];
-    let tail = raw.substring(head.length);
+    const raw  = message.content;
+    const args = raw.match(/'+([^;]*)'+|{+([^;]*)}+|`+([^;]*)`+|\[([^;]*)\]|\S+/g);
+    const tags = raw.match(/<((@!?\d+)|(:.+?:\d+))>/g);
+    const head = args[0];
+    const tail = raw.substring(head.length);
 
-    let vulcan  = message.client;
-    let cmdName = head.slice(1);
-    let command = vulcan.commands.get(cmdName);
-    let argsString = null;
+    const vulcan  = message.client;
+    const cmdName = head.slice(1);
+    const command = vulcan.commands.get(cmdName);
 
     args.shift();
-    argsString = args.join(' ').trim();
+    const argsString = args.join(' ').trim();
 
     return {
         command,

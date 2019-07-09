@@ -19,6 +19,7 @@ play.execute = async (message) => {
         }
 
         message.client.emit('channelInfo', message.channel, 'Playing whatever is at front of queue. (or restarting current song)');
+
         return musicController.play();
     }
 
@@ -35,7 +36,7 @@ play.execute = async (message) => {
             {
                 message,
                 description: 'Queued an item to the music player.',
-                fields: [
+                fields     : [
                     { name: 'Queued Song', value: request },
                     { name: 'Queue Size',  value: musicController.queue.length }
                 ]

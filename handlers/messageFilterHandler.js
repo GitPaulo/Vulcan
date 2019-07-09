@@ -25,11 +25,11 @@ module.exports = (message) => {
                 message.delete().then(() => (
                     message.channel.send({
                         embed: {
-                            color: 0x0099ff,
-                            title: 'Message Filtered',
+                            color : 0x0099ff,
+                            title : 'Message Filtered',
                             author: {
-                                name: `Message by: ${message.author.tag}`,
-                                icon_url: message.author.defaultAvatarURL /* eslint-disable-line camelcase */
+                                name    : `Message by: ${message.author.tag}`,
+                                icon_url: message.author.defaultAvatarURL       /* eslint-disable-line camelcase */
                             },
                             description: filteredContent
                         }

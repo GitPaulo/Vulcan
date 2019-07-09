@@ -32,6 +32,7 @@ function simulate (node, player) {
         node.expand();
 
         let playoutResult = playout(node, player);
+
         node.update(playoutResult);
 
         result = playoutResult;
@@ -78,7 +79,7 @@ function select (node) {
 
         if (score > bestScore) {
             bestScore = score;
-            bestNode = child;
+            bestNode  = child;
         }
     }
 

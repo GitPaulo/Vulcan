@@ -30,6 +30,7 @@ class GameNode {
         for (let i = 0; i < this.board.width; i++) {
             if (this.board.isValidMove(i)) {
                 let newNode = this.getNodeAfterMove(i);
+
                 this.children.push(newNode);
             }
         }
@@ -69,6 +70,7 @@ class GameNode {
                 bestScore = child.score;
             }
         }
+
         return bestChild;
     }
 
@@ -80,6 +82,7 @@ class GameNode {
         if (this.winner === player) {
             return 1;
         }
+
         return -1;
     }
 
@@ -90,6 +93,7 @@ class GameNode {
     get randomChild () {
         let allowedMoves = this.board.allowedMoves;
         let randomMove   = allowedMoves[Math.floor(Math.random() * allowedMoves.length)];
+
         return this.getNodeAfterMove(randomMove);
     }
 

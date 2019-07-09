@@ -1,5 +1,6 @@
 /* This file is loaded via npm script */
-const path       = require('path');
+const path = require('path');
+
 global.__basedir = path.join(__dirname, '..', '..');
 
 // Absolute path version of node's 'require()'

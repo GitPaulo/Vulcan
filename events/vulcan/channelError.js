@@ -13,15 +13,15 @@ module.exports = (
     logger.error(`[${channel.name}] => ${description}\n\tError message: ${err.message}\n\tStack: ${err.stack}`);
     channel.send(messageEmbeds.error(
         {
-            title: 'Vulcan Internal Error',
+            title : 'Vulcan Internal Error',
             description,
             fields: [
                 {
-                    name: 'Error Message',
+                    name : 'Error Message',
                     value: err.message
                 },
                 {
-                    name: 'Stack String',
+                    name : 'Stack String',
                     value: `\`\`\`${err.stack.toString()}\`\`\``
                 }
             ]
