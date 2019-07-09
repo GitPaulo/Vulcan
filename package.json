@@ -1,62 +1,66 @@
 {
-    "name": "Vulcan",
-    "version": "1.0.0",
-    "description": "Collaboration discord bot by Paulo & Carlos, using discord.js and heroku.",
-    "main": "bot.js",
-    "scripts": {
-        "_COMMENT0": " ============================ BUILD SCRIPTS  ============================",
-        "wintools": "npm install -g windows-build-tools",
-        "_COMMENT1": " ============================ RUN SCRIPTS  ============================",
-        "start": "node --require ./plugins/scripts/globals.js bot.js",
-        "dev": "nodemon --require ./plugins/scripts/globals.js bot.js",
-        "_COMMENT2": " ============================ TEST SCRIPTS  ============================",
-        "test": "node --require ./plugins/scripts/globals.js tests/loading.js",
-        "test:music": "node --require ./plugins/scripts/globals.js tests/musicDependencies.js",
-        "_COMMENT3": " ============================ CODE ENV SCRIPTS  ============================",
-        "linter": "eslint .",
-        "linter:errors-only": "eslint . --quiet",
-        "linter:setup": "npm install eslint --save-dev",
-        "linter:init": "eslint --init",
-        "linter:fix": "eslint . --fix"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/GitPaulo/Vulcan.git"
-    },
-    "keywords": [
-        "vulcan",
-        "discord",
-        "bot",
-        "discord-js",
-        "discordjs",
-        "heroku"
-    ],
-    "author": "Paulo & Carlos",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/GitPaulo/Vulcan/issues"
-    },
-    "homepage": "https://github.com/GitPaulo/Vulcan#readme",
-    "dependencies": {
-        "archiver": "^3.0.0",
-        "chalk": "^2.4.2",
-        "cheerio": "^1.0.0-rc.3",
-        "discord.js": "github:discordjs/discord.js",
-        "ffmpeg-static": "^2.5.0",
-        "github-api": "^3.2.2",
-        "got": "^9.6.0",
-        "js-yaml": "^3.13.1",
-        "mongoose": "^5.6.4",
-        "node-opus": "^0.3.2",
-        "request": "^2.88.0",
-        "request-promise": "^4.2.4",
-        "ytdl-core": "^0.29.3",
-        "ytdl-core-discord": "^1.0.3"
-    },
-    "devDependencies": {
-        "eslint": "^6.0.1",
-        "eslint-config-mudamuda": "^1.0.9",
-        "eslint-plugin-security": "^1.4.0",
-        "nodemon": "^1.19.1"
-    }
+  "name": "Vulcan",
+  "version": "1.0.0",
+  "description": "Collaboration discord bot by Paulo & Carlos, using discord.js and heroku.",
+  "main": "bot.js",
+  "scripts": {
+    "_COMMENT0": " ============================ BUILD SCRIPTS  ============================",
+    "wintools": "npm install -g windows-build-tools",
+    "_COMMENT1": " ============================ RUN SCRIPTS  ============================",
+    "start": "node --require ./plugins/scripts/globals.js bot.js",
+    "dev": "nodemon --require ./plugins/scripts/globals.js bot.js",
+    "_COMMENT2": " ============================ TEST SCRIPTS  ============================",
+    "test": "node --require ./plugins/scripts/globals.js tests/loading.js",
+    "test:music": "node --require ./plugins/scripts/globals.js tests/musicDependencies.js",
+    "_COMMENT3": " ============================ CODE ENV SCRIPTS  ============================",
+    "linter": "eslint .",
+    "linter:errors-only": "eslint . --quiet",
+    "linter:setup": "npm install eslint --save-dev",
+    "linter:init": "eslint --init",
+    "linter:fix": "eslint . --fix",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GitPaulo/Vulcan.git"
+  },
+  "keywords": [
+    "vulcan",
+    "discord",
+    "bot",
+    "discord-js",
+    "discordjs",
+    "heroku"
+  ],
+  "author": "Paulo & Carlos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GitPaulo/Vulcan/issues"
+  },
+  "homepage": "https://github.com/GitPaulo/Vulcan#readme",
+  "dependencies": {
+    "archiver": "^3.0.0",
+    "chalk": "^2.4.2",
+    "cheerio": "^1.0.0-rc.3",
+    "discord.js": "github:discordjs/discord.js",
+    "ffmpeg-static": "^2.5.0",
+    "github-api": "^3.2.2",
+    "got": "^9.6.0",
+    "js-yaml": "^3.13.1",
+    "mongoose": "^5.6.4",
+    "node-opus": "^0.3.2",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "ytdl-core": "^0.29.3",
+    "ytdl-core-discord": "^1.0.3",
+    "snyk": "^1.192.4"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "eslint-config-mudamuda": "^1.0.9",
+    "eslint-plugin-security": "^1.4.0",
+    "nodemon": "^1.19.1"
+  },
+  "snyk": true
 }
