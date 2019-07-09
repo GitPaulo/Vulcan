@@ -54,7 +54,7 @@
     },
     "devDependencies": {
         "eslint": "^6.0.1",
-        "eslint-config-mudamuda": "^1.0.7",
+        "eslint-config-mudamuda": "^1.0.8",
         "eslint-plugin-security": "^1.4.0",
         "nodemon": "^1.19.1"
     }
