@@ -6,7 +6,6 @@ const path              = xrequire('path');
 const DatabaseManager   = xrequire('./managers/DatabaseManager');
 const TerminalManager   = xrequire('./managers/TerminalManager');
 const PermissionManager = xrequire('./managers/PermissionManager');
-const mathFunctions     = xrequire('./plugins/libs/mathFunctions');
 const logger            = xrequire('./managers/LogManager').getInstance();
 
 /****************************************************************/
@@ -89,7 +88,7 @@ class Vulcan extends Discord.Client {
             let event = eventFile.replace(/\.js$/i, '');
 
             this.on(event, xrequire(path.join(discordjsEventsPath, eventFile)));
-            logger.log(`Finished loading (DiscordJS) event file '${eventFile}' (took ${mathFunctions.round(performance.now() - t, 2)}ms).`);
+            logger.log(`Finished loading (DiscordJS) event file '${eventFile}' (took ${Math.roundDP(performance.now() - t, 2)}ms).`);
         }
 
         for (let eventFile of vulcanEvents) {
@@ -97,7 +96,7 @@ class Vulcan extends Discord.Client {
             let event = eventFile.replace(/\.js$/i, '');
 
             this.on(event, xrequire(path.join(vulcanEventsPath, eventFile)));
-            logger.log(`Finished loading (Vulcan) event file '${eventFile}' (took ${mathFunctions.round(performance.now() - t, 2)}ms).`);
+            logger.log(`Finished loading (Vulcan) event file '${eventFile}' (took ${Math.roundDP(performance.now() - t, 2)}ms).`);
         }
 
         return chainPrint('Discord & Vulcan Events', this);
@@ -154,6 +153,18 @@ class Vulcan extends Discord.Client {
         });
 
         return chainPrint('Discord Connection', this);
+    }
+
+    destroy () {
+        // Stop Vulcan CLI
+        if (this.terminalManager) {
+            this.terminalManager.stop();
+        }
+
+        // Close other things safely (database perhaps?)
+        // [here]
+
+        super.destroy();
     }
 
     /************************

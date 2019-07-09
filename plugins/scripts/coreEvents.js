@@ -11,7 +11,8 @@ process.exit = async (code = 0, message = 'Unknown') => {
         return global._exit(1);
     }
 
-    let vulcan = global.__loaded && xrequire('./bot.js');
+    // Don't use comma or infinite loop!
+    const vulcan = global.__loaded && xrequire('./bot.js');
 
     if (!vulcan) {
         logger.error(`Vulcan client was invalid before process exit!\n\tMessage: ${message}'`);
@@ -46,17 +47,9 @@ process.exit = async (code = 0, message = 'Unknown') => {
         });
     }
 
-    // Stop Vulcan CLI
-    if (vulcan.terminalManager) {
-        vulcan.terminalManager.stop();
-    }
-
-    // Close other things safely (database perhaps?)
-    // [here]
-
+    vulcan.destroy();
     logger.log(`Vulcan process is exiting.\n\tMessage: ${message}\n\tExit code: ${code}`);
 
-    vulcan.destroy();
     global._exit(code);
 };
 

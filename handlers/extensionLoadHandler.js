@@ -42,6 +42,6 @@ module.exports = () => {
             (parent) => xrequire(path.join(extensionsDir, file))
         );
 
-        logger.log(`Sucessfully loaded extensions file '${file}'. (took ${Math.round(performance.now() - t)}ms)`);
+        logger.log(`Sucessfully loaded extensions file '${file}'. (took ${Math.roundDP(performance.now() - t, 2)}ms)`);
     });
 };

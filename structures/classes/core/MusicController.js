@@ -318,11 +318,11 @@ class MusicController {
             const embedWrap = messageEmbeds.info({
                 description: `Playlist detected. Loaded playlist into queue.`,
                 fields     : [
-                    { name: 'Playlist',            value: url,                             inline: false },
-                    { name: 'Playlist Size',       value: playlist.length,                 inline: true  },
-                    { name: 'Queue Size',          value: queueSize,                       inline: true  },
-                    { name: 'Estimated Load Time', value: `${Math.round(estimate * pn)}s`, inline: true  },
-                    { name: 'Load Progress',       value: `0/${pn} songs`,                 inline: true  }
+                    { name: 'Playlist',            value: url,                                  inline: false },
+                    { name: 'Playlist Size',       value: playlist.length,                      inline: true  },
+                    { name: 'Queue Size',          value: queueSize,                            inline: true  },
+                    { name: 'Estimated Load Time', value: `${Math.roundDP(estimate * pn, 2)}s`, inline: true  },
+                    { name: 'Load Progress',       value: `0/${pn} songs`,                      inline: true  }
                 ]
             });
 

@@ -339,3 +339,31 @@ documentation:
     color: 0xffa500
     title: 'Overwatch Hero Roulette'
     image: './assets/media/images/commands/discord/OverwatchRoulette.gif'
+
+# 
+logs:
+  aliases:
+  - 'dump'
+  description: 'Zips and uploads the log dump files.'
+  group: 1
+  examples:
+  - '!logs'
+  throttling: 2000
+  embed:
+    color: 0x00000
+    title: 'Logs'
+    image: './assets/media/images/commands/discord/Logs.gif'
+
+# 
+kill:
+  aliases:
+  - 'korosu'
+  description: 'Kills vulcan process.'
+  group: 1
+  examples:
+  - '!kill'
+  throttling: 0
+  embed:
+    color: 0x00000
+    title: 'Kill'
+    image: './assets/media/images/commands/discord/Kill.gif'

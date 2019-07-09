@@ -41,7 +41,7 @@ evaluate.execute = async (message) => {
         returnValue = err.message;
     }
 
-    const execTime = Math.round(performance.now() - t0, 2);
+    const execTime = Math.roundDP(performance.now() - t0, 2);
 
     if (returnValue === outputValue) {
         returnValue = 'undefined';

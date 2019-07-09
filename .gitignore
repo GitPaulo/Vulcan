@@ -66,6 +66,7 @@ settings/
 
 # Vulcan logs folder
 logs/
+logs.zip
 
 # Vulcan Data folder
 data/

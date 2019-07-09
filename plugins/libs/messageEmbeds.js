@@ -24,12 +24,7 @@ messageEmbeds.reply = (
         },
         url   = '',
         image = {},
-        files = [
-            {
-                attachment: imgPath,
-                name      : imgName
-            }
-        ]
+        files = []
     }
 ) => ({
     embed: {
@@ -44,14 +39,20 @@ messageEmbeds.reply = (
         url,
         image
     },
-    files
+    files: [
+        {
+            attachment: imgPath,
+            name      : imgName
+        },
+        ...files
+    ]
 });
 
 messageEmbeds.critical = (
     {
         title       = `Critical Error`,
         description = `A Critical Error has been detected by Vulcan.`,
-        color       = 0x000000,                                          // black
+        color       = 0x000000, // Black
         thumbnail   = {
             url: `attachment://critical.png`
         },
@@ -85,7 +86,7 @@ messageEmbeds.error = (
     {
         title       = `Error`,
         description = `An error has been detected by Vulcan.`,
-        color       = 0xFF0000,                                  // red
+        color       = 0xFF0000, // Red
         thumbnail   = {
             url: `attachment://error.png`
         },
@@ -119,7 +120,7 @@ messageEmbeds.warning = (
     {
         title       = `Warning`,
         description = 'Vulcan has detected unexpected behaviour.',
-        color       = 0xFFFF00,                                      // orange
+        color       = 0xFFFF00, // Orange
         thumbnail   = {
             url: `attachment://warning.png`
         },
@@ -153,7 +154,7 @@ messageEmbeds.info = (
     {
         title       = `Information`,
         description = 'Vulcan has something to say?',
-        color       = 0x89CFF0,                         // bblue
+        color       = 0x89CFF0, // Blue
         thumbnail   = {
             url: `attachment://info.png`
         },

@@ -2,7 +2,6 @@ const { performance } = xrequire('perf_hooks');
 const path            = xrequire('path');
 const fs              = xrequire('fs');
 const yaml            = xrequire('js-yaml');
-const mathFunctions   = xrequire('./plugins/libs/mathFunctions');
 const fileFunctions   = xrequire('./plugins/libs/fileFunctions');
 const CommandMap      = xrequire('./structures/classes/core/CommandMap');
 const logger          = xrequire('./managers/LogManager').getInstance();
@@ -85,7 +84,7 @@ module.exports = (vulcan, folderPath) => {
 
             // Add to map
             commands.addCommand(command);
-            logger.log(`Loaded (${commandDefinition.type}) command '${command.id}' from ${fileName} (took ${mathFunctions.round(performance.now() - t, 2)}ms)`);
+            logger.log(`Loaded (${commandDefinition.type}) command '${command.id}' from ${fileName} (took ${Math.roundDP(performance.now() - t, 2)}ms)`);
         } catch (err) {
             logger.error(
                 `[Command Loader Error]\n${err.stack}`
