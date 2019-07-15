@@ -54,7 +54,7 @@
     "request-promise": "^4.2.4",
     "ytdl-core": "^0.29.3",
     "ytdl-core-discord": "^1.0.3",
-    "snyk": "^1.192.4"
+    "snyk": "^1.193.1"
   },
   "devDependencies": {
     "eslint": "^6.0.1",
