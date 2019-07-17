@@ -50,7 +50,7 @@
     "github-api": "^3.2.2",
     "got": "^9.6.0",
     "js-yaml": "^3.13.1",
-    "mongoose": "^5.6.4",
+    "mongoose": "^5.6.5",
     "node-opus": "^0.3.2",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
@@ -62,7 +62,7 @@
     "eslint-config-mudamuda": "^1.0.10",
     "eslint-plugin-security": "^1.4.0",
     "nodemon": "^1.19.1",
-    "snyk": "^1.193.0"
+    "snyk": "^1.193.2"
   },
   "snyk": true
 }
