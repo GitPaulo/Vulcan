@@ -1,11 +1,11 @@
 const git           = module.exports;
 const GithubAPI     = xrequire('github-api');
-const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
+const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 // eslint-disable-next-line no-unused-vars
-git.load = (vulcan, commandDescriptor) => {
+git.load = (commandDescriptor) => {
     this.git = new GithubAPI({
-        token: vulcan.credentials.githubOAuth
+        token: this.vulcan.credentials.apiKeys.github
     });
 };
 

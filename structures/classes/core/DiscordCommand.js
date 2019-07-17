@@ -23,6 +23,7 @@ class DiscordCommand extends Command {
             throw new TypeError(`Essential command 'embed' property is undefined!`);
         }
 
+        // Discord Command Specific Properties
         this.type  = commandDefinition.type;
         this.group = commandDefinition.group;
         this.embed = commandDefinition.embed || {};
@@ -37,6 +38,12 @@ class DiscordCommand extends Command {
         if (!this.embed.image || !fs.existsSync(this.embed.image)) {
             this.embed.image = './assets/media/images/embeds/Default.gif';
         }
+
+        // By default no command is disabled
+        this.disabled = commandDefinition.disabled || false;
+
+        // If unauthenticated guilds can use this command
+        this.safe = commandDefinition.safe || false;
     }
 
     addCall (author) {
@@ -47,10 +54,16 @@ class DiscordCommand extends Command {
         return this.underThrottling(author.id);
     }
 
-    validatePermissions (message) {
-        const permissionManager = message.client.permissionManager;
+    authenticate (message) {
+        const commandGroupLevel = message.client.hierarchy.get(this.group);
+        const authorGroup       = message.client.fetchUsergroup(message.author.id);
 
-        return (permissionManager.getUserPermissions(message.author.id) <= this.group);
+        if (!commandGroupLevel) {
+            throw new Error(`Command '${this.id}' has invalid group: ${this.group}`);
+        }
+
+        // (smaller means more important!)
+        return commandGroupLevel >= authorGroup.level;
     }
 }
 

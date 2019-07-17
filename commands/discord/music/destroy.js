@@ -1,18 +1,18 @@
 const destroy       = module.exports;
-const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
+const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 destroy.execute = async (message) => {
-    const musicController = message.guild.musicController;
+    const musicManager = message.guild.musicManager;
 
-    musicController.destroy();
+    musicManager.destroy();
 
     await message.channel.send(messageEmbeds.reply(
         {
             message,
             description: 'Destroyed the music player.',
             fields     : [
-                { name: 'Is Playing?', value: musicController.playing || 'No' },
-                { name: 'Queue Size',  value: musicController.queue.length || '0' }
+                { name: 'Is Playing?', value: musicManager.playing || 'No' },
+                { name: 'Queue Size',  value: musicManager.queue.length || '0' }
             ]
         }
     ));

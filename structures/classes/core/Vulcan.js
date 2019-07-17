@@ -1,53 +1,77 @@
-const Discord           = xrequire('discord.js');
-const { performance }   = xrequire('perf_hooks');
-const os                = xrequire('os');
-const fs                = xrequire('fs');
-const path              = xrequire('path');
-const DatabaseManager   = xrequire('./managers/DatabaseManager');
-const TerminalManager   = xrequire('./managers/TerminalManager');
-const PermissionManager = xrequire('./managers/PermissionManager');
-const logger            = xrequire('./managers/LogManager').getInstance();
+const os              = xrequire('os');
+const fs              = xrequire('fs');
+const path            = xrequire('path');
+const yaml            = xrequire('js-yaml');
+const Discord         = xrequire('discord.js');
+const { performance } = xrequire('perf_hooks');
+const DatabaseManager = xrequire('./managers/DatabaseManager');
+const TerminalManager = xrequire('./managers/TerminalManager');
+const logger          = xrequire('./managers/LogManager').getInstance();
 
 /****************************************************************/
-global['couldnt_have_forged_it_better_myself'] = `\\ \\    / /   | |                
+global['couldnt_have_forged_it_better_myself'] = `
+\\ \\    / /   | |                
  \\ \\  / /   _| | ___ __ _ _ __  
   \\ \\/ / | | | |/ __/ _\` | \'_ \\ 
    \\  /| |_| | | (_| (_| | | | |
-    \\/  \\__,_|_|\\___\\__,_|_| |_| by Pas-kun & Tacos-sama`;
+    \\/  \\__,_|_|\\___\\__,_|_| |_| by Pas-kun & Tacos-sama\n`;
 /****************************************************************/
 
 // Dumb function : )
 const chainPrint = (category, chainee) => (logger.log('Initialised => ' + category), chainee);
 
 class Vulcan extends Discord.Client {
-    constructor (settings, options = {}) {
+    constructor (vulcanOptions, discordOptions = {}) {
         // https://discord.js.org/#/docs/main/stable/typedef/ClientOptions
-        super(options);
+        super(discordOptions);
 
-        // Seal these properties! :)
+        // Easy Clap
+        const { settings, defaults } = vulcanOptions;
+
+        // ! These two properties are NOT to be changed
         Object.defineProperties(
             this,
             {
-                configuration: {
-                    value       : settings.configuration,
+                defaults: {
+                    value       : defaults,
                     writable    : false,
-                    enumerable  : false,
+                    enumerable  : true,
                     configurable: false
                 },
                 credentials: {
                     value       : settings.credentials,
                     writable    : false,
-                    enumerable  : false,
-                    configurable: false
-                },
-                permissions: {
-                    value       : settings.permissions,
-                    writable    : false,
-                    enumerable  : false,
+                    enumerable  : true,
                     configurable: false
                 }
             }
         );
+
+        // Join prefixes as a regex
+        const prefixString = settings.configuration.prefixes.join('|');
+        const prefixRegex  = prefixString.regexEscape(['|']);
+
+        this.prefixRegex = new RegExp(`^(${prefixRegex})`, 'u');
+
+        // ? Initialise 'public' properties
+        this.configuration = settings.configuration;
+        this.blacklist     = new Map(settings.blacklist);
+        this.servers       = new Map(settings.servers);
+        this.usergroups    = new Map(settings.usergroups);
+
+        // * Set up hierarchy
+        const hierarchyArray = ['root', ...settings.configuration.usergroups, 'default'];
+
+        this.defaultGroupName = 'default';
+        this.rootGroupName    = 'root';
+        this.hierarchy        = new Map(hierarchyArray.map((value, index) => [value, index + 1])); // ? make index not be 0 (cuz falsey)
+
+        // * Add owners and devs to root
+        [...this.configuration.devsID, ...this.configuration.ownersID].forEach((id) => {
+            this.usergroups.set(id, this.rootGroupName);
+        });
+
+        console.log(this.usergroups, this.hierarchy, hierarchyArray);
 
         // Vulcan is here!
         logger.plain(global.couldnt_have_forged_it_better_myself, 'red');
@@ -105,15 +129,22 @@ class Vulcan extends Discord.Client {
     loadDatabase () {
         this.databaseManager = new DatabaseManager(this);
 
-        const username = this.credentials.dbCredentials.username;
-        const password = this.credentials.dbCredentials.password;
+        const defaultCreds  = this.defaults.settings.credentials.data.database;
+        const dbcredentials = this.credentials.database;
+        const { username, password } = dbcredentials;
 
-        if (username === global.VulcanDefaults.files.credentials.data.dbCredentials.username) {
-            logger.warning(`Database username (${username}) has matched the default.\n\tThis is likely to be wrong and is unrecommended.`);
+        if (username === defaultCreds.username) {
+            logger.warning(
+                `Database username (${username}) has matched the default.`
+              + `\n\tThis is likely to be wrong and is unrecommended.`
+            );
         }
 
-        if (password === global.VulcanDefaults.files.credentials.data.dbCredentials.password) {
-            logger.warning(`Database password (${'*'.repeat(password.length)}) has matched the default.\n\tThis is likely to be wrong and is unrecommended.`);
+        if (password === defaultCreds.password) {
+            logger.warning(
+                `Database password (${'*'.repeat(password.length)}) has matched the default.`
+              + `\n\tThis is likely to be wrong and is unrecommended.`
+            );
         }
 
         this.databaseManager.connect(username, password);
@@ -121,38 +152,199 @@ class Vulcan extends Discord.Client {
         return chainPrint('Database Connection', this);
     }
 
-    loadPermissions () {
-        // Dev ids => roots by default
-        for (let devID of this.configuration.devsID) {
-            this.permissions.roots.push(devID);
-        }
-
-        this.permissionManager = new PermissionManager(this.permissions);
-        logger.debug('######### Permissions Enabled ##########');
-        logger.debug(this.permissionManager.permissions);
-
-        return chainPrint('Permission system', this);
-    }
-
     connect () {
         logger.log('Attempting to connect to discord servers...');
 
-        if (this.credentials.token === global.VulcanDefaults.files.credentials.data.token) {
-            logger.error(`Default token detected, please change @'${global.VulcanDefaults.files.credentials.location}'`);
+        const defaultCreds = this.defaults.settings.credentials.data;
+        const credentials  = this.credentials;
 
-            return;
+        if (credentials.token === defaultCreds.token) {
+            return logger.error(`Default token detected, please change @'${defaultCreds.location}'`);
         }
 
-        if (this.configuration.devsID.sort().join(',') !== global.VulcanDefaults.files.configuration.data.devsID.sort().join(',')) {
+        const defaultConfig = this.defaults.settings.configuration.data;
+        const configuration = this.configuration;
+
+        if (configuration.devsID.sort().join(',') !== defaultConfig.devsID.sort().join(',')) {
             logger.warning(`Default developer IDs have been changed from the default!\n\tWe are slightly unhappy :C`);
         }
 
-        this.login(this.credentials.token).then((token) => {
+        const token = credentials.token;
+
+        this.login(token).then((_token) => {
             this.loadTime = process.uptime();
-            logger.log(`Sucessfully logged in to discord servers with token: ${token}`);
+            logger.log(`Sucessfully logged in to discord servers with token: ${_token}`);
         });
 
         return chainPrint('Discord Connection', this);
+    }
+
+    /************************
+     * Extra Client Methods *
+    ************************/
+
+    // TODO: Switch is pepega (improve)
+    // ! Perhaps turn this to async? (or make equivalent async)
+    update (descriptor = 'all') {
+        // Handle state => settings files update
+        const t0                 = performance.now();
+        const shouldBreak        = (descriptor !== 'all');
+        const updateSettingsFile = (id, data) => {
+            fs.writeFileSync(
+                this.defaults.settings[id].location,
+                yaml.safeDump(data),
+                'utf8'
+            );
+            logger.debug(`Updated file of id: ${id}`);
+        };
+
+        // Allows update selection
+        // ? Maps are turned into arrays for yaml dump
+        switch (descriptor) {
+            case 'all':
+            case 'configuration':
+                updateSettingsFile('configuration', this.configuration);
+                if (shouldBreak) {
+                    break;
+                }
+            case 'blacklist':
+                updateSettingsFile('blacklist', [...this.blacklist]);
+                if (shouldBreak) {
+                    break;
+                }
+            case 'servers':
+                updateSettingsFile('servers', [...this.servers]);
+                if (shouldBreak) {
+                    break;
+                }
+            case 'usergroups':
+                updateSettingsFile('usergroups', [...this.usergroups]);
+                if (shouldBreak) {
+                    break;
+                }
+            default:
+                throw new Error(`Invalid update descriptor: ${descriptor}`);
+        }
+
+        // TODO: Do other stuff?
+
+        logger.log(`Vulcan update completed, time taken: ${Math.roundDP(performance.now() - t0, 2)}`);
+    }
+
+    authoriseGuild (guildID) {
+        const cachedGuild = this.guilds.get(guildID);
+
+        // Add to auth servers list + date of addition
+        this.servers.set(guildID, Date.now());
+        this.update('servers');
+
+        if (!cachedGuild) {
+            logger.warning(`Authorised uncached guild!`);
+        }
+
+        logger.log(`Authorised guild with id: ${guildID}.`);
+
+        return cachedGuild;
+    }
+
+    unauthoriseGuild (guildID) {
+        const cachedGuild = this.guilds.get(guildID);
+
+        this.servers.delete(guildID);
+        this.update('servers');
+
+        if (!cachedGuild) {
+            logger.warning(`Unauthorising uncached guild!`);
+        }
+
+        logger.log(`Unauthorised guild with id: ${guildID}`);
+
+        return cachedGuild;
+    }
+
+    blacklistUser (userID) {
+        const cachedUser = this.users.get(userID);
+        const blDate     = Date.now();
+
+        // Add user to blacklist
+        this.blacklist.set(userID, blDate);
+        this.update('blacklist');
+
+        if (!cachedUser) {
+            logger.warning(`Blacklisted uncached user: ${userID}`);
+        }
+
+        logger.log(`Added user id (${userID}) to the Vulcan blacklist.`);
+
+        return cachedUser;
+    }
+
+    unblacklistUser (userID) {
+        const entry = this.blacklist.get(userID);
+
+        if (!entry) {
+            throw new Error(`User (${userID}) is not in the blacklist!`);
+        }
+
+        const cachedUser = this.users.get(userID);
+
+        // Remove user from blacklist
+        this.blacklist.delete(userID);
+        this.update('blacklist');
+
+        if (!cachedUser) {
+            logger.warning(`Unblacklisted uncached user: ${userID}`);
+        }
+
+        logger.log(`Removed user id (${userID}) from the Vulcan blacklist.`);
+
+        return cachedUser;
+    }
+
+    updateUsergroup (userID, newGroupName) {
+        const newGroupLevel = this.hierarchy.get(newGroupName);
+
+        if (typeof newGroupLevel === 'undefined') {
+            throw new Error(`Invalid group id passed: ${newGroupName}`);
+        }
+
+        if (newGroupLevel < 1 || newGroupLevel > this.hierarchy.size) {
+            throw new Error(`Invalid permission level. HIGHEST: ${1} LOWEST: ${this.hierarchy.size} GIVEN: ${newGroupLevel}`);
+        }
+
+        if (newGroupLevel === 1) {
+            throw new Error(`Root users cannot be modified during runtime!`);
+        }
+
+        const currentGroup = this.fetchUsergroup(userID);
+
+        if (currentGroup.name === newGroupName) {
+            throw new Error(`Tried to assign a user a group which he already has! (${newGroupName})`);
+        }
+
+        const cachedUser = this.users.get(userID);
+
+        // Update usergroups
+        this.usergroups.set(userID, newGroupName);
+        this.update('usergroups');
+
+        if (!cachedUser) {
+            logger.warning(`Updated usergroup of uncached user: ${userID}`);
+        }
+
+        logger.log(`User group of ${cachedUser.tag}(userID) updated from ${currentGroup.name} => ${newGroupName}.`);
+
+        return cachedUser;
+    }
+
+    fetchUsergroup (userID) {
+        const name  = this.usergroups.get(userID) || this.defaultGroupName;
+        const level = this.hierarchy.get(name);
+
+        return {
+            name,
+            level
+        };
     }
 
     destroy () {

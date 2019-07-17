@@ -1,8 +1,7 @@
 const smiteroulette = module.exports;
 const request       = xrequire('request-promise');
-const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
+const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 const logger        = xrequire('./managers/LogManager').getInstance();
-const HashTable     = xrequire('./structures/classes/external/HashTable');
 
 /**
  * Note: This command is dependent on endpoint: 'https://cms.smitegame.com/wp-json/smite-api/all-gods/1'
@@ -10,7 +9,7 @@ const HashTable     = xrequire('./structures/classes/external/HashTable');
 smiteroulette.loadGodCache = async () => {
     const result = await request('https://cms.smitegame.com/wp-json/smite-api/all-gods/1');
     const gods   = JSON.parse(result);
-    const cache  = new HashTable();
+    const cache  = new Map();
 
     const dynamicInsert = (god, key) => {
         god[key]        = god[key].toLowerCase().trim(); // ok hirez!
@@ -49,7 +48,7 @@ smiteroulette.loadGodCache = async () => {
     this.cache = cache;
 };
 
-smiteroulette.load = (vulcan, commandDescriptor) => {
+smiteroulette.load = (commandDescriptor) => {
     smiteroulette.loadGodCache();
 };
 

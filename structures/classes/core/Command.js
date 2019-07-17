@@ -1,5 +1,3 @@
-const HashTable = xrequire('./structures/classes/external/HashTable');
-
 class Command {
     constructor (
         id,
@@ -33,7 +31,7 @@ class Command {
         this.examples    = examples;
         this.aliases     = aliases;
         this.throttling  = throttling;
-        this.callMap     = new HashTable();
+        this.callMap     = new Map();
         this.lastCall    = null;
     }
 

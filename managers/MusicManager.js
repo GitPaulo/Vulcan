@@ -4,13 +4,13 @@ const cheerio         = xrequire('cheerio');
 const Discord         = xrequire('discord.js');
 const ytdl            = xrequire('ytdl-core');
 const ytdlcd          = xrequire('ytdl-core-discord');
-const messageEmbeds   = xrequire('./plugins/libs/messageEmbeds');
-const stringFunctions = xrequire('./plugins/libs/stringFunctions');
+const messageEmbeds   = xrequire('./utility/modules/messageEmbeds');
+const stringFunctions = xrequire('./utility/modules/stringFunctions');
 const logger          = xrequire('./managers/LogManager').getInstance();
 
 ytdl.getInfoAsync = promisify(ytdl.getBasicInfo);
 
-class MusicController {
+class MusicManager {
     constructor (guild) {
         // Init properties
         this.guild   = guild;
@@ -139,7 +139,7 @@ class MusicController {
     ********************/
 
     log (str) {
-        logger.log(`[MusicController] => [${this.guild.name}] => ${str}`);
+        logger.log(`[MusicManager] => [${this.guild.name}] => ${str}`);
     }
 
     loadPlaylistToArray (data, opt) {
@@ -482,4 +482,4 @@ class MusicController {
     }
 }
 
-module.exports = MusicController;
+module.exports = MusicManager;

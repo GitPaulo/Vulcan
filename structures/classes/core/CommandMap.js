@@ -6,8 +6,8 @@ class CommandMap extends Map {
             throw new TypeError('CommandMap only accepts instances of Command');
         }
 
-        // set for id
-        let allAlias = [command.id, ...command.aliases];
+        // Set for id
+        const allAlias = [command.id, ...command.aliases];
 
         for (let alias of allAlias) {
             if (this.get(alias)) {

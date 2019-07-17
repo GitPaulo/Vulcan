@@ -1,13 +1,13 @@
 const autoplay      = module.exports;
-const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
+const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 autoplay.execute = async (message) => {
-    const musicController = message.guild.musicController;
+    const musicManager = message.guild.musicManager;
 
     let input = message.parsed.args[0];
-    let bool  = input ? Boolean(input) : !musicController.autoplay;
+    let bool  = input ? Boolean(input) : !musicManager.autoplay;
 
-    musicController.autoplay = bool;
+    musicManager.autoplay = bool;
 
     await message.channel.send(messageEmbeds.reply(
         {

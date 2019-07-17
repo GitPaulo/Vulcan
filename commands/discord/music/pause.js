@@ -1,15 +1,15 @@
 const pause         = module.exports;
 const Discord       = xrequire('discord.js');
-const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
+const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 pause.execute = async (message) => {
-    const musicController = message.guild.musicController;
+    const musicManager = message.guild.musicManager;
 
-    if (!musicController.playing) {
+    if (!musicManager.playing) {
         return message.client.emit('channelInfo', message.channel, 'No music is playing. Therefore cannot pause.');
     }
 
-    musicController.pause();
+    musicManager.pause();
 
     await message.channel.send(messageEmbeds.reply(
         {
@@ -17,7 +17,7 @@ pause.execute = async (message) => {
             fields: [
                 {
                     name : 'Paused Song',
-                    value: Discord.Util.escapeMarkdown(musicController.loadedSong.name)
+                    value: Discord.Util.escapeMarkdown(musicManager.loadedSong.name)
                 }
             ]
         }

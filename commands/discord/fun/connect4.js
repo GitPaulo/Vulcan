@@ -8,7 +8,7 @@ const whiteFlagEmoji    = '%F0%9F%8F%B3';
 
 connect4.getControlEmojis = () => this.emojiPlays.concat([whiteFlagEmoji]);
 
-connect4.load = (vulcan, commandDefinition) => {
+connect4.load = (commandDefinition) => {
     // Default board size
     this.boardWidth  = 7;
     this.boardHeight = 6;

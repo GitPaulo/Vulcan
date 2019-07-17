@@ -6,3 +6,5 @@ patch:
   SNYK-JS-LODASH-450202:
     - archiver > async > lodash:
         patched: '2019-07-09T22:58:34.475Z'
+      cheerio > lodash:
+        patched: '2019-07-10T11:46:50.207Z'

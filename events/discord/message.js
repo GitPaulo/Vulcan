@@ -4,20 +4,27 @@ const parser    = xrequire('./handlers/messageParserHandler');
 const filter    = xrequire('./handlers/messageFilterHandler');
 const logger    = xrequire('./managers/LogManager').getInstance();
 
+/* eslint-disable complexity */
 module.exports = async (message) => {
     try {
-        const vulcan = message.client;
-
+        // For now, log every message
         logger.log(
-            `[${message.isDirectMessage() ? 'Direct Message' : message.guild.name}@${message.channel.name}]`
+            `[${message.isDirectMessage()
+                ? `Direct Message@${message.author.tag}`
+                : `${((!message.guild.authorised && '[*UNAUTH*] => ' || '') + message.guild.name)}@${message.channel.name}`}]`
             + ` => `
-            + `[${message.author.tag}(${message.author.id})]`
+            + `[${message.system ? 'Discord System' : `${message.author.tag}(${message.author.id})`}]`
             + ` => `
-            + `"${message.content || 'Empty?'}"`
+            + `"${message.cleanContent || (message.embeds.length ? `[Embeds: ${message.embeds.length}]` : `[Attachments Only]`)}"`
         );
 
-        // Filter contents of message
-        if (await filter(message)) {
+        // Log any attachments
+        if (message.attachments.size > 0) {
+            logger.debug(message.attachments);
+        }
+
+        // Filter contents of message if they are not authored by Vulcan
+        if ((message.author !== message.client.user) && await filter(message)) {
             return;
         }
 
@@ -26,24 +33,88 @@ module.exports = async (message) => {
             return;
         }
 
-        // Validate prefix [FIX] + random console outputs
-        if (message.content.match(new RegExp(`^(${vulcan.configuration.prefixes.join('|')})`, 'i')) === null) {
+        // Prevents spam
+        if (message.cleanContent.isIdentile()) {
             return;
         }
 
-        // Check if Vulcan can respond
+        // Validate cached prefix
+        if (!message.content.match(message.client.prefixRegex)) {
+            return;
+        }
+
+        // Check if client can respond
         if (message.channel.type === 'text' && !message.guild.me.hasPermission('SEND_MESSAGES')) {
             return;
         }
 
-        /* if (author is blacklisted){} TODO */
+        if (message.client.blacklist.get(message.author.id)) {
+            return message.client.emit(
+                'preventedCommandCall',
+                message,
+                `The user ${message.author.tag} is blocked from using Vulcan commands.`
+            );
+        }
 
         // Parse message and initialise message.command & parse data
         message.setParsed(await parser(message));
 
         // Check if message was a valid command
         if (!message.isCommand) {
-            return message.client.emit('channelWarning', message.channel, `The command request \`${message.content}\` is invalid.`);
+            return message.client.emit(
+                'preventedCommandCall',
+                message,
+                `The command request \`${message.content}\` is invalid.`
+            );
+        }
+
+        // Disable unsafe interaction from unauthorised guilds
+        if (!message.guild.authorised && !message.command.safe) {
+            return message.client.emit(
+                'preventedCommandCall',
+                message,
+                `This guild is **unauthorised**. Only \`safe\` commands are enabled.\n`
+                + `You may submit an authorisation request by using the \`authorise\` command!`
+            );
+        }
+
+        // Check if command is disabled
+        if (message.command.disabled) {
+            return message.client.emit(
+                'preventedCommandCall',
+                message,
+                `This command has been disabled!`
+            );
+        }
+
+        // Authenticate message author
+        if (!message.command.authenticate(message)) {
+            return message.client.emit(
+                'preventedCommandCall',
+                message,
+                `Not authorised to run command.\n\t(Lacking Vulcan Permissions)`,
+                [
+                    {
+                        name  : 'Usergroup',
+                        value : `${JSON.stringify(message.client.fetchUsergroup(message.author.id))}`,
+                        inline: true
+                    },
+                    {
+                        name  : 'Required',
+                        value : `${JSON.stringify({ name: message.command.group, level: message.client.hierarchy.get(message.command.group) })}`,
+                        inline: true
+                    }
+                ]
+            );
+        }
+
+        // Check for spam
+        if (message.command.isSpamming(message.author)) {
+            return message.client.emit(
+                'preventedCommandCall',
+                message,
+                `Potential spamming has been detected.\nCommand '${message.command.id}' was **blocked**.`
+            );
         }
 
         // Call Appropriate message handler

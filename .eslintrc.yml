@@ -15,4 +15,3 @@ globals:
   oldLog: readonly
   print: readonly
   PrintHistory: readonly
-  VulcanDefaults: readonly

@@ -1,8 +1,10 @@
-const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
+const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 const logger        = xrequire('./managers/LogManager').getInstance();
 
-// Controlled exit
-// [If the following code errors => infinite loop! (REMINDER)]
+/*
+    Attempt at controlled exit:
+        ! If the following code errors => infinite loop! (Check for everything!)
+*/
 global._exit = process.exit;
 process.exit = async (code = 0, message = 'Unknown') => {
     if (!logger || !messageEmbeds) {
@@ -22,31 +24,36 @@ process.exit = async (code = 0, message = 'Unknown') => {
 
     if (code !== 0) {
         await vulcan.guilds.array().asyncForEach(async (guild) => {
-            await guild.botChannel.send(messageEmbeds.critical(
-                {
-                    description: `Vulcan process is exiting.`,
-                    fields     : [
-                        {
-                            name  : 'Message',
-                            value : message,
-                            inline: false
-                        },
-                        {
-                            name  : 'Exit Code',
-                            value : code,
-                            inline: true
-                        },
-                        {
-                            name  : 'Vulcan Uptime',
-                            value : vulcan.uptime,
-                            inline: true
-                        }
-                    ]
-                }
-            ));
+            const botChannel = guild.botChannel;
+
+            if (botChannel) {
+                await botChannel.send(messageEmbeds.critical(
+                    {
+                        description: `Vulcan process is exiting.`,
+                        fields     : [
+                            {
+                                name  : 'Message',
+                                value : message,
+                                inline: false
+                            },
+                            {
+                                name  : 'Exit Code',
+                                value : code,
+                                inline: true
+                            },
+                            {
+                                name  : 'Vulcan Uptime',
+                                value : vulcan.uptime,
+                                inline: true
+                            }
+                        ]
+                    }
+                ));
+            }
         });
     }
 
+    // Clean up before exiting!
     vulcan.destroy();
     logger.log(`Vulcan process is exiting.\n\tMessage: ${message}\n\tExit code: ${code}`);
 
@@ -63,7 +70,7 @@ process.on('unhandledRejection', (err, promise) => {
         + `Stack: ${err.stack}\n`
         + `Promise: ${promise}`
     );
-    process.exit(1);
+    process.exit(1, err.message);
 });
 
 /**
@@ -77,7 +84,7 @@ process.on('uncaughtException', (err, origin) => {
         + `File Descriptor: ${process.stderr.fd}\n`
         + `Exception origin: ${origin}`
     );
-    process.exit(1);
+    process.exit(1, err.message);
 });
 
 /**
@@ -87,7 +94,7 @@ process.on('uncaughtException', (err, origin) => {
  */
 process.on('multipleResolves', (type, promise, reason) => {
     logger.error(`Multiple Resolved Detected: ${type}, ${promise}, ${reason}`);
-    setImmediate(() => process.exit(1));
+    setImmediate(() => process.exit(1, reason));
 });
 
 /**

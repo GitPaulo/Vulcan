@@ -1,13 +1,15 @@
-/*
-* Files of type (1): <Class>.prototype.js
-* Will have the module.exports methods added
-* -with enumerate property as false, to the prototype of <Class>.
-*/
 
 /*
-* Files of type (2): <Class>.js
-* Will have the module.exports methods added
-* -to the <Class> object.
+* Prototype - Tasked with dynamically loading all extensions found in (./structures/prototypes/)
+  Files on that dir must be named following pattern: <discord.js_Class>.js
+
+  ? Files of type (1): <Class>.prototype.js
+    - Will have the module.exports methods added
+    - With enumerate property as false, to the prototype of <Class>.
+
+  ? Files of type (2): <Class>.js
+    - Will have the module.exports methods added
+    - To the <Class> object.
 */
 
 const fs              = xrequire('fs');

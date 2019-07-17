@@ -28,3 +28,25 @@ _.replaceAll = function (search, replacement) {
 
     return target.split(search).join(replacement);
 };
+
+_.regexEscape = function (exceptions) {
+    let regexString = '[.*+?^${}()|[\\]\\\\]';
+
+    exceptions.forEach((exclude) => {
+        // Little hack to deal with backslash escaping (shared by regex and strings)
+        if (exclude === '\\') {
+            exclude = '\\\\\\\\';
+        }
+
+        regexString = regexString.replaceAll(exclude, '');
+    });
+
+    return this.replace(new RegExp(regexString, 'g'), '\\$&'); // $& means the whole matched string
+};
+
+_.isIdentile = function () {
+    const letters = this.split('');
+    const unique  = new Set(letters);
+
+    return (unique.size === 1) ? true : false;
+};

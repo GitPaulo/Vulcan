@@ -24,15 +24,18 @@ Each directory, representing a command interface, must contain the file 'command
 ```js
 const mycommand = module.exports;
 
-mycommand.load = (vulcan, commandDescriptor) => {
-    // Parameter: 'vulcan' is a reference to the Vulcan client object
+mycommand.load = (commandDescriptor) => {
     // Parameter: 'commandDescriptor' is a JSON object representing the entry for this command in commands.yaml
+    // You can access the vulcan object (the bot client) with: 'this.vulcan'
 
     // This code is ran once before any call of execute()
 };
 
 mycommand.execute = async (message) => {
     // Parameter: 'message' is a discord.js message object
+    // You can access the vulcan object (the bot client) with: 'this.vulcan'
+    // message.client === this.vulcan
+
     await message.channel.send('Hello World!');
 };
 ```
@@ -42,15 +45,17 @@ mycommand.execute = async (message) => {
 ```js
 const mycommand = module.exports;
 
-mycommand.load = (vulcan, commandDescriptor) => {
-    // Parameter: 'vulcan' is a reference to the Vulcan client object
+mycommand.load = (commandDescriptor) => {
     // Parameter: 'commandDescriptor' is a JSON object representing the entry for this command in commands.yaml
+    // You can access the vulcan object (the bot client) with: 'this.vulcan'
 
     // This code is ran once before any call of execute()
 };
 
-mycommand.execute = (vulcan) => {
-    // Parameter: 'vulcan' is a reference to the Vulcan client object (like in .load())
+mycommand.execute = () => {
+    // You can access the vulcan object (the bot client) with: 'this.vulcan'
+
+    // Hi!
     console.log('Hello world!');
 };
 ```
@@ -62,9 +67,9 @@ By design the command load functions are **not** asynchronous. The following is 
 ```js
 const mycommand = module.exports;
 
-mycommand.load = (vulcan, commandDescriptor) => {
+mycommand.load = (commandDescriptor) => {
     // Set a flag
-    iReturnAPromise().then((res) => (this._loaded = true)).catch((err)=>console.err(err));
+    iReturnAPromise().then((res) => (this._loaded = true)).catch((err) => console.err(err));
 };
 
 // Change to appropriate .execute() function type

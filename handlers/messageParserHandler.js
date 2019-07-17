@@ -1,7 +1,10 @@
+const argumentsRegex = /'+([^;]*)'+|{+([^;]*)}+|`+([^;]*)`+|\[([^;]*)\]|\S+/g;
+const tagsRegex      = /<((@!?\d+)|(:.+?:\d+))>/g;
+
 module.exports = async (message) => {
     const raw  = message.content;
-    const args = raw.match(/'+([^;]*)'+|{+([^;]*)}+|`+([^;]*)`+|\[([^;]*)\]|\S+/g);
-    const tags = raw.match(/<((@!?\d+)|(:.+?:\d+))>/g);
+    const args = raw.match(argumentsRegex);
+    const tags = raw.match(tagsRegex);
     const head = args[0];
     const tail = raw.substring(head.length);
 
@@ -20,6 +23,7 @@ module.exports = async (message) => {
         head,
         tail,
         cmdName,
-        argsString
+        argsString,
+        mentions: message.mentions // ? For consitensy
     };
 };

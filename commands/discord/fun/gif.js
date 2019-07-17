@@ -3,15 +3,15 @@ const util            = xrequire('util');
 const fs              = xrequire('fs');
 const path            = xrequire('path');
 const http            = xrequire('http');
-const messageEmbeds   = xrequire('./plugins/libs/messageEmbeds');
-const stringFunctions = xrequire('./plugins/libs/stringFunctions');
+const messageEmbeds   = xrequire('./utility/modules/messageEmbeds');
+const stringFunctions = xrequire('./utility/modules/stringFunctions');
 // const logger           = xrequire('./managers/LogManager').getInstance();
 
 // Promisify fs functions
 const readdir = util.promisify(fs.readdir);
 
 // eslint-disable-next-line no-unused-vars
-gif.load = (vulcan, commandDefinition) => {
+gif.load = (commandDefinition) => {
     this.folderPath        = path.join(__basedir, 'data', 'gifs');
     this.allowedExtensions = ['.png', '.jpg', '.mp4', '.gif'];
 

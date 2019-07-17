@@ -2,11 +2,11 @@ const evaluate        = module.exports;
 const vm              = xrequire('vm');
 const util            = xrequire('util');
 const { performance } = xrequire('perf_hooks');
-const messageEmbeds   = xrequire('./plugins/libs/messageEmbeds');
+const messageEmbeds   = xrequire('./utility/modules/messageEmbeds');
 const logger          = xrequire('./managers/LogManager').getInstance();
 
 // eslint-disable-next-line no-unused-vars
-evaluate.load = (vulcan, commandDefinition) => {
+evaluate.load = (commandDefinition) => {
     this.historyMax = 100;
     this.history    = [];
 };

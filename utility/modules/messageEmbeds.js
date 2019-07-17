@@ -183,3 +183,37 @@ messageEmbeds.info = (
         }
     ]
 });
+
+messageEmbeds.preventedCommandCall = (
+    {
+        title       = `Command Call Blocked`,
+        description = 'A command execution has been **prevented** from being called.',
+        color       = 0xFF0000, // Red
+        thumbnail   = {
+            url: `attachment://PreventedCommandCall.gif`
+        },
+        timestamp = new Date(),
+        footer    = {
+            text: '(Vulcan protection system)™'
+        },
+        fields = [],
+        url    = ''
+    }
+) => ({
+    embed: {
+        title,
+        description,
+        color,
+        thumbnail,
+        timestamp,
+        footer,
+        fields,
+        url
+    },
+    files: [
+        {
+            attachment: './assets/media/images/embeds/PreventedCommandCall.gif',
+            name      : 'PreventedCommandCall.gif'
+        }
+    ]
+});

@@ -61,15 +61,13 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# Vulcan settings folder
+# Vulcan (defaults)
+data/
 settings/
 
-# Vulcan logs folder
+# Vulcan logs
 logs/
 logs.zip
-
-# Vulcan Data folder
-data/
 
 # VScode settings folder
 .vscode/

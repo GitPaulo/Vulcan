@@ -1,16 +1,21 @@
-/**
- * Happens whenever a call for a Vulcan commands is invalid.
- * This could be for many reasons:
- *      - Invalid #arguments
- *      - Authenticity
- *      - Validity
- *      - etc...
+/*
+ * Happens when validation inside the command.execute() fails
+    ? This could be for many reasons:
+       - Invalid #arguments
+       - Authenticity
+       - Validity
+       - etc...
+    ! DO NOT mistaken this for 'preventedCommandCall' which acts
+    ! at a higher level (before command.execute())
  */
 
-const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
+const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 const logger        = xrequire('./managers/LogManager').getInstance();
 
-module.exports = (description, message) => {
+module.exports = (
+    message,
+    description = 'Invalid command call!'
+) => {
     console.log(message.command);
     message.channel.send(messageEmbeds.warning(
         {

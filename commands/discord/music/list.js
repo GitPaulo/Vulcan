@@ -1,10 +1,10 @@
 const list          = module.exports;
-const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
+const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 list.execute = async (message) => {
-    const musicController = message.guild.musicController;
+    const musicManager = message.guild.musicManager;
 
-    if (musicController.queueEmpty) {
+    if (musicManager.queueEmpty) {
         return message.client.emit('channelInfo', message.channel, 'Music player queue is empty!');
     }
 
@@ -14,7 +14,7 @@ list.execute = async (message) => {
             fields: [
                 {
                     name : 'Queue (as list)',
-                    value: musicController.queueString()
+                    value: musicManager.queueString()
                 }
             ]
         }

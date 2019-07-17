@@ -1,15 +1,15 @@
 const resume        = module.exports;
 const Discord       = xrequire('discord.js');
-const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
+const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 resume.execute = async (message) => {
-    const musicController = message.guild.musicController;
+    const musicManager = message.guild.musicManager;
 
-    if (musicController.playing) {
+    if (musicManager.playing) {
         return message.client.emit('channelInfo', message.channel, 'Music is already playing. Therefore cannot resume.');
     }
 
-    musicController.resume();
+    musicManager.resume();
 
     await message.channel.send(messageEmbeds.reply(
         {
@@ -17,7 +17,7 @@ resume.execute = async (message) => {
             fields: [
                 {
                     name : 'Resumed Song',
-                    value: Discord.Util.escapeMarkdown(musicController.loadedSong.name)
+                    value: Discord.Util.escapeMarkdown(musicManager.loadedSong.name)
                 }
             ]
         }

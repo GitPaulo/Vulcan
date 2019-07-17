@@ -13,9 +13,10 @@
 #     - aliasN
 #   description: 'This command does XYZ.'
 #   examples: 
-#     - '<prefix>command_id <arg1:number> <arg2:string> ... <argn:boolean> '
-#   group: 1 # check group system!
+#     - '<prefix>command_id <arg1:number> <arg2:string> ... <argn:boolean>'
+#   group: "root" ... "default" (check configuration usergroups)
 #   throttling: 2000 
+#   safe: false 
 # [OPTIONAL FIELDS]
 #   embed: 
 #     color: 0x00000
@@ -29,8 +30,9 @@ botchannel:
   description: 'Set botchannel of guild.'
   examples:
   - '<prefix>botchannel'
-  group: 3
+  group: 'default'
   throttling: 2000
+  safe: true
   embed:
     color: 0xAACE6D
     title: 'Botchannel Set'
@@ -48,8 +50,9 @@ evaluate:
   - 'a'
   - 'b'
   - 'c'
-  group: 1
+  group: 'root'
   throttling: 2000
+  safe: false
   embed:
     color: 0xFFCE6D
     title: 'JavaScript Evaluation'
@@ -65,28 +68,30 @@ git:
   - 'a'
   - 'b'
   - 'c'
-  group: 1
+  group: 'root'
   throttling: 2000
+  safe: false
   embed:
     color: 0x1e5fc7
     title: 'Git'
     image: './assets/media/images/commands/discord/Git.gif'
 
 #
-permission:
+usergroups:
   aliases:
-  - 'perm'
-  description: 'Interface to the permission system'
-  group: 1
+  - 'permissions'
+  description: 'Interface to the usergroup system.'
+  group: 'root'
   examples:
-  - 'a'
-  - 'b'
-  - 'c'
+  - '!usergroups set @USER'
+  - '!usergroups get @USER'
+  - '!usergroups hierarchy'
   throttling: 2000
+  safe: false
   embed:
     color: 0x8c047c
-    title: 'Permission System'
-    image: './assets/media/images/commands/discord/Permissions.gif'
+    title: 'Usergroup System'
+    image: './assets/media/images/commands/discord/Usergroups.gif'
 
 #
 ping:
@@ -98,8 +103,9 @@ ping:
   - 'a'
   - 'b'
   - 'c'
-  group: 3
+  group: 'default'
   throttling: 5000
+  safe: true
   embed:
     color: 0xFF0000
     title: 'Ping...'
@@ -114,8 +120,9 @@ gif:
   - 'a'
   - 'b'
   - 'c'
-  group: 3
+  group: 'default'
   throttling: 2000
+  safe: false
   embed:
     color: 0x666666
     title: 'Gif'
@@ -128,8 +135,9 @@ connect4:
   description: 'Connect 4 game in vulcan!'
   examples:
   - '!c4 @someone'
-  group: 3
+  group: 'default'
   throttling: 2000
+  safe: false
   embed:
     color: 0x666666
     title: 'Connect 4'
@@ -140,10 +148,11 @@ autoplay:
   aliases:
   - 'musicautoplay'
   description: 'Sets music player autoplay.'
-  group: 3
+  group: 'default'
   examples:
   - '!autoplay [boolean]'
   throttling: 1000
+  safe: false
   embed:
     color: 0xFFA500
     title: 'Auto Play'
@@ -154,10 +163,11 @@ destroy:
   aliases:
   - 'musicdestroy'
   description: 'Destroys music player.'
-  group: 3
+  group: 'default'
   examples:
   - '!destroy'
   throttling: 1000
+  safe: false
   embed:
     color: 0xFFA500
     title: 'Destroy'
@@ -168,10 +178,11 @@ forceplay:
   aliases:
   - 'musicforceplay'
   description: 'Force plays a song despite the queue!'
-  group: 3
+  group: 'default'
   examples:
   - '!forceplay [url]'
   throttling: 1000
+  safe: false
   embed:
     color: 0xFFA500
     title: 'ForcePlay'
@@ -182,10 +193,11 @@ list:
   aliases:
   - 'musiclist'
   description: 'Displays the music player queue as a list.'
-  group: 3
+  group: 'default'
   examples:
   - '!list'
   throttling: 1000
+  safe: false
   embed:
     color: 0xFFA500
     title: 'List'
@@ -196,10 +208,11 @@ pause:
   aliases:
   - 'musicpause'
   description: 'Pauses the currently playing track.'
-  group: 3
+  group: 'default'
   examples:
   - '!pause'
   throttling: 1000
+  safe: false
   embed:
     color: 0xFFA500
     title: 'Pause'
@@ -210,10 +223,11 @@ play:
   aliases:
   - 'musicplay'
   description: 'Plays youtube music.'
-  group: 3
+  group: 'default'
   examples:
   - '!play [url]'
   throttling: 1000
+  safe: false
   embed:
     color: 0xFFA500
     title: 'Play'
@@ -224,13 +238,29 @@ purge:
   aliases:
   - 'musicpurge'
   description: 'Purges music controller.'
-  group: 3
+  group: 'default'
   examples:
   - '!purge'
   throttling: 1000
+  safe: false
   embed:
     color: 0xFFA500
     title: 'Purge'
+    image: './assets/media/images/commands/discord/Music.gif'
+
+#
+leave:
+  aliases:
+  - 'musicleave'
+  description: 'Destroys player and leaves channel.'
+  group: 'default'
+  examples:
+  - '!leave'
+  throttling: 1000
+  safe: false
+  embed:
+    color: 0xFFA500
+    title: 'Leave'
     image: './assets/media/images/commands/discord/Music.gif'
 
 #
@@ -238,10 +268,11 @@ repeat:
   aliases:
   - 'musicrepeat'
   description: 'Sets current music for repeat.'
-  group: 3
+  group: 'default'
   examples:
   - '!repeat [boolean]'
   throttling: 1000
+  safe: false
   embed:
     color: 0xFFA500
     title: 'Repeat'
@@ -252,10 +283,11 @@ resume:
   aliases:
   - 'musicresume'
   description: 'Resumes the paused track.'
-  group: 3
+  group: 'default'
   examples:
   - '!resume'
   throttling: 1000
+  safe: false
   embed:
     color: 0xFFA500
     title: 'Resume'
@@ -266,10 +298,11 @@ shuffle:
   aliases:
   - 'musicshuffle'
   description: 'Shuffles queue.'
-  group: 3
+  group: 'default'
   examples:
   - '!shuffle [boolean]'
   throttling: 1000
+  safe: false
   embed:
     color: 0xFFA500
     title: 'Shuffle'
@@ -280,10 +313,11 @@ skip:
   aliases:
   - 'musicskip'
   description: 'Skips current music.'
-  group: 3
+  group: 'default'
   examples:
   - '!skip [force]'
   throttling: 1000
+  safe: false
   embed:
     color: 0xFFA500
     title: 'Skip'
@@ -295,12 +329,13 @@ smiteroulette:
   - 'smitespin'
   - 'smiter'
   description: 'Spins a random smite god!'
-  group: 3
+  group: 'default'
   examples:
   - '!smiteroulette'
   - '!smiteroulette <pantheon>'
   - '!smiteroulette <class>'
   throttling: 1000
+  safe: false
   embed:
     color: 0xffa500
     title: 'Smite God Roulette'
@@ -314,11 +349,12 @@ overwatchroulette:
   - 'owspin'
   - 'owroulette'
   description: 'Spins a random overwatch hero god!'
-  group: 3
+  group: 'default'
   examples:
   - '!overwatchroulette'
   - '!overwatchroulette <class>'
   throttling: 1000
+  safe: false
   embed:
     color: 0xffa500
     title: 'Overwatch Hero Roulette'
@@ -331,10 +367,11 @@ documentation:
   - 'help'
   - 'commands'
   description: 'Displays documentation about Vulcan usage.'
-  group: 3
+  group: 'default'
   examples:
   - '!documentation'
   throttling: 1000
+  safe: false
   embed:
     color: 0xffa500
     title: 'Overwatch Hero Roulette'
@@ -345,10 +382,11 @@ logs:
   aliases:
   - 'dump'
   description: 'Zips and uploads the log dump files.'
-  group: 1
+  group: 'root'
   examples:
   - '!logs'
   throttling: 2000
+  safe: false
   embed:
     color: 0x00000
     title: 'Logs'
@@ -359,11 +397,77 @@ kill:
   aliases:
   - 'korosu'
   description: 'Kills vulcan process.'
-  group: 1
+  group: 'root'
   examples:
   - '!kill'
   throttling: 0
+  safe: false
   embed:
     color: 0x00000
     title: 'Kill'
     image: './assets/media/images/commands/discord/Kill.gif'
+
+# 
+blacklist:
+  aliases:
+  - 'naughtylist'
+  description: 'Handles the blacklist of Vulcan.'
+  group: 'root'
+  examples:
+  - '!blacklist add <user_id>'
+  - '!blacklist remove <user_id>'
+  - '!blacklist list'
+  throttling: 0
+  safe: false
+  embed:
+    color: 0x00000
+    title: 'Blacklist'
+    image: './assets/media/images/commands/discord/Blacklist.gif'
+
+# 
+servers:
+  aliases:
+  - 'serverlist'
+  - 'authorised'
+  description: 'Handles the authorised server list of Vulcan.'
+  group: 'root'
+  examples:
+  - '!servers add <user_id>'
+  - '!servers remove <user_id>'
+  - '!servers list'
+  throttling: 0
+  safe: false
+  embed:
+    color: 0x00000
+    title: 'Authorised Server List'
+    image: './assets/media/images/commands/discord/Servers.gif'
+
+# 
+exit:
+  aliases:
+  - 'guildleave'
+  description: 'Exits the current guild!'
+  group: 'default'
+  examples:
+  - '!exit'
+  throttling: 0
+  safe: true
+  embed:
+    color: 0x00000
+    title: 'Exiting Guild'
+    image: './assets/media/images/commands/discord/Exit.gif'
+
+# 
+authorise:
+  aliases:
+  - 'guildauthorise'
+  description: 'Requests guild authorisation.'
+  group: 'default'
+  examples:
+  - '!authorise'
+  throttling: 0
+  safe: true
+  embed:
+    color: 0x00000
+    title: 'Guild Authorisation Request'
+    image: './assets/media/images/commands/discord/Authorise.gif'

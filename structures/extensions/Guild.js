@@ -1,14 +1,83 @@
-const MusicController = xrequire('./structures/classes/core/MusicController');
+const MusicManager = xrequire('./managers/MusicManager');
+const logger       = xrequire('./managers/LogManager').getInstance();
 
 module.exports = class _Guild extends xrequire('discord.js').Guild {
     constructor (...args) {
         super(...args);
 
         // Each guild has one music controller
-        this.musicController = new MusicController(this);
+        this.musicManager = new MusicManager(this);
+
+        // Name of bot channel
+        this.botChannelName = 'bot-dump';
     }
 
+    async requestAuthorisation (requestee = this.client.user) {
+        const vulcan = this.client;
+
+        // Ask owners to accept request.
+        for (let ownerID of vulcan.configuration.ownersID) {
+            const cachedOwner = vulcan.users.get(ownerID);
+
+            if (!cachedOwner) {
+                return logger.warn(`Invalid owner ID in configuration cache?`);
+            }
+
+            const dmChannel  = await cachedOwner.createDM();
+            const requestMsg = await dmChannel.send(`\`\`\`New Guild Authorisation Request\n\tName: ${this.name}\n\tID: ${this.id}\`\`\``);
+
+            // Set up reactions
+            const no     = '❎';
+            const yes    = '✅';
+            const filter = (reaction, user) => (reaction.emoji.name === yes
+                || reaction.emoji.name === no) && user !== vulcan.user;
+
+            // React!
+            await requestMsg.react(no);
+            await requestMsg.react(yes);
+
+            // Collect!
+            // ? Reminder: this will await until bot shutsdown or answered
+            requestMsg.awaitReactions(filter, { max: 1 })
+                .then(async (collected) => {
+                    // What was the decision?
+                    const answer = (collected.first().emoji.name === yes);
+                    const ansStr = answer ? 'APPROVED' : 'REJECTED';
+
+                    if (answer) {
+                        this.client.authoriseGuild(this.id);
+                    }
+
+                    // DM respond (cant self DM!)
+                    if (requestee !== this.client.user) {
+                        (await requestee.createDM()).send(
+                            `Guild authorisation request for (${this.name}) has been **${ansStr}** by: ${cachedOwner.tag}`
+                        );
+                    }
+
+                    // Update message
+                    await requestMsg.edit(
+                        `${requestMsg.content.substring(0, requestMsg.content.length - 3)}\n\tStatus: ${ansStr}\n\tResponder: ${cachedOwner.tag}\`\`\``
+                    );
+
+                    // Authorisation event!
+                    this.client.emit('guildAuthorisation', this, cachedOwner, requestee, answer);
+                }).catch(async (...args) => {
+                    logger.error(args);
+                    // Notify users?
+                });
+        }
+
+        logger.log(`Guild authorisation request received by ${requestee.tag} for guild: ${this.name}(${this.id})`);
+    }
+
+    // Remove later
     get botChannel () {
-        return this.channels.first();
+        return this.channels.array().filter((channel) => channel.name === this.botChannelName).pop()
+            || this.this.channels.first();
+    }
+
+    get authorised () {
+        return this.client.servers.get(this.id);
     }
 };

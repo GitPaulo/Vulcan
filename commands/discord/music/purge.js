@@ -1,18 +1,18 @@
 const purge         = module.exports;
-const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
+const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 purge.execute = async (message) => {
-    const musicController = message.guild.musicController;
+    const musicManager = message.guild.musicManager;
 
-    musicController.purge();
+    musicManager.purge();
 
     await message.channel.send(messageEmbeds.reply(
         {
             message,
             description: 'Purged music player queue.',
             fields     : [
-                { name: 'Is Playing?', value: musicController.playing || 'No' },
-                { name: 'Queue Size',  value: musicController.queue.length || '0' }
+                { name: 'Is Playing?', value: musicManager.playing || 'No' },
+                { name: 'Queue Size',  value: musicManager.queue.length || '0' }
             ]
         }
     ));

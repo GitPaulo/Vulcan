@@ -2,7 +2,7 @@ const { performance } = xrequire('perf_hooks');
 const path            = xrequire('path');
 const fs              = xrequire('fs');
 const yaml            = xrequire('js-yaml');
-const fileFunctions   = xrequire('./plugins/libs/fileFunctions');
+const fileFunctions   = xrequire('./utility/modules/fileFunctions');
 const CommandMap      = xrequire('./structures/classes/core/CommandMap');
 const logger          = xrequire('./managers/LogManager').getInstance();
 
@@ -59,7 +59,7 @@ module.exports = (vulcan, folderPath) => {
             Object.defineProperties(commandDefinition,
                 {
                     type: {
-                        value       : path.dirname(fullPath).split(path.sep).slice(-1).pop(),   // add type (folder name)
+                        value       : path.dirname(fullPath).split(path.sep).slice(-1).pop(),   // Add type (folder name)
                         writable    : false,
                         enumerable  : false,
                         configurable: false
@@ -73,17 +73,25 @@ module.exports = (vulcan, folderPath) => {
                 }
             );
 
-            // Hack the system - make command object instance of appropriate class
-            let   commandObject = xrequire(fullPath);
-            const command       = Object.assign(new CommandClass(commandDefinition), commandObject);
+            // Baby command object
+            const commandObject = xrequire(fullPath);
+
+            // * Attach vulcan
+            commandObject.vulcan = vulcan;
+
+            // Real command object that will be stored in map
+            const command = Object.assign(new CommandClass(commandDefinition), commandObject);
 
             // Call load command if defined
+            // ? commandDefiniton will not become a property of command!
             if (command.load) {
-                command.load(vulcan, commandDefinition);
+                command.load(commandDefinition);
             }
 
             // Add to map
             commands.addCommand(command);
+
+            // Log :D
             logger.log(`Loaded (${commandDefinition.type}) command '${command.id}' from ${fileName} (took ${Math.roundDP(performance.now() - t, 2)}ms)`);
         } catch (err) {
             logger.error(

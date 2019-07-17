@@ -1,0 +1,56 @@
+[
+    {
+        "name": "configuration",
+        "extension": "yml",
+        "data": {
+            "prefixes": [
+                "!",
+                ">"
+            ],
+            "usergroups": [
+                "admin",
+                "mod"
+            ],
+            "ownersID": [],
+            "devsID": [
+                "166176374036365312",
+                "207606117159796737"
+            ]
+        }
+    },
+    {
+        "name": "credentials",
+        "extension": "yml",
+        "data": {
+            "token": "PLEASE ADD YOUR DISCORD TOKEN HERE",
+            "apiKeys": {
+                "github" : "API KEY HERE"
+            },
+            "OAuth": {
+                "twitch": {
+                    "id": "PLEASE ADD YOUR TWITCH API CLIENT ID",
+                    "secret": "PLEASE ADD YOUR TWITCH API CLIENT SECRET"
+                }
+            },
+            "database": {
+                "username": "baka-san!",
+                "password": "senpai~~~ uwu"
+            }
+        }
+    },
+    {
+        "name": "usergroups",
+        "extension": "yml",
+        "data": []
+    },
+    {
+        "name": "blacklist",
+        "extension": "yml",
+        "data": []
+    },
+    {
+        "name": "servers",
+        "extension": "yml",
+        "data": []
+    }
+]

@@ -1,9 +1,8 @@
 const overwatchroulette = module.exports;
 const cheerio           = xrequire('cheerio');
 const request           = xrequire('request-promise');
-const messageEmbeds     = xrequire('./plugins/libs/messageEmbeds');
+const messageEmbeds     = xrequire('./utility/modules/messageEmbeds');
 const logger            = xrequire('./managers/LogManager').getInstance();
-const HashTable         = xrequire('./structures/classes/external/HashTable');
 
 /*
 * Note: This command is dependent on the uptime of 'www.overbuff.com/heroes'
@@ -14,7 +13,7 @@ overwatchroulette.loadHeroCache = async () => {
     const html      = await request('http://www.overbuff.com/heroes');
     const $         = cheerio.load(html);
     const heroTable = $('.table-data tbody tr');
-    const cache     = new HashTable();
+    const cache     = new Map();
 
     cache.set('ALL', []);
 
@@ -45,7 +44,7 @@ overwatchroulette.loadHeroCache = async () => {
     this.cache = cache;
 };
 
-overwatchroulette.load = (vulcan, commandDescriptor) => {
+overwatchroulette.load = (commandDescriptor) => {
     this.loadHeroCache();
 };
 

@@ -7,19 +7,21 @@
     "_COMMENT0": " ============================ BUILD SCRIPTS  ============================",
     "wintools": "npm install -g windows-build-tools",
     "_COMMENT1": " ============================ RUN SCRIPTS  ============================",
-    "start": "node --require ./plugins/scripts/globals.js bot.js",
-    "dev": "nodemon --require ./plugins/scripts/globals.js bot.js",
+    "start": "node --require ./utility/scripts/globals.js bot.js",
+    "dev": "nodemon --require ./utility/scripts/globals.js bot.js",
     "_COMMENT2": " ============================ TEST SCRIPTS  ============================",
-    "test": "node --require ./plugins/scripts/globals.js tests/loading.js",
-    "test:music": "node --require ./plugins/scripts/globals.js tests/musicDependencies.js",
+    "test": "node --require ./utility/scripts/globals.js tests/loading.js",
+    "test:music": "node --require ./utility/scripts/globals.js tests/musicDependencies.js",
     "_COMMENT3": " ============================ CODE ENV SCRIPTS  ============================",
     "linter": "eslint .",
     "linter:errors-only": "eslint . --quiet",
     "linter:setup": "npm install eslint --save-dev",
     "linter:init": "eslint --init",
     "linter:fix": "eslint . --fix",
-    "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
+    "snyk:protect": "snyk protect",
+    "snyk:auth": "snyk auth",
+    "snyk:snapshot": "snyk monitor",
+    "snyk:wizard": "snyk wizard"
   },
   "repository": {
     "type": "git",
@@ -53,14 +55,14 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "ytdl-core": "^0.29.3",
-    "ytdl-core-discord": "^1.0.3",
-    "snyk": "^1.192.4"
+    "ytdl-core-discord": "^1.0.3"
   },
   "devDependencies": {
     "eslint": "^6.0.1",
-    "eslint-config-mudamuda": "^1.0.9",
+    "eslint-config-mudamuda": "^1.0.10",
     "eslint-plugin-security": "^1.4.0",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "snyk": "^1.193.0"
   },
   "snyk": true
 }

@@ -1,7 +1,4 @@
-/*
-* Files on this dir are of type: <DiscordJS_Class>.js
-* Will have the module.exports methods added to the Discord JS class prototype.
-*/
+// *Note: Files on the extensions fodler must be named following pattern: <discord.js_Class>.js
 
 const fs              = xrequire('fs');
 const path            = xrequire('path');
@@ -9,7 +6,6 @@ const Discord         = xrequire('discord.js');
 const { performance } = xrequire('perf_hooks');
 const logger          = xrequire('./managers/LogManager').getInstance();
 
-// Needs to be absolute REEE fs lib
 const extensionsDir = path.join(__basedir, './structures/extensions/');
 
 module.exports = () => {
@@ -23,7 +19,7 @@ module.exports = () => {
         let t     = performance.now();
         let parts = file.split('.');
 
-        if (parts < 2 || parts > 2) {
+        if (parts.length !== 2) {
             throw new Error(`Invalid extensions file name format for: ${file}`);
         }
 

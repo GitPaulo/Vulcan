@@ -1,1 +1,10 @@
-module.exports = (guild) => xrequire('./managers/LogManager').getInstance().log(`Vulcan has joined guild '${guild.name}(${guild.id})' owned by ${guild.owner ? guild.owner.user.tag : 'Unknown'}.`);
+const logger = xrequire('./managers/LogManager').getInstance();
+
+module.exports = async (guild) => {
+    logger.log(`Vulcan joined a new guild: ${guild.name}(${guild.id})`);
+
+    // New guild! Request auth!
+    if (!guild.authenticate()) {
+        guild.requestAuthorisation(); // Requestee === client.user
+    }
+};

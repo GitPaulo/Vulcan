@@ -1,4 +1,4 @@
-const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
+const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 const logger        = xrequire('./managers/LogManager').getInstance();
 
 /*

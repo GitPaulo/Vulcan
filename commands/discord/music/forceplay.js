@@ -1,8 +1,8 @@
 const forceplay     = module.exports;
-const messageEmbeds = xrequire('./plugins/libs/messageEmbeds');
+const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 forceplay.execute = async (message) => {
-    const musicController = message.guild.musicController;
+    const musicManager = message.guild.musicManager;
 
     let request = message.parsed.args[0];
 
@@ -11,18 +11,18 @@ forceplay.execute = async (message) => {
     }
 
     // Join voice if not already in
-    if (!musicController.voiceChannel) {
-        await musicController.joinVoice(message.member.voice.channel);
+    if (!musicManager.voiceChannel) {
+        await musicManager.joinVoice(message.member.voice.channel);
     }
 
-    await musicController.forcePlay(request, message.channel, message.author);
+    await musicManager.forcePlay(request, message.channel, message.author);
     await message.channel.send(messageEmbeds.reply(
         {
             message,
             decription: 'Force played a song.\nWill play on top of queue without affecting queue state.',
             fields    : [
                 { name: 'Forced Song', value: request },
-                { name: 'Current Queue Size',  value: musicController.queue.length }
+                { name: 'Current Queue Size',  value: musicManager.queue.length }
             ]
         }
     ));
