@@ -32,7 +32,7 @@ class PresenceManager {
             };
 
             this.vulcan.user.setPresence(presenceData).then((presence) => {
-                logger.log(`Presence data has been set to:`, { presenceData, presence });
+                console.debug(`Presence data has been set to:`, { presenceData, presence });
             }).catch(() => {
                 logger.error(`Failed to set activity.\n`, presenceData);
             });
@@ -65,7 +65,7 @@ class PresenceManager {
                         };
 
                         this.vulcan.user.setPresence(presenceData).then((presence) => {
-                            logger.log(`Presence data has been set to:`, { twitchResponse, presenceData, presence });
+                            console.debug(`Presence data has been set to:`, { twitchResponse, presenceData, presence });
                         }).catch(() => {
                             logger.error(`Failed to set activity.\n`, presenceData);
                         });
