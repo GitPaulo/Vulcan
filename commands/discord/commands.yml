@@ -4,38 +4,42 @@
 ###############################################
 
 ### [Command Structure]
-# [REQUIRED FIELDS]
-# command_id:
-#   aliases:
-#     - alias1
-#     - alias2
-#     - (...)
-#     - aliasN
-#   description: 'This command does XYZ.'
-#   examples: 
-#     - '<prefix>command_id <arg1:number> <arg2:string> ... <argn:boolean>'
-#   group: "root" ... "default" (check configuration usergroups)
-#   throttling: 2000 
-#   safe: false 
-# [OPTIONAL FIELDS]
-#   embed: 
-#     color: 0x00000
-#     title: 'Title of reply message'
-#     image: 'some path in assets folder' 
+# === [REQUIRED FIELDS] ===
+# command_id => (Identifier) The primary unique command identifier
+#   aliases     => (Array) The other unique strings that identify the command (excluding command_id)
+#   description => (String) Description of the command
+#   examples    => (Array) Descriptions of example usage.
+#   group       => (String) The usergroup lowerbound that is allowed to call the command.
+#   throttling  => (Number) The number of milliseconds the command goes under cooldown.
+#   safe        => (Boolean) Wether unauthorised guilds can used this command.
+#   === [OPTIONAL FIELDS] ===
+#   embed => (Identifier) Must be kept as 'embed', defines an object of the command response
+#     color => (Number) Color of the embed as hex number
+#     title => (String) The title of the embed
+#     image => (String) The path to the thumbnail of the embed. (PLEASE USE ./assets FOLDER) 
+
+### [Special Substrings]
+# <prefix>: will be replaced by the bot configuration prefix(s)
+# <id>: will be replaced by the command id
+# <aliases>: will be replaced by a joined alias string
+
+### [NOTES]
+#  Write example arguments in the form: <arg1:DataType>
+#  Dont diverge from file or yaml format used
 
 #
 botchannel:
   aliases:
   - 'botc'
-  description: 'Set botchannel of guild.'
+  description: 'Set the bot dump channel of the guild.'
   examples:
-  - '<prefix>botchannel'
+  - '<prefix><id>'
   group: 'default'
-  throttling: 2000
+  throttling: 250
   safe: true
-  embed:
+  embed:  
     color: 0xAACE6D
-    title: 'Botchannel Set'
+    title: 'Bot Channel Configuration'
     image: './assets/media/images/commands/discord/Configuration.gif'
 
 #
@@ -45,31 +49,30 @@ evaluate:
   - 'js'
   - 'runjs'
   - 'jsrun'
-  description: '???'
+  description: 'Evaluates JavaScript code in a semi-controlled manner. (seperate VM instance)'
   examples:
-  - 'a'
-  - 'b'
-  - 'c'
+  - '<prefix><id> 1+1'
+  - '<prefix><id> console.log("Hello World!);"'
+  - '<prefix><id> __message.channel.send("Hello Channel!");'
   group: 'root'
-  throttling: 2000
+  throttling: 1000
   safe: false
   embed:
     color: 0xFFCE6D
     title: 'JavaScript Evaluation'
-    image: './assets/media/images/commands/discord/Eval.gif'
+    image: './assets/media/images/commands/discord/Evaluate.gif'
 
 #
 git:
   aliases:
   - 'github'
-  - 'repo'
-  description: '???'
+  - 'repository'
+  description: 'A gateway for git commands.'
   examples:
-  - 'a'
-  - 'b'
-  - 'c'
+  - '<prefix><id> commits <number to display>'
+  - '<prefix><id> collaborators'
   group: 'root'
-  throttling: 2000
+  throttling: 1000
   safe: false
   embed:
     color: 0x1e5fc7
@@ -83,14 +86,14 @@ usergroups:
   description: 'Interface to the usergroup system.'
   group: 'root'
   examples:
-  - '!usergroups set @USER'
-  - '!usergroups get @USER'
-  - '!usergroups hierarchy'
+  - '<prefix><id> set <@user/id>'
+  - '<prefix><id> get <@user/id>'
+  - '<prefix><id> hierarchy'
   throttling: 2000
   safe: false
   embed:
     color: 0x8c047c
-    title: 'Usergroup System'
+    title: 'Usergroups System'
     image: './assets/media/images/commands/discord/Usergroups.gif'
 
 #
@@ -98,13 +101,11 @@ ping:
   aliases:
   - 'pingpong'
   - 'latency'
-  description: '???'
+  description: 'Pings vulcan client for latency information.'
   examples:
-  - 'a'
-  - 'b'
-  - 'c'
+  - '<prefix><id>'
   group: 'default'
-  throttling: 5000
+  throttling: 0
   safe: true
   embed:
     color: 0xFF0000
@@ -115,11 +116,11 @@ ping:
 gif:
   aliases:
   - 'imagestorage'
-  description: '??'
+  description: 'Store media and retrieve with vulcan.'
   examples:
-  - 'a'
-  - 'b'
-  - 'c'
+  - '<prefix><id> store <id> <url/messageid>'
+  - '<prefix><id> fetch <id>'
+  - '<prefix><id> list'
   group: 'default'
   throttling: 2000
   safe: false
@@ -132,9 +133,9 @@ gif:
 connect4:
   aliases:
   - 'c4'
-  description: 'Connect 4 game in vulcan!'
+  description: 'Starts a connect 4 game! Contains playable AI!'
   examples:
-  - '!c4 @someone'
+  - '<prefix><id> <@User/@Vulcan>'
   group: 'default'
   throttling: 2000
   safe: false
@@ -150,7 +151,7 @@ autoplay:
   description: 'Sets music player autoplay.'
   group: 'default'
   examples:
-  - '!autoplay [boolean]'
+  - '<prefix><id> <boolean>'
   throttling: 1000
   safe: false
   embed:
@@ -165,7 +166,7 @@ destroy:
   description: 'Destroys music player.'
   group: 'default'
   examples:
-  - '!destroy'
+  - '<prefix><id>'
   throttling: 1000
   safe: false
   embed:
@@ -177,15 +178,15 @@ destroy:
 forceplay:
   aliases:
   - 'musicforceplay'
-  description: 'Force plays a song despite the queue!'
+  description: 'Force plays a youtube song despite the queue!'
   group: 'default'
   examples:
-  - '!forceplay [url]'
+  - '<prefix><id> <youtubeurl>'
   throttling: 1000
   safe: false
   embed:
     color: 0xFFA500
-    title: 'ForcePlay'
+    title: 'Force Play'
     image: './assets/media/images/commands/discord/Music.gif'
 
 #
@@ -195,7 +196,7 @@ list:
   description: 'Displays the music player queue as a list.'
   group: 'default'
   examples:
-  - '!list'
+  - <prefix><id>'
   throttling: 1000
   safe: false
   embed:
@@ -210,7 +211,7 @@ pause:
   description: 'Pauses the currently playing track.'
   group: 'default'
   examples:
-  - '!pause'
+  - '<prefix><id>'
   throttling: 1000
   safe: false
   embed:
@@ -222,10 +223,10 @@ pause:
 play:
   aliases:
   - 'musicplay'
-  description: 'Plays youtube music.'
+  description: 'Plays the audio of youtube videos or playlists.'
   group: 'default'
   examples:
-  - '!play [url]'
+  - '<prefix><id> <youtubeurl>'
   throttling: 1000
   safe: false
   embed:
@@ -240,7 +241,7 @@ purge:
   description: 'Purges music controller.'
   group: 'default'
   examples:
-  - '!purge'
+  - '<prefix><id>'
   throttling: 1000
   safe: false
   embed:
@@ -255,7 +256,7 @@ leave:
   description: 'Destroys player and leaves channel.'
   group: 'default'
   examples:
-  - '!leave'
+  - '<prefix><id>'
   throttling: 1000
   safe: false
   embed:
@@ -270,7 +271,7 @@ repeat:
   description: 'Sets current music for repeat.'
   group: 'default'
   examples:
-  - '!repeat [boolean]'
+  - '<prefix><id> <boolean>'
   throttling: 1000
   safe: false
   embed:
@@ -285,7 +286,7 @@ resume:
   description: 'Resumes the paused track.'
   group: 'default'
   examples:
-  - '!resume'
+  - '<prefix><id>'
   throttling: 1000
   safe: false
   embed:
@@ -300,7 +301,7 @@ shuffle:
   description: 'Shuffles queue.'
   group: 'default'
   examples:
-  - '!shuffle [boolean]'
+  - '<prefix><id> <boolean>'
   throttling: 1000
   safe: false
   embed:
@@ -315,7 +316,7 @@ skip:
   description: 'Skips current music.'
   group: 'default'
   examples:
-  - '!skip [force]'
+  - '<prefix><id> <boolean>'
   throttling: 1000
   safe: false
   embed:
@@ -331,9 +332,9 @@ smiteroulette:
   description: 'Spins a random smite god!'
   group: 'default'
   examples:
-  - '!smiteroulette'
-  - '!smiteroulette <pantheon>'
-  - '!smiteroulette <class>'
+  - '<prefix><id>'
+  - '<prefix><id> <pantheon>'
+  - '<prefix><id> <class>'
   throttling: 1000
   safe: false
   embed:
@@ -351,8 +352,8 @@ overwatchroulette:
   description: 'Spins a random overwatch hero god!'
   group: 'default'
   examples:
-  - '!overwatchroulette'
-  - '!overwatchroulette <class>'
+  - '<prefix><id>'
+  - '<prefix><id> <class>'
   throttling: 1000
   safe: false
   embed:
@@ -369,7 +370,7 @@ documentation:
   description: 'Displays documentation about Vulcan usage.'
   group: 'default'
   examples:
-  - '!documentation'
+  - '<prefix><id>'
   throttling: 1000
   safe: false
   embed:
@@ -384,7 +385,7 @@ logs:
   description: 'Zips and uploads the log dump files.'
   group: 'root'
   examples:
-  - '!logs'
+  - '<prefix><id>'
   throttling: 2000
   safe: false
   embed:
@@ -399,7 +400,7 @@ kill:
   description: 'Kills vulcan process.'
   group: 'root'
   examples:
-  - '!kill'
+  - '<prefix><id>'
   throttling: 0
   safe: false
   embed:
@@ -414,9 +415,9 @@ blacklist:
   description: 'Handles the blacklist of Vulcan.'
   group: 'root'
   examples:
-  - '!blacklist add <user_id>'
-  - '!blacklist remove <user_id>'
-  - '!blacklist list'
+  - '<prefix><id> add <user_id>'
+  - '<prefix><id> remove <user_id>'
+  - '<prefix><id> list'
   throttling: 0
   safe: false
   embed:
@@ -432,9 +433,9 @@ servers:
   description: 'Handles the authorised server list of Vulcan.'
   group: 'root'
   examples:
-  - '!servers add <user_id>'
-  - '!servers remove <user_id>'
-  - '!servers list'
+  - '<prefix><id> add <user_id>'
+  - '<prefix><id> remove <user_id>'
+  - '<prefix><id> list'
   throttling: 0
   safe: false
   embed:
@@ -449,7 +450,7 @@ exit:
   description: 'Exits the current guild!'
   group: 'default'
   examples:
-  - '!exit'
+  - '<prefix><id>'
   throttling: 0
   safe: true
   embed:
@@ -464,10 +465,42 @@ authorise:
   description: 'Requests guild authorisation.'
   group: 'default'
   examples:
-  - '!authorise'
+  - '<prefix><id>'
   throttling: 0
   safe: true
   embed:
     color: 0x00000
     title: 'Guild Authorisation Request'
     image: './assets/media/images/commands/discord/Authorise.gif'
+
+#
+disabled:
+  aliases:
+  - 'cmdoff'
+  description: 'Disables a command.'
+  group: 'root'
+  examples:
+  - '<prefix><id> <command_name>'
+  throttling: 0
+  safe: false
+  embed:
+    color: 0x00000
+    title: 'Command Disable'
+    image: './assets/media/images/commands/discord/Disabled.gif'
+
+#
+cat:
+  aliases:
+  - 'cats'
+  - 'meow'
+  - ':3'
+  description: 'Fetches a random cat pic.'
+  group: 'default'
+  examples:
+  - '<prefix><id> <command_name>'
+  throttling: 1000
+  safe: false
+  embed:
+    color: 0x32CD32
+    title: 'Command Disable'
+    image: './assets/media/images/commands/discord/Cat.gif'

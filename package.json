@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/GitPaulo/Vulcan#readme",
   "dependencies": {
-    "archiver": "^3.0.0",
+    "archiver": "^3.0.3",
     "chalk": "^2.4.2",
     "cheerio": "^1.0.0-rc.3",
     "discord.js": "github:discordjs/discord.js",
@@ -62,7 +62,7 @@
     "eslint-config-mudamuda": "^1.0.10",
     "eslint-plugin-security": "^1.4.0",
     "nodemon": "^1.19.1",
-    "snyk": "^1.193.2"
+    "snyk": "^1.195.1"
   },
   "snyk": true
 }

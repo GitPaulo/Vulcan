@@ -6,6 +6,7 @@ const Discord         = xrequire('discord.js');
 const { performance } = xrequire('perf_hooks');
 const DatabaseManager = xrequire('./managers/DatabaseManager');
 const TerminalManager = xrequire('./managers/TerminalManager');
+const PresenceManager = xrequire('./managers/PresenceManager');
 const logger          = xrequire('./managers/LogManager').getInstance();
 
 /****************************************************************/
@@ -150,6 +151,12 @@ class Vulcan extends Discord.Client {
         this.databaseManager.connect(username, password);
 
         return chainPrint('Database Connection', this);
+    }
+
+    loadPresence () {
+        this.presenceManager = new PresenceManager(this);
+
+        return chainPrint('Presence', this);
     }
 
     connect () {
