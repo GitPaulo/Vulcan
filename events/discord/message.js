@@ -9,7 +9,7 @@ module.exports = async (message) => {
     try {
         // For now, log every message
         logger.log(
-            `[${message.isDirectMessage()
+            `[${message.direct
                 ? `Direct Message@${message.author.tag}`
                 : `${((!message.guild.authorised && '[*UNAUTH*] => ' || '') + message.guild.name)}@${message.channel.name}`}]`
             + ` => `
@@ -69,7 +69,7 @@ module.exports = async (message) => {
         }
 
         // Disable unsafe interaction from unauthorised guilds
-        if (!message.guild.authorised && !message.command.safe) {
+        if (!message.direct && !message.guild.authorised && !message.command.safe) {
             return message.client.emit(
                 'preventedCommandCall',
                 message,
@@ -118,7 +118,7 @@ module.exports = async (message) => {
         }
 
         // Call Appropriate message handler
-        await (message.isDirectMessage() ? mdHandler : mgHandler)(message);
+        await (message.direct ? mdHandler : mgHandler)(message);
 
         // Register Recent Call for command [throttling]
         message.command.addCall(message.author);

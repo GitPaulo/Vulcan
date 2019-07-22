@@ -1,4 +1,4 @@
-module.exports = class _TextChannel extends xrequire('discord.js').TextChannel {
+module.exports = class _DMChannel extends xrequire('discord.js').DMChannel {
     constructor (...args) {
         super(...args);
 

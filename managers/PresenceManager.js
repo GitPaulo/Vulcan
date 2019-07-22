@@ -7,7 +7,8 @@ class PresenceManager {
         this.timeout = null;
     }
 
-    updateTimeout (callback, interval = 5000) {
+    // Update every minute by default
+    updateTimeout (callback, interval = 60000) {
         if (this.timeout) {
             clearInterval(this.timeout);
         }
@@ -32,7 +33,7 @@ class PresenceManager {
             };
 
             this.vulcan.user.setPresence(presenceData).then((presence) => {
-                console.debug(`Presence data has been set to:`, { presenceData, presence });
+                logger.debug('Presence has been updated!', presence);
             }).catch(() => {
                 logger.error(`Failed to set activity.\n`, presenceData);
             });
@@ -65,7 +66,7 @@ class PresenceManager {
                         };
 
                         this.vulcan.user.setPresence(presenceData).then((presence) => {
-                            console.debug(`Presence data has been set to:`, { twitchResponse, presenceData, presence });
+                            logger.debug('Presence has been updated!', presence);
                         }).catch(() => {
                             logger.error(`Failed to set activity.\n`, presenceData);
                         });

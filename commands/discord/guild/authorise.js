@@ -1,4 +1,4 @@
-const authorise  = module.exports;
+const authorise     = module.exports;
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 authorise.execute = async (message) => {

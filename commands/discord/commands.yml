@@ -504,3 +504,19 @@ cat:
     color: 0x32CD32
     title: 'Command Disable'
     image: './assets/media/images/commands/discord/Cat.gif'
+
+#
+info:
+  aliases:
+  - 'information'
+  - 'botinfo'
+  description: 'Displays general information about the bot.'
+  group: 'default'
+  examples:
+  - '<prefix><id>'
+  throttling: 1000
+  safe: false
+  embed:
+    color: 0xDC91FF
+    title: 'Command Disable'
+    image: './assets/media/images/commands/discord/Info.gif'

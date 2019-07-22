@@ -5,5 +5,5 @@ documentation.load = (vulcan, commandDescriptor) => {
 };
 
 documentation.execute = async (message) => {
-    await message.channel.send('This command has not been implemented yet!');
+    await message.channel.send('This command has not been implemented yet!\n\t**Comming soon™**');
 };
