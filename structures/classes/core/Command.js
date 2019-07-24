@@ -61,6 +61,14 @@ class Command {
     underThrottling (id) {
         return (Date.now() - (this.resolveCall(id) || 0)) < this.throttling;
     }
+
+    toString () {
+        return `==============[${this.id}]==============\n`
+            +  `Aliases: [$${this.aliases.join(', ')}]\n`
+            +  `Description: "${this.description}"\n`
+            +  `Examples:\n\t${this.examples.join('\n\t')}\n`
+            +  `Throttling: ${this.throttling}\n`;
+    }
 }
 
 module.exports = Command;

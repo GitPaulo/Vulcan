@@ -1,6 +1,12 @@
 const Command = xrequire('./structures/classes/core/Command');
 
 class CommandMap extends Map {
+    constructor (...args) {
+        super(...args);
+
+        this.primaryIdentifiers = [];
+    }
+
     addCommand (command) {
         if (!(command instanceof Command)) {
             throw new TypeError('CommandMap only accepts instances of Command');
@@ -16,6 +22,8 @@ class CommandMap extends Map {
 
             this.set(alias, command);
         }
+
+        this.primaryIdentifiers.push(command.id);
     }
 
     retrieveCommand (idOrAlias) {

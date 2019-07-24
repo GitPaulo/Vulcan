@@ -1,1 +1,0 @@
-# This folder will house all classes which do not directly relate to the Vulcan core and are not part of packages

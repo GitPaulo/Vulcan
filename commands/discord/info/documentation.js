@@ -1,9 +1,19 @@
 const documentation = module.exports;
+const hastebin      = xrequire('./utility/modules/hastebin.js');
+const messageEmbeds = xrequire('./utility/modules/messageEmbeds.js');
 
-documentation.load = (vulcan, commandDescriptor) => {
-    // TODO
-};
-
+// TODO - Improve this! Make prettier :)
 documentation.execute = async (message) => {
-    await message.channel.send('This command has not been implemented yet!\n\t**Comming soon™**');
+    let documentString = '==================[ Vulcan Command Documentation ]==================\n\n';
+    let commands       = this.vulcan.commands;
+
+    // Make a simple long string and upload to hastebin
+    commands.primaryIdentifiers.forEach((id) => documentString += commands.get(id).toString());
+
+    await message.channel.send(messageEmbeds.reply(
+        {
+            message,
+            description: await hastebin.post(documentString)
+        }
+    ));
 };

@@ -65,6 +65,13 @@ class DiscordCommand extends Command {
         // (smaller means more important!)
         return commandGroupLevel >= authorGroup.level;
     }
+
+    toString () {
+        return super.toString()
+            + `Type: ${this.type}\n`
+            + `Access Usergroup: ${this.group}\n`
+            + `Has embed: ${Boolean(this.embed)}\n`;
+    }
 }
 
 module.exports = DiscordCommand;

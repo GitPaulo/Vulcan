@@ -1,5 +1,5 @@
 const cat     = module.exports;
-const request = require('request-promise');
+const request = xrequire('request-promise');
 
 cat.execute = async (message) => {
     const URL = JSON.parse(await request('http://aws.random.cat/meow')).file;

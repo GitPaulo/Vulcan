@@ -374,9 +374,9 @@ documentation:
   throttling: 1000
   safe: false
   embed:
-    color: 0xffa500
-    title: 'Overwatch Hero Roulette'
-    image: './assets/media/images/commands/discord/OverwatchRoulette.gif'
+    color: 0xFF6B4A
+    title: 'Vulcan Documentation'
+    image: './assets/media/images/commands/discord/Documentation.gif'
 
 # 
 logs:
@@ -520,3 +520,50 @@ info:
     color: 0xDC91FF
     title: 'Command Disable'
     image: './assets/media/images/commands/discord/Info.gif'
+
+#
+roll:
+  aliases:
+  - 'diceroll'
+  - 'chance'
+  description: 'Rolls probability based on upperbound.'
+  group: 'default'
+  examples:
+  - '<prefix><id> <upperbound>'
+  throttling: 1000
+  safe: false
+  embed:
+    color: 0x2CC646
+    title: 'Roll'
+    image: './assets/media/images/commands/discord/Roll.gif'
+
+#
+flip:
+  aliases:
+  - 'coinflip'
+  - 'coin'
+  description: 'Flips a coin.'
+  group: 'default'
+  examples:
+  - '<prefix><id>'
+  throttling: 1000
+  safe: false
+  embed:
+    color: 0x209834
+    title: 'Flip'
+    image: './assets/media/images/commands/discord/Flip.gif'
+
+#
+twitch:
+  aliases:
+  - 'ttv'
+  description: 'Access twitch API through vulcan.'
+  group: 'default'
+  examples:
+  - '<prefix><id> <streamer>'
+  throttling: 1000
+  safe: false
+  embed:
+    color: 0x551a8b
+    title: 'Twitch'
+    image: './assets/media/images/commands/discord/Twitch.gif'
