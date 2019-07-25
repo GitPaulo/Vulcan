@@ -63,7 +63,7 @@
     "eslint-config-mudamuda": "^1.0.10",
     "eslint-plugin-security": "^1.4.0",
     "nodemon": "^1.19.1",
-    "snyk": "^1.198.0"
+    "snyk": "^1.199.2"
   },
   "snyk": true
 }
