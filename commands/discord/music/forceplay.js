@@ -7,7 +7,11 @@ forceplay.execute = async (message) => {
     let request = message.parsed.args[0];
 
     if (!request) {
-        return message.client.emit('invalidCommandCall', `Expected 1 argument (song source), instead got nothing!`, message);
+        return message.client.emit(
+            'invalidCommandUsage',
+            message,
+            `Expected 1 argument (song source), instead got nothing!`
+        );
     }
 
     // Join voice if not already in

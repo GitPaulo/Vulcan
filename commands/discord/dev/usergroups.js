@@ -7,7 +7,7 @@ usergroups.execute = async (message) => {
 
     if (!scmd) {
         return vulcan.emit(
-            'invalidCommandCall',
+            'invalidCommandUsage',
             message,
             `Usergroups command requires subcommand usage!`
         );
@@ -26,7 +26,7 @@ usergroups.execute = async (message) => {
 
             if (!vulcan.hierarchy.get(newGroupName)) {
                 return vulcan.emit(
-                    'invalidCommandCall',
+                    'invalidCommandUsage',
                     message,
                     `Invalid usergroup! Input: ${newGroupName}`
                 );
@@ -44,7 +44,7 @@ usergroups.execute = async (message) => {
             break;
         default:
             return vulcan.emit(
-                'invalidCommandCall',
+                'invalidCommandUsage',
                 message,
                 `Invalid subcommand as first argument!\n\tInput: \`${scmd}`
             );

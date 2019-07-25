@@ -24,7 +24,11 @@ connect4.load = (commandDefinition) => {
 
 connect4.execute = async (message) => {
     if (message.parsed.args.length < 1) {
-        return message.client.emit('invalidCommandCall', `You need to challenge someone. Invalid #args.`, message);
+        return message.client.emit(
+            'invalidCommandUsage',
+            `You need to challenge someone. Invalid #args.`,
+            message
+        );
     }
 
     // Sort out challenge request

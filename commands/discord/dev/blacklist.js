@@ -7,7 +7,7 @@ blacklist.execute = async (message) => {
 
     if (!scmd) {
         return vulcan.emit(
-            'invalidCommandCall',
+            'invalidCommandUsage',
             message,
             `Blacklist command requires subcommand usage!`
         );
@@ -21,23 +21,27 @@ blacklist.execute = async (message) => {
 
     switch (scmd) {
         case 'add':
-        case 'insert':
+        case 'insert': {
             output = await this.add(targetID);
             break;
+        }
         case 'delete':
-        case 'remove':
+        case 'remove': {
             output = await this.remove(targetID);
             break;
+        }
         case 'list':
-        case 'blacklist':
+        case 'blacklist': {
             output = await this.list();
             break;
-        default:
+        }
+        default: {
             return vulcan.emit(
-                'invalidCommandCall',
+                'invalidCommandUsage',
                 message,
                 `Invalid subcommand as first argument!\n\tInput: \`${scmd}`
             );
+        }
     }
 
     await message.channel.send(messageEmbeds.reply({

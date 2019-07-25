@@ -10,11 +10,11 @@ git.load = (commandDescriptor) => {
 };
 
 git.execute = async (message) => {
-    const cmd       = message.parsed.args[0];
+    const scmd      = message.parsed.args[0];
     const channel   = message.channel;
     const embedWrap = messageEmbeds.reply({
         message,
-        title : `**Git** request received: **${cmd}**`,
+        title : `**Git** request received: **${scmd}**`,
         fields: [
             {
                 name : 'Subcommand',
@@ -32,20 +32,27 @@ git.execute = async (message) => {
     // Currently only commands about vulcan repo
     let vulcanRepo = this.git.getRepo('GitPaulo', 'Vulcan');
 
-    switch (cmd) {
-        case 'collaborators':
+    switch (scmd) {
+        case 'collaborators': {
             const collabsArray = await this.fetchCollaborators(vulcanRepo);
 
             embedWrap.embed.fields[1].value     = collabsArray.join(', ');
             break;
-        case 'commits':
+        }
+        case 'commits': {
             const numCommits   = message.parsed.args[1];
             const commitsArray = await this.fetchCommits(vulcanRepo, numCommits);
 
             embedWrap.embed.fields[1].value     = commitsArray.join('\n');
             break;
-        default:
-            return message.client.emit('invalidCommandCall', `The command **${cmd}** was not found in the list of sub-commands for this operation.`, message);
+        }
+        default: {
+            return message.client.emit(
+                'invalidCommandUsage',
+                message,
+                `The command **${scmd}** was not found in the list of sub-commands for this operation.`
+            );
+        }
     }
 
     await reply.edit(embedWrap);

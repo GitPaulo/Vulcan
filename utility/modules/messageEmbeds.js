@@ -184,13 +184,13 @@ messageEmbeds.info = (
     ]
 });
 
-messageEmbeds.preventedCommandCall = (
+messageEmbeds.invalidCommandCall = (
     {
         title       = `Command Call Blocked`,
         description = 'A command execution has been **prevented** from being called.',
         color       = 0xFF0000, // Red
         thumbnail   = {
-            url: `attachment://PreventedCommandCall.gif`
+            url: `attachment://invalidCommandCall.gif`
         },
         timestamp = new Date(),
         footer    = {
@@ -212,8 +212,8 @@ messageEmbeds.preventedCommandCall = (
     },
     files: [
         {
-            attachment: './assets/media/images/embeds/PreventedCommandCall.gif',
-            name      : 'PreventedCommandCall.gif'
+            attachment: './assets/media/images/embeds/invalidCommandCall.gif',
+            name      : 'invalidCommandCall.gif'
         }
     ]
 });

@@ -22,12 +22,12 @@ gif.load = (commandDefinition) => {
 };
 
 gif.execute = async (message) => {
-    let cmd = message.parsed.args[0];
+    let scmd = message.parsed.args[0];
 
     const channel   = message.channel;
     const embedWrap = messageEmbeds.reply({
         message,
-        title : `**Gif** request received: **${cmd}**`,
+        title : `**Gif** request received: **${scmd}**`,
         fields: [
             {
                 name : 'Arguments',
@@ -40,18 +40,18 @@ gif.execute = async (message) => {
         ]
     });
 
-    const noreply = (cmd.substr(0, 3) === 'nr-') && (cmd = cmd.substr(3));
+    const noreply = (scmd.substr(0, 3) === 'nr-') && (scmd = scmd.substr(3));
     const reply   = !noreply && await channel.send(embedWrap);
     const numArgs = message.parsed.args.length;
 
-    switch (cmd) {
+    switch (scmd) {
         /* Stores media from URL or File (from message id) by id */
         case 'store':
         case 'upload':
-        case 'put':
+        case 'put': {
             // Check arguments [!gif store <url> <id>]
             if (numArgs < 3) {
-                return message.client.emit('invalidCommandCall', `Expected 3 arguments got ${numArgs}.`, message);
+                return message.client.emit('invalidCommandUsage', `Expected 3 arguments got ${numArgs}.`, message);
             }
 
             // ID must come last to support multiple arguments easily
@@ -67,9 +67,9 @@ gif.execute = async (message) => {
                     messageWithImage = await message.channel.fetchMessage(String(url));
                 } catch (err) {
                     return message.client.emit(
-                        'invalidCommandCall',
-                        'The message with id: **' + url + '** was not found in the list of messages from this channel.',
-                        message
+                        'invalidCommandUsage',
+                        message,
+                        `The message with id: **${url}** was not found in the list of messages from this channel.`
                     );
                 }
 
@@ -79,10 +79,15 @@ gif.execute = async (message) => {
             embedWrap.embed.fields[1].value = 'Completed!';
             break;
         /* Fetches stored media by id (data/gifs) */
+        }
         case 'get':
-        case 'fetch':
+        case 'fetch': {
             if (numArgs < 2) {
-                return message.client.emit('invalidCommandCall', `Expected 1 arguments got ${numArgs}.`, message);
+                return message.client.emit(
+                    'invalidCommandUsage',
+                    message,
+                    `Expected 1 arguments got ${numArgs}.`
+                );
             }
 
             const input  = message.parsed.args[1];
@@ -95,14 +100,21 @@ gif.execute = async (message) => {
             });
             break;
         /* Lists all entries of media. */
+        }
         case 'list':
-        case 'all':
+        case 'all': {
             const files = await this.getImages();
 
             embedWrap.embed.fields[1].value = `\`\`\`\n${files.join(', ')}\n\`\`\``;
             break;
-        default:
-            return message.client.emit('invalidCommandCall', `The command **${cmd}** was not found in the list of sub-commands for this operation.`, message);
+        }
+        default: {
+            return message.client.emit(
+                'invalidCommandUsage',
+                message,
+                `The command **${scmd}** was not found in the list of sub-commands for this operation.`
+            );
+        }
     }
 
     if (!noreply) {

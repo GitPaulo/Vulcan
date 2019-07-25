@@ -50,7 +50,7 @@ module.exports = async (message) => {
 
         if (message.client.blacklist.get(message.author.id)) {
             return message.client.emit(
-                'preventedCommandCall',
+                'invalidCommandCall',
                 message,
                 `The user ${message.author.tag} is blocked from using Vulcan commands.`
             );
@@ -62,7 +62,7 @@ module.exports = async (message) => {
         // Check if message was a valid command
         if (!message.isCommand) {
             return message.client.emit(
-                'preventedCommandCall',
+                'invalidCommandCall',
                 message,
                 `The command request \`${message.content}\` is invalid.`
             );
@@ -71,7 +71,7 @@ module.exports = async (message) => {
         // Disable unsafe interaction from unauthorised guilds
         if (!message.direct && !message.guild.authorised && !message.command.safe) {
             return message.client.emit(
-                'preventedCommandCall',
+                'invalidCommandCall',
                 message,
                 `This guild is **unauthorised**. Only \`safe\` commands are enabled.\n`
                 + `You may submit an authorisation request by using the \`authorise\` command!`
@@ -81,7 +81,7 @@ module.exports = async (message) => {
         // Check if command is disabled
         if (message.command.disabled) {
             return message.client.emit(
-                'preventedCommandCall',
+                'invalidCommandCall',
                 message,
                 `This command has been disabled!`
             );
@@ -90,7 +90,7 @@ module.exports = async (message) => {
         // Authenticate message author
         if (!message.command.authenticate(message)) {
             return message.client.emit(
-                'preventedCommandCall',
+                'invalidCommandCall',
                 message,
                 `Not authorised to run command.\n\t(Lacking Vulcan Permissions)`,
                 [
@@ -111,7 +111,7 @@ module.exports = async (message) => {
         // Check for spam
         if (message.command.isSpamming(message.author)) {
             return message.client.emit(
-                'preventedCommandCall',
+                'invalidCommandCall',
                 message,
                 `Potential spamming has been detected.\nCommand '${message.command.id}' was **blocked**.`
             );

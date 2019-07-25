@@ -1,35 +1,37 @@
 /*
- * Happens when validation inside the command.execute() fails
+ * Happens when validation inside the message event fails.
     ? This could be for many reasons:
-       - Invalid #arguments
-       - Authenticity
-       - Validity
+       - Spam filtering
+       - Blacklisting
+       - Permissions
        - etc...
-    ! DO NOT mistaken this for 'preventedCommandCall' which acts
-    ! at a higher level (before command.execute())
+    ! message.command is not guaranteed to be defined
  */
 
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 const logger        = xrequire('./managers/LogManager').getInstance();
 
+// ? Rate limit this event? (Could be abused)
 module.exports = (
     message,
-    description = 'Invalid command call!'
+    description,
+    extraFields = []
 ) => {
-    console.log(message.command);
-    message.channel.send(messageEmbeds.warning(
+    message.channel.send(messageEmbeds.invalidCommandCall(
         {
-            title : `Invalid Command Call (${message.command.id})`,
             description,
             fields: [
                 {
-                    name : 'Help Description',
-                    value: message.command.description
+                    name  : 'Caller',
+                    value : `<@${message.author.id}>`,
+                    inline: true
                 },
                 {
-                    name : 'Examples',
-                    value: `\`\`\`\n${message.command.examples.join('\n')}\n\`\`\``
-                }
+                    name  : 'Input',
+                    value : `\`${message.content}\``,
+                    inline: true
+                },
+                ...extraFields
             ]
         }
     )).catch((err) => {
