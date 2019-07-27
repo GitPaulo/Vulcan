@@ -2,13 +2,21 @@ const botchannel    = module.exports;
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 botchannel.execute = async (message) => {
-    const guild     = message.guild;
-    const embedWrap = messageEmbeds.reply({
+    const guild         = message.guild;
+    const preventUnauth = Boolean(message.parsed.args[0]);
+    const embedWrap     = messageEmbeds.reply({
         message,
-        description: 'Attempting to leave this guild!\nGood bye! :('
+        description: 'Leaving this guild!\nGood bye! :(',
+        fields     : [
+            { name: 'Unauthorised?', value: String(!preventUnauth) }
+        ]
     });
 
     await message.channel.send(embedWrap);
-    await message.client.unauthoriseGuild(guild.id);
+
+    if (!preventUnauth) {
+        await message.client.unauthoriseGuild(guild.id);
+    }
+
     await guild.leave();
 };
