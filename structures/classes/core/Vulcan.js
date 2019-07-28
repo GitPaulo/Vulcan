@@ -159,6 +159,20 @@ class Vulcan extends Discord.Client {
         return chainPrint('Presence', this);
     }
 
+    loadWebServer (port = 443) {
+        this.webServer = xrequire('./webhooks');
+
+        this.webServer.listen(port, (err) => {
+            if (err) {
+                return logger.error(`Something bad happened while starting web server!\n\tERROR: ${err.message}`);
+            }
+
+            logger.debug(`Web server is listening on ${port}`);
+        });
+
+        return chainPrint('Web Server', this);
+    }
+
     connect () {
         logger.log('Attempting to connect to discord servers...');
 

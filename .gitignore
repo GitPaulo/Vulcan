@@ -74,3 +74,7 @@ logs.zip
 
 # VIM things :)
 .swp
+
+# HTTPS
+cert.pem
+key.pem

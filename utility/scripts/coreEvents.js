@@ -8,9 +8,8 @@ const logger        = xrequire('./managers/LogManager').getInstance();
 global._exit = process.exit;
 process.exit = async (code = 0, message = 'Unknown') => {
     if (!logger || !messageEmbeds) {
-        console.err(`Requirements for controlled process.exit are invalid.`);
-
-        return global._exit(1);
+        return console.err(`Requirements for controlled process.exit are invalid.`),
+        global._exit(1);
     }
 
     // Don't use comma or infinite loop!

@@ -41,35 +41,15 @@ To invite Vulcan to your discord server simply click the image link below:
 </a>
 
 # Self Hosting
+Make sure you have updated versions of your host machine's OS services and follow these steps:
 
-There are **two** ways you may achieve this:
-
-1. The first is to host Vulcan on your local computer.
-    - (required the **master** branch version of Vulcan)
-2. The second and preferred way, is to deploy Vulcan using heroku.
-    - (required the **deployment** branch version of Vulcan)
-
-## Local Host
-
-Currently there are no installation wizards. Manual installation is necessary by following these steps:
-
-0. Remember, if asked to "ADD XYZ TO 'PATH'" on any of the installations say **yes**.
-1. Download and install [python](https://www.python.org/downloads/).
-2. Download and install [node.js](https://nodejs.org/en/download/).
+1. Download and install [python (v2.7)](https://www.python.org/downloads/).
+2. Download and install [node.js (lastest stable)](https://nodejs.org/en/download/).
 3. Download and extract the [zipped repository code](https://github.com/GitPaulo/Vulcan.git).
 4. Open a [shell](https://git-scm.com/downloads) in the location of directory of the extraced zip.
-5. Run the following command: `npm install && npm test`
+5. Run the following command: `npm ci && npm test`
 6. Navigate to the new `'settings/'` folder and fill in the required configuration & credentials.
-7. Run the following command: `npm start`
-
-(Closing the shell window will result in the bot shutting down)
-
-## Heroku
-
-We use [heroko](https://dashboard.heroku.com/) for the deployment of the bot for our own server.
-You may do the same as well.
-
-If you are interested, please refer to the ['deployment'](https://github.com/GitPaulo/Vulcan/tree/deployment) branch.
+7. Run the following command: `npm run production`
 
 # FAQ
 

@@ -14,9 +14,17 @@ module.exports = class _Guild extends xrequire('discord.js').Guild {
 
     async requestAuthorisation (requestee = this.client.user) {
         const vulcan = this.client;
+        const owners = vulcan.configuration.ownersID;
+
+        if (owners.length <= 0) {
+            return logger.warn(
+                `No bot owners have been configured! There is no one to send authorisation request!\n\t`
+                + `Please configure them in: ${vulcan.defaults.settings.configuration.location}`
+            );
+        }
 
         // Ask owners to accept request.
-        for (let ownerID of vulcan.configuration.ownersID) {
+        for (let ownerID of owners) {
             const cachedOwner = vulcan.users.get(ownerID);
 
             if (!cachedOwner) {
@@ -37,7 +45,7 @@ module.exports = class _Guild extends xrequire('discord.js').Guild {
             await requestMsg.react(yes);
 
             // Collect!
-            // ? Reminder: this will await until bot shutsdown or answered
+            // ? Reminder: this will await until bot shutdown or request is answered
             requestMsg.awaitReactions(filter, { max: 1 })
                 .then(async (collected) => {
                     // What was the decision?

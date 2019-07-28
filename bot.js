@@ -1,5 +1,4 @@
 // Pre-initialisation scripts
-xrequire('./utility/scripts/globals');
 xrequire('./utility/scripts/coreEvents');
 
 // Load structures
@@ -37,6 +36,7 @@ vulcan
     .loadCommands()
     .loadEvents()
     .loadPresence()
+    .loadWebServer()
     .loadCLI()
     .connect();
 

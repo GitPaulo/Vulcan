@@ -1,17 +1,19 @@
 {
   "name": "Vulcan",
   "version": "1.0.0",
-  "description": "Collaboration discord bot by Paulo & Carlos, using discord.js and heroku.",
+  "description": "Collaboration discord bot by Paulo & Carlos, using discord.js.",
   "main": "bot.js",
   "scripts": {
     "_COMMENT0": " ============================ BUILD SCRIPTS  ============================",
     "wintools": "npm install -g windows-build-tools",
     "_COMMENT1": " ============================ RUN SCRIPTS  ============================",
-    "start": "node --require ./utility/scripts/globals.js bot.js",
-    "dev": "nodemon --require ./utility/scripts/globals.js bot.js",
+    "start": "node index.js ./bot.js",
+    "dev": "nodemon index.js ./bot.js",
+    "production": "pm2 start index.js --name=vulcan -- ./bot.js",
+    "restart": "pm2 restart vulcan",
     "_COMMENT2": " ============================ TEST SCRIPTS  ============================",
-    "test": "node --require ./utility/scripts/globals.js tests/loading.js",
-    "test:music": "node --require ./utility/scripts/globals.js tests/musicDependencies.js",
+    "test": "node index.js ./tests/loading.js",
+    "test:music": "node index.js ./tests/musicDependencies.js",
     "_COMMENT3": " ============================ CODE ENV SCRIPTS  ============================",
     "linter": "eslint .",
     "linter:errors-only": "eslint . --quiet",
@@ -32,8 +34,7 @@
     "discord",
     "bot",
     "discord-js",
-    "discordjs",
-    "heroku"
+    "discordjs"
   ],
   "author": "Paulo & Carlos",
   "license": "MIT",
@@ -50,7 +51,7 @@
     "github-api": "^3.2.2",
     "got": "^9.6.0",
     "js-yaml": "^3.13.1",
-    "mongoose": "^5.6.6",
+    "mongoose": "^5.6.7",
     "node-gyp": "^5.0.3",
     "node-opus": "^0.3.2",
     "request": "^2.88.0",
@@ -63,7 +64,8 @@
     "eslint-config-mudamuda": "^1.0.10",
     "eslint-plugin-security": "^1.4.0",
     "nodemon": "^1.19.1",
-    "snyk": "^1.198.0"
+    "pm2": "^3.5.1",
+    "snyk": "^1.200.1"
   },
   "snyk": true
 }
