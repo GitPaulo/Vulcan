@@ -1,5 +1,6 @@
 const os              = xrequire('os');
 const fs              = xrequire('fs');
+const pem             = xrequire('pem');
 const path            = xrequire('path');
 const yaml            = xrequire('js-yaml');
 const Discord         = xrequire('discord.js');
@@ -160,14 +161,20 @@ class Vulcan extends Discord.Client {
     }
 
     loadWebServer (port = 443) {
-        this.webServer = xrequire('./webhooks');
-
-        this.webServer.listen(port, (err) => {
+        pem.createCertificate({ days: 31, selfSigned: true }, (err, keys) => {
             if (err) {
-                return logger.error(`Something bad happened while starting web server!\n\tERROR: ${err.message}`);
+                throw err;
             }
 
-            logger.debug(`Web server is listening on ${port}`);
+            this.webServer = xrequire('./webhooks')(keys);
+
+            this.webServer.listen(port, (err) => {
+                if (err) {
+                    return logger.error(`Something bad happened while starting web server!\n\tERROR: ${err.message}`);
+                }
+
+                logger.debug(`Web server is listening on ${port}`);
+            });
         });
 
         return chainPrint('Web Server', this);

@@ -3,24 +3,9 @@ const path   = xrequire('path');
 const https  = xrequire('https');
 const logger = xrequire('./managers/LogManager').getInstance();
 
-// ===== Web server constants
-const key    = fs.readFileSync('key.pem');
-const cert   = fs.readFileSync('cert.pem');
-const server = https.createServer({ key, cert }, (request, response) => {
-    if (request.method === 'POST') {
-        handlePOST(request, response);
-    }
-
-    if (request.method === 'GET') {
-        handleGET(request, response);
-    }
-
-    logger.log(`${request.method} request received!\n\tURL: ${request.url}`);
-});
-
 // ==== HTTP Method Handlers
 const handleGET = (request, response) => {
-    request.end('Currently there is no functionality tied to GET requests :(');
+    response.end('Currently there is no functionality tied to GET requests :(');
 };
 
 const handlePOST = (request, response) => {
@@ -64,5 +49,28 @@ const handlePOST = (request, response) => {
     });
 };
 
-// Export to store on vulcan client
-module.exports = server;
+module.exports = (keys) => {
+    // ===== Generated before
+    const key  = keys.serviceKey;
+    const cert = keys.certificate;
+
+    // ===== Web server constants
+    const server = https.createServer({ key, cert }, (request, response) => {
+        // Lazy D:<
+        if (request.statusCode >= 300 && request.statusCode <= 600) {
+            return logger.error(`Caught bad status code from request!\n\tCODE: ${request.statusCode}\n\tURL: ${request.url}`);
+        }
+
+        if (request.method === 'POST') {
+            handlePOST(request, response);
+        }
+
+        if (request.method === 'GET') {
+            handleGET(request, response);
+        }
+
+        logger.log(`${request.method} request received!\n\tURL: ${request.url}`);
+    });
+
+    return server;
+};
