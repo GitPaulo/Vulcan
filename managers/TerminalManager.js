@@ -96,7 +96,7 @@ class TerminalManager {
         // Close and relinquesh control of streams
         this.cli.close();
 
-        this.log('Vulcan CLI has stopped uccesfully!');
+        this.log('Vulcan CLI has stopped succesfully!');
     }
 }
 
