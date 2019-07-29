@@ -74,7 +74,3 @@ May I use code in this repository?
 May I host this program publicly?
 
 - **Yes.** Credit this repository and follow the license.
-
-What platforms does self-hosting support?
-
-- Both modern Windows and Linux machines have been tested to be compatible with Vulcan.
