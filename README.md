@@ -43,8 +43,8 @@ To invite Vulcan to your discord server simply click the image link below:
 # Self Hosting
 Make sure you have updated versions of your host machine's OS services and follow these steps:
 
-1. Download and install [python (v2.7)](https://www.python.org/downloads/).
-2. Download and install [node.js (lastest stable)](https://nodejs.org/en/download/).
+1. Download and install [python (v2.x)](https://www.python.org/downloads/).
+2. Download and install [node.js (v11.x)](https://nodejs.org/en/download/).
     
     2.1 If on Linux machine we recommend using [NVM](https://stackabuse.com/using-nvm-to-install-node/)
 3. Download and extract the [zipped repository code](https://github.com/GitPaulo/Vulcan.git).

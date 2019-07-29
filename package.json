@@ -6,11 +6,13 @@
   "scripts": {
     "_COMMENT0": " ============================ BUILD SCRIPTS  ============================",
     "wintools": "npm install -g windows-build-tools",
+    "fixhttps": "npm config set registry http://registry.npmjs.org/",
     "_COMMENT1": " ============================ RUN SCRIPTS  ============================",
     "start": "node index.js ./bot.js",
     "dev": "nodemon index.js ./bot.js",
     "production": "pm2 start index.js --name=vulcan -- ./bot.js",
     "_COMMENT2": " ============================ PRODUCTIN SCRIPTS  ============================",
+    "production:list": "pm2 ls",
     "production:restart": "pm2 restart vulcan",
     "production:stop": "pm2 stop vulcan",
     "production:delete": "pm2 delete vulcan",
