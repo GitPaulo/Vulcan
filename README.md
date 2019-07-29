@@ -45,6 +45,8 @@ Make sure you have updated versions of your host machine's OS services and follo
 
 1. Download and install [python (v2.7)](https://www.python.org/downloads/).
 2. Download and install [node.js (lastest stable)](https://nodejs.org/en/download/).
+    
+    2.1 If on Linux machine we recommend using [NVM](https://stackabuse.com/using-nvm-to-install-node/)
 3. Download and extract the [zipped repository code](https://github.com/GitPaulo/Vulcan.git).
 4. Open a [shell](https://git-scm.com/downloads) in the location of directory of the extraced zip.
 5. Run the following command: `npm ci && npm test`
