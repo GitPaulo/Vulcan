@@ -1,26 +1,26 @@
 language: node_js
 
 node_js:
-  - 'lts/*'
+  - lts/*
 
 install:
-  - 'npm config set registry http://registry.npmjs.org/'
+  - npm config set registry http://registry.npmjs.org/
   # - 'npm install -g windows-build-tools' [Windows machine only]
-  - 'npm ci'
+  - npm ci
 
 script:
-  - 'npm test'
+  - npm test
 
 notifications:
   email: false
 
 after_success:
-  - 'wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh'
-  - 'chmod +x send.sh'
-  - './send.sh success $WEBHOOK_URL_SHOGUNATE'
-  - 'curl -d '["update", "restart"]' -X POST $NGROK_URL'
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh success $WEBHOOK_URL_SHOGUNATE
+  - curl -d '["update", "restart"]' -X POST $NGROK_URL
 
 after_failure:
-  - 'wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh'
-  - 'chmod +x send.sh'
-  - './send.sh failure $WEBHOOK_URL_SHOGUNATE'
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh failure $WEBHOOK_URL_SHOGUNATE
