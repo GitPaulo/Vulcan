@@ -41,17 +41,29 @@ To invite Vulcan to your discord server simply click the image link below:
 </a>
 
 # Self Hosting
+
 Make sure you have updated versions of your host machine's OS services and follow these steps:
 
-1. Download and install [python (v2.x)](https://www.python.org/downloads/).
-2. Download and install [node.js (v11.x)](https://nodejs.org/en/download/).
+1. Download and install [ffmpeg](https://ffmpeg.org/download.html).
+2. Download and install [python (v2.x)](https://www.python.org/downloads/).
+3. Download and install [node & npm (latest)](https://nodejs.org/en/download/).
     
-    2.1 If on Linux machine we recommend using [NVM](https://stackabuse.com/using-nvm-to-install-node/)
-3. Download and extract the [zipped repository code](https://github.com/GitPaulo/Vulcan.git).
-4. Open a [shell](https://git-scm.com/downloads) in the location of directory of the extraced zip.
-5. Run the following command: `npm ci && npm test`
-6. Navigate to the new `'settings/'` folder and fill in the required configuration & credentials.
-7. Run the following command: `npm run production`
+    2.1. If on Linux machine we recommend using [NVM](https://stackabuse.com/using-nvm-to-install-node/).
+4. Download and extract the [zipped repository code](https://github.com/GitPaulo/Vulcan.git).
+5. Open a [shell](https://git-scm.com/downloads) in the location of directory of the extraced zip.
+6. Run the following command: `npm ci && npm test`.
+7. Navigate to the new `'settings/'` folder and fill in the required configuration & credentials.
+8. Run the following command: `sudo npm run production`.
+
+## Supported Platforms
+
+Because of the use of [node-opus](https://github.com/Rantanen/node-opus), the bot can only be hosted in the following platforms:
+
+- Linux x64 & ia32
+- Linux ARM (Raspberry Pi 1 & 2)
+- Linux ARM64 (Raspberry Pi 3)
+- Mac OS X x64
+- Windows x64
 
 # FAQ
 
