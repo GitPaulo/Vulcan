@@ -9,7 +9,7 @@ module.exports = async (message) => {
     const tail = raw.substring(head.length);
 
     const vulcan  = message.client;
-    const cmdName = head.slice(1);
+    const cmdName = head.replace(vulcan.prefixRegex, '');
     const command = vulcan.commands.get(cmdName);
 
     args.shift();

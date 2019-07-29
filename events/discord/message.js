@@ -34,7 +34,7 @@ module.exports = async (message) => {
         }
 
         // Prevents spam
-        if (message.cleanContent.isIdentile()) {
+        if (message.cleanContent.isIdentile() || message.cleanContent.replace(message.client.prefixRegex, '').length <= 0) {
             return;
         }
 
@@ -64,7 +64,7 @@ module.exports = async (message) => {
             return message.client.emit(
                 'invalidCommandCall',
                 message,
-                `The command request \`${message.content}\` is invalid.`
+                `The command request \`${message.parsed.cmdName}\` is invalid.`
             );
         }
 
