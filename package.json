@@ -59,7 +59,7 @@
     "got": "^9.6.0",
     "js-yaml": "^3.13.1",
     "mongoose": "^5.6.7",
-    "node-opus": "^0.3.2",
+    "opusscript": "0.0.6",
     "pem": "^1.14.2",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
