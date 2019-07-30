@@ -6,7 +6,7 @@ const command = (global.isLinux ? 'sudo ' : '') + 'git pull origin production';
 
 module.exports = (request, response) => exec(command, (err, stdout, stderr) => {
     if (err) {
-        return logger.error(`Could execute command: ${command}\n\tError: ${err.message}`);
+        return logger.error(`Could not execute command: ${command}\n\tError: ${err.message}`);
     }
 
     console.log(`stdout: ${stdout}`);
