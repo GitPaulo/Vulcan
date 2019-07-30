@@ -1,7 +1,8 @@
 const { exec } = require('child_process');
 const logger   = xrequire('./managers/LogManager').getInstance();
 
-const command = (global.isLinux ? 'sudo ' : '') + 'git pull origin master';
+// ? Make sure we pull from production branch!
+const command = (global.isLinux ? 'sudo ' : '') + 'git pull origin production';
 
 module.exports = (request, response) => exec(command, (err, stdout, stderr) => {
     if (err) {
