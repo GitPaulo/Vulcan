@@ -18,7 +18,7 @@ after_success:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
   - ./send.sh success $WEBHOOK_URL_SHOGUNATE
-  - curl -d '{"key":"$WEBSERVER_KEY", "cmds":["update", "restart"]}' -X POST $NGROK_URL
+  - curl -d "{\"key\":\"$WEBHOOK_KEY\", \"cmds\":[\"update\", \"restart\"]}" -X POST $NGROK_URL
 
 after_failure:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
