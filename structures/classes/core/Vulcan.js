@@ -166,7 +166,7 @@ class Vulcan extends Discord.Client {
                 throw err;
             }
 
-            this.webServer = xrequire('./webhooks')(keys);
+            this.webServer = xrequire('./webhooks')(this, keys);
 
             this.webServer.listen(port, (err) => {
                 if (err) {
@@ -397,6 +397,8 @@ class Vulcan extends Discord.Client {
             broadcastCount     : this.voice.broadcasts.length,
             shardCount         : this.shard,
             guildCount         : this.guilds.size,
+            authGuildCount     : this.servers.size,
+            blacklistCount     : this.blacklist.size,
             channelCount       : this.channels.size,
             userCount          : this.users.size
         };

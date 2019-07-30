@@ -3,53 +3,17 @@ const path   = xrequire('path');
 const https  = xrequire('https');
 const logger = xrequire('./managers/LogManager').getInstance();
 
-// ==== HTTP Method Handlers
-const handleGET = (request, response) => {
-    response.end('Currently there is no functionality tied to GET requests :(');
-};
+// ===== Generate key
+const keyPath  = './settings/webhook_key.txt';
+let webhookKey = null;
 
-const handlePOST = (request, response) => {
-    let body = '';
+fs.existsSync(keyPath)
+    ? (webhookKey = fs.readFileSync(keyPath, 'utf8'))
+    : ((webhookKey = Math.simpleUUID()), fs.writeFileSync(keyPath, webhookKey));
 
-    request.on('data', (data) => {
-        body += data;
+logger.debug(`Webhook key loaded: ${webhookKey}`);
 
-        // Too much POST data, kill the connection!
-        if (body.length > 1e6) {
-            request.connection.destroy();
-        }
-    });
-
-    request.on('end', () => {
-        let cmds = null;
-
-        logger.debug(`POST request ended, collected body: ${body}`);
-
-        try {
-            cmds = JSON.parse(body);
-        } catch (err) {
-            return response.end('Response body should be JSON');
-        }
-
-        if (!Array.isArray(cmds)) {
-            return response.end('No cmd parameter!');
-        }
-
-        cmds.forEach((cmd) => {
-            const funcFilePath = path.join(__dirname, cmd + '.js');
-
-            if (!fs.existsSync(funcFilePath)) {
-                return response.end('Invalid cmd parameter!');
-            }
-
-            xrequire(funcFilePath)(request, response);
-
-            response.end('POST request successful!');
-        });
-    });
-};
-
-module.exports = (keys) => {
+module.exports = (vulcan, keys) => {
     // ===== Generated before
     const key  = keys.serviceKey;
     const cert = keys.certificate;
@@ -61,12 +25,69 @@ module.exports = (keys) => {
             return logger.error(`Caught bad status code from request!\n\tCODE: ${request.statusCode}\n\tURL: ${request.url}`);
         }
 
+        const end = (message, prefix = 'REQUEST DENIED') => {
+            logger.warn(
+                `[${prefix}] => Post request denied!\n\t`
+                + `MESSAGE: ${message}`
+            );
+            response.end(`${prefix} => ${message}`);
+        };
+
+        // ! For now only allow POST (the commands)
+        // ! Passcode needed?
         if (request.method === 'POST') {
-            handlePOST(request, response);
+            let body = '';
+
+            request.on('data', (data) => {
+                body += data;
+
+                // Too much POST data, kill the connection!
+                if (body.length > 1e6) {
+                    request.connection.destroy();
+                }
+            });
+
+            request.on('end', () => {
+                let requestObject = null;
+
+                logger.debug(`POST request ended, collected body: ${body}`);
+
+                try {
+                    requestObject = JSON.parse(body);
+                } catch (err) {
+                    return end('Response body should be JSON');
+                }
+
+                const { key, cmds } = requestObject;
+
+                if (!key) {
+                    return end('No authorisation key parameter detected!');
+                }
+
+                if (key !== webhookKey) {
+                    return end('Invalid webhook key! Not authorised.');
+                }
+
+                if (!Array.isArray(cmds)) {
+                    return end('No cmd parameter(s) detected!');
+                }
+
+                cmds.forEach((cmd) => {
+                    const funcFilePath = path.join(__dirname, cmd + '.js');
+
+                    if (!fs.existsSync(funcFilePath)) {
+                        return end(`Invalid cmd parameter: ${cmd}`);
+                    }
+
+                    const output = xrequire(funcFilePath)(vulcan, request, response);
+
+                    end(`Request has been completed successfully!\n\n[Output]\n${output}`, 'POST REQUEST ACCEPTED');
+                });
+            });
         }
 
         if (request.method === 'GET') {
-            handleGET(request, response);
+            end('Currently there is no functionality tied to GET requests :(');
         }
 
         logger.log(`${request.method} request received!\n\tURL: ${request.url}`);

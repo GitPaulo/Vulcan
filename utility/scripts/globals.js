@@ -1,4 +1,5 @@
 /* This file is loaded via npm script */
+const os   = require('os');
 const path = require('path');
 
 global.__basedir = path.join(__dirname, '..', '..');
@@ -41,3 +42,7 @@ global.print        = console.log = function () {
     global.PrintHistory.push([...arguments].join(', '));
     global.oldLog.apply(console, arguments);
 };
+
+global.platform  = os.platform();
+global.isLinux   = global.platform === 'linux';
+global.isWindows = global.platform === 'win32';
