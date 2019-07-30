@@ -1,7 +1,7 @@
 const { exec } = require('child_process');
 const logger   = xrequire('./managers/LogManager').getInstance();
 
-const command = 'git pull origin master';
+const command = (global.isLinux ? 'sudo ' : '') + 'git pull origin master';
 
 module.exports = (request, response) => exec(command, (err, stdout, stderr) => {
     if (err) {

@@ -36,7 +36,7 @@ Note that this is **intended**. Once Vulcan is invited to a new server an automa
 
 To invite Vulcan to your discord server simply click the image link below:
 
-<a href="https://discordapp.com/oauth2/authorize?client_id=284079399165231106&scope=bot&permissions=8&redirect_uri=https%3A%2F%2Fgithub.com%2FGitPaulo%2FVulcan" title="Vulcan-invite" target="_blank">
+<a href="https://discordapp.com/oauth2/authorize?client_id=604662534410207233&scope=bot&permissions=0" title="Vulcan-invite" target="_blank">
     <img src="./.github/resources/join.png" width="30%" height="30%">
 </a>
 
@@ -56,7 +56,3 @@ May I use code in this repository?
 May I host this program publicly?
 
 - **Yes.** Credit this repository and follow the license.
-
-What platforms does self-hosting support?
-
-- Both modern Windows and Linux machines have been tested to be compatible with Vulcan.

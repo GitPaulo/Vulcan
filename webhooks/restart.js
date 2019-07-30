@@ -1,8 +1,8 @@
 const { exec } = require('child_process');
 const logger   = xrequire('./managers/LogManager').getInstance();
 
-const command = 'npm run restart';
+const command = (global.isLinux ? 'sudo ' : '') + 'npm run restart';
 
-module.exports = (request, response) =>
+module.exports = (vulcan, request, response) =>
     exec(command, (err, stdout, stderr) =>
-        logger.error(`Could execute command: ${command}\n\tError: ${err.message}`));
+        logger.error(`Could not execute webhook command: ${command}\n\tError: ${err.message}\n\tstdout: ${stdout}\n\tstdin: ${stderr}`));
