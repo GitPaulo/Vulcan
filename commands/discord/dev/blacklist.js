@@ -2,7 +2,7 @@ const blacklist     = module.exports;
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 blacklist.execute = async (message) => {
-    const vulcan = this.vulcan;
+    const vulcan = this.command.client;
     const scmd   = message.parsed.args[0];
 
     if (!scmd) {
@@ -57,7 +57,7 @@ blacklist.execute = async (message) => {
 
 blacklist.add = async (targetID) => {
     // Blacklist :(
-    const cachedUser = this.vulcan.blacklistUser(targetID);
+    const cachedUser = this.command.client.blacklistUser(targetID);
 
     if (cachedUser && !cachedUser.bot) {
         (await cachedUser.createDM()).send(`You have been added to the **blacklist**!`);
@@ -68,7 +68,7 @@ blacklist.add = async (targetID) => {
 
 blacklist.remove = async (targetID) => {
     // Unblacklist :)
-    const cachedUser = this.vulcan.blacklistUser(targetID);
+    const cachedUser = this.command.client.blacklistUser(targetID);
 
     if (cachedUser) {
         (await cachedUser.createDM()).send(`You have been removed from the **blacklist**!`);
@@ -77,4 +77,4 @@ blacklist.remove = async (targetID) => {
     return `Successfully added **(${targetID})** to the blacklist!`;
 };
 
-blacklist.list = async () => `\`\`\`js\n${JSON.stringify(Array.from(this.vulcan.blacklist.entries()))}\n\`\`\``;
+blacklist.list = async () => `\`\`\`js\n${JSON.stringify(Array.from(this.command.client.blacklist.entries()))}\n\`\`\``;

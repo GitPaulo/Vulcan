@@ -1,8 +1,9 @@
 const Command = xrequire('./structures/classes/core/Command');
 
 class TerminalCommand extends Command {
-    constructor (commandDefinition) {
+    constructor (vulcan, commandDefinition) {
         super(
+            vulcan,
             commandDefinition.id,
             commandDefinition.description,
             commandDefinition.examples,

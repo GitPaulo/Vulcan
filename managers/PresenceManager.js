@@ -3,7 +3,7 @@ const logger  = xrequire('./managers/LogManager').getInstance();
 
 class PresenceManager {
     constructor (vulcan) {
-        this.vulcan  = vulcan;
+        this.client  = vulcan;
         this.timeout = null;
     }
 
@@ -27,12 +27,12 @@ class PresenceManager {
                 status  : 'dnd',
                 afk     : false,
                 activity: {
-                    name: `#C: ${this.vulcan.commands.size} #G: ${this.vulcan.guilds.size} #U: ${this.vulcan.users.size} #AS: ${this.vulcan.servers.size}`,
+                    name: `#C: ${this.client.commands.size} #G: ${this.client.guilds.size} #U: ${this.client.users.size} #AS: ${this.client.servers.size}`,
                     type: 'WATCHING'
                 }
             };
 
-            this.vulcan.user.setPresence(presenceData).then((presence) => {
+            this.client.user.setPresence(presenceData).then((presence) => {
                 logger.debug('Presence has been updated!', presence);
             }).catch(() => {
                 logger.error(`Failed to set activity.\n`, presenceData);
@@ -45,7 +45,7 @@ class PresenceManager {
         const requestData = {
             uri    : 'https://api.twitch.tv/helix/streams?first=1',
             headers: {
-                'Client-ID': this.vulcan.credentials.OAuth.twitch.id
+                'Client-ID': this.client.credentials.OAuth.twitch.id
             }
         };
 
@@ -65,7 +65,7 @@ class PresenceManager {
                             }
                         };
 
-                        this.vulcan.user.setPresence(presenceData).then((presence) => {
+                        this.client.user.setPresence(presenceData).then((presence) => {
                             logger.debug('Presence has been updated!', presence);
                         }).catch(() => {
                             logger.error(`Failed to set activity.\n`, presenceData);

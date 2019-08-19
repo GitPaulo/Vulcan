@@ -84,12 +84,13 @@ class Vulcan extends Discord.Client {
      *****************/
 
     loadCLI () {
-        this.terminalManager = new TerminalManager();
+        this.terminalManager = new TerminalManager(this);
         this.terminalManager.loadCommands();
 
+        // ? Start only when bot is ready!
         this.on('ready', () => {
             logger.log(`Starting CLI...`);
-            this.terminalManager.start(this);
+            this.terminalManager.start();
         });
 
         return chainPrint('Vulcan Command Line Interface', this);
@@ -180,7 +181,7 @@ class Vulcan extends Discord.Client {
         return chainPrint('Web Server', this);
     }
 
-    connect () {
+    connect (attempt = 1, maxAttempts = 5) {
         logger.log('Attempting to connect to discord servers...');
 
         const defaultCreds = this.defaults.settings.credentials.data;
@@ -197,11 +198,21 @@ class Vulcan extends Discord.Client {
             logger.warning(`Default developer IDs have been changed from the default!\n\tWe are slightly unhappy :C`);
         }
 
-        const token = credentials.token;
+        const token    = credentials.token;
+        const waitTime = 5000;
 
         this.login(token).then((_token) => {
             this.loadTime = process.uptime();
             logger.log(`Sucessfully logged in to discord servers with token: ${_token}`);
+        }).catch((error) => {
+            logger.error(`Error while connecting to discord!\n\tMESSAGE: ${error}\n\tTOKEN: ${token}`);
+            logger.log(`Retrying connection in ${waitTime / 1000} seconds.\n\tATTEMPT: ${attempt}/${maxAttempts}`);
+
+            if (attempt <= maxAttempts) {
+                setTimeout(() => this.connect(++attempt), waitTime);
+            } else {
+                process.exit(0, `Max reconnection attempts reached.`);
+            }
         });
 
         return chainPrint('Discord Connection', this);
@@ -375,7 +386,7 @@ class Vulcan extends Discord.Client {
         };
     }
 
-    destroy () {
+    end () {
         // Stop Vulcan CLI
         if (this.terminalManager) {
             this.terminalManager.stop();
@@ -385,6 +396,8 @@ class Vulcan extends Discord.Client {
         // [here]
 
         super.destroy();
+
+        logger.debug(`Vulcan client has been called for destruction!`);
     }
 
     /************************

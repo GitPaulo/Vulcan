@@ -1,6 +1,4 @@
-const _ = module.exports;
-
-_.simpleTransverse = function (
+Object.simpleTransverse = function (
     value,
     callback
 ) {

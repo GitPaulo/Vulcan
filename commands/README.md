@@ -26,15 +26,14 @@ const mycommand = module.exports;
 
 mycommand.load = (commandDescriptor) => {
     // Parameter: 'commandDescriptor' is a JSON object representing the entry for this command in commands.yaml
-    // You can access the vulcan object (the bot client) with: 'this.vulcan'
+    // You can access the vulcan object (the bot client) with: 'this.command.client'
 
     // This code is ran once before any call of execute()
 };
 
 mycommand.execute = async (message) => {
     // Parameter: 'message' is a discord.js message object
-    // You can access the vulcan object (the bot client) with: 'this.vulcan'
-    // message.client === this.vulcan
+    // You can access the vulcan object (the bot client) with 'message.client' or 'this.command.client'
 
     await message.channel.send('Hello World!');
 };
@@ -47,13 +46,13 @@ const mycommand = module.exports;
 
 mycommand.load = (commandDescriptor) => {
     // Parameter: 'commandDescriptor' is a JSON object representing the entry for this command in commands.yaml
-    // You can access the vulcan object (the bot client) with: 'this.vulcan'
+    // You can access the vulcan object (the bot client) with: 'this.command.client'
 
     // This code is ran once before any call of execute()
 };
 
 mycommand.execute = () => {
-    // You can access the vulcan object (the bot client) with: 'this.vulcan'
+    // You can access the vulcan object (the bot client) with 'message.client' or 'this.command.client'
 
     // Hi!
     console.log('Hello world!');

@@ -2,7 +2,7 @@ const usergroups    = module.exports;
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 usergroups.execute = async (message) => {
-    const vulcan = this.vulcan;
+    const vulcan = this.command.client;
     const scmd   = message.parsed.args[0];
 
     if (!scmd) {
@@ -62,7 +62,7 @@ usergroups.execute = async (message) => {
 };
 
 usergroups.set = async (targetID, newGroupName) => {
-    const cachedUser = this.vulcan.updateUsergroup(targetID, newGroupName);
+    const cachedUser = this.command.client.updateUsergroup(targetID, newGroupName);
 
     if (cachedUser && !cachedUser.bot) {
         (await cachedUser.createDM()).send(`Your usergroup has changed to: **${newGroupName}**!`);
@@ -71,6 +71,6 @@ usergroups.set = async (targetID, newGroupName) => {
     return `Successfully updated usergroup of **(${targetID})** to: **${newGroupName}**!`;
 };
 
-usergroups.get = async (targetID) => this.vulcan.fetchUsergroup(targetID).name;
+usergroups.get = async (targetID) => this.command.client.fetchUsergroup(targetID).name;
 
-usergroups.list = async () => `\`\`\`js\n${JSON.stringify(Array.from(this.vulcan.usergroups.entries()))}\n\`\`\``;
+usergroups.list = async () => `\`\`\`js\n${JSON.stringify(Array.from(this.command.client.usergroups.entries()))}\n\`\`\``;

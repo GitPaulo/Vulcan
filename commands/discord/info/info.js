@@ -1,10 +1,9 @@
-const info     = module.exports;
+const info          = module.exports;
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 info.execute = async (message) => {
-    const performance = this.vulcan.performance;
-    const statistics  = this.vulcan.statistics;
-    const guild       = message.guild;
+    const performance = message.client.performance;
+    const statistics  = message.client.statistics;
     const embedWrap   = messageEmbeds.reply({
         message,
         description: `Hello there, I'm vulcan and here is my information.`,
@@ -35,12 +34,12 @@ info.execute = async (message) => {
             },
             {
                 name  : 'Perfixes',
-                value : `${this.vulcan.configuration.prefixes.join(', ')}`,
+                value : `${message.client.configuration.prefixes.join(', ')}`,
                 inline: true
             },
             {
                 name  : 'Authorised Servers Count',
-                value : `${this.vulcan.servers.size}`,
+                value : `${message.client.servers.size}`,
                 inline: true
             }
         ]

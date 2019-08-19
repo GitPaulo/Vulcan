@@ -35,7 +35,7 @@ module.exports = () => {
         }
 
         Discord.Structures.extend(discordClassName,
-            (parent) => xrequire(path.join(extensionsDir, file))
+            () => xrequire(path.join(extensionsDir, file))
         );
 
         logger.log(`Sucessfully loaded extensions file '${file}'. (took ${Math.roundDP(performance.now() - t, 2)}ms)`);

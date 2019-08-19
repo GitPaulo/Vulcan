@@ -4,6 +4,7 @@ const logger   = xrequire('./managers/LogManager').getInstance();
 // ? Make sure we pull from production branch!
 const command = (global.isLinux ? 'sudo ' : '') + 'git pull origin production';
 
+/* eslint-disable no-unused-vars */
 module.exports = (request, response) => exec(command, (err, stdout, stderr) => {
     if (err) {
         return logger.error(`Could not execute command: ${command}\n\tError: ${err.message}`);

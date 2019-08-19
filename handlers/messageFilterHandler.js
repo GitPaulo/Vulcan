@@ -22,6 +22,14 @@ module.exports = (message) => {
             let hasFiltered = filteredContent !== message.content;
 
             if (hasFiltered) {
+                if (!message.guild.me.hasPermission('MANAGE_MESSAGES')) {
+                    return message.client.emit(
+                        'vulcanMissingPermissions',
+                        message,
+                        `Vulcan doesn't have the essential permission: \`MANAGE_MESSAGES\` thus he cannot reply!`
+                    );
+                }
+
                 message.delete().then(() => (
                     message.channel.send({
                         embed: {

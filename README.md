@@ -47,6 +47,10 @@ Changes:
 
 - node-opus not supported for our host machine OS - forced to use opusscript. (appeal made)
 
+It is possible for compatibility with other OSs but that requires node-opus installation tinkering.
+
+More information can be found in the [node-opus repository.](https://github.com/Rantanen/node-opus)
+
 # FAQ
 
 May I use code in this repository?

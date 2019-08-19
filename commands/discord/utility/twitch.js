@@ -1,13 +1,14 @@
 const twitch        = module.exports;
 const request       = xrequire('request-promise');
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
-const logger        = xrequire('./managers/LogManager').getInstance();
+// const logger     = xrequire('./managers/LogManager').getInstance();
 
 // TODO - Improve! Add more functionality and prettier embeds :)
+/* eslint-disable no-unused-vars */
 twitch.load = (commandDescriptor) => {
     this.endpoint = 'https://api.twitch.tv/helix';
-    this.id       = this.vulcan.credentials.OAuth.twitch.id;
-    this.secret   = this.vulcan.credentials.OAuth.twitch.secret;
+    this.id       = this.command.client.credentials.OAuth.twitch.id;
+    this.secret   = this.command.client.credentials.OAuth.twitch.secret;
 };
 
 twitch.execute = async (message) => {
@@ -33,7 +34,7 @@ twitch.execute = async (message) => {
             const num = message.parsed.args[1];
 
             if (isNaN(num)) {
-                return this.vulcan.emit(
+                return message.client.emit(
                     'invalidCommandUsage',
                     message,
                     `Expected number as first argument for this subcommand!`
@@ -58,7 +59,7 @@ twitch.execute = async (message) => {
             const num = message.parsed.args[1];
 
             if (isNaN(num)) {
-                return this.vulcan.emit(
+                return this.command.client.emit(
                     'invalidCommandUsage',
                     message,
                     `Expected number as first argument for this subcommand!`
@@ -81,7 +82,7 @@ twitch.execute = async (message) => {
             break;
         }
         default: {
-            return this.vulcan.emit(
+            return message.client.emit(
                 'invalidCommandUsage',
                 message,
                 `Invalid twitch subcommand: ${scmd}`

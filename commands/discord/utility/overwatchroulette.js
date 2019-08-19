@@ -44,6 +44,7 @@ overwatchroulette.loadHeroCache = async () => {
     this.cache = cache;
 };
 
+/* eslint-disable no-unused-vars */
 overwatchroulette.load = (commandDescriptor) => {
     this.loadHeroCache();
 };

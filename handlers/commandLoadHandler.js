@@ -49,7 +49,7 @@ module.exports = (vulcan, folderPath) => {
             let commandID = matches[matches.length - 1].slice(0, -3);
             let fullPath  = path.join(dirPath, fileName);
 
-            // Fetch command deifnition using id & validate
+            // Fetch command definition using id & validate
             let commandDefinition = commandDefinitions[commandID];
 
             if (!commandDefinition) {
@@ -73,19 +73,25 @@ module.exports = (vulcan, folderPath) => {
                 }
             );
 
-            // Baby command object
-            const commandObject = xrequire(fullPath);
+            // Object returned by command file
+            // ! 'this' inside cmd files refers to this object NOT 'command'
+            const fileObject = xrequire(fullPath);
 
-            // * Attach vulcan
-            commandObject.vulcan = vulcan;
+            // Actual command Object
+            const commandObject = new CommandClass(vulcan, commandDefinition);
+            const command       = Object.assign(commandObject, fileObject);
 
-            // Real command object that will be stored in map
-            const command = Object.assign(new CommandClass(commandDefinition), commandObject);
+            // * Attach command (pepega)
+            fileObject.command = command;
 
             // Call load command if defined
             // ? commandDefiniton will not become a property of command!
             if (command.load) {
                 command.load(commandDefinition);
+            }
+
+            if (!command.execute) {
+                throw new Error(`Execute function is undefined in '${command.id}'\nEvery command must implement 'command.execute'!`);
             }
 
             // Add to map
