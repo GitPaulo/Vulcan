@@ -22,6 +22,7 @@
     "_COMMENT3": " ============================ TEST SCRIPTS  ============================",
     "test": "node index.js ./tests/loading.js",
     "test:music": "node index.js ./tests/musicDependencies.js",
+    "test:discord": "node index.js ./tests/discordConnection.js",
     "_COMMENT4": " ============================ CODE ENV SCRIPTS  ============================",
     "linter": "eslint .",
     "linter:errors-only": "eslint . --quiet",
