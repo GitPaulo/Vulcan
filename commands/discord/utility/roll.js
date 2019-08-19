@@ -5,7 +5,7 @@ roll.execute = async (message) => {
     const upperBound = message.parsed.args[0] || 10;
 
     if (isNaN(upperBound || upperBound <= 0)) {
-        this.vulcan.emit(
+        return message.client.emit(
             'invalidCommandUsage',
             message,
             'Upper bound must be a number larger than 0!'

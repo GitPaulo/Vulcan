@@ -4,28 +4,32 @@
 ###############################################
 
 ### [Command Structure]
-# === [REQUIRED FIELDS] ===
-# command_id => (Identifier) The primary unique command identifier
-#   aliases     => (Array) The other unique strings that identify the command (excluding command_id)
-#   description => (String) Description of the command
+# ========== [REQUIRED FIELDS] ==========
+# command_id:
+#   aliases     => (Array) The other unique strings that identify the command (excluding command_id).
+#   description => (String) Description of the command.
 #   examples    => (Array) Descriptions of example usage.
-#   group       => (String) The usergroup lowerbound that is allowed to call the command.
-#   throttling  => (Number) The number of milliseconds the command goes under cooldown.
-#   safe        => (Boolean) Wether unauthorised guilds can used this command.
-#   === [OPTIONAL FIELDS] ===
-#   embed => (Identifier) Must be kept as 'embed', defines an object of the command response
-#     color => (Number) Color of the embed as hex number
-#     title => (String) The title of the embed
-#     image => (String) The path to the thumbnail of the embed. (PLEASE USE ./assets FOLDER) 
+# ========== [OPTIONAL FIELDS] ==========
+#   group             => (String)['default'] The usergroup lowerbound that is allowed to call the command.
+#   throttling        => (Number)[500] The number of milliseconds the command goes under cooldown.
+#   vulcanPermissions => (Array)[[]] The permissions required for the bot to execute the command.
+#   userPermissions   => (Array)[[]] The user permissions required for the user to execute the command.
+#   safe              => (Boolean)[false] Whether unauthorised guilds can used this command. 
+#   disabled          => (Boolean)[false] Whether this command is disabled.
+#   embed:
+#     color => (Number)[0x0] Color of the embed as hex number.
+#     title => (String)[Command <ID>'] The title of the embed.
+#     image => (String)['Command.gif'] The path to the thumbnail of the embed. (PLEASE use ./assets folder) .
 
 ### [Special Substrings]
-# <prefix>: will be replaced by the bot configuration prefix(s)
-# <id>: will be replaced by the command id
-# <aliases>: will be replaced by a joined alias string
+# <prefix>: will be replaced by the bot configuration prefix(s).
+# <id>: will be replaced by the command id.
+# <aliases>: will be replaced by a joined alias string.
 
 ### [NOTES]
-#  Write example arguments in the form: <arg1:DataType>
-#  Dont diverge from file or yaml format used
+#  Write example arguments in the form: <arg1:DataType>.
+#  Dont diverge from file or yaml format used.
+#  There are default REQUIRED bot premissions that may be omitted like: 
 
 #
 botchannel:
@@ -37,6 +41,9 @@ botchannel:
   group: 'default'
   throttling: 250
   safe: true
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:  
     color: 0xAACE6D
     title: 'Bot Channel Configuration'
@@ -57,6 +64,9 @@ evaluate:
   group: 'root'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0xFFCE6D
     title: 'JavaScript Evaluation'
@@ -74,6 +84,9 @@ git:
   group: 'root'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0x1e5fc7
     title: 'Git'
@@ -91,6 +104,9 @@ usergroups:
   - '<prefix><id> hierarchy'
   throttling: 2000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0x8c047c
     title: 'Usergroups System'
@@ -107,6 +123,9 @@ ping:
   group: 'default'
   throttling: 0
   safe: true
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0xFF0000
     title: 'Ping...'
@@ -124,6 +143,10 @@ gif:
   group: 'default'
   throttling: 2000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'ATTACH_FILES'
   embed:
     color: 0x666666
     title: 'Gif'
@@ -139,6 +162,10 @@ connect4:
   group: 'default'
   throttling: 2000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'ADD_REACTIONS'
   embed:
     color: 0x666666
     title: 'Connect 4'
@@ -154,6 +181,10 @@ autoplay:
   - '<prefix><id> <boolean>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
     title: 'Auto Play'
@@ -169,6 +200,10 @@ destroy:
   - '<prefix><id>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
     title: 'Destroy'
@@ -184,6 +219,13 @@ forceplay:
   - '<prefix><id> <youtubeurl>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'CONNECT'
+    - 'SPEAK'
+    - 'USE_VAD'
+    - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
     title: 'Force Play'
@@ -199,6 +241,10 @@ list:
   - <prefix><id>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
     title: 'List'
@@ -214,6 +260,10 @@ pause:
   - '<prefix><id>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
     title: 'Pause'
@@ -229,6 +279,13 @@ play:
   - '<prefix><id> <youtubeurl>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'CONNECT'
+    - 'SPEAK'
+    - 'USE_VAD'
+    - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
     title: 'Play'
@@ -244,6 +301,10 @@ purge:
   - '<prefix><id>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
     title: 'Purge'
@@ -259,6 +320,10 @@ leave:
   - '<prefix><id>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
     title: 'Leave'
@@ -274,6 +339,10 @@ repeat:
   - '<prefix><id> <boolean>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
     title: 'Repeat'
@@ -289,6 +358,13 @@ resume:
   - '<prefix><id>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'CONNECT'
+    - 'SPEAK'
+    - 'USE_VAD'
+    - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
     title: 'Resume'
@@ -304,6 +380,10 @@ shuffle:
   - '<prefix><id> <boolean>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions:
+    - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
     title: 'Shuffle'
@@ -319,6 +399,13 @@ skip:
   - '<prefix><id> <boolean>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'CONNECT'
+    - 'SPEAK'
+    - 'USE_VAD'
+    - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
     title: 'Skip'
@@ -337,6 +424,9 @@ smiteroulette:
   - '<prefix><id> <class>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0xffa500
     title: 'Smite God Roulette'
@@ -356,6 +446,9 @@ overwatchroulette:
   - '<prefix><id> <class>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0xffa500
     title: 'Overwatch Hero Roulette'
@@ -373,6 +466,10 @@ documentation:
   - '<prefix><id>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions:
+    - 'ATTACH_FILES'
   embed:
     color: 0xFF6B4A
     title: 'Vulcan Documentation'
@@ -388,6 +485,10 @@ logs:
   - '<prefix><id>'
   throttling: 2000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions:
+    - 'ATTACH_FILES'
   embed:
     color: 0x00000
     title: 'Logs'
@@ -403,6 +504,9 @@ kill:
   - '<prefix><id>'
   throttling: 0
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0x00000
     title: 'Kill'
@@ -420,6 +524,9 @@ blacklist:
   - '<prefix><id> list'
   throttling: 0
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0x00000
     title: 'Blacklist'
@@ -438,6 +545,9 @@ servers:
   - '<prefix><id> list'
   throttling: 0
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0x00000
     title: 'Authorised Server List'
@@ -453,6 +563,9 @@ exit:
   - '<prefix><id>'
   throttling: 0
   safe: true
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0x00000
     title: 'Exiting Guild'
@@ -468,6 +581,9 @@ authorise:
   - '<prefix><id>'
   throttling: 0
   safe: true
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0x00000
     title: 'Guild Authorisation Request'
@@ -483,6 +599,9 @@ disabled:
   - '<prefix><id> <command_name>'
   throttling: 0
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0x00000
     title: 'Command Disable'
@@ -500,6 +619,10 @@ cat:
   - '<prefix><id> <command_name>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions:
+    - 'ATTACH_FILES'
   embed:
     color: 0x32CD32
     title: 'Command Disable'
@@ -516,6 +639,9 @@ info:
   - '<prefix><id>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0xDC91FF
     title: 'Command Disable'
@@ -532,6 +658,9 @@ roll:
   - '<prefix><id> <upperbound>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0x2CC646
     title: 'Roll'
@@ -548,6 +677,9 @@ flip:
   - '<prefix><id>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
   embed:
     color: 0x209834
     title: 'Flip'
@@ -563,6 +695,10 @@ twitch:
   - '<prefix><id> <streamer>'
   throttling: 1000
   safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions:
+    - 'EMBED_LINKS'
   embed:
     color: 0x551a8b
     title: 'Twitch'

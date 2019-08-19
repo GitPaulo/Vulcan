@@ -5,7 +5,7 @@ mongoose.Promise = global.Promise;
 
 class DatabaseManager {
     constructor (vulcan) {
-        this.vulcan = vulcan;
+        this.client = vulcan;
         this.db     = mongoose.connection;
         this.db.on('error', logger.error.bind(logger, 'MongoDB connection error!'));
         this.db.on('disconnected', logger.log.bind(logger, 'MongoDB connection has been lost!'));

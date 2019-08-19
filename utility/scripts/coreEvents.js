@@ -53,7 +53,7 @@ process.exit = async (code = 0, message = 'Unknown') => {
     }
 
     // Clean up before exiting!
-    vulcan.destroy();
+    vulcan.end();
     logger.log(`Vulcan process is exiting.\n\tMessage: ${message}\n\tExit code: ${code}`);
 
     global._exit(code);

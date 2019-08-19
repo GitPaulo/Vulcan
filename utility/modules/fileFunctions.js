@@ -10,8 +10,8 @@ fileFunctions.allDirFiles = (dir, fileTypes = '.js') => {
     function walkDir (currentPath) {
         const files = fs.readdirSync(currentPath);
 
-        for (let i in files) {
-            let curFile = path.join(currentPath, files[i]);
+        for (let fileName of files) {
+            let curFile = path.join(currentPath, fileName);
 
             if (fs.statSync(curFile).isFile() && fileTypes.indexOf(path.extname(curFile)) !== -1) {
                 filesToReturn.push(curFile.replace(dir, ''));

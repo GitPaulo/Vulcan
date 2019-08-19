@@ -8,6 +8,7 @@ const whiteFlagEmoji    = '%F0%9F%8F%B3';
 
 connect4.getControlEmojis = () => this.emojiPlays.concat([whiteFlagEmoji]);
 
+/* eslint-disable no-unused-vars */
 connect4.load = (commandDefinition) => {
     // Default board size
     this.boardWidth  = 7;
@@ -26,8 +27,8 @@ connect4.execute = async (message) => {
     if (message.parsed.args.length < 1) {
         return message.client.emit(
             'invalidCommandUsage',
+            message,
             `You need to challenge someone. Invalid #args.`,
-            message
         );
     }
 
@@ -188,4 +189,3 @@ connect4.execute = async (message) => {
     // Results Message
     await game.turnMessage.channel.send(`Game #${gameID} has ended\n\t${game.state.win ? `<@${game.winner.id}> WINS` : `Game ended in draw!`}`);
 };
-

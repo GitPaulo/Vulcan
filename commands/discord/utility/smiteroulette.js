@@ -48,6 +48,7 @@ smiteroulette.loadGodCache = async () => {
     this.cache = cache;
 };
 
+/* eslint-disable no-unused-vars */
 smiteroulette.load = (commandDescriptor) => {
     smiteroulette.loadGodCache();
 };

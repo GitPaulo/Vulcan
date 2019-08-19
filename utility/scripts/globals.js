@@ -46,3 +46,14 @@ global.print        = console.log = function () {
 global.platform  = os.platform();
 global.isLinux   = global.platform === 'linux';
 global.isWindows = global.platform === 'win32';
+
+global.extendPrototype = (prototype, propertyName, value) => {
+    // Being explicit
+    Object.defineProperty(prototype, propertyName, {
+        enumerable  : false,
+        configurable: false,
+        writable    : false,
+        value
+    });
+};
+

@@ -5,7 +5,7 @@ const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 // eslint-disable-next-line no-unused-vars
 git.load = (commandDescriptor) => {
     this.git = new GithubAPI({
-        token: this.vulcan.credentials.apiKeys.github
+        token: this.command.client.credentials.apiKeys.github
     });
 };
 

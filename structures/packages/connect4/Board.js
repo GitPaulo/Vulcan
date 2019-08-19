@@ -99,12 +99,14 @@ class Board {
         }
 
         for (let direction in increments) {
-            if (1 + this.countInLine(increments[direction], y, x, player) + this.countInLine(increments[direction].map((x) => -x), y, x, player) >= 4) {
-                return {
-                    win : true,
-                    draw: false,
-                    direction
-                };
+            if (increments.hasOwnProperty(direction)) {
+                if (1 + this.countInLine(increments[direction], y, x, player) + this.countInLine(increments[direction].map((x) => -x), y, x, player) >= 4) {
+                    return {
+                        win : true,
+                        draw: false,
+                        direction
+                    };
+                }
             }
         }
 

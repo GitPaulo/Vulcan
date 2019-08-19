@@ -1,7 +1,7 @@
-const _ = module.exports;
+const proto = Object.prototype;
 
-_.methodNames = function () {
-    let obj = this;
+global.extendPrototype(proto, 'methodNames', function () {
+    const obj      = this;
     let properties = new Set();
     let currentObj = obj;
 
@@ -10,4 +10,4 @@ _.methodNames = function () {
     } while ((currentObj = Object.getPrototypeOf(currentObj)));
 
     return [...properties.keys()].filter((item) => typeof obj[item] === 'function');
-};
+});

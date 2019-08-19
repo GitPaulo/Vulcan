@@ -24,10 +24,6 @@ module.exports = () => {
     let files = fs.readdirSync(prototypesDir);
 
     files.forEach((file) => {
-        if (file === 'index.js') {
-            return;
-        }
-
         let t     = performance.now();
         let parts = file.split('.');
         let ext   = 'js';
@@ -40,23 +36,9 @@ module.exports = () => {
             throw new Error(`Invalid prototypes file extension: ${file}`);
         }
 
-        let globalObject = global[parts[0]];
+        let filePath = path.join(prototypesDir, file);
 
-        if (!globalObject) {
-            throw new Error(`Invalid object from file name: ${globalObject} from ${file}`);
-        }
-
-        let targetObject = parts[1] === 'prototype' ? globalObject.prototype : globalObject;
-        let properties   = xrequire(path.join(prototypesDir, file));
-
-        for (let property in properties) {
-            let propertyValue = properties[property];
-
-            Object.defineProperty(targetObject, property, {
-                enumerable: false,
-                value     : propertyValue
-            });
-        }
+        xrequire(filePath);
 
         logger.log(`Sucessfully loaded prototypes file '${file}'. (took ${Math.round(performance.now() - t, 2)}ms)`);
     });

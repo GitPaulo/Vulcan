@@ -1,11 +1,18 @@
+const { Client } = xrequire('discord.js');
+
 class Command {
     constructor (
+        vulcan,
         id,
         description = 'A vulcan command.',
         examples    = [`<prefix>${id} <...args>`],
         aliases     = [],
         throttling  = 500
     ) {
+        if (!(vulcan instanceof Client)) {
+            throw new TypeError(`Vulcan must be a valid discord client!`);
+        }
+
         if (typeof id !== 'string') {
             throw new TypeError(`Command must have valid string id.`);
         }
@@ -26,6 +33,7 @@ class Command {
             throw new TypeError(`Command ${id} must have an number type for throttling.`);
         }
 
+        this.client      = vulcan;
         this.id          = id;
         this.description = description;
         this.examples    = examples;

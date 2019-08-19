@@ -77,12 +77,12 @@ class MusicManager {
                 title      : `Now Playing :musical_note: :musical_note:`,
                 description: `Music Controller started playing a song.`,
                 fields     : [
-                    { name: 'Song name',       value: this.loadedSong.name,          inline: false },
-                    { name: 'Request Author',  value: this.loadedSong.requestAuthor, inline: true  },
-                    { name: 'Upload Author',   value: this.loadedSong.author,        inline: true  },
-                    { name: 'Duration',        value: this.loadedSong.seconds + 's', inline: true  },
-                    { name: 'Age Restricted',  value: this.loadedSong.ageRestricted, inline: true  },
-                    { name: 'URL',             value: this.loadedSong.url,           inline: false }
+                    { name: 'Song name',       value: this.loadedSong.name || 'Unknown',          inline: false },
+                    { name: 'Request Author',  value: this.loadedSong.requestAuthor || 'Unknown', inline: true  },
+                    { name: 'Upload Author',   value: this.loadedSong.author || 'Unknown',        inline: true  },
+                    { name: 'Duration',        value: this.loadedSong.seconds + 's' || '0s?',     inline: true  },
+                    { name: 'Age Restricted',  value: this.loadedSong.ageRestricted || 'false',   inline: true  },
+                    { name: 'URL',             value: this.loadedSong.url || 'Unkonwn',           inline: false }
                 ]
             }
         ));
@@ -130,8 +130,9 @@ class MusicManager {
         }
     }
 
+    /* eslint-disable no-unused-vars */
     async onSpeakEvent (isPlaying) {
-
+        // TODO ?
     }
 
     /********************
@@ -318,11 +319,11 @@ class MusicManager {
             const embedWrap = messageEmbeds.info({
                 description: `Playlist detected. Loaded playlist into queue.`,
                 fields     : [
-                    { name: 'Playlist',            value: url,                                  inline: false },
-                    { name: 'Playlist Size',       value: playlist.length,                      inline: true  },
-                    { name: 'Queue Size',          value: queueSize,                            inline: true  },
-                    { name: 'Estimated Load Time', value: `${Math.roundDP(estimate * pn, 2)}s`, inline: true  },
-                    { name: 'Load Progress',       value: `0/${pn} songs`,                      inline: true  }
+                    { name: 'Playlist',            value: url || 'Unkown',                              inline: false },
+                    { name: 'Playlist Size',       value: playlist.length || 'N/A',                     inline: true  },
+                    { name: 'Queue Size',          value: queueSize || 'N/A',                           inline: true  },
+                    { name: 'Estimated Load Time', value: `${Math.roundDP(estimate * pn, 2) || '??'}s`, inline: true  },
+                    { name: 'Load Progress',       value: `0/${pn || '??'} songs`,                      inline: true  }
                 ]
             });
 
@@ -331,7 +332,7 @@ class MusicManager {
 
             // Status edit
             let loadedSongs = 0;
-            let step        = Math.round(pn * 0.20);
+            let step        = Math.round(pn * 0.35);
 
             for (let song of playlist) {
                 if (song.name === '[Deleted video]') {

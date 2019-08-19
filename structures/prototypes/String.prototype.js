@@ -1,6 +1,6 @@
-const _ = module.exports;
+const proto = String.prototype;
 
-_.toHHMMSS = function () {
+global.extendPrototype(proto, 'toHHMMSS', function () {
     let sec     = parseInt(this, 10); // Don't forget the second param
     let hours   = Math.floor(sec / 3600);
     let minutes = Math.floor((sec - (hours * 3600)) / 60);
@@ -21,15 +21,15 @@ _.toHHMMSS = function () {
     let time = hours + ':' + minutes + ':' + seconds;
 
     return time;
-};
+});
 
-_.replaceAll = function (search, replacement) {
+global.extendPrototype(proto, 'replaceAll', function (search, replacement) {
     let target = this;
 
     return target.split(search).join(replacement);
-};
+});
 
-_.regexEscape = function (exceptions) {
+global.extendPrototype(proto, 'regexEscape', function (exceptions) {
     let regexString = '[.*+?^${}()|[\\]\\\\]';
 
     exceptions.forEach((exclude) => {
@@ -42,11 +42,11 @@ _.regexEscape = function (exceptions) {
     });
 
     return this.replace(new RegExp(regexString, 'g'), '\\$&'); // $& means the whole matched string
-};
+});
 
-_.isIdentile = function () {
+global.extendPrototype(proto, 'isIdentile', function () {
     const letters = this.split('');
     const unique  = new Set(letters);
 
     return (unique.size === 1) ? true : false;
-};
+});

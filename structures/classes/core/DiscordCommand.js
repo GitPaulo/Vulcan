@@ -2,8 +2,9 @@ const fs      = xrequire('fs');
 const Command = xrequire('./structures/classes/core/Command');
 
 class DiscordCommand extends Command {
-    constructor (commandDefinition) {
+    constructor (vulcan, commandDefinition) {
         super(
+            vulcan,
             commandDefinition.id,
             commandDefinition.description,
             commandDefinition.examples,
@@ -15,24 +16,25 @@ class DiscordCommand extends Command {
             throw new TypeError(`Essential command 'type' property is undefined.`);
         }
 
-        if (!commandDefinition.group) {
-            throw new TypeError(`Essential command 'group' property is undefined!`);
+        if (!vulcan.hierarchy.get(commandDefinition.group)) {
+            throw new TypeError(`Invalid group given to command!`);
         }
 
         if (typeof commandDefinition.embed !== 'object') {
             throw new TypeError(`Essential command 'embed' property is undefined!`);
         }
 
-        // Discord Command Specific Properties
+        // ====== Discord Command Specific Properties
+        // = No defaults
         this.type  = commandDefinition.type;
         this.group = commandDefinition.group;
-        this.embed = commandDefinition.embed || {};
 
-        // Default embed color
-        this.embed.color = this.embed.color || 0x00000;
-
-        // Default embed color
-        this.embed.title = `Command: ${this.id}`;
+        // = Defaults
+        this.embed             = commandDefinition.embed || {};
+        this.vulcanPermissions = commandDefinition.vulcanPermissions || [];
+        this.userPermissions   = commandDefinition.userPermissions || [];
+        this.embed.color       = this.embed.color || 0x0;
+        this.embed.title       = `Command: ${this.id}`;
 
         // Default embed Image
         if (!this.embed.image || !fs.existsSync(this.embed.image)) {

@@ -3,10 +3,12 @@ const logger   = xrequire('./managers/LogManager').getInstance();
 
 class TerminalManager {
     constructor (
+        vulcan,
         inputStream  = process.stdin,
         outputStream = process.stdout
     ) {
-        this.cli = readline.createInterface(
+        this.client = vulcan;
+        this.cli    = readline.createInterface(
             {
                 input : inputStream,
                 output: outputStream
@@ -19,12 +21,12 @@ class TerminalManager {
     }
 
     // eslint-disable-next-line no-unused-vars
-    onCTRLZ (vulcan) {
+    onCTRLZ () {
         this.log('Terminal: <ctrl>-Z detected!');
     }
 
     // eslint-disable-next-line no-unused-vars
-    onCTRLC (vulcan) {
+    onCTRLC () {
         this.log('Terminal: <ctrl>-C detected!');
         this.cli.question('Are you sure you want to exit the CLI? [yes/no] ', (answer) => {
             if (answer.match(/^y(es)?$/i)) {
@@ -34,12 +36,12 @@ class TerminalManager {
     }
 
     // eslint-disable-next-line no-unused-vars
-    onStreamPause (vulcan) {
+    onStreamPause () {
         this.log(`CLI input stream paused. (or received SIGCONT)`, 'warning');
         this.log(`Terminal paused.`);
     }
 
-    onCommandReceived (line, vulcan) {
+    onCommandReceived (line) {
         let args = line.split(' ');
         let cmd  = args[0];
 
@@ -54,7 +56,7 @@ class TerminalManager {
         }
 
         try {
-            command.execute(vulcan);
+            command.execute(line);
         } catch (err) {
             this.log(`CLI Command Error: ${err.message}\nStack: ${err.stack}`);
         }
@@ -67,18 +69,18 @@ class TerminalManager {
     }
 
     loadCommands (folderPath = './commands/terminal') {
-        this.commands = xrequire('./handlers/commandLoadHandler')(this, folderPath);
+        this.commands = xrequire('./handlers/commandLoadHandler')(this.client, folderPath);
     }
 
-    start (vulcan) {
+    start () {
         // Command History
         this.history = [];
 
         // Readline Events
-        this.cli.on('line',    (line) => this.onCommandReceived(line, vulcan));
-        this.cli.on('pause',   ()     => this.onStreamPause(vulcan));
-        this.cli.on('SIGINT',  ()     => this.onCTRLC(vulcan));
-        this.cli.on('SIGTSTP', ()     => this.onCTRLZ(vulcan));
+        this.cli.on('line',    (line) => this.onCommandReceived(line));
+        this.cli.on('pause',   ()     => this.onStreamPause());
+        this.cli.on('SIGINT',  ()     => this.onCTRLC());
+        this.cli.on('SIGTSTP', ()     => this.onCTRLZ());
 
         logger.log('Vulcan CLI has started succesfully!');
     }

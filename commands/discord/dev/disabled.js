@@ -2,7 +2,7 @@ const disabled      = module.exports;
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 disabled.execute = async (message) => {
-    const vulcan  = this.vulcan;
+    const vulcan  = message.client;
     const cmdName = message.parsed.args[0];
     const command = vulcan.commands.retrieveCommand(cmdName);
 

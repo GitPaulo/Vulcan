@@ -43,11 +43,7 @@ module.exports = async (message) => {
             return;
         }
 
-        // Check if client can respond
-        if (message.channel.type === 'text' && !message.guild.me.hasPermission('SEND_MESSAGES')) {
-            return;
-        }
-
+        // Check if author is blacklisted
         if (message.client.blacklist.get(message.author.id)) {
             return message.client.emit(
                 'invalidCommandCall',
@@ -68,16 +64,6 @@ module.exports = async (message) => {
             );
         }
 
-        // Disable unsafe interaction from unauthorised guilds
-        if (!message.direct && !message.guild.authorised && !message.command.safe) {
-            return message.client.emit(
-                'invalidCommandCall',
-                message,
-                `This guild is **unauthorised**. Only \`safe\` commands are enabled.\n`
-                + `You may submit an authorisation request by using the \`authorise\` command!`
-            );
-        }
-
         // Check if command is disabled
         if (message.command.disabled) {
             return message.client.emit(
@@ -87,12 +73,12 @@ module.exports = async (message) => {
             );
         }
 
-        // Authenticate message author
+        // Check Authorisation level of message author
         if (!message.command.authenticate(message)) {
             return message.client.emit(
                 'invalidCommandCall',
                 message,
-                `Not authorised to run command.\n\t(Lacking Vulcan Permissions)`,
+                `Not authorised to run command.\n\t(User Lacking Authority)`,
                 [
                     {
                         name  : 'Usergroup',
@@ -117,11 +103,9 @@ module.exports = async (message) => {
             );
         }
 
-        // Call Appropriate message handler
-        await (message.direct ? mdHandler : mgHandler)(message);
-
-        // Register Recent Call for command [throttling]
-        message.command.addCall(message.author);
+        // ! If something is returned from the handler then we had a problem!
+        !(await (message.direct ? mdHandler : mgHandler)(message))
+        && message.command.addCall(message.author);
     } catch (err) {
         message.client.emit('channelError', message.channel, err);
     }
