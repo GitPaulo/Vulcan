@@ -1,4 +1,4 @@
-const stringFunctions = module.exports = {};
+const stringFunctions = module.exports;
 
 stringFunctions.isURL = (str) => {
     let pattern = new RegExp('^(https?:\\/\\/)?'              // protocol

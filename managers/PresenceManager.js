@@ -21,7 +21,24 @@ class PresenceManager {
         })(), interval);
     }
 
-    useInformationalPresence () {
+    useUpdating () {
+        const presenceData = {
+            status  : 'idle',
+            afk     : false,
+            activity: {
+                name: 'An update has started!',
+                type: 'LISTENING'
+            }
+        };
+
+        this.client.user.setPresence(presenceData).then((presence) => {
+            logger.debug('Presence has been updated!', presence);
+        }).catch(() => {
+            logger.error(`Failed to set activity.\n`, presenceData);
+        });
+    }
+
+    useInformational () {
         this.updateTimeout(() => {
             const presenceData = {
                 status  : 'dnd',
@@ -40,7 +57,7 @@ class PresenceManager {
         });
     }
 
-    useTwitchPresence () {
+    useTwitch () {
         // Twitch Activity
         const requestData = {
             uri    : 'https://api.twitch.tv/helix/streams?first=1',
