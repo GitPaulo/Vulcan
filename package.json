@@ -59,8 +59,8 @@
     "github-api": "^3.2.2",
     "got": "^9.6.0",
     "js-yaml": "^3.13.1",
-    "mongoose": "^5.6.9",
-    "opusscript": "0.0.7",
+    "mongoose": "^5.6.10",
+    "node-opus": "^0.3.2",
     "pem": "^1.14.2",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
@@ -68,12 +68,12 @@
     "ytdl-core-discord": "^1.0.3"
   },
   "devDependencies": {
-    "eslint": "^6.2.0",
+    "eslint": "^6.2.1",
     "eslint-config-mudamuda": "^1.0.13",
     "eslint-plugin-security": "^1.4.0",
     "nodemon": "^1.19.1",
     "pm2": "^3.5.1",
-    "snyk": "^1.217.1"
+    "snyk": "^1.217.3"
   },
   "snyk": true
 }

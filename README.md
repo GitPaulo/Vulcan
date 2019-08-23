@@ -40,12 +40,32 @@ To invite Vulcan to your discord server simply click the image link below:
     <img src="./.github/resources/join.png" width="30%" height="30%">
 </a>
 
-# HELLO! This is production repo!
-You might be looking for: [master-branch](https://github.com/GitPaulo/Vulcan)
+# Self Hosting
 
-Changes:
+Make sure you have updated versions of your host machine's OS services and follow these steps:
 
-- node-opus not supported for our host machine OS - forced to use opusscript. (appeal made)
+1. Download and install [ffmpeg](https://ffmpeg.org/download.html).
+2. Download and install [python (v2.x)](https://www.python.org/downloads/).
+3. Download and install [node & npm (stable)](https://nodejs.org/en/download/).
+    
+    2.1. If on Linux machine we recommend using [NVM](https://stackabuse.com/using-nvm-to-install-node/).
+4. Clone repository using [git](https://git-scm.com/) OR Download and extract the [zipped repository code](https://github.com/GitPaulo/Vulcan.git).
+5. Open a [shell](https://git-scm.com/downloads) in the location of directory of the extraced zip.
+6. Run the following command: `npm ci && npm test`.
+7. Navigate to the new `'settings/'` folder and fill in the required configuration & credentials details.
+8. Afterwards, run the following command: `sudo npm run production`.
+9. If using the webhook server. Make sure port 443 is open. (or use a service such as [ngrok](https://ngrok.com/))
+
+## Supported Platforms
+
+The master branch uses node-opus. **Unlike** the production branch. (compatibility issues - soon to be fixed)
+Because of the use of node-opus, the bot can only be hosted in the following platforms:
+
+- Linux x64 & ia32
+- Linux ARM (Raspberry Pi 1 & 2)
+- Linux ARM64 (Raspberry Pi 3)
+- Mac OS X x64
+- Windows x64
 
 It is possible for compatibility with other OSs but that requires node-opus installation tinkering.
 
