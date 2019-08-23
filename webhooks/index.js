@@ -27,8 +27,9 @@ module.exports = (vulcan, keys) => {
 
         const end = (message, prefix = 'REQUEST DENIED') => {
             logger.warn(
-                `[${prefix}] => Post request denied!\n\t`
-                + `MESSAGE: ${message}`
+                `[WEBHOOKS] => HTTPS request has successfully completed!\n\t`
+                + `MESSAGE: ${message}\n\t`
+                + `PREFIX: ${prefix}`
             );
             response.end(`${prefix} => ${message}`);
         };

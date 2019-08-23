@@ -3,38 +3,59 @@ const logger  = xrequire('./managers/LogManager').getInstance();
 
 class PresenceManager {
     constructor (vulcan) {
-        this.client  = vulcan;
-        this.timeout = null;
+        this.client   = vulcan;
+        this.current  = null;
+        this.previous = null;
+    }
+
+    switchToPrevious () {
+        if (!this.previous) {
+            throw new Error(`No previous presence to switch to!`);
+        }
+
+        this.updateTimeout(this.previous.callback, this.previous.interval);
+        logger.log(`Using previous presence...`);
     }
 
     // Update every minute by default
     updateTimeout (callback, interval = 60000) {
-        if (this.timeout) {
-            clearInterval(this.timeout);
+        if (this.current) {
+            clearInterval(this.current.timeout);
+
+            // Store previous, if there was a previous!
+            this.previous = this.current;
         }
 
-        this.timeout = setInterval((function cb () {
-            callback();
+        this.current = {
+            timeout: setInterval((function cb () {
+                callback();
 
-            // ? So that cb is ran first tick.
-            return cb;
-        })(), interval);
+                // ? So that cb is ran first tick.
+                return cb;
+            })(), interval),
+            callback,
+            interval
+        };
+
+        console.log(this.timeout);
     }
 
     useUpdating () {
-        const presenceData = {
-            status  : 'idle',
-            afk     : false,
-            activity: {
-                name: 'An update has started!',
-                type: 'LISTENING'
-            }
-        };
+        this.updateTimeout(() => {
+            const presenceData = {
+                status  : 'idle',
+                afk     : false,
+                activity: {
+                    name: 'An update has started!',
+                    type: 'LISTENING'
+                }
+            };
 
-        this.client.user.setPresence(presenceData).then((presence) => {
-            logger.debug('Presence has been updated!', presence);
-        }).catch(() => {
-            logger.error(`Failed to set activity.\n`, presenceData);
+            this.client.user.setPresence(presenceData).then((presence) => {
+                logger.debug('Presence has been updated!', presence);
+            }).catch(() => {
+                logger.error(`Failed to set activity.\n`, presenceData);
+            });
         });
     }
 
