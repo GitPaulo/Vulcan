@@ -71,8 +71,8 @@ class Command {
     }
 
     toString () {
-        return `==============[${this.id}]==============\n`
-            +  `Aliases: [$${this.aliases.join(', ')}]\n`
+        return `=> 💻 [${this.id}]\n`
+            +  `Aliases: [${this.aliases.join(', ')}]\n`
             +  `Description: "${this.description}"\n`
             +  `Examples:\n\t${this.examples.join('\n\t')}\n`
             +  `Throttling: ${this.throttling}\n`;

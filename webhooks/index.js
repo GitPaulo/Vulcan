@@ -55,7 +55,7 @@ module.exports = (vulcan, keys) => {
                 try {
                     requestObject = JSON.parse(body);
                 } catch (err) {
-                    return end('Response body should be JSON');
+                    return end('Response body should be JSON. (Check validity of JSON)');
                 }
 
                 const { key, cmds } = requestObject;

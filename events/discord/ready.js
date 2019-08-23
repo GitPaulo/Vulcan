@@ -4,7 +4,7 @@ const logger  = xrequire('./managers/LogManager').getInstance();
 
 module.exports = () => {
     // Set Presence
-    vulcan.presenceManager.useInformationalPresence();
+    vulcan.presenceManager.useInformational();
 
     // Prevent ml string de-format
     const p = pjson.version;

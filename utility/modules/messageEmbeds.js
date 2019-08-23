@@ -1,4 +1,4 @@
-const messageEmbeds = module.exports = {};
+const messageEmbeds = module.exports;
 
 messageEmbeds.reply = (
     {

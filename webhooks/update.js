@@ -5,7 +5,7 @@ const logger   = xrequire('./managers/LogManager').getInstance();
 const command = (global.isLinux ? 'sudo ' : '') + 'git pull origin production';
 
 /* eslint-disable no-unused-vars */
-module.exports = (request, response) => exec(command, (err, stdout, stderr) => {
+module.exports = (vulcan, request, response) => vulcan.presenceManager.useUpdating(), exec(command, (err, stdout, stderr) => {
     if (err) {
         return logger.error(`Could not execute command: ${command}\n\tError: ${err.message}`);
     }

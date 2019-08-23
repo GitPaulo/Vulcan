@@ -8,5 +8,7 @@ module.exports = async () => {
         throw new Error(`Git branch shell command errored!\n\tERROR: ${stderr}`);
     }
 
-    return stdout.substring(stdout.indexOf('*') + 1).trim();
+    let cut1 = stdout.substring(stdout.indexOf('*') + 1);
+
+    return cut1.substring(0, cut1.indexOf('\n')).trim();
 };

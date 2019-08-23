@@ -1,19 +1,15 @@
 const documentation = module.exports;
-const hastebin      = xrequire('./utility/modules/hastebin.js');
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds.js');
+const gitBranch     = xrequire('./utility/modules/gitBranch');
 
 // TODO - Improve this! Make prettier :)
 documentation.execute = async (message) => {
-    let documentString = '==================[ Vulcan Command Documentation ]==================\n\n';
+    const branch = await gitBranch();
+
+    let documentString = `=> Vulcan Command Documentation\n\t Branch: ${branch}\n\n`;
     let commands       = message.client.commands;
 
     // Make a simple long string and upload to hastebin
-    commands.primaryIdentifiers.forEach((id) => documentString += commands.get(id).toString());
+    commands.primaryIdentifiers.forEach((id) => documentString += commands.get(id).toString() + '\n// [end]\n\n');
 
-    await message.channel.send(messageEmbeds.reply(
-        {
-            message,
-            description: await hastebin.post(documentString)
-        }
-    ));
+    await message.channel.send(`\`\`\`\n${documentString}\`\`\``);
 };
