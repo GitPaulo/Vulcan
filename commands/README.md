@@ -52,7 +52,7 @@ mycommand.load = (commandDescriptor) => {
 };
 
 mycommand.execute = () => {
-    // You can access the vulcan object (the bot client) with 'message.client' or 'this.command.client'
+    // You can access the vulcan object with 'this.command.client'
 
     // Hi!
     console.log('Hello world!');

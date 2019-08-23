@@ -38,8 +38,13 @@ class DatabaseManager {
 
     // to do (on both, check first if this.db is undefined [we may sometimes not want to use database])
     // eslint-disable-next-line no-unused-vars
-    async databaseQuery (query) {}
-    databaseQuerySync () {}
+    async databaseQuery (query) {
+        // TODO
+    }
+
+    databaseQuerySync () {
+        // TODO
+    }
 }
 
 module.exports = DatabaseManager;

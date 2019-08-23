@@ -1,14 +1,30 @@
 # Command Structure
 # (fill in later)
 #
-#
 
-### New Command ###
+#
 uptime:
   aliases:
     - 'timeup'
-  description: '???'
+  description: 'Echoes vulcan uptime.'
   examples:
-    - 'a'
-  group: 'GROUP_SYSTEM_SOON_TM'
+    - '<prefix><id>'
+  throttling: 1000
+
+#
+restart:
+  aliases:
+    - 'reboot'
+  description: 'Reboots vulcan application.'
+  examples:
+    - '<prefix><id>'
+  throttling: 1000
+
+#
+update:
+  aliases:
+    - 'gitpull'
+  description: 'Pulls changes from github.'
+  examples:
+    - '<prefix><id>'
   throttling: 1000

@@ -1,5 +1,5 @@
 const uptime = module.exports;
 
-uptime.execute = (vulcan) => {
-    console.log('Uptime: ', vulcan.uptime);
+uptime.execute = () => {
+    console.log('Uptime: ', this.command.client.uptime);
 };
