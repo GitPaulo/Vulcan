@@ -51,7 +51,8 @@ mycommand.load = (commandDescriptor) => {
     // This code is ran once before any call of execute()
 };
 
-mycommand.execute = () => {
+mycommand.execute = (line) => {
+    // Parameter: 'line' the input command as a string from the terminal.
     // You can access the vulcan object with 'this.command.client'
 
     // Hi!

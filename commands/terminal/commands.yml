@@ -28,3 +28,12 @@ update:
   examples:
     - '<prefix><id>'
   throttling: 1000
+
+#
+psa:
+  aliases:
+    - 'globalsay'
+  description: 'Brodacasts PSA message to all botchannels.'
+  examples:
+    - '<prefix><id> <message>'
+  throttling: 1000

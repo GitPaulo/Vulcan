@@ -4,7 +4,7 @@ const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 leave.execute = async (message) => {
     const musicManager = message.guild.musicManager;
 
-    musicManager.leave();
+    musicManager.leaveVoice();
 
     await message.channel.send(messageEmbeds.reply(
         {

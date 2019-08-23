@@ -692,7 +692,8 @@ twitch:
   description: 'Access twitch API through vulcan.'
   group: 'default'
   examples:
-  - '<prefix><id> <streamer>'
+  - '<prefix><id> topgames <num>'
+  - '<prefix><id> topstreams <num>'
   throttling: 1000
   safe: false
   disabled: false

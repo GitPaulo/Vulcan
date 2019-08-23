@@ -43,7 +43,7 @@ twitch.execute = async (message) => {
 
             const topList  = await this.topGames(num);
             let listString = `=====[ Top ${num} Live Twitch Games ]=====\n`;
-            let position   = 0;
+            let position   = 1;
 
             // Build list string
             topList.forEach((gameObject) => {
@@ -68,7 +68,7 @@ twitch.execute = async (message) => {
 
             const topList  = await this.topStreams(num);
             let listString = `=====[ Top ${num} Live Twitch Streamers ]=====\n`;
-            let position   = 0;
+            let position   = 1;
 
             // Build list string
             topList.forEach((streamObject) => {

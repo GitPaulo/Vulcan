@@ -217,3 +217,37 @@ messageEmbeds.invalidCommandCall = (
         }
     ]
 });
+
+messageEmbeds.PSA = (
+    {
+        title       = `Public Service Announcement (PSA)`,
+        description = 'A PSA has been attempted.',
+        color       = 0xFF7063, // Vulcan Red
+        thumbnail   = {
+            url: `attachment://psa.png`
+        },
+        timestamp = new Date(),
+        footer    = {
+            text: 'This is a global message from the system admin.'
+        },
+        fields = [],
+        url    = ''
+    }
+) => ({
+    embed: {
+        title,
+        description,
+        color,
+        thumbnail,
+        timestamp,
+        footer,
+        fields,
+        url
+    },
+    files: [
+        {
+            attachment: './assets/media/images/embeds/psa.png',
+            name      : 'psa.png'
+        }
+    ]
+});

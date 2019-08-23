@@ -1,5 +1,6 @@
 const uptime = module.exports;
 
-uptime.execute = () => {
+// eslint-disable-next-line no-unused-vars
+uptime.execute = (line) => {
     console.log('Uptime: ', this.command.client.uptime);
 };

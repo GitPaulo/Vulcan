@@ -38,7 +38,7 @@ class DiscordCommand extends Command {
 
         // Default embed Image
         if (!this.embed.image || !fs.existsSync(this.embed.image)) {
-            this.embed.image = './assets/media/images/embeds/Default.gif';
+            this.embed.image = './assets/media/images/embeds/default.gif';
         }
 
         // By default no command is disabled

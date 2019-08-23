@@ -4,7 +4,8 @@ const command = (global.isLinux ? 'sudo ' : '') + 'git pull origin master';
 const { exec } = require('child_process');
 const logger   = xrequire('./managers/LogManager').getInstance();
 
-update.execute = () => {
+// eslint-disable-next-line no-unused-vars
+update.execute = (line) => {
     const vulcan = this.command.client;
 
     vulcan.presenceManager.useUpdating();

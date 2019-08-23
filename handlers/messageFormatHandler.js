@@ -4,6 +4,7 @@ const Discord  = xrequire('discord.js');
 const hastebin = xrequire('./utility/modules/hastebin');
 const logger   = xrequire('./managers/LogManager').getInstance();
 
+const MaxFileSizeMB   = 8;
 const CharacterLimits = {
     content: 2000,
     embed  : {
@@ -19,13 +20,59 @@ const CharacterLimits = {
 
 // ! This may slow down replying (be careful)
 module.exports = async (channel, ...args) => {
-    const apiMessage = Discord.APIMessage.create(channel, ...args);
-    let { options }  = apiMessage;
+    const apiMessage  = Discord.APIMessage.create(channel, ...args);
+    const { options } = apiMessage;
+
+    // === File Size Check
+    if (options.files) {
+        let largeFiles = [];
+
+        // Check for large files
+        for (let i = 0; i < options.files.length; i++) {
+            let localFilePath = options.files[i];
+
+            if (typeof localFilePath === 'object') {
+                localFilePath = path.join(global.__basedir, localFilePath.attachment);
+            }
+
+            if (typeof localFilePath !== 'string') {
+                continue;
+            }
+
+            // Only analyse for local files
+            if (!fs.existsSync(localFilePath)) {
+                continue;
+            }
+
+            const stats    = fs.statSync(localFilePath);
+            const fileSize = stats['size'] / 1000000;
+
+            if (fileSize > MaxFileSizeMB) {
+                largeFiles.push(localFilePath);
+                apiMessage.options.files.splice(i, 1);
+            }
+        }
+
+        if (largeFiles.length > 0) {
+            logger.warning(`Tried to upload large files through discord.`);
+            logger.debug(largeFiles);
+
+            channel._send({
+                embed: {
+                    description: `Files from a messages were to large to upload. Had to remove them :(\n`,
+                    fields     : [
+                        { name: 'Files', value: largeFiles.join('\n') }
+                    ]
+                }
+            });
+        }
+    }
+
+    // === Message Content Check
     let largeContent = ''; // * reminder that '' is falsey in JS
     let reasons      = [];
 
     // Check message content
-    console.log(options.content && options.content.length);
     if (options.content && (options.content.length > CharacterLimits.content)) {
         largeContent += `\n========[Message Content]========\n`;
         largeContent += options.content;
@@ -82,7 +129,7 @@ module.exports = async (channel, ...args) => {
     }
 
     /*
-    * Currently two ways of dealing with larege conten messages:
+    * Currently two ways of dealing with lareg content messages:
         ?  Hastebin upload
         ?  Discord file upload (fallback)
     */
@@ -107,10 +154,5 @@ module.exports = async (channel, ...args) => {
         apiMessage.options.files = [filePath];
     }
 
-    try {
-        return channel._send(apiMessage);
-    } catch (error) {
-        return logger.error(`Long message filter was unsuccessful.\n\tERROR: ${error.message}`),
-        channel.send(`I was unable to filter a long message\n\tERROR: ${error.message}`);
-    }
+    return channel._send(apiMessage);
 };
