@@ -14,3 +14,15 @@ Object.simpleTransverse = function (
         callback(value);
     }
 };
+
+Object.filter = function (obj, predicate) {
+    let result = {};
+
+    for (let key in obj) {
+        if (obj.hasOwnProperty(key) && !predicate(obj[key])) {
+            result[key] = obj[key];
+        }
+    }
+
+    return result;
+};

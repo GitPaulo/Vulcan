@@ -22,14 +22,20 @@
         "name": "credentials",
         "extension": "yml",
         "data": {
-            "token": "PLEASE ADD YOUR DISCORD TOKEN HERE",
+            "token": "<DISCORD TOKEN>",
             "apiKeys": {
-                "github" : "API KEY HERE"
+                "github": "<API KEY>",
+                "openweathermap": "<API KEY>"
             },
             "OAuth": {
                 "twitch": {
-                    "id": "PLEASE ADD YOUR TWITCH API CLIENT ID",
-                    "secret": "PLEASE ADD YOUR TWITCH API CLIENT SECRET"
+                    "id": "<CLIENT ID>",
+                    "secret": "<CLIENT SECRET>"
+                },
+                "yahooWeather": {
+                    "id": "<CLIENT ID>",
+                    "secret": "<CLIENT SECRET>",
+                    "appid": "<APPID>"
                 }
             },
             "database": {

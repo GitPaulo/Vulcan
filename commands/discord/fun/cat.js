@@ -1,8 +1,17 @@
-const cat     = module.exports;
-const request = xrequire('request-promise');
+const cat           = module.exports;
+const request       = xrequire('request-promise');
+const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 cat.execute = async (message) => {
-    const URL = JSON.parse(await request('http://aws.random.cat/meow')).file;
+    const response = JSON.parse(await request('http://aws.random.cat/meow'));
 
-    await message.channel.send({ files: [URL] });
+    if (!response.file) {
+        return message.channel.send(messageEmbeds.reply(
+            {
+                description: 'The "aws.random.cat" API endpoint seems to be down!\nTry again later!'
+            }
+        ));
+    }
+
+    await message.channel.send({ files: [response.file] });
 };

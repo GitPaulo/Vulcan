@@ -38,7 +38,11 @@ class DiscordCommand extends Command {
 
         // Default embed Image
         if (!this.embed.image || !fs.existsSync(this.embed.image)) {
-            this.embed.image = './assets/media/images/embeds/default.gif';
+            const expectedDefaultPath = `./assets/media/images/embeds/${commandDefinition.id}.gif`;
+            const defaultPath         = `./assets/media/images/embeds/default.gif`;
+
+            // Try looking for it, if not found use default.
+            this.embed.image = fs.existsSync(expectedDefaultPath) ? expectedDefaultPath : defaultPath;
         }
 
         // By default no command is disabled
