@@ -16,7 +16,7 @@
     "production:restart": "pm2 restart vulcan",
     "production:stop": "pm2 stop vulcan",
     "production:delete": "pm2 delete vulcan",
-    "production:logs": "pm2 logs vulcan",
+    "production:logs": "pm2 logs vulcan --lines 30",
     "production:show": "pm2 show vulcan",
     "production:monitor": "pm2 monitor vulcan",
     "_COMMENT3": " ============================ TEST SCRIPTS  ============================",
