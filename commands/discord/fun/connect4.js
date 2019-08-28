@@ -143,16 +143,25 @@ connect4.execute = async (message) => {
     // Push new game and update embed
     const gameID = this.games.push(game);
 
-    logger.debug(`New connect 4 game (ID: ${gameID}) has started.`, game);
+    // To avoid rate limit
+    let reactionDelay = 0;
+    const delayStep   = 800;
 
     // Set up emojis for game message
     for (let emoji of this.getControlEmojis()) {
         try {
-            await game.boardMessage.react(emoji);
+            setTimeout(() => {
+                game.boardMessage.react(emoji);
+            }, reactionDelay);
         } catch (err) {
             return game.boardMessage.client.emit('channelError', game.boardMessage.channel, err);
         }
+
+        reactionDelay += delayStep;
     }
+
+    // Log start
+    logger.debug(`New connect 4 game (ID: ${gameID}) has started.`, game);
 
     // First turn!
     await game.updateView();
@@ -187,5 +196,8 @@ connect4.execute = async (message) => {
     await game.updateTurnMessage('Game finished.');
 
     // Results Message
-    await game.turnMessage.channel.send(`Game #${gameID} has ended\n\t${game.state.win ? `<@${game.winner.id}> WINS` : `Game ended in draw!`}`);
+    await game.turnMessage.channel.send(
+        `\`\`\`\n===[${game.players[0].tag} VS ${game.players[1].tag}]===\n`
+        + `=> Connect 4 Game ID: ${gameID} has ended\n=> ${game.state.win ? `<@${game.winner.id}> WINS` : `Game ended in draw!`}\`\`\``
+    );
 };
