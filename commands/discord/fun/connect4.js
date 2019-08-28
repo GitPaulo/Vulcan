@@ -198,6 +198,6 @@ connect4.execute = async (message) => {
     // Results Message
     await game.turnMessage.channel.send(
         `\`\`\`\n===[${game.players[0].tag} VS ${game.players[1].tag}]===\n`
-        + `=> Connect 4 Game ID: ${gameID} has ended\n=> ${game.state.win ? `<@${game.winner.tag}> WINS` : `Game ended in draw!`}\`\`\``
+        + `=> Connect 4 Game ID: ${gameID} has ended\n=> ${game.state.win ? `${game.winner.tag} WINS` : `Game ended in draw!`}\`\`\``
     );
 };
