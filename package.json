@@ -73,7 +73,7 @@
     "eslint-config-mudamuda": "^1.0.13",
     "eslint-plugin-security": "^1.4.0",
     "nodemon": "^1.19.4",
-    "pm2": "^3.5.1",
+    "pm2": "^4.1.2",
     "snyk": "^1.240.3"
   },
   "snyk": true
