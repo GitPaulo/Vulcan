@@ -2,6 +2,7 @@ const mgHandler = xrequire('./handlers/messageGuildHandler');
 const mdHandler = xrequire('./handlers/messageDirectHandler');
 const parser    = xrequire('./handlers/messageParserHandler');
 const filter    = xrequire('./handlers/messageFilterHandler');
+const ats       = xrequire('./handlers/messageAtsHandler');
 const logger    = xrequire('./managers/LogManager').getInstance();
 
 /* eslint-disable complexity */
@@ -31,6 +32,11 @@ module.exports = async (message) => {
         // Prohibit parsing of self messages or from other bots
         if (message.author.bot) {
             return;
+        }
+
+        // Handle extended ats
+        if (message.client.configuration.extendedAts) {
+            await ats(message);
         }
 
         // Prevents spam
