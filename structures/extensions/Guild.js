@@ -88,4 +88,10 @@ module.exports = class _Guild extends xrequire('discord.js').Guild {
     get authorised () {
         return this.client.servers.get(this.id);
     }
+
+    findChannelsByName (name, type = 'text') {
+        return this.channels.array().filter((channel) =>
+            (channel.name === name)
+            && (type === channel.type));
+    }
 };
