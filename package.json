@@ -65,7 +65,7 @@
     "pem": "^1.14.3",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "ytdl-core": "^0.29.7",
+    "ytdl-core": "^1.0.1",
     "ytdl-core-discord": "^1.0.3"
   },
   "devDependencies": {
