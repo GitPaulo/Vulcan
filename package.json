@@ -63,6 +63,7 @@
     "oauth": "^0.9.15",
     "opusscript": "0.0.7",
     "pem": "^1.14.2",
+    "public-ip": "^4.0.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "ytdl-core": "^0.29.5",
