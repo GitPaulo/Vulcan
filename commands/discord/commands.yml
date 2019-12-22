@@ -6,20 +6,20 @@
 ### [Command Structure]
 # ========== [REQUIRED FIELDS] ==========
 # command_id:
-#   aliases     => (Array) The other unique strings that identify the command (excluding command_id).
-#   description => (String) Description of the command.
-#   examples    => (Array) Descriptions of example usage.
+#   aliases     => (String Array) => The other unique strings that identify the command (excluding command_id).
+#   description => (String)       => Description of the command.
+#   examples    => (String Array) => Descriptions of example usage.
 # ========== [OPTIONAL FIELDS] ==========
-#   group             => (String)['default'] The usergroup lowerbound that is allowed to call the command.
-#   throttling        => (Number)[500] The number of milliseconds the command goes under cooldown.
-#   vulcanPermissions => (Array)[[]] The permissions required for the bot to execute the command.
-#   userPermissions   => (Array)[[]] The user permissions required for the user to execute the command.
-#   safe              => (Boolean)[false] Whether unauthorised guilds can used this command. 
-#   disabled          => (Boolean)[false] Whether this command is disabled.
-#   embed:
-#     color => (Number)[0x0] Color of the embed as hex number.
-#     title => (String)[Command <ID>'] The title of the embed.
-#     image => (String)['Command.gif'] The path to the thumbnail of the embed. (PLEASE use ./assets folder) .
+#   group             => (String Array) => The usergroup lowerbound that is allowed to call the command.
+#   throttling        => (Number)       => The number of milliseconds the command goes under cooldown.
+#   vulcanPermissions => (String Array) => The permissions required for the bot to execute the command.
+#   userPermissions   => (String Array) => The user permissions required for the user to execute the command.
+#   safe              => (Boolean)      => Whether unauthorised guilds can used this command. 
+#   disabled          => (Boolean)      =>  Whether this command is disabled.
+#   embed => (Object) =>
+#     - color => (Number) => Color of the embed as hex number.
+#     - title => (String) => The title of the embed.
+#     - image => (String) => The path to the thumbnail of the embed. (PLEASE use ./assets folder) .
 
 ### [Special Substrings]
 # <prefix>: will be replaced by the bot configuration prefix(s).
@@ -35,7 +35,9 @@
 botchannel:
   aliases:
   - 'botc'
-  description: 'Set caller channel as the bot dump channel of the guild.'
+  - 'botdump'
+  - 'botd'
+  description: 'Set caller channel as the "bot dump" channel for the caller guild.'
   examples:
   - '<prefix><id>'
   group: 'default'
@@ -52,6 +54,7 @@ botchannel:
 #
 evaluate: 
   aliases:
+  - 'evaluation'
   - 'eval'
   - 'js'
   - 'runjs'
@@ -77,7 +80,8 @@ git:
   aliases:
   - 'github'
   - 'repository'
-  description: 'A gateway for git commands.'
+  - 'repo'
+  description: 'Git API access for things related to the Github Vulcan repository.'
   examples:
   - '<prefix><id> commits <number to display>'
   - '<prefix><id> collaborators'
@@ -95,11 +99,12 @@ git:
 #
 usergroups:
   aliases:
-  - 'permissions'
-  description: 'Interface to the usergroup system.'
+  - 'ugroups'
+  - 'ugs'
+  description: 'Interface for the usergroup system.'
   group: 'root'
   examples:
-  - '<prefix><id> set <@user/id>'
+  - '<prefix><id> set <@user/id> <usergroup>'
   - '<prefix><id> get <@user/id>'
   - '<prefix><id> hierarchy'
   throttling: 2000
@@ -127,15 +132,16 @@ ping:
   userPermissions: []
   vulcanPermissions: []
   embed:
-    color: 0xFF0000
+    color: 0xAF0000
     title: 'Ping...'
     image: './assets/media/images/commands/discord/ping.gif'
 
 #
-gif:
+media:
   aliases:
+  - 'md'
   - 'imagestorage'
-  description: 'Store media and retrieve with vulcan.'
+  description: 'Store and retrieve media with Vulcan.'
   examples:
   - '<prefix><id> store <id> <url/messageid>'
   - '<prefix><id> fetch <id>'
@@ -148,9 +154,9 @@ gif:
   vulcanPermissions: 
     - 'ATTACH_FILES'
   embed:
-    color: 0x666666
-    title: 'Gif'
-    image: './assets/media/images/commands/discord/gif.gif'
+    color: 0x6e4f67
+    title: 'Media'
+    image: './assets/media/images/commands/discord/media.gif'
 
 #
 connect4:
@@ -450,9 +456,30 @@ overwatchroulette:
   userPermissions: []
   vulcanPermissions: []
   embed:
-    color: 0xffa500
+    color: 0xFFF500
     title: 'Overwatch Hero Roulette'
     image: './assets/media/images/commands/discord/overwatchroulette.gif'
+
+# 
+lolroulette:
+  aliases:
+  - 'lolspin'
+  - 'lolr'
+  - 'leaguespin'
+  - 'leagueroulette'
+  description: 'Spins for a random League of Legends Champion!'
+  group: 'default'
+  examples:
+  - '<prefix><id>'
+  throttling: 1000
+  safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
+  embed:
+    color: 0xC9FFA0
+    title: 'League Of Legends Champion Roulette'
+    image: './assets/media/images/commands/discord/lolroulette.gif'
 
 # 
 documentation:
@@ -744,3 +771,22 @@ weather:
     color: 0xC0C0C0
     title: 'Weather'
     image: './assets/media/images/commands/discord/weather.gif'
+
+#
+clearpublic:
+  aliases:
+  - 'cpublic'
+  - 'deletepublic'
+  description: 'Clear the public file folder.'
+  group: 'root'
+  examples:
+  - '<prefix><id>'
+  throttling: 1000
+  safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
+  embed:
+    color: 0xC0D0B0
+    title: 'Public Folder Cleared'
+    image: './assets/media/images/commands/discord/clearpublic.gif'

@@ -10,40 +10,42 @@ git.load = (commandDescriptor) => {
 };
 
 git.execute = async (message) => {
-    const scmd      = message.parsed.args[0];
-    const channel   = message.channel;
-    const embedWrap = messageEmbeds.reply({
-        message,
-        title : `**Git** request received: **${scmd}**`,
-        fields: [
-            {
-                name : 'Subcommand',
-                value: message.parsed.args.join(', ')
-            },
-            {
-                name : 'Output',
-                value: 'Processing...'
-            }
-        ]
-    });
+    // Always target Vulcan repo. (do this in load?)
+    const vulcanRepo = this.git.getRepo('GitPaulo', 'Vulcan');
+    const embedWrap  = messageEmbeds.reply(
+        {
+            message,
+            title : `**Git** request received: **${scmd}**`,
+            fields: [
+                {
+                    name : 'Request',
+                    value: message.parsed.args.join(', ')
+                },
+                {
+                    name : 'Output',
+                    value: '`Processing...`'
+                }
+            ]
+        }
+    );
 
-    const reply = await channel.send(embedWrap);
-
-    // Currently only commands about vulcan repo
-    let vulcanRepo = this.git.getRepo('GitPaulo', 'Vulcan');
+    // For cleaner code
+    let scmd       = message.parsed.args[0];
+    let action     = null;
+    let parameters = [];
 
     switch (scmd) {
         case 'collaborators': {
-            const collabsArray = await this.fetchCollaborators(vulcanRepo);
-
-            embedWrap.embed.fields[1].value     = collabsArray.join(', ');
+            action = this.fetchCollaborators;
+            parameters.push(vulcanRepo);
             break;
         }
         case 'commits': {
-            const numCommits   = message.parsed.args[1];
-            const commitsArray = await this.fetchCommits(vulcanRepo, numCommits);
+            const _this = this;
 
-            embedWrap.embed.fields[1].value     = commitsArray.join('\n');
+            action = async (...args) => (await _this.fetchCommits(...args)).map((commit) => '```yml\n' + commit + '```');
+            parameters.push(vulcanRepo);
+            parameters.push(message.parsed.args[1]);
             break;
         }
         default: {
@@ -55,6 +57,11 @@ git.execute = async (message) => {
         }
     }
 
+    // First reply
+    let reply = await message.channel.send(embedWrap);
+
+    // Edit reply based on action response
+    embedWrap.embed.fields[1].value = (await action(...parameters)).join('');
     await reply.edit(embedWrap);
 };
 
@@ -82,7 +89,7 @@ this.fetchCommits = async (repo, number = 4) => {
     list.forEach((commitData) => {
         const dataStr = `Date: "${commitData.commit.author.date}"\nAuthor: "${commitData.commit.author.name}"\nMessage: "${commitData.commit.message}"\n`;
 
-        carray.push(`\`\`\`yml\n${dataStr}\n\`\`\``);
+        carray.push(dataStr);
     });
 
     carray.push(`[https://github.com/GitPaulo/Vulcan/commits/master]`);

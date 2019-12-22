@@ -9,30 +9,45 @@
     ! at a higher level (before command.execute())
  */
 
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
-const logger        = xrequire('./managers/LogManager').getInstance();
-
 module.exports = (
     message,
-    description = 'Invalid command call!'
+    description = 'Command was used in an unexpected or incorrect way!'
 ) => {
-    console.log(message.command);
-    message.channel.send(messageEmbeds.warning(
+    message.channel.send(
         {
-            title : `Invalid Command Call (${message.command.id})`,
-            description,
-            fields: [
-                {
-                    name : 'Help Description',
-                    value: message.command.description
+            embed: {
+                title      : `Invalid Command Usage`,
+                description: `Vulcan has caught an improper or unexpected usage of the command: \`${message.command.id}\``,
+                color      : 0xD8B1FF,
+                thumbnail  : {
+                    url: `attachment://invalidCommandUsage.gif`
                 },
+                timestamp: new Date(),
+                footer   : {
+                    text: 'Read the documentation please D:<'
+                },
+                fields: [
+                    {
+                        name : 'Message',
+                        value: description
+                    },
+                    {
+                        name : 'Help Description',
+                        value: message.command.description
+                    },
+                    {
+                        name : 'Command Usage Examples',
+                        value: `\`\`\`\n${message.command.examples.join('\n')}\n\`\`\``
+                    }
+                ],
+                url: ''
+            },
+            files: [
                 {
-                    name : 'Examples',
-                    value: `\`\`\`\n${message.command.examples.join('\n')}\n\`\`\``
+                    attachment: './assets/media/images/embeds/invalidCommandUsage.gif',
+                    name      : 'invalidCommandUsage.gif'
                 }
             ]
         }
-    )).catch((err) => {
-        logger.error(err.message);
-    });
+    );
 };

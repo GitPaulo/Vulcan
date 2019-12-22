@@ -59,22 +59,23 @@
     "github-api": "^3.3.0",
     "got": "^9.6.0",
     "js-yaml": "^3.13.1",
-    "mongoose": "^5.7.7",
+    "mongoose": "^5.8.1",
     "node-opus": "^0.3.3",
     "oauth": "^0.9.15",
     "pem": "^1.14.3",
+    "public-ip": "^4.0.0",
     "request": "^2.88.0",
-    "request-promise": "^4.2.4",
+    "request-promise": "^4.2.5",
     "ytdl-core": "^0.29.7",
     "ytdl-core-discord": "^1.0.3"
   },
   "devDependencies": {
-    "eslint": "^6.6.0",
+    "eslint": "^6.7.2",
     "eslint-config-mudamuda": "^1.0.13",
     "eslint-plugin-security": "^1.4.0",
     "nodemon": "^1.19.4",
-    "pm2": "^3.5.1",
-    "snyk": "^1.240.3"
+    "pm2": "^3.5.2",
+    "snyk": "^1.260.0"
   },
   "snyk": true
 }

@@ -3,26 +3,21 @@ const archiver = xrequire('archiver');
 const logger   = xrequire('./managers/LogManager').getInstance();
 
 module.exports = (outputPath, fileType, options) => {
-    const output = fs.createWriteStream(outputPath);
-
-    output.on('close', () => {
-        logger.debug(archive.pointer() + ' total bytes');
-        logger.log(`Archiver finalised.\n\tPath: ${outputPath}\n\tOptions: ${options}`);
-    });
-
-    output.on('end', () => {
-        logger.debug('Data has been drained.');
-    });
-
-    const archive = archiver(fileType, options);
-
+    // Flags
     let done;
     let error;
     let promise;
     let onSuccess;
     let onError;
 
-    archive.on('finish', () => {
+    // Main Objects & Events
+    const output  = fs.createWriteStream(outputPath);
+    const archive = archiver(fileType, options);
+
+    output.on('close', () => {
+        logger.debug(archive.pointer() + ' total bytes');
+        logger.log(`Archiver finalised.\n\tPath: ${outputPath}\n\tOptions: ${options}`);
+
         done = true;
 
         if (onSuccess) {

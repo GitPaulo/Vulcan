@@ -1,33 +1,34 @@
-const gif             = module.exports;
+const media           = module.exports;
 const util            = xrequire('util');
 const fs              = xrequire('fs');
 const path            = xrequire('path');
 const http            = xrequire('http');
 const messageEmbeds   = xrequire('./utility/modules/messageEmbeds');
 const stringFunctions = xrequire('./utility/modules/stringFunctions');
-// const logger           = xrequire('./managers/LogManager').getInstance();
+// const logger       = xrequire('./managers/LogManager').getInstance();
 
 // Promisify fs functions
 const readdir = util.promisify(fs.readdir);
 
 // eslint-disable-next-line no-unused-vars
-gif.load = (commandDefinition) => {
-    this.folderPath        = path.join(__basedir, 'data', 'gifs');
+media.load = (commandDefinition) => {
+    this.omitReplyPrefix   = 'or-';
+    this.folderPath        = path.join(__basedir, 'data', 'media');
     this.allowedExtensions = ['.png', '.jpg', '.mp4', '.gif'];
 
-    // Create Gif folder (where we store all downloaded gifs)
+    // Create Media folder (where we store all downloaded media)
     if (!fs.existsSync(this.folderPath)) {
         fs.mkdirSync(this.folderPath);
     }
 };
 
-gif.execute = async (message) => {
-    let scmd = message.parsed.args[0];
-
-    const channel   = message.channel;
+media.execute = async (message) => {
+    const omitReply = (message.parsed.args[0].substr(0, 3) === this.omitReplyPrefix);
+    const scmd      = omitReply && message.parsed.args[0].substr(3) || message.parsed.args[0];
+    const numArgs   = message.parsed.args.length;
     const embedWrap = messageEmbeds.reply({
         message,
-        title : `**Gif** request received: **${scmd}**`,
+        title : `**Media** request received: **${scmd}**`,
         fields: [
             {
                 name : 'Arguments',
@@ -40,48 +41,32 @@ gif.execute = async (message) => {
         ]
     });
 
-    const noreply = (scmd.substr(0, 3) === 'nr-') && (scmd = scmd.substr(3));
-    const reply   = !noreply && await channel.send(embedWrap);
-    const numArgs = message.parsed.args.length;
+    // For cleaner code
+    let action     = null;
+    let parameters = [];
 
     switch (scmd) {
-        /* Stores media from URL or File (from message id) by id */
         case 'store':
         case 'upload':
         case 'put': {
-            // Check arguments [!gif store <url> <id>]
             if (numArgs < 3) {
-                return message.client.emit('invalidCommandUsage', `Expected 3 arguments got ${numArgs}.`, message);
+                return message.client.emit(
+                    'invalidCommandUsage',
+                    `Expected 3 arguments got ${numArgs}.`,
+                    message
+                );
             }
 
-            // ID must come last to support multiple arguments easily
-            const [, url, ...idArray] = message.parsed.args;
-            const id                  = idArray.join(' ');
+            action = this.store;
+            parameters.push(message.parsed.args[1]); // ID
+            parameters.push(message.parsed.args[2]); // URL
+            parameters.push(message.channel);
 
-            if (stringFunctions.isURL(url)) {
-                await this.storeImageFromURL(url, id);
-            } else { // its file upload
-                let messageWithImage;
-
-                try {
-                    messageWithImage = await message.channel.fetchMessage(String(url));
-                } catch (err) {
-                    return message.client.emit(
-                        'invalidCommandUsage',
-                        message,
-                        `The message with id: **${url}** was not found in the list of messages from this channel.`
-                    );
-                }
-
-                this.storeImageFromMessage(id, messageWithImage);
-            }
-
-            embedWrap.embed.fields[1].value = 'Completed!';
             break;
-        /* Fetches stored media by id (data/gifs) */
         }
-        case 'get':
-        case 'fetch': {
+        case 'fetch':
+        case 'dwonload':
+        case 'get': {
             if (numArgs < 2) {
                 return message.client.emit(
                     'invalidCommandUsage',
@@ -90,22 +75,16 @@ gif.execute = async (message) => {
                 );
             }
 
-            const input  = message.parsed.args[1];
-            const result = await this.fetchImage(input);
+            action = this.fetch;
+            parameters.push(message.parsed.args[1]);
+            parameters.push(message.channel);
 
-            embedWrap.embed.fields[1].value = result;
-
-            await message.channel.send({
-                files: [result]
-            });
             break;
-        /* Lists all entries of media. */
         }
         case 'list':
         case 'all': {
-            const files = await this.getImages();
+            action = this.list;
 
-            embedWrap.embed.fields[1].value = `\`\`\`\n${files.join(', ')}\n\`\`\``;
             break;
         }
         default: {
@@ -117,19 +96,28 @@ gif.execute = async (message) => {
         }
     }
 
-    if (!noreply) {
-        // console.log("NANI!???", reply)
-        await reply.edit(embedWrap);
+    // In the case users want just the picture!
+    if (omitReply) {
+        await action(...parameters);
+
+        return;
     }
+
+    // First reply
+    let reply = await message.channel.send(embedWrap);
+
+    // Edit reply based on action response
+    embedWrap.embed.fields[1].value = (await action(...parameters));
+    await reply.edit(embedWrap);
 };
 
 /*******************
  *  Extra Methods  *
 *******************/
 
-gif.getImages = () => readdir(this.folderPath);
+media.getImages = () => readdir(this.folderPath);
 
-gif.storeImageFromMessage = (fileName, message) => {
+media.storeImageFromMessage = (fileName, message) => {
     let attachments = message.attachments;
     let i           = 0;
 
@@ -138,7 +126,7 @@ gif.storeImageFromMessage = (fileName, message) => {
     });
 };
 
-gif.storeImageFromURL = async (url, fileName) => {
+media.storeImageFromURL = async (url, fileName) => {
     // Only 'http' allowed with GET
     url = url.replace('https://', 'http://');
 
@@ -164,7 +152,7 @@ gif.storeImageFromURL = async (url, fileName) => {
     }
 };
 
-gif.fetchImage = async (keyword) => {
+media.fetchImage = async (keyword) => {
     const files = await readdir(this.folderPath);
 
     let filePath = 'N/A';
@@ -180,4 +168,50 @@ gif.fetchImage = async (keyword) => {
     });
 
     return path.join(this.folderPath, filePath);
+};
+
+/******************
+ *  SCMD Methods  *
+*******************/
+
+media.store = async (id, url, channel) => {
+    try {
+        if (stringFunctions.isURL(url)) {
+            await this.storeImageFromURL(url, id);
+        } else { // It is a file upload
+            let messageWithImage = await channel.fetchMessage(String(url));
+
+            this.storeImageFromMessage(id, messageWithImage);
+        }
+    } catch (err) {
+        return `\`\`\`\nError while storing gif: ${url}\nMessage: ${err.message}\`\`\``;
+    }
+
+    return `\`Gif stored with id: '${id}'\``;
+};
+
+media.fetch = async (id, channel) => {
+    const result = await this.fetchImage(id);
+
+    if (!result) {
+        return `\`Unable to fetch gif with id: ${id}\``;
+    }
+
+    await channel.send(
+        {
+            files: [result]
+        }
+    );
+
+    return `\`Gif with id '${id}' fetched!\``;
+};
+
+media.list = async () => {
+    const files = await this.getImages();
+
+    if (files.length <= 0) {
+        return `\`There are no media stored!\``;
+    }
+
+    return `\`\`\`\n${files.join(', ')}\`\`\``;
 };

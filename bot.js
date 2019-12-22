@@ -36,6 +36,7 @@ vulcan
     .loadCommands()
     .loadEvents()
     .loadPresence()
+    .loadFileServer()
     .loadWebServer()
     .loadCLI()
     .connect();

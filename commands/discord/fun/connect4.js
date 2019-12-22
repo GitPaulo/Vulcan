@@ -6,6 +6,7 @@ const logger   = xrequire('./managers/LogManager').getInstance();
 const numberEmojiSuffix = '%E2%83%A3';
 const whiteFlagEmoji    = '%F0%9F%8F%B3';
 
+// ! Rate limit on reaction based moves!
 connect4.getControlEmojis = () => this.emojiPlays.concat([whiteFlagEmoji]);
 
 /* eslint-disable no-unused-vars */
@@ -28,7 +29,7 @@ connect4.execute = async (message) => {
         return message.client.emit(
             'invalidCommandUsage',
             message,
-            `You need to challenge someone. Invalid #args.`,
+            `You need to challenge someone. Invalid #args.`
         );
     }
 
@@ -38,7 +39,7 @@ connect4.execute = async (message) => {
 
     // Let them know we mean business
     const challengeMessage = await message.channel.send(
-        `<@${challenger.id}> has challenged <@${challengee.id}> for a connect 4 game!\nChallengee may accept by saying **'I accept'**.`
+        `<@${challenger.id}> has challenged <@${challengee.id}> for a connect 4 game!\n\`Challengee may accept by typing: 'I accept'\`.`
     );
 
     if (challengee === message.client.user) {
@@ -166,9 +167,19 @@ connect4.execute = async (message) => {
     // First turn!
     await game.updateView();
 
+    // Avoid rate limits
+    let lastMoveTime = 0;
+
     // Game Event Loop
     while (!game.gameOver) {
         try {
+            let timeFrame = Date.now() - lastMoveTime;
+
+            // ? Reduces amount of rate limits. Not working too well but it's better!
+            if (timeFrame <= global.RateLimits.reactions) {
+                continue;
+            }
+
             await game.resetControls();
             let move = await game.nextMove();
 
@@ -185,6 +196,8 @@ connect4.execute = async (message) => {
                 await game.updateState(state);
                 await game.updateView();
             }
+
+            lastMoveTime = Date.now();
         } catch (err) {
             game.boardMessage.client.emit('channelError', game.boardMessage.channel, err);
             game.exit = true;
@@ -193,11 +206,5 @@ connect4.execute = async (message) => {
 
     // Final update
     await game.updateBoardMessage();
-    await game.updateTurnMessage('Game finished.');
-
-    // Results Message
-    await game.turnMessage.channel.send(
-        `\`\`\`\n===[${game.players[0].tag} VS ${game.players[1].tag}]===\n`
-        + `=> Connect 4 Game ID: ${gameID} has ended\n=> ${game.state.win ? `${game.winner.tag} WINS` : `Game ended in draw!`}\`\`\``
-    );
+    await game.updateTurnMessage(`Game (${gameID}) finished.\n\t**Result:** ${game.state.win ? `<@${game.winner.id}> won!` : `Game ended in draw!`}`);
 };

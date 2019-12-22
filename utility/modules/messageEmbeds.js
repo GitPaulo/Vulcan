@@ -184,40 +184,6 @@ messageEmbeds.info = (
     ]
 });
 
-messageEmbeds.invalidCommandCall = (
-    {
-        title       = `Command Call Blocked`,
-        description = 'A command execution has been **prevented** from being called.',
-        color       = 0xFF0000, // Red
-        thumbnail   = {
-            url: `attachment://invalidCommandCall.gif`
-        },
-        timestamp = new Date(),
-        footer    = {
-            text: '(Vulcan protection system)™'
-        },
-        fields = [],
-        url    = ''
-    }
-) => ({
-    embed: {
-        title,
-        description,
-        color,
-        thumbnail,
-        timestamp,
-        footer,
-        fields,
-        url
-    },
-    files: [
-        {
-            attachment: './assets/media/images/embeds/invalidCommandCall.gif',
-            name      : 'invalidCommandCall.gif'
-        }
-    ]
-});
-
 messageEmbeds.PSA = (
     {
         title       = `Public Service Announcement (PSA)`,

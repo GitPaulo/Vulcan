@@ -5,6 +5,7 @@ const path            = xrequire('path');
 const yaml            = xrequire('js-yaml');
 const Discord         = xrequire('discord.js');
 const { performance } = xrequire('perf_hooks');
+const publicIp        = require('public-ip');
 const DatabaseManager = xrequire('./managers/DatabaseManager');
 const TerminalManager = xrequire('./managers/TerminalManager');
 const PresenceManager = xrequire('./managers/PresenceManager');
@@ -161,13 +162,29 @@ class Vulcan extends Discord.Client {
         return chainPrint('Presence', this);
     }
 
+    loadFileServer (port = 442) {
+        this.fileServer      = xrequire('./webfiles')(this);
+        this.fileServer.port = 442;
+
+        this.fileServer.listen(port, (err) => {
+            if (err) {
+                return logger.error(`Something bad happened while starting file server!\n\tERROR: ${err.message}`);
+            }
+
+            logger.debug(`File server is listening on ${port}`);
+        });
+
+        return chainPrint('File Server', this);
+    }
+
     loadWebServer (port = 443) {
         pem.createCertificate({ days: 31, selfSigned: true }, (err, keys) => {
             if (err) {
                 throw err;
             }
 
-            this.webServer = xrequire('./webhooks')(this, keys);
+            this.webServer      = xrequire('./webhooks')(this, keys);
+            this.webServer.port = 443;
 
             this.webServer.listen(port, (err) => {
                 if (err) {
@@ -421,6 +438,14 @@ class Vulcan extends Discord.Client {
         return {
             cpuUsage: os.loadavg()[1],
             memUsage: process.memoryUsage().rss / 1024 / 1024
+        };
+    }
+
+    //  Get External IP :D
+    async externalIP () {
+        return {
+            v4: await publicIp.v4(),
+            v6: await publicIp.v6()
         };
     }
 }
