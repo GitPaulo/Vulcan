@@ -155,7 +155,7 @@ media.storeImageFromURL = async (url, fileName) => {
 media.fetchImage = async (keyword) => {
     const files = await readdir(this.folderPath);
 
-    let filePath = 'N/A';
+    let filePath = null;
     let hvalue   = 0;
 
     files.forEach((file) => {
@@ -166,8 +166,8 @@ media.fetchImage = async (keyword) => {
             hvalue   = cvalue;
         }
     });
-
-    return path.join(this.folderPath, filePath);
+    
+    return filePath ? path.join(this.folderPath, filePath) : false;
 };
 
 /******************
