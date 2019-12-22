@@ -8,33 +8,50 @@
     ! message.command is not guaranteed to be defined
  */
 
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
-const logger        = xrequire('./managers/LogManager').getInstance();
-
 // ? Rate limit this event? (Could be abused)
 module.exports = (
     message,
     description,
     extraFields = []
 ) => {
-    message.channel.send(messageEmbeds.invalidCommandCall(
+    message.channel.send(
         {
-            description,
-            fields: [
-                {
-                    name  : 'Caller',
-                    value : `<@${message.author.id}>`,
-                    inline: true
+            embed: {
+                title      : `Invalid Command Call`,
+                description: `The command parsed by vulcan was found to either not exist or have problems with said parsing.\n\n*Nothing was executed.*`,
+                color      : 0xFF0000, // Red
+                thumbnail  : {
+                    url: `attachment://invalidCommandCall.gif`
                 },
-                {
-                    name  : 'Input',
-                    value : `\`${message.content}\``,
-                    inline: true
+                timestamp: new Date(),
+                footer   : {
+                    text: 'You should really look up the commands before typing anything :)'
                 },
-                ...extraFields
+                fields: [
+                    {
+                        name : 'Message',
+                        value: description
+                    },
+                    {
+                        name  : 'Caller',
+                        value : `<@${message.author.id}>`,
+                        inline: true
+                    },
+                    {
+                        name  : 'Input',
+                        value : `\`${message.content}\``,
+                        inline: true
+                    },
+                    ...extraFields
+                ],
+                url: ''
+            },
+            files: [
+                {
+                    attachment: './assets/media/images/embeds/invalidCommandCall.gif',
+                    name      : 'invalidCommandCall.gif'
+                }
             ]
         }
-    )).catch((err) => {
-        logger.error(err.message);
-    });
+    );
 };

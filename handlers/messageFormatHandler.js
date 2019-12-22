@@ -4,6 +4,7 @@ const Discord  = xrequire('discord.js');
 const hastebin = xrequire('./utility/modules/hastebin');
 const logger   = xrequire('./managers/LogManager').getInstance();
 
+// File Constants
 const MaxFileSizeMB   = 8;
 const CharacterLimits = {
     content: 2000,
@@ -20,13 +21,14 @@ const CharacterLimits = {
 
 // ! This may slow down replying (be careful)
 module.exports = async (channel, ...args) => {
+    const vulcan      = channel.client;
     const apiMessage  = Discord.APIMessage.create(channel, ...args);
     const { options } = apiMessage;
 
     // === File Size Check
-    if (options.files) {
-        let largeFiles = [];
+    let largeFiles = [];
 
+    if (options.files) {
         // Check for large files
         for (let i = 0; i < options.files.length; i++) {
             let localFilePath = options.files[i];
@@ -49,22 +51,8 @@ module.exports = async (channel, ...args) => {
 
             if (fileSize > MaxFileSizeMB) {
                 largeFiles.push(localFilePath);
-                apiMessage.options.files.splice(i, 1);
+                options.files.splice(i, 1);
             }
-        }
-
-        if (largeFiles.length > 0) {
-            logger.warning(`Tried to upload large files through discord.`);
-            logger.debug(largeFiles);
-
-            channel._send({
-                embed: {
-                    description: `Files from a messages were to large to upload. Had to remove them :(\n`,
-                    fields     : [
-                        { name: 'Files', value: largeFiles.join('\n') }
-                    ]
-                }
-            });
         }
     }
 
@@ -123,35 +111,76 @@ module.exports = async (channel, ...args) => {
         }
     }
 
-    // If nothing is large, send normal!
-    if (!largeContent) {
+    // Weird champ
+    if (!largeContent && largeFiles.length <= 0) {
         return channel._send(apiMessage);
     }
 
-    /*
+    // Embed time (but dont touch if embed already exists :))
+    options.embed = options.embed || {
+        description: options.content,
+        fields     : []
+    };
+
+    /* Sort out large files
+        * This is dependant on the status of the file server and the ./public/ folder
+    */
+    if (largeFiles.length > 0) {
+        logger.debug('Found large files in message!');
+
+        let publicPaths = [];
+
+        // ! Copy files? what if sensitive?
+        largeFiles.forEach((largeFilePath) => {
+            let fileName   = path.basename(largeFilePath);
+            let publicPath = `./public/${fileName}`;
+
+            fs.copyFileSync(largeFilePath, publicPath);
+            logger.debug(`Copied file to public realm: ${largeFilePath} => ${publicPath}`);
+
+            publicPaths.push(publicPath);
+        });
+
+        // Add IP and http
+        let externalIP = (await vulcan.externalIP()).v4;
+
+        publicPaths.forEach((publicPath, i) => {
+            publicPaths[i] = `http://${externalIP}:${vulcan.fileServer.port}/${publicPath.substring(2)}`;
+        });
+
+        // Finally output
+        options.embed.fields.push(
+            {
+                name : 'Large Files Found',
+                value: `Number of large files: ${largeFiles.length}\nOutsource: ${publicPaths}`
+            }
+        );
+    }
+
+
+    /* Sort out large content
     * Currently two ways of dealing with lareg content messages:
         ?  Hastebin upload
         ?  Discord file upload (fallback)
     */
-    apiMessage.options.content = null;
-    apiMessage.options.embed   = {
-        description: `Content was **too large** to be sent via Discord text channel.\n`,
-        fields     : [
-            { name: 'Reasons', value: reasons.join('\n=> ') }
-        ]
-    };
+    if (largeContent) {
+        logger.debug('Found large content in message!');
 
-    try {
-        apiMessage.options.embed.description += `\nI have uploaded it to: ${(await hastebin.post(largeContent))}`;
-    } catch (error) {
-        const dataDir  = `./data/`;
-        const id       = fs.readdirSync(dataDir).length + 1;
-        const filePath = path.join(dataDir, `${channel.id}_${id}.txt`);
+        options.content           = null;
+        options.embed.description = `Embed content was too large!`;
 
-        fs.writeFileSync(filePath, largeContent);
+        try {
+            options.embed.description += `\nI have uploaded it to: ${(await hastebin.post(largeContent))}`;
+        } catch (error) {
+            const dataDir  = `./data/`;
+            const id       = fs.readdirSync(dataDir).length + 1;
+            const filePath = path.join(dataDir, `${channel.id}_${id}.txt`);
 
-        apiMessage.options.embed.description += `I also detected hastebin to be **down**?\nI am uploading content via Discord file system!`;
-        apiMessage.options.files = [filePath];
+            fs.writeFileSync(filePath, largeContent);
+
+            options.embed.description += `\nI also detected hastebin to be **down**? Or file was incompatible with hastebin!\nI am uploading content via Discord file system!`;
+            options.files = [filePath];
+        }
     }
 
     return channel._send(apiMessage);

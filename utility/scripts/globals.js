@@ -4,6 +4,10 @@ const path = require('path');
 
 global.__basedir = path.join(__dirname, '..', '..');
 
+// Rate limits (Discord)
+global.RateLimits = { };
+global.RateLimits.reactions = 250;
+
 // Absolute path version of node's 'require()'
 global.xrequire = (...module) => {
     if (module[0] && module[0].startsWith('.')) {

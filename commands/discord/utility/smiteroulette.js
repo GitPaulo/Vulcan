@@ -7,7 +7,7 @@ const logger        = xrequire('./managers/LogManager').getInstance();
  * Note: This command is dependent on endpoint: 'https://cms.smitegame.com/wp-json/smite-api/all-gods/1'
  */
 smiteroulette.loadGodCache = async () => {
-    const result = await request('https://cms.smitegame.com/wp-json/smite-api/all-gods/1');
+    const result = await request('http://cms.smitegame.com/wp-json/smite-api/all-gods/1');
     const gods   = JSON.parse(result);
     const cache  = new Map();
 

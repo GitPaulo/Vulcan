@@ -14,15 +14,14 @@ usergroups.execute = async (message) => {
     }
 
     // Avoid writing it twice :)
-    const maybeFirst = message.mentions.users.first();
-    const targetID   = (maybeFirst && maybeFirst.id) || message.parsed.args[1];
-
-    let output = '';
+    let maybeFirst = message.mentions.users.first();
+    let targetID   = (maybeFirst && maybeFirst.id) || message.parsed.args[1];
+    let output     = '';
 
     switch (scmd) {
         case 'set':
         case 'write':
-            const newGroupName = message.parsed.args[2] || vulcan.defaultGroupName;
+            let newGroupName = message.parsed.args[2] || vulcan.defaultGroupName;
 
             if (!vulcan.hierarchy.get(newGroupName)) {
                 return vulcan.emit(
@@ -32,15 +31,23 @@ usergroups.execute = async (message) => {
                 );
             }
 
-            output = await this.set(targetID, newGroupName);
+            output = (await this.set(targetID, newGroupName))
+                ? `Usergroup '${newGroupName}' set for id: ${targetID}.`
+                : `Could not set usergroup for id: ${targetID}`;
             break;
         case 'get':
         case 'read':
-            output = await this.get(targetID);
+            let checkedGroup = await this.get(targetID);
+
+            output = (checkedGroup)
+                ? `Usergroup of ${targetID} is '${checkedGroup}'`
+                : `Could not find a usergroup linked to id: ${targetID}`;
             break;
+        case 'hierarchy':
         case 'list':
         case 'usergroups':
-            output = await this.list();
+            output = `\`\`\`js\n${JSON.stringify(await this.list())}\`\`\``
+                + `\`\`\`js\n${JSON.stringify((await this.hierarchy()).toString())}\`\`\``;
             break;
         default:
             return vulcan.emit(
@@ -50,15 +57,17 @@ usergroups.execute = async (message) => {
             );
     }
 
-    await message.channel.send(messageEmbeds.reply({
-        message,
-        fields: [
-            {
-                name : 'Output',
-                value: output
-            }
-        ]
-    }));
+    await message.channel.send(messageEmbeds.reply(
+        {
+            message,
+            fields: [
+                {
+                    name : 'Output',
+                    value: output
+                }
+            ]
+        }
+    ));
 };
 
 usergroups.set = async (targetID, newGroupName) => {
@@ -66,11 +75,15 @@ usergroups.set = async (targetID, newGroupName) => {
 
     if (cachedUser && !cachedUser.bot) {
         (await cachedUser.createDM()).send(`Your usergroup has changed to: **${newGroupName}**!`);
+
+        return true;
     }
 
-    return `Successfully updated usergroup of **(${targetID})** to: **${newGroupName}**!`;
+    return false;
 };
 
 usergroups.get = async (targetID) => this.command.client.fetchUsergroup(targetID).name;
 
-usergroups.list = async () => `\`\`\`js\n${JSON.stringify(Array.from(this.command.client.usergroups.entries()))}\n\`\`\``;
+usergroups.list = async () => Array.from(this.command.client.usergroups.entries());
+
+usergroups.hierarchy = async () => this.command.client.hierarchy;

@@ -22,16 +22,16 @@ module.exports = (vulcan, keys) => {
     const server = https.createServer({ key, cert }, (request, response) => {
         // Lazy D:<
         if (request.statusCode >= 300 && request.statusCode <= 600) {
-            return logger.error(`Caught bad status code from request!\n\tCODE: ${request.statusCode}\n\tURL: ${request.url}`);
+            return logger.error(`[Web Hooks] => Caught bad status code from request!\n\tCODE: ${request.statusCode}\n\tURL: ${request.url}`);
         }
 
         const end = (message, prefix = 'REQUEST DENIED') => {
             logger.warn(
-                `[WEBHOOKS] => HTTPS request has successfully completed!\n\t`
+                `[Web Hooks] => HTTPS request has successfully completed!\n\t`
                 + `MESSAGE: ${message}\n\t`
                 + `PREFIX: ${prefix}`
             );
-            response.end(`${prefix} => ${message}`);
+            response.end(`[Web Hooks] => ${prefix} => ${message}`);
         };
 
         // ! For now only allow POST (the commands)
@@ -51,47 +51,47 @@ module.exports = (vulcan, keys) => {
             request.on('end', () => {
                 let requestObject = null;
 
-                logger.debug(`POST request ended, collected body: ${body}`);
+                logger.debug(`[Web Hooks] => POST request ended, collected body: ${body}`);
 
                 try {
                     requestObject = JSON.parse(body);
                 } catch (err) {
-                    return end('Response body should be JSON. (Check validity of JSON)');
+                    return end('[Web Hooks] => Response body should be JSON. (Check validity of JSON)');
                 }
 
                 const { key, cmds } = requestObject;
 
                 if (!key) {
-                    return end('No authorisation key parameter detected!');
+                    return end('[Web Hooks] => No authorisation key parameter detected!');
                 }
 
                 if (key !== webhookKey) {
-                    return end('Invalid webhook key! Not authorised.');
+                    return end('[Web Hooks] => Invalid webhook key! Not authorised.');
                 }
 
                 if (!Array.isArray(cmds)) {
-                    return end('No cmd parameter(s) detected!');
+                    return end('[Web Hooks] => No cmd parameter(s) detected!');
                 }
 
                 cmds.forEach((cmd) => {
                     const funcFilePath = path.join(__dirname, cmd + '.js');
 
                     if (!fs.existsSync(funcFilePath)) {
-                        return end(`Invalid cmd parameter: ${cmd}`);
+                        return end(`[Web Hooks] => Invalid cmd parameter: ${cmd}`);
                     }
 
                     const output = xrequire(funcFilePath)(vulcan, request, response);
 
-                    end(`Request has been completed successfully!\n\n[Output]\n${output}`, 'POST REQUEST ACCEPTED');
+                    end(`[Web Hooks] => Request has been completed successfully!\n\n[Output]\n${output}`, 'POST REQUEST ACCEPTED');
                 });
             });
         }
 
         if (request.method === 'GET') {
-            end('Currently there is no functionality tied to GET requests :(');
+            end('[Web Hooks] => Currently there is no functionality tied to GET requests :(');
         }
 
-        logger.log(`${request.method} request received!\n\tURL: ${request.url}`);
+        logger.log(`[Web Hooks] => ${request.method} request received!\n\tURL: ${request.url}`);
     });
 
     return server;

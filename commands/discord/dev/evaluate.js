@@ -15,8 +15,8 @@ evaluate.execute = async (message) => {
     let returnValue = '';
     let outputValue = '';
 
-    const code = message.parsed.argsString;
-    const t0   = performance.now();
+    const code      = message.parsed.argsString;
+    const startTime = performance.now();
 
     try {
         returnValue = vm.runInContext(
@@ -41,27 +41,29 @@ evaluate.execute = async (message) => {
         returnValue = err.message;
     }
 
-    const execTime = Math.roundDP(performance.now() - t0, 2);
+    const execTime = Math.roundDP(performance.now() - startTime, 2);
 
     if (returnValue === outputValue) {
         returnValue = 'undefined';
     }
 
-    this.historySave({
-        code,
-        execTime,
-        returnValue,
-        outputValue,
-        authorID : message.author.id,
-        authorTag: message.author.tag
-    });
+    this.historySave(
+        {
+            code,
+            execTime,
+            returnValue,
+            outputValue,
+            authorID : message.author.id,
+            authorTag: message.author.tag
+        }
+    );
 
     await message.channel.send(messageEmbeds.reply(
         {
             message,
             fields: [
                 { name: 'Code',              value: '```js\n' + code + '\n```'             }, // \n stops .md break
-                { name: 'Benchmark',         value: `${execTime}ms`, inline: true                 },
+                { name: 'Benchmark',         value: `${execTime}ms`, inline: true          },
                 { name: 'Size',              value: `${code.length} (chars)`, inline: true },
                 { name: 'Expression Return', value: `\`${returnValue}\``,     inline: true },
                 { name: 'Stream Output',     value: `\`${outputValue}\``,     inline: true }
