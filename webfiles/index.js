@@ -47,12 +47,13 @@ module.exports = (vulcan) => {
 
                 return;
             }
-
-            const sync = fs.statSync(pathname);
+            
+            const base  = pathname.match(rootDirReg)
+            const sync  = fs.statSync(pathname);
             const isDir = sync.isDirectory();
 
             // Check for Authentication (public folder)
-            if (pathname.match(rootDirReg)[0] + '/' !== publicFolderPath) {
+            if (!base || base[0] + '/' !== publicFolderPath) {
                 // Cheeky!
                 res.statusCode = 403;
                 res.end(`[File Server] => Access denied to this part of the file system.`);
