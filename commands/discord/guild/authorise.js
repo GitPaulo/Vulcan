@@ -5,7 +5,7 @@ authorise.execute = async (message) => {
     const guild = message.guild;
 
     if (guild.authorised) {
-        message.client.emit(
+        return message.client.emit(
             'invalidCommandUsage',
             message,
             `This guild is already authorised!`
