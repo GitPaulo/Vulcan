@@ -37,3 +37,13 @@ psa:
   examples:
     - '<prefix><id> <message>'
   throttling: 1000
+
+#
+cmds:
+  aliases:
+    - 'help'
+    - 'docs'
+  description: 'Displays all the terminal commands.'
+  examples:
+    - '<prefix><id>'
+  throttling: 1000
