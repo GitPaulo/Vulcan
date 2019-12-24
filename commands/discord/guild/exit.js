@@ -6,9 +6,16 @@ botchannel.execute = async (message) => {
     const preventUnauth = Boolean(message.parsed.args[0]);
     const embedWrap     = messageEmbeds.reply({
         message,
-        description: 'Leaving this guild!\nGood bye! :(',
+        description: 'Vulcan is **leaving** this guild!\nGood bye! :(',
         fields     : [
-            { name: 'Unauthorised?', value: String(!preventUnauth) }
+            {
+                name : 'Unauthorised?',
+                value: String(!preventUnauth)
+            },
+            {
+                name : 'Re-Invite',
+                value: `https://discordapp.com/oauth2/authorize?client_id=604662534410207233&scope=bot&permissions=0`
+            }
         ]
     });
 

@@ -133,7 +133,7 @@ module.exports = async (channel, ...args) => {
         // ! Copy files? what if sensitive?
         largeFiles.forEach((largeFilePath) => {
             let fileName   = path.basename(largeFilePath);
-            let publicPath = `./public/${fileName}`;
+            let publicPath = path.join(vulcan.fileServer.publicFolderPath, fileName);
 
             fs.copyFileSync(largeFilePath, publicPath);
             logger.debug(`Copied file to public realm: ${largeFilePath} => ${publicPath}`);
@@ -145,7 +145,7 @@ module.exports = async (channel, ...args) => {
         let externalIP = (await vulcan.externalIP()).v4;
 
         publicPaths.forEach((publicPath, i) => {
-            publicPaths[i] = `http://${externalIP}:${vulcan.fileServer.port}/${publicPath.substring(2)}`;
+            publicPaths[i] = `http://${externalIP}:${vulcan.fileServer.port}/${publicPath}`;
         });
 
         // Finally output

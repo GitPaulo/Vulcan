@@ -1,14 +1,18 @@
 const exec    = xrequire('util').promisify(xrequire('child_process').exec);
-const command = `git branch`;
+const command = `git status`;
 
+// ! Dependent on consistensty of output of command
 module.exports = async () => {
     const { stdout, stderr } = await exec(command);
 
     if (!stdout || stdout.length <= 0) {
-        throw new Error(`Git branch shell command errored!\n\tERROR: ${stderr}`);
+        throw new Error(`Git command errored!\n\tERROR: ${stderr}`);
     }
 
-    let cut1 = stdout.substring(stdout.indexOf('*') + 1);
+    let output = stdout.split('\n');
 
-    return cut1.substring(0, cut1.indexOf('\n')).trim();
+    return {
+        branch: output[0].split(' ')[2],
+        status: output[1]
+    };
 };

@@ -4,8 +4,10 @@ const logger    = xrequire('./managers/LogManager').getInstance();
 
 /* eslint-disable no-unused-vars */
 module.exports = (vulcan, request, response) => {
-    gitBranch().then((branchName) => {
-        // Simple sanitize (although i cant see how gitBranch would be modified)
+    gitBranch().then((output) => {
+        const branchName = output.branch;
+
+        // Simple sanitize (although i can't see how gitBranch would be modified)
         if (/\s/.test(branchName)) {
             throw new Error(`'gitBranch' module should only return one word for the branch name!`);
         }

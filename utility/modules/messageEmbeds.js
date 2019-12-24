@@ -1,5 +1,10 @@
 const messageEmbeds = module.exports;
 
+/*
+    * This file should only contained wraps that are used more than once!
+    ! Do not create wraps for events.
+*/
+
 messageEmbeds.reply = (
     {
         message,
@@ -45,40 +50,6 @@ messageEmbeds.reply = (
             name      : imgName
         },
         ...files
-    ]
-});
-
-messageEmbeds.critical = (
-    {
-        title       = `Critical Error`,
-        description = `A Critical Error has been detected by Vulcan.`,
-        color       = 0x000000, // Black
-        thumbnail   = {
-            url: `attachment://critical.png`
-        },
-        timestamp = new Date(),
-        footer    = {
-            text: '[Error] This is bad. MAZUI! Vulcan will shutdown!'
-        },
-        fields = [],
-        url    = ''
-    }
-) => ({
-    embed: {
-        title,
-        description,
-        color,
-        thumbnail,
-        timestamp,
-        footer,
-        fields,
-        url
-    },
-    files: [
-        {
-            attachment: './assets/media/images/embeds/critical.png',
-            name      : 'critical.png'
-        }
     ]
 });
 

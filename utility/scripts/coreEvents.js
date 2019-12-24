@@ -5,6 +5,7 @@ const logger        = xrequire('./managers/LogManager').getInstance();
     Attempt at controlled exit:
         ! If the following code errors => infinite loop! (Check for everything!)
 */
+
 global._exit = process.exit;
 process.exit = async (code = 0, message = 'Unknown') => {
     if (!logger || !messageEmbeds) {
@@ -26,28 +27,46 @@ process.exit = async (code = 0, message = 'Unknown') => {
             const botChannel = guild.botChannel;
 
             if (botChannel) {
-                await botChannel.send(messageEmbeds.critical(
+                // ? Cannot be outsourced to event because emmiter.emit() won't be promise wrapped
+                await botChannel.send(
                     {
-                        description: `Vulcan process is exiting.`,
-                        fields     : [
-                            {
-                                name  : 'Message',
-                                value : message,
-                                inline: false
+                        embed: {
+                            title      : 'Critical Error',
+                            timestamp  : new Date(),
+                            color      : 0x000000,
+                            description: `Vulcan process is exiting.`,
+                            fields     : [
+                                {
+                                    name  : 'Message',
+                                    value : `\`\`\`\n${message}\`\`\``,
+                                    inline: false
+                                },
+                                {
+                                    name  : 'Exit Code',
+                                    value : code,
+                                    inline: true
+                                },
+                                {
+                                    name  : 'Vulcan Uptime',
+                                    value : String(vulcan.uptime / 1000).toHHMMSS(),
+                                    inline: true
+                                }
+                            ],
+                            thumbnail: {
+                                url: `attachment://critical.png`
                             },
+                            footer: {
+                                text: '[Error] This is bad. Vulcan main process has crashed. Restart imminent!'
+                            }
+                        },
+                        files: [
                             {
-                                name  : 'Exit Code',
-                                value : code,
-                                inline: true
-                            },
-                            {
-                                name  : 'Vulcan Uptime',
-                                value : vulcan.uptime,
-                                inline: true
+                                attachment: './assets/media/images/embeds/critical.png',
+                                name      : 'critical.png'
                             }
                         ]
                     }
-                ));
+                );
             }
         });
     }

@@ -40,12 +40,19 @@ module.exports = class _Guild extends xrequire('discord.js').Guild {
             const filter = (reaction, user) => (reaction.emoji.name === yes
                 || reaction.emoji.name === no) && user !== vulcan.user;
 
-            // React!
-            await requestMsg.react(no);
-            await requestMsg.react(yes);
+            // ! Rate limit is a WeirdChamp
+            const fuckRateLimit = 1000;
+
+            setTimeout(async () => {
+                await requestMsg.react(no);
+                setTimeout(async () => {
+                    await requestMsg.react(yes);
+                }, fuckRateLimit);
+            }, fuckRateLimit);
 
             // Collect!
-            // ? Reminder: this will await until bot shutdown or request is answered
+            // ? Reminder: this will await until bot shutdown or request is answered.
+            // ! If dev mode. Don't forget reload changes this, lol.
             requestMsg.awaitReactions(filter, { max: 1 })
                 .then(async (collected) => {
                     // What was the decision?
@@ -79,10 +86,10 @@ module.exports = class _Guild extends xrequire('discord.js').Guild {
         logger.log(`Guild authorisation request received by ${requestee.tag} for guild: ${this.name}(${this.id})`);
     }
 
-    // Remove later
+    // ! May cause infinite loop
     get botChannel () {
         return this.channels.array().filter((channel) => channel.name === this.botChannelName).pop()
-            || this.this.channels.first();
+            || this.systemChannel || this.channels.array()[0];
     }
 
     get authorised () {

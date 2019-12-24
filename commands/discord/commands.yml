@@ -606,7 +606,7 @@ authorise:
   group: 'default'
   examples:
   - '<prefix><id>'
-  throttling: 0
+  throttling: 5000
   safe: true
   disabled: false
   userPermissions: []

@@ -13,8 +13,8 @@ module.exports = (
 ) => {
     const authStr1 = response ? 'APPROVED' : 'REJECTED';
     const authStr2 = response
-        ? 'This guild now has access to all vulcan features.\nGet started by using the `docs` command!'
-        : 'Vulcan features will remained locked. You may resubmit request.';
+        ? 'This guild now has access to all vulcan features.\n\nGet started by using the `docs` command!'
+        : 'Vulcan features will remained locked.\n\nYou may resubmit request with the \'authorise\' command.';
 
     guild.botChannel.send(messageEmbeds.info(
         {

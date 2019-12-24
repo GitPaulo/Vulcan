@@ -4,8 +4,7 @@ const fs     = require('fs');
 const path   = require('path');
 const logger = xrequire('./managers/LogManager').getInstance();
 
-const rootDirReg       = /\.\/[^/\\]+/;
-const publicFolderPath = './public/';
+const publicFolderPath = `./${path.dirname(__filename).split(path.sep).pop()}/public/`;
 
 // Create public folder (where files can be seen)
 if (!fs.existsSync(publicFolderPath)) {
@@ -47,13 +46,12 @@ module.exports = (vulcan) => {
 
                 return;
             }
-            
-            const base  = pathname.match(rootDirReg)
+
             const sync  = fs.statSync(pathname);
             const isDir = sync.isDirectory();
 
             // Check for Authentication (public folder)
-            if (!base || base[0] + '/' !== publicFolderPath) {
+            if (!pathname.startsWith(publicFolderPath)) {
                 // Cheeky!
                 res.statusCode = 403;
                 res.end(`[File Server] => Access denied to this part of the file system.`);
@@ -85,6 +83,9 @@ module.exports = (vulcan) => {
             }
         });
     });
+
+    // It is useful
+    server.publicFolderPath = publicFolderPath;
 
     return server;
 };
