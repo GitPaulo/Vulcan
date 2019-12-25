@@ -27,7 +27,7 @@ leave.execute = async (message) => {
                 },
                 {
                     name : 'Queue Size',
-                    value: musicManager.queue.length || 'NaN'
+                    value: musicManager.queue.length || 'No Queue'
                 }
             ]
         }

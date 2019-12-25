@@ -383,13 +383,19 @@ class MusicManager {
         }
 
         const loadedSong = this.queue[0];
-        const stream     = await ytdlcd(loadedSong.url);
+        const stream     = await ytdlcd(
+            loadedSong.url,
+            // ? ytdl options (ytdlcd is optimised for discord but uses ytdl options)
+            {
+                quality: 'highestaudio'
+            }
+        );
 
         // New dispatcher every new song
         this.dispatcher = this.connection.play(
             stream,
             {
-                bitrate: this.voiceChannel.bitrate / 1000,
+                bitrate: 'auto',
                 passes : 5,
                 type   : 'opus',
                 volume : false
