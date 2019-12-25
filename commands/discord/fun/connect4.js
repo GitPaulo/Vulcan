@@ -52,7 +52,7 @@ connect4.execute = async (message) => {
             );
         } catch (warn) {
             return message.channel.client.emit(
-                'channelInfo',
+                'channelInformation',
                 message.channel,
                 `Time expired for connect 4 challenge between <@${challenger.id}> and <@${challengee.id}>`
             );

@@ -59,7 +59,7 @@
     "github-api": "^3.3.0",
     "got": "^9.6.0",
     "js-yaml": "^3.13.1",
-    "mongoose": "^5.8.1",
+    "mongoose": "^5.8.3",
     "node-opus": "^0.3.3",
     "oauth": "^0.9.15",
     "pem": "^1.14.3",
@@ -67,7 +67,7 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "ytdl-core": "^0.29.7",
-    "ytdl-core-discord": "^1.0.3"
+    "ytdl-core-discord": "git+https://github.com/amishshah/ytdl-core-discord.git"
   },
   "devDependencies": {
     "eslint": "^6.7.2",
@@ -75,7 +75,7 @@
     "eslint-plugin-security": "^1.4.0",
     "nodemon": "^1.19.4",
     "pm2": "^3.5.2",
-    "snyk": "^1.260.0"
+    "snyk": "^1.266.0"
   },
   "snyk": true
 }

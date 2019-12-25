@@ -6,15 +6,12 @@ class DiscordCommand extends Command {
         super(
             vulcan,
             commandDefinition.id,
+            commandDefinition.category,
             commandDefinition.description,
             commandDefinition.examples,
             commandDefinition.aliases,
             commandDefinition.throttling
         );
-
-        if (typeof commandDefinition.type !== 'string') {
-            throw new TypeError(`Essential command 'type' property is undefined.`);
-        }
 
         if (!vulcan.hierarchy.get(commandDefinition.group)) {
             throw new TypeError(`Invalid group given to command!`);
@@ -26,7 +23,6 @@ class DiscordCommand extends Command {
 
         // ====== Discord Command Specific Properties
         // = No defaults
-        this.type  = commandDefinition.type;
         this.group = commandDefinition.group;
 
         // = Defaults
@@ -74,7 +70,6 @@ class DiscordCommand extends Command {
 
     toString () {
         return super.toString()
-            + `Type: ${this.type}\n`
             + `Access Usergroup: ${this.group}\n`
             + `Has embed: ${Boolean(this.embed)}\n`;
     }

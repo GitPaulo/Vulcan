@@ -5,6 +5,7 @@ class TerminalCommand extends Command {
         super(
             vulcan,
             commandDefinition.id,
+            commandDefinition.category,
             commandDefinition.description,
             commandDefinition.examples,
             commandDefinition.aliases,

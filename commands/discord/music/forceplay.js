@@ -19,14 +19,22 @@ forceplay.execute = async (message) => {
         await musicManager.joinVoice(message.member.voice.channel);
     }
 
+    // Force Play
     await musicManager.forcePlay(request, message.channel, message.author);
+
     await message.channel.send(messageEmbeds.reply(
         {
             message,
             decription: 'Force played a song.\nWill play on top of queue without affecting queue state.',
             fields    : [
-                { name: 'Forced Song', value: request },
-                { name: 'Current Queue Size',  value: musicManager.queue.length }
+                {
+                    name : 'Forced Song',
+                    value: request
+                },
+                {
+                    name : 'Current Queue Size',
+                    value: musicManager.queue.length
+                }
             ]
         }
     ));

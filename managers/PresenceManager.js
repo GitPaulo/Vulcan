@@ -36,8 +36,6 @@ class PresenceManager {
             callback,
             interval
         };
-
-        console.log(this.timeout);
     }
 
     useUpdating () {

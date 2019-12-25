@@ -109,6 +109,20 @@ module.exports = async (message) => {
             );
         }
 
+        // Music command require caller to be in the same voice channel as bot
+        if (
+            message.command.category === 'music'
+            && message.member.voice.channel
+            && !message.member.voice.channel.members.get(message.client.user.id)
+        ) {
+            return message.client.emit(
+                'invalidCommandCall',
+                message,
+                `Commands from the category \`music\` require the requestee to share a voice channel with the bot.\n\n`
+                + `Use the command \`music\` to have the bot join your voice channel first!`
+            );
+        }
+
         // ! If something is returned from the handler then we had a problem!
         !(await (message.direct ? mdHandler : mgHandler)(message))
         && message.command.addCall(message.author);

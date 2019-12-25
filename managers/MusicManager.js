@@ -121,7 +121,7 @@ class MusicManager {
             }
         } else { // No more songs to play...
             this.guild.client.emit(
-                'channelInfo',
+                'channelInformation',
                 this.requestChannel,
                 `No more songs to play. Leaving voice channel.`
             );
@@ -307,7 +307,7 @@ class MusicManager {
 
             if (playlist.length === 0) {
                 return this.guild.client.emit(
-                    'channelInfo',
+                    'channelInformation',
                     requestChannel,
                     `Unable to load playlist ${url}\n\tLikely due to youtube API reasons?`
                 );
@@ -337,7 +337,7 @@ class MusicManager {
             for (let song of playlist) {
                 if (song.name === '[Deleted video]') {
                     requestChannel.client.emit(
-                        'channelInfo',
+                        'channelInformation',
                         requestChannel,
                         `Encountered deleted video on playlist: ${song.url}`
                     );

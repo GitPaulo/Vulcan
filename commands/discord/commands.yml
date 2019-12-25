@@ -178,6 +178,26 @@ connect4:
     image: './assets/media/images/commands/discord/connect4.gif'
 
 #
+music:
+  aliases:
+  - 'voicejoin'
+  - 'joinvoice'
+  - 'voice'
+  description: 'Joins voice channel and prepares bot for music.'
+  group: 'default'
+  examples:
+  - '<prefix><id>'
+  throttling: 1000
+  safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
+  embed:
+    color: 0xFFA500
+    title: 'Music'
+    image: './assets/media/images/commands/discord/music.gif'
+
+#
 autoplay:
   aliases:
   - 'musicautoplay'
@@ -240,7 +260,9 @@ forceplay:
 #
 list:
   aliases:
+  - 'queue'
   - 'musiclist'
+  - 'musicqueue'
   description: 'Displays the music player queue as a list.'
   group: 'default'
   examples:
@@ -253,7 +275,7 @@ list:
     - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
-    title: 'List'
+    title: 'Music List (Queue)'
     image: './assets/media/images/commands/discord/music.gif'
 
 #

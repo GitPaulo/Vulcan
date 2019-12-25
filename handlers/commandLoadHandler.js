@@ -58,8 +58,8 @@ module.exports = (vulcan, folderPath) => {
 
             Object.defineProperties(commandDefinition,
                 {
-                    type: {
-                        value       : path.dirname(fullPath).split(path.sep).slice(-1).pop(),   // Add type (folder name)
+                    category: {
+                        value       : path.dirname(fullPath).split(path.sep).slice(-1).pop(),   // Add category (folder name)
                         writable    : false,
                         enumerable  : false,
                         configurable: false
@@ -98,7 +98,7 @@ module.exports = (vulcan, folderPath) => {
             commands.addCommand(command);
 
             // Log :D
-            logger.log(`Loaded (${commandDefinition.type}) command '${command.id}' from ${fileName} (took ${Math.roundDP(performance.now() - t, 2)}ms)`);
+            logger.log(`Loaded (${commandDefinition.category}) command '${command.id}' from ${fileName} (took ${Math.roundDP(performance.now() - t, 2)}ms)`);
         } catch (err) {
             logger.error(
                 `[Command Loader Error]\n${err.stack}`

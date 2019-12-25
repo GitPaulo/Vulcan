@@ -4,6 +4,7 @@ class Command {
     constructor (
         vulcan,
         id,
+        category,
         description = 'A vulcan command.',
         examples    = [`<prefix>${id} <...args>`],
         aliases     = [],
@@ -11,6 +12,10 @@ class Command {
     ) {
         if (!(vulcan instanceof Client)) {
             throw new TypeError(`Vulcan must be a valid discord client!`);
+        }
+
+        if (typeof category !== 'string') {
+            throw new TypeError(`Command category missing or not a string!`);
         }
 
         if (typeof id !== 'string') {
@@ -35,6 +40,7 @@ class Command {
 
         this.client      = vulcan;
         this.id          = id;
+        this.category    = category;
         this.description = description;
         this.examples    = examples;
         this.aliases     = aliases;
@@ -71,7 +77,7 @@ class Command {
     }
 
     toString () {
-        return `=> 💻 [${this.id}]\n`
+        return `=> 💻 [${this.id}@${this.category}]\n`
             +  `Aliases: [${this.aliases.join(', ')}]\n`
             +  `Description: "${this.description}"\n`
             +  `Examples:\n\t${this.examples.join('\n\t')}\n`

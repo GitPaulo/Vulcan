@@ -5,7 +5,7 @@ list.execute = async (message) => {
     const musicManager = message.guild.musicManager;
 
     if (musicManager.queueEmpty) {
-        return message.client.emit('channelInfo', message.channel, 'Music player queue is empty!');
+        return message.client.emit('channelInformation', message.channel, 'Music player queue is empty!');
     }
 
     await message.channel.send(messageEmbeds.reply(

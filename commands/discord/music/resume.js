@@ -6,7 +6,7 @@ resume.execute = async (message) => {
     const musicManager = message.guild.musicManager;
 
     if (musicManager.playing) {
-        return message.client.emit('channelInfo', message.channel, 'Music is already playing. Therefore cannot resume.');
+        return message.client.emit('channelInformation', message.channel, 'Music is already playing. Therefore cannot resume.');
     }
 
     musicManager.resume();

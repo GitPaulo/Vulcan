@@ -11,8 +11,14 @@ destroy.execute = async (message) => {
             message,
             description: 'Destroyed the music player.',
             fields     : [
-                { name: 'Is Playing?', value: musicManager.playing || 'No' },
-                { name: 'Queue Size',  value: musicManager.queue.length || '0' }
+                {
+                    name : 'Is Playing?',
+                    value: musicManager.playing || 'No'
+                },
+                {
+                    name : 'Queue Size',
+                    value: musicManager.queue.length || '0'
+                }
             ]
         }
     ));

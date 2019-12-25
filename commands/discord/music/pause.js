@@ -6,7 +6,7 @@ pause.execute = async (message) => {
     const musicManager = message.guild.musicManager;
 
     if (!musicManager.playing) {
-        return message.client.emit('channelInfo', message.channel, 'No music is playing. Therefore cannot pause.');
+        return message.client.emit('channelInformation', message.channel, 'No music is playing. Therefore cannot pause.');
     }
 
     musicManager.pause();
