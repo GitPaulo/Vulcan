@@ -82,3 +82,7 @@ logs.zip
 # HTTPS
 cert.pem
 key.pem
+
+# Kind of useless!
+package-lock.json*
+package-lock.json

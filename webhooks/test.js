@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-module.exports = (vulcan, request, response) => {
+module.exports = async (vulcan, request, response) => {
     console.debug('This is a test!');
 
     return 'Hello World!';

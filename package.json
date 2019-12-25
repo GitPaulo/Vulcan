@@ -18,6 +18,7 @@
     "production:delete": "pm2 delete vulcan",
     "production:logs": "pm2 logs vulcan --lines 30",
     "production:show": "pm2 show vulcan",
+    "production:id": "pm2 id vulcan",
     "production:monitor": "pm2 monitor vulcan",
     "_COMMENT3": " ============================ TEST SCRIPTS  ============================",
     "test": "node index.js ./tests/loading.js",

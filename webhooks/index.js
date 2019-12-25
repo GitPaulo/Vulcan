@@ -25,7 +25,7 @@ module.exports = (vulcan, keys) => {
             return logger.error(`[Web Hooks] => Caught bad status code from request!\n\tCODE: ${request.statusCode}\n\tURL: ${request.url}`);
         }
 
-        const end = (message, prefix = 'REQUEST DENIED') => {
+        const end = (message, prefix = '[Denied]') => {
             logger.warn(
                 `[Web Hooks] => HTTPS request has successfully completed!\n\t`
                 + `MESSAGE: ${message}\n\t`
@@ -48,50 +48,64 @@ module.exports = (vulcan, keys) => {
                 }
             });
 
-            request.on('end', () => {
+            request.on('end', async () => {
                 let requestObject = null;
 
-                logger.debug(`[Web Hooks] => POST request ended, collected body: ${body}`);
+                logger.debug(`POST request recevied, collected body: ${body}`);
 
                 try {
                     requestObject = JSON.parse(body);
                 } catch (err) {
-                    return end('[Web Hooks] => Response body should be JSON. (Check validity of JSON)');
+                    return end('Response body should be JSON. (Check validity of JSON)');
                 }
 
                 const { key, cmds } = requestObject;
 
                 if (!key) {
-                    return end('[Web Hooks] => No authorisation key parameter detected!');
+                    return end('No authorisation key parameter detected!');
                 }
 
                 if (key !== webhookKey) {
-                    return end('[Web Hooks] => Invalid webhook key! Not authorised.');
+                    return end('Invalid webhook key! Not authorised.');
                 }
 
                 if (!Array.isArray(cmds)) {
-                    return end('[Web Hooks] => No cmd parameter(s) detected!');
+                    return end('No cmd parameter(s) detected!');
                 }
 
-                cmds.forEach((cmd) => {
+                // Store all of the output
+                const output = [];
+
+                await cmds.asyncForEach(async (cmd) => {
                     const funcFilePath = path.join(__dirname, cmd + '.js');
 
                     if (!fs.existsSync(funcFilePath)) {
                         return end(`[Web Hooks] => Invalid cmd parameter: ${cmd}`);
                     }
 
-                    const output = xrequire(funcFilePath)(vulcan, request, response);
+                    // ? If command errors, don't panic!
+                    let returnValue = null;
 
-                    end(`[Web Hooks] => Request has been completed successfully!\n\n[Output]\n${output}`, 'POST REQUEST ACCEPTED');
+                    try {
+                        returnValue = await (xrequire(funcFilePath)(vulcan, request, response));
+                    } catch (err) {
+                        returnValue = `Command '${cmd}' has errored.\nMessage: ${err.message}`;
+
+                        logger.error(returnValue);
+                    }
+
+                    output.push(returnValue);
                 });
+
+                end(`Request has been completed!\n\n========[Output]========\n[${output.join(', ')}]`, '[Accepted]');
             });
         }
 
         if (request.method === 'GET') {
-            end('[Web Hooks] => Currently there is no functionality tied to GET requests :(');
+            end('Currently there is no functionality tied to GET requests :(');
         }
 
-        logger.log(`[Web Hooks] => ${request.method} request received!\n\tURL: ${request.url}`);
+        logger.log(`[Web Hooks] => Parsing request: '${request.method}' with URL: '${request.url}'`);
     });
 
     return server;
