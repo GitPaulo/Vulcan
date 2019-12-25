@@ -12,7 +12,9 @@ module.exports = (vulcan, request, response) => {
             throw new Error(`'gitBranch' module should only return one word for the branch name!`);
         }
 
-        const command = (global.isLinux ? 'sudo ' : '') + `git pull origin ${branchName}`;
+        const command = (global.isLinux ? 'sudo ' : '') 
+            // * We need to make sure we perform a full update! (Packages may change)
+            + `git pull origin ${branchName} && rm -f package-lock.json && rm -f -rf node_modules && npm install`;
 
         // Update presence :)
         vulcan.presenceManager.useUpdating();
