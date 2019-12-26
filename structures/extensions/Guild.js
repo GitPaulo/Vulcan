@@ -76,7 +76,7 @@ module.exports = class _Guild extends xrequire('discord.js').Guild {
                     );
 
                     // Authorisation event!
-                    this.client.emit('guildAuthorisation', this, cachedOwner, requestee, answer);
+                    await this.client.emit('guildAuthorisation', this, cachedOwner, requestee, answer);
                 }).catch(async (...args) => {
                     logger.error(args);
                     // Notify users?
@@ -86,10 +86,13 @@ module.exports = class _Guild extends xrequire('discord.js').Guild {
         logger.log(`Guild authorisation request received by ${requestee.tag} for guild: ${this.name}(${this.id})`);
     }
 
-    // ! May cause infinite loop
+    // ! May cause infinite loop [ALSO, GUILDS MAY NOT HAVE BOT CHANNELS!!!]
+    // ? Default to guild owner DM?
     get botChannel () {
-        return this.channels.array().filter((channel) => channel.name === this.botChannelName).pop()
-            || this.systemChannel || this.channels.array()[0];
+        const textChannels = this.channels.array().filter((channel) => channel.type === 'text');
+
+        return textChannels.filter((channel) => channel.name === this.botChannelName).pop()
+            || textChannels[0] || this.systemChannel;
     }
 
     get authorised () {

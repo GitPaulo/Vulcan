@@ -6,8 +6,10 @@ psa.execute = (line) => {
     const argsString = line.substring(line.indexOf(' ')) || '[EMPTY]';
 
     vulcan.guilds.array().forEach((guild) => {
-        guild.botChannel.send(messageEmbeds.PSA({
-            description: argsString
-        }));
+        if (guild.botChannel) {
+            guild.botChannel.send(messageEmbeds.PSA({
+                description: argsString
+            }));
+        }
     });
 };

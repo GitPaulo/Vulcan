@@ -5,7 +5,7 @@
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 const logger        = xrequire('./managers/LogManager').getInstance();
 
-module.exports = (
+module.exports = async (
     guild,
     respondant,
     requestee,
@@ -16,7 +16,10 @@ module.exports = (
         ? 'This guild now has access to all vulcan features.\n\nGet started by using the `docs` command!'
         : 'Vulcan features will remained locked.\n\nYou may resubmit request with the \'authorise\' command.';
 
-    guild.botChannel.send(messageEmbeds.info(
+    // Bot channel may not exist because guilds may have no text channel
+    const responseChannel = guild.botChannel || await requestee.createDM();
+
+    responseChannel.send(messageEmbeds.info(
         {
             title      : `Guild Authorisation`,
             description: `This guild has been **${authStr1}** authorisation.\n${authStr2}`,

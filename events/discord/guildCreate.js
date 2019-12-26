@@ -19,8 +19,11 @@ module.exports = async (guild) => {
         guild.requestAuthorisation(); // Requestee === client.user
     }
 
+    // Bot channel may not exist because guilds may have no text channel
+    const responseChannel = guild.botChannel || await guild.owner.createDM();
+
     // Welcome message
-    await guild.botChannel.send({
+    await responseChannel.send({
         embed: {
             title      : `Hello World!`,
             description: `Thank you for inviting Vulcan to your guild.\n\n`
