@@ -27,10 +27,10 @@ module.exports = async (channel, ...args) => {
 
     // === Runtime permissions check
     // TODO: Improve this
-    const vulcanPermissions = channel.permissionsFor(vulcan.user);
-
     // Could be DM
     if (channel.type === 'text') {
+        let vulcanPermissions = channel.permissionsFor(vulcan.user);
+
         if (
             !(vulcanPermissions.has('SEND_MESSAGES')
             && vulcanPermissions.has('ADD_REACTIONS')
