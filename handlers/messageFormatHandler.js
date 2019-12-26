@@ -29,14 +29,17 @@ module.exports = async (channel, ...args) => {
     // TODO: Improve this
     const vulcanPermissions = channel.permissionsFor(vulcan.user);
 
-    if (
-        !(vulcanPermissions.has('SEND_MESSAGES')
-        && vulcanPermissions.has('ADD_REACTIONS')
-        && vulcanPermissions.has('ATTACH_FILES'))
-    ) {
-        logger.warning(`Vulcan did not have enough permissions to send a message to the channel: ${channel.name} (${channel.id})`);
+    // Could be DM
+    if (channel.type === 'text') {
+        if (
+            !(vulcanPermissions.has('SEND_MESSAGES')
+            && vulcanPermissions.has('ADD_REACTIONS')
+            && vulcanPermissions.has('ATTACH_FILES'))
+        ) {
+            logger.warning(`Vulcan did not have enough permissions to send a message to the channel: ${channel.name} (${channel.id})`);
 
-        return;
+            return;
+        }
     }
 
     // === File Size Check
