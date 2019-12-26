@@ -3,6 +3,27 @@ const logger = xrequire('./managers/LogManager').getInstance();
 module.exports = async (guild) => {
     logger.log(`Vulcan joined a new guild: ${guild.name}(${guild.id})`);
 
+    // Check permissions
+    // ! Don't join guild if vulcan has the wrong permissions
+    const vulcanMember      = guild.member(guild.client.user);
+    const vulcanPermissions = vulcanMember.permissions;
+
+    if (
+        !vulcanMember
+        || !(vulcanPermissions.has('SEND_MESSAGES') && vulcanPermissions.has('ADD_REACTIONS'))
+    ) {
+        let ownerChannel = await guild.owner.createDM();
+
+        await ownerChannel.send(
+            `Hello!\nI could not join guild your guild (${guild.id}) because of insuficient permissions.`
+            + `\nPlease use: https://discordapp.com/oauth2/authorize?client_id=604662534410207233&scope=bot&permissions=1341644225`
+        );
+
+        logger.warning(`Could not join guild (${guild.id}) because of insuficient permissions`);
+
+        return guild.leave();
+    }
+
     // Turn into actual names, if valid
     let tagOwners = guild.client.configuration.ownersID.map((ownerID) => {
         let owner = guild.client.users.get(ownerID);
