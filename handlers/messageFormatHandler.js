@@ -25,6 +25,20 @@ module.exports = async (channel, ...args) => {
     const apiMessage  = Discord.APIMessage.create(channel, ...args);
     const { options } = apiMessage;
 
+    // === Runtime permissions check
+    // TODO: Improve this
+    const vulcanPermissions = channel.permissionsFor(vulcan.user);
+
+    if (
+        !(vulcanPermissions.has('SEND_MESSAGES')
+        && vulcanPermissions.has('ADD_REACTIONS')
+        && vulcanPermissions.has('ATTACH_FILES'))
+    ) {
+        logger.warning(`Vulcan did not have enough permissions to send a message to the channel: ${channel.name} (${channel.id})`);
+
+        return;
+    }
+
     // === File Size Check
     let largeFiles = [];
 
