@@ -14,11 +14,11 @@ class DiscordCommand extends Command {
         );
 
         if (!vulcan.hierarchy.get(commandDefinition.group)) {
-            throw new TypeError(`Invalid group given to command!`);
+            throw new TypeError(`Invalid group given to command '${commandDefinition.id}'!`);
         }
 
         if (typeof commandDefinition.embed !== 'object') {
-            throw new TypeError(`Essential command 'embed' property is undefined!`);
+            throw new TypeError(`Essential command 'embed' property is undefined for command '${commandDefinition.id}'!`);
         }
 
         // ====== Discord Command Specific Properties

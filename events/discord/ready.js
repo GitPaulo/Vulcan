@@ -1,22 +1,30 @@
-const vulcan  = xrequire('./bot');
-const pjson   = xrequire('./package.json');
-const logger  = xrequire('./managers/LogManager').getInstance();
+const vulcan    = xrequire('./bot');
+const pjson     = xrequire('./package.json');
+const gitBranch = xrequire('./utility/modules/gitBranch');
+const logger    = xrequire('./managers/LogManager').getInstance();
 
-module.exports = () => {
-    // Set Presence
+module.exports = async () => {
+    // Set statistical presence
     vulcan.presenceManager.useInformational();
 
     // Prevent ml string de-format
-    const p = pjson.version;
-    const u = vulcan.users.size;
-    const c = vulcan.channels.size;
-    const g = vulcan.guilds.size;
+    const { branch } = await gitBranch();
+    const { v4, v6 } = await vulcan.externalIP();
+    const header     = `=========================== [ Vulcan Is Ready (branch:${branch}) ] ===========================\n`;
+    const footer     = `=`.repeat(header.length);
 
     logger.plain(
-        `=========================== [ Vulcan Is Ready (v${p}) ] ===========================\n`
-      + `    Vulcan has connected with (${u}) users, (${c}) channels and (${g}) guilds.     \n`
-      + `       => Blacklisted users: ${vulcan.blacklist.size}                              \n`
-      + `       => Authenticated guilds: ${vulcan.servers.size}                             \n`
-      + `====================================================================================`
+        header
+      + `    Vulcan has connected to discord servers sucessfuly and is now ready!            \n`
+      + `       (${v4})(${v6})[WSP:${vulcan.webServer.port}][FSP:${vulcan.fileServer.port}]  \n`
+      + `       => Networked users: ${vulcan.users.size}                                     \n`
+      + `       => Networked channels: ${vulcan.channels.size}                               \n`
+      + `       => Blacklisted users: ${vulcan.blacklist.size}                               \n`
+      + `       => Authenticated guilds: ${vulcan.servers.size}                              \n`
+      + `       => Networked guilds: ${vulcan.guilds.size}                                   \n`
+      + `       => Usergroup Map: ${vulcan.hierarchy}                                        \n`
+      + `       => Dependencies: ${Object.keys(pjson.dependencies).length}                   \n`
+      + `       => Dev Dependencies: ${Object.keys(pjson.devDependencies).length}            \n`
+      + footer
     );
 };

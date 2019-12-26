@@ -74,8 +74,6 @@ class Vulcan extends Discord.Client {
             this.usergroups.set(id, this.rootGroupName);
         });
 
-        console.log(this.usergroups, this.hierarchy, hierarchyArray);
-
         // Vulcan is here!
         logger.plain(global.couldnt_have_forged_it_better_myself, 'red');
     }
@@ -178,13 +176,17 @@ class Vulcan extends Discord.Client {
     }
 
     loadWebServer (port = 443) {
+        // For display purposes
+        this.webServer = { port };
+
+        // Generate certificate for HTTPS protocol
         pem.createCertificate({ days: 31, selfSigned: true }, (err, keys) => {
             if (err) {
                 throw err;
             }
 
             this.webServer      = xrequire('./webhooks')(this, keys);
-            this.webServer.port = 443;
+            this.webServer.port = port;
 
             this.webServer.listen(port, (err) => {
                 if (err) {
@@ -446,7 +448,7 @@ class Vulcan extends Discord.Client {
         return {
             v4: await publicIP.v4(),
             // ! Todo: Improve and fix
-            v6: global.isLinux ? "Unknown" : await publicIP.v6()
+            v6: global.isLinux ? 'Unknown' : await publicIP.v6()
         };
     }
 }

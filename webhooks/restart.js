@@ -1,4 +1,4 @@
-const exec   = xrequire('util').promisify(xrequire('child_process').exec);
+const exec = xrequire('util').promisify(xrequire('child_process').exec);
 // const logger = xrequire('./managers/LogManager').getInstance();
 
 // TODO Check for git branches?

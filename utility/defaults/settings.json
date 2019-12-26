@@ -8,8 +8,8 @@
                 ">"
             ],
             "usergroups": [
-                "admin",
-                "mod"
+                "administrator",
+                "host"
             ],
             "ownersID": [],
             "devsID": [

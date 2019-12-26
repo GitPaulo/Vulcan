@@ -46,8 +46,8 @@ usergroups.execute = async (message) => {
         case 'hierarchy':
         case 'list':
         case 'usergroups':
-            output = `\`\`\`js\n${JSON.stringify(await this.list())}\`\`\``
-                + `\`\`\`js\n${JSON.stringify((await this.hierarchy()).toString())}\`\`\``;
+            output = `\`\`\`js\n${this.list().join('\n')}\`\`\``
+                + `\`\`\`js\n${JSON.stringify(this.hierarchy())}\`\`\``;
             break;
         default:
             return vulcan.emit(
@@ -70,6 +70,7 @@ usergroups.execute = async (message) => {
     ));
 };
 
+usergroups.get = async (targetID) => this.command.client.fetchUsergroup(targetID).name;
 usergroups.set = async (targetID, newGroupName) => {
     const cachedUser = this.command.client.updateUsergroup(targetID, newGroupName);
 
@@ -82,8 +83,12 @@ usergroups.set = async (targetID, newGroupName) => {
     return false;
 };
 
-usergroups.get = async (targetID) => this.command.client.fetchUsergroup(targetID).name;
 
-usergroups.list = async () => Array.from(this.command.client.usergroups.entries());
+usergroups.list = () => Array.from(this.command.client.usergroups.entries())
+    .map((entry) => {
+        let user = this.command.client.users.get(entry[0]);
 
-usergroups.hierarchy = async () => this.command.client.hierarchy;
+        return `- ${user.tag} => ${entry[1]}`;
+    });
+
+usergroups.hierarchy = () => Array.from(this.command.client.hierarchy.entries());

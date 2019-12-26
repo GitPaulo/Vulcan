@@ -40,7 +40,7 @@ botchannel:
   description: 'Set caller channel as the "bot dump" channel for the caller guild.'
   examples:
   - '<prefix><id>'
-  group: 'default'
+  group: 'host'
   throttling: 250
   safe: true
   disabled: false
@@ -85,7 +85,7 @@ git:
   examples:
   - '<prefix><id> commits <number to display>'
   - '<prefix><id> collaborators'
-  group: 'root'
+  group: 'administrator'
   throttling: 1000
   safe: false
   disabled: false
@@ -566,7 +566,7 @@ blacklist:
   aliases:
   - 'naughtylist'
   description: 'Handles the blacklist of Vulcan.'
-  group: 'root'
+  group: 'administrator'
   examples:
   - '<prefix><id> add <user_id>'
   - '<prefix><id> remove <user_id>'
@@ -587,7 +587,7 @@ servers:
   - 'serverlist'
   - 'authorised'
   description: 'Handles the authorised server list of Vulcan.'
-  group: 'root'
+  group: 'administrator'
   examples:
   - '<prefix><id> add <user_id>'
   - '<prefix><id> remove <user_id>'
@@ -607,7 +607,7 @@ exit:
   aliases:
   - 'guildleave'
   description: 'Exits the current guild!'
-  group: 'default'
+  group: 'host'
   examples:
   - '<prefix><id>'
   throttling: 0
@@ -625,7 +625,7 @@ authorise:
   aliases:
   - 'guildauthorise'
   description: 'Requests guild authorisation.'
-  group: 'default'
+  group: 'host'
   examples:
   - '<prefix><id>'
   throttling: 5000
@@ -812,3 +812,21 @@ clearpublic:
     color: 0xC0D0B0
     title: 'Public Folder Cleared'
     image: './assets/media/images/commands/discord/clearpublic.gif'
+
+#
+restart:
+  aliases:
+  - 'reboot'
+  description: 'Restarts Vulcan process.'
+  group: 'root'
+  examples:
+  - '<prefix><id>'
+  throttling: 1000
+  safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
+  embed:
+    color: 0xC0D0B0
+    title: 'Restart Vulcan'
+    image: './assets/media/images/commands/discord/restart.gif'
