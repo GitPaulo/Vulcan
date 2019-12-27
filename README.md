@@ -20,19 +20,15 @@
 
 # Overview
 
-**Vulcan** is a multi-purpose discord bot built with [discord.js](https://github.com/discordjs/discord.js). Its creation purpose is set out to acomplish the tasks of administration, utility and entertainment for the discord server of our group of friends. As such, the design and features are tailored to our needs.
+**Vulcan** is a multi-purpose discord bot built with [discord.js](https://github.com/discordjs/discord.js). Vulcan was created to acomplish the tasks of administration, utility and entertainment for the discord server of our group of friends and, as such, its design and features are tailored to our needs.
   
-The project is currently **under early development**. All of the code present is subject to significant changes.
-
-# Documentation
-
-Currently there is no documentation. This page will be updated as soon as there is a change.
+The project is maintained by only a few people, but you are welcome to join.
 
 # Invite Vulcan
 
-Vulcan features are **disabled by default** on __new guilds__. They must be activated by one of the bot owners.
+Vulcan's features are **disabled by default** on __new guilds__: they must be activated by one of the bot owners.
 
-Note that this is **intended**. Once Vulcan is invited to a new server an automatic request to enable its features on the new guild is sent to the bot owners. You may also use the `authorise` command to manually send a request. 
+Note that this is **intended**. Once Vulcan is invited to a new server an automatic request to enable its features on the new guild is sent to the bot owners. You may also use the `authorise` command to manually send a request.
 
 To invite Vulcan to your discord server simply click the image link below:
 

@@ -5,19 +5,20 @@ There currently exist **two** interfaces for commands in vulcan.
 - [Discord Commands](./discord/)
 - [Terminal Commands](./terminal/)
 
-Discord commands are the commands executed via the discord API. In other words, the relevant ones which typical users may interact with. Furthermore, vulcan also has Terminal Comamnds. These commands are parsed and executed via the vulcan CLI interface and are typically only of use to the developers or the host of vulcan.
+Discord commands are the commands executed via the Discord API. Terminal commands are the instructions executed via the Vulcan's process shell (on the host server). Please read the notes below for best practices with adding new commands.
 
 ## The 'commands.yml' file
 
-Each directory, representing a command interface, must contain the file 'commands.yml'. This file holds meta information about each of the commands. It is designed in such a way anyone can edit without much programming experience. The structure for each command descriptor should be definined at the top of each file.
+Each of the folders representing a command 'package' contains a file named 'commands.yml'. This file specifies the meta information about each of the commands within their respective realm. It is designed in such a way that anyone should be able to edit without much programming experience. The structure for each command descriptor should be defined at the top of each file. Please follow the instruction detailed in the commented sections.
 
 ## Adding a new command
 
-  1. Navigate to the correct derictory.
-  2. Identify the **type** of command you wish to add and navigate to the folder that best describes that type. If your type does not exist or is poorly represented, create a folder for it.
-  3. Inside the folder of your command type, create a .js file. The name of this file will be your **command id** (convention is full lowercase) and **must be unique.**
-  4. Add the descriptor for your command in the appropriate command.yml file.
-  5. __(optional)__ Add a thumbnail for the command emebed in the [assets](./assets/media/images/commands) folder
+  1. Navigate to the correct realm directory (discord/terminal).
+  2. Identify the **type** of command you wish to add and navigate to the folder that best describes that type. If your type does not exist or is poorly represented then create a folder for it.
+  3. Inside the folder of your command type, create a .js file in which the main code will be held for that command. The name of this file will be your **command id** (full lowercase please) and **must be unique.**
+  4. __(optional)__ Extra code can be placed in the [](../structures/packages/) directory
+  5. Add the descriptor for your command in the appropriate command.yml file.
+  6. __(optional)__ Add a thumbnail for the command emebed in the [assets](./assets/media/images/commands) folder.
 
 ### Discord Command Template (./discord/mytype/mycommand.js)
 
@@ -60,7 +61,7 @@ mycommand.execute = (line) => {
 };
 ```
 
-### Asynchronous Load Template (for any command type)
+### Asynchronous Load Template (for any command type/realm)
 
 By design the command load functions are **not** asynchronous. The following is the recommended pattern when loading async data:
 
