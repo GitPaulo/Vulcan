@@ -7,7 +7,7 @@ module.exports = async () => {
     // Set statistical presence
     vulcan.presenceManager.useInformational();
 
-    // Prevent ml string de-format
+    // Make things cleaner
     const { branch } = await gitBranch();
     const { v4, v6 } = await vulcan.externalIP();
     const header     = `=========================== [ Vulcan Is Ready (branch:${branch}) ] ===========================\n`;
@@ -17,14 +17,15 @@ module.exports = async () => {
         header
       + `    Vulcan has connected to discord servers sucessfuly and is now ready!            \n`
       + `       (${v4})(${v6})[WSP:${vulcan.webServer.port}][FSP:${vulcan.fileServer.port}]  \n`
+      + `       => Commands: ${vulcan.commands.identifiers.length}                           \n`
       + `       => Networked users: ${vulcan.users.size}                                     \n`
       + `       => Networked channels: ${vulcan.channels.size}                               \n`
       + `       => Blacklisted users: ${vulcan.blacklist.size}                               \n`
       + `       => Authenticated guilds: ${vulcan.servers.size}                              \n`
       + `       => Networked guilds: ${vulcan.guilds.size}                                   \n`
-      + `       => Usergroup Map: ${vulcan.hierarchy}                                        \n`
+      + `       => Usergroup map: ${vulcan.hierarchy}                                        \n`
       + `       => Dependencies: ${Object.keys(pjson.dependencies).length}                   \n`
-      + `       => Dev Dependencies: ${Object.keys(pjson.devDependencies).length}            \n`
+      + `       => Dev-Dependencies: ${Object.keys(pjson.devDependencies).length}            \n`
       + footer
     );
 };

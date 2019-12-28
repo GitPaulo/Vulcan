@@ -1,7 +1,6 @@
 const smiteroulette = module.exports;
 const request       = xrequire('request-promise');
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
-const logger        = xrequire('./managers/LogManager').getInstance();
 
 /**
  * Note: This command is dependent on endpoint: 'https://cms.smitegame.com/wp-json/smite-api/all-gods/1'
@@ -42,8 +41,6 @@ smiteroulette.loadGodCache = async () => {
             dynamicInsert(god, newKey);
         }
     }
-
-    logger.log('[SMITE Roulette] => Loaded god cache from web scraps.');
 
     this.cache = cache;
 };

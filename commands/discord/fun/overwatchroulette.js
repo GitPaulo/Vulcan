@@ -2,7 +2,6 @@ const overwatchroulette = module.exports;
 const cheerio           = xrequire('cheerio');
 const request           = xrequire('request-promise');
 const messageEmbeds     = xrequire('./utility/modules/messageEmbeds');
-const logger            = xrequire('./managers/LogManager').getInstance();
 
 /*
 * Note: This command is dependent on the uptime of 'www.overbuff.com/heroes'
@@ -38,8 +37,6 @@ overwatchroulette.loadHeroCache = async () => {
         // ALL
         cache.get('ALL').push(hero);
     });
-
-    logger.log('[Overwatch Roulette] => Loaded hero cache from web scraps.');
 
     this.cache = cache;
 };

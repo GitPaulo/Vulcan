@@ -159,7 +159,7 @@ media.fetchImage = async (keyword) => {
     let hvalue   = 0;
 
     files.forEach((file) => {
-        let cvalue = stringFunctions.levenshteinSimilarity(keyword, file);
+        let cvalue = stringFunctions.levenshtein(keyword, file);
 
         if (cvalue > hvalue) {
             filePath = file;

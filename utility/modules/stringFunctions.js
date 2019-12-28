@@ -57,7 +57,7 @@ stringFunctions.editDistance = (s1, s2) => {
     return costs[s2.length];
 };
 
-stringFunctions.levenshteinSimilarity = (s1, s2) => {
+stringFunctions.levenshtein = (s1, s2) => {
     let longer = s1;
     let shorter = s2;
 

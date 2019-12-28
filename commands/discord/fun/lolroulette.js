@@ -26,7 +26,7 @@ lolroulette.execute = async (message) => {
         return message.client.emit(
             'channelWarning',
             message.channel,
-            `Please wait. Smite god cache is still loading!`
+            `Please wait. League of legends champion cache is still loading!`
         );
     }
 

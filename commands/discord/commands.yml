@@ -504,6 +504,24 @@ lolroulette:
     image: './assets/media/images/commands/discord/lolroulette.gif'
 
 # 
+fgoservant:
+  aliases:
+  - 'fgos'
+  description: 'Looks up information about a F:GO servant!'
+  group: 'default'
+  examples:
+  - '<prefix><id> <jp/en> <servant_name>'
+  throttling: 1000
+  safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
+  embed:
+    color: 0xCB8AFF
+    title: 'F:GO Servant'
+    image: './assets/media/images/commands/discord/fgoservant.gif'
+
+# 
 documentation:
   aliases:
   - 'docs'

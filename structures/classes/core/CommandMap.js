@@ -4,7 +4,7 @@ class CommandMap extends Map {
     constructor (...args) {
         super(...args);
 
-        this.primaryIdentifiers = [];
+        this.identifiers = [];
     }
 
     addCommand (command) {
@@ -23,7 +23,7 @@ class CommandMap extends Map {
             this.set(alias, command);
         }
 
-        this.primaryIdentifiers.push(command.id);
+        this.identifiers.push(command.id);
     }
 
     retrieveCommand (idOrAlias) {

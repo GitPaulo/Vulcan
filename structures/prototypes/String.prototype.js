@@ -50,3 +50,18 @@ global.extendPrototype(proto, 'isIdentile', function () {
 
     return (unique.size === 1) ? true : false;
 });
+
+global.extendPrototype(proto, 'nthOccurrenceOf', function (pat, n) {
+    let L = this.length;
+    let i = -1;
+
+    while (n-- && i++ < L) {
+        i = this.indexOf(pat, i);
+
+        if (i < 0) {
+            break;
+        }
+    }
+
+    return i;
+});

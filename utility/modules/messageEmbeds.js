@@ -19,6 +19,7 @@ messageEmbeds.reply = (
             url     : message.author.displayAvatarURL()
         },
         description = `Replying to a request from **${message.author.tag}** for command **${message.command.id}**.`,
+        // ! if this is changed, image will be attached
         thumbnail   = {
             url: `attachment://${imgName}`
         },

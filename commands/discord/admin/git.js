@@ -11,6 +11,7 @@ git.load = (commandDescriptor) => {
 
 git.execute = async (message) => {
     // Always target Vulcan repo. (do this in load?)
+    const scmd       = message.parsed.args[0];
     const vulcanRepo = this.git.getRepo('GitPaulo', 'Vulcan');
     const embedWrap  = messageEmbeds.reply(
         {
@@ -30,7 +31,6 @@ git.execute = async (message) => {
     );
 
     // For cleaner code
-    let scmd       = message.parsed.args[0];
     let action     = null;
     let parameters = [];
 
