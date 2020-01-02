@@ -1,10 +1,25 @@
-const Command = xrequire('./structures/classes/core/Command');
+const buckets         = require('buckets-js');
+const Command         = xrequire('./structures/classes/core/Command');
+const stringFunctions = xrequire('./utility/modules/stringFunctions');
 
 class CommandMap extends Map {
     constructor (...args) {
         super(...args);
 
         this.identifiers = [];
+    }
+
+    similar (cmdName) {
+        let similarityHeap = buckets.Heap((a, b) => a.similarity < b.similarity);
+
+        for (let identifier of this.identifiers) {
+            similarityHeap.add({
+                identifier,
+                similarity: stringFunctions.levenshtein(identifier, cmdName),
+            });
+        }
+
+        return similarityHeap.toArray();
     }
 
     addCommand (command) {

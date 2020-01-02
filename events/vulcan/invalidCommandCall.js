@@ -18,7 +18,7 @@ module.exports = (
         {
             embed: {
                 title      : `Invalid Command Call`,
-                description: `The command parsed by vulcan was found to either not exist or have problems with said parsing.\n\n*Nothing was executed.*`,
+                description: `The command parsed by vulcan was found to either not exist or have problems with its parsing.`,
                 color      : 0xFF0000, // Red
                 thumbnail  : {
                     url: `attachment://invalidCommandCall.gif`

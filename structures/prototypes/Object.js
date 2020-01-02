@@ -26,3 +26,13 @@ Object.filter = function (obj, predicate) {
 
     return result;
 };
+
+Object.flip = function (obj) {
+    let ret = {};
+
+    for (let key in obj) {
+        ret[obj[key]] = key;
+    }
+
+    return ret;
+};

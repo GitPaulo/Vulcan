@@ -603,13 +603,10 @@ blacklist:
 servers:
   aliases:
   - 'serverlist'
-  - 'authorised'
-  description: 'Handles the authorised server list of Vulcan.'
+  description: 'Displays statistics about the networked servers.'
   group: 'administrator'
   examples:
-  - '<prefix><id> add <user_id>'
-  - '<prefix><id> remove <user_id>'
-  - '<prefix><id> list'
+  - '<prefix><id>'
   throttling: 0
   safe: false
   disabled: false
@@ -617,7 +614,7 @@ servers:
   vulcanPermissions: []
   embed:
     color: 0x00000
-    title: 'Authorised Server List'
+    title: 'Server Statistics'
     image: './assets/media/images/commands/discord/servers.gif'
 
 # 
@@ -654,6 +651,24 @@ authorise:
   embed:
     color: 0x00000
     title: 'Guild Authorisation Request'
+    image: './assets/media/images/commands/discord/authorise.gif'
+
+# 
+unauthorise:
+  aliases:
+  - 'guildunauthorise'
+  description: 'Revokes guild authorisation.'
+  group: 'administrator'
+  examples:
+  - '<prefix><id>'
+  throttling: 1000
+  safe: true
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
+  embed:
+    color: 0x00000
+    title: 'Guild Authorisation Revoked'
     image: './assets/media/images/commands/discord/authorise.gif'
 
 #

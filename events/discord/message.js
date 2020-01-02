@@ -8,20 +8,20 @@ const logger    = xrequire('./managers/LogManager').getInstance();
 /* eslint-disable complexity */
 module.exports = async (message) => {
     try {
-        // For now, log every message
+        // Log every message
         logger.log(
             `[${message.direct
-                ? `Direct Message@${message.author.tag}`
-                : `${((!message.guild.authorised && '[*UNAUTH*] => ' || '') + message.guild.name)}@${message.channel.name}`}]`
+                ? `DM:${message.author.tag}`
+                : `${((!message.guild.authorised && 'U-AUTH' || 'AUTH') + `:(${message.guild.name})`)}@${message.channel.name}`}]`
             + ` => `
-            + `[${message.system ? 'Discord System' : `${message.author.tag}(${message.author.id})`}]`
+            + `[${message.system ? 'System(Discord)' : `${message.author.tag}(${message.author.id})`}]`
             + ` => `
-            + `"${message.cleanContent || (message.embeds.length ? `[Embeds: ${message.embeds.length}]` : `[Attachments Only]`)}"`
+            + `"${message.cleanContent || (message.embeds.length ? `[Embeds: ${message.embeds.length}]` : `[Files Attached: ${message.files.length}]`)}"`
         );
 
         // Log any attachments
         if (message.attachments.size > 0) {
-            logger.debug(message.attachments);
+            logger.plain(message.attachments);
         }
 
         // Filter contents of message if they are not authored by Vulcan
@@ -35,7 +35,7 @@ module.exports = async (message) => {
         }
 
         // Handle extended ats
-        if (message.client.configuration.extendedAts) {
+        if (message.client.configuration.extendedAts.enabled) {
             await ats(message);
         }
 
@@ -61,12 +61,15 @@ module.exports = async (message) => {
         // Parse message and initialise message.command & parse data
         message.setParsed(await parser(message));
 
-        // Check if message was a valid command
+        // Check if message was a valid command. Output similarity aid if not.
         if (!message.isCommand) {
             return message.client.emit(
                 'invalidCommandCall',
                 message,
-                `The command request \`${message.parsed.cmdName}\` is invalid.`
+                `The command request \`${message.parsed.cmdName}\` is invalid.\n`
+                + `\`\`\`\nDid you mean?\n${
+                        message.client.commands.similar(message.parsed.cmdName).map((e)=>`- ${e.identifier}`).slice(0,3).join('\n')
+                    }\`\`\``
             );
         }
 

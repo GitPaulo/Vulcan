@@ -29,7 +29,7 @@ module.exports = async (channel, ...args) => {
     // TODO: Improve this
     // Could be DM
     if (channel.type === 'text') {
-        let vulcanPermissions = channel.permissionsFor(vulcan.user);
+        let vulcanPermissions = channel.permissionsFor(vulcan.user.id);
 
         if (
             !(vulcanPermissions.has('SEND_MESSAGES')

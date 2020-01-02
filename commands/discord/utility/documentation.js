@@ -8,7 +8,7 @@ documentation.execute = async (message) => {
     const output   = await gitBranch();
     const commands = message.client.commands;
 
-    let smallDocumentString = `=> All Command IDs\n=> #Commands: ${commands.identifiers.length}\n\n`;
+    let smallDocumentString = `[Vulcan@${output.branch}]\n=> Total Commands: ${commands.identifiers.length}\n\n`;
     let documentString      = `=> Vulcan Command Documentation\n\t Branch: ${output.branch}\n\n`;
 
     // Make a simple long string and upload to hastebin
@@ -23,7 +23,7 @@ documentation.execute = async (message) => {
         {
             message,
             title      : 'Command Documentation',
-            description: `\`\`\`\n${smallDocumentString}\`\`\``,
+            description: `\`\`\`\n${smallDocumentString.trim().slice(0, -1)}\`\`\``,
             fields     : [
                 {
                     name : 'Full Documentation',

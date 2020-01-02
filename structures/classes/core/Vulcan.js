@@ -56,6 +56,14 @@ class Vulcan extends Discord.Client {
 
         this.prefixRegex = new RegExp(`^(${prefixRegex})`, 'u');
 
+        // Join 'special' ats prefixes as a regex (extended ats aka: 'eats')
+        const eatsConfig = settings.configuration.extendedAts.prefixes;
+        const eatsMapStr = Object.entries(eatsConfig).map((prefix) => '\\' + prefix[1]).join('|');
+        const eatsRegex  = new RegExp(`@(${eatsMapStr})[^\\s]*`, 'g');
+
+        this.eatsRegex  = eatsRegex;
+        this.eatsLookup = Object.flip(eatsConfig);
+
         // ? Initialise 'public' properties
         this.configuration = settings.configuration;
         this.blacklist     = new Map(settings.blacklist);
