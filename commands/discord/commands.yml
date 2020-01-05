@@ -741,7 +741,7 @@ info:
   group: 'default'
   examples:
   - '<prefix><id>'
-  throttling: 1000
+  throttling: 5000
   safe: false
   disabled: false
   userPermissions: []
@@ -816,7 +816,7 @@ weather:
   description: 'Access weather and climate information about regions.'
   group: 'default'
   examples:
-  - '<prefix><id>'
+  - '<prefix><id> <region> <today/tomorrow/week>'
   throttling: 1000
   safe: false
   disabled: false
@@ -855,6 +855,26 @@ restart:
   group: 'root'
   examples:
   - '<prefix><id>'
+  throttling: 1000
+  safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
+  embed:
+    color: 0xC0D0B0
+    title: 'Restart Vulcan'
+    image: './assets/media/images/commands/discord/restart.gif'
+
+#
+insult:
+  aliases:
+  - 'bm'
+  - 'affront'
+  - 'abuse'
+  description: 'Generates an insult towards a target.'
+  group: 'default'
+  examples:
+  - '<prefix><id> <target>'
   throttling: 1000
   safe: false
   disabled: false

@@ -3,10 +3,10 @@ const gitBranch     = xrequire('./utility/modules/gitBranch');
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 info.execute = async (message) => {
-    const performance = message.client.performance;
-    const statistics  = message.client.statistics;
-    const address     = await message.client.externalIP();
-    const output      = await gitBranch();
+    const performance        = message.client.performance;
+    const statistics         = message.client.statistics;
+    const address            = (await message.client.externalIP()) || { v4: 'Unknown', v5: 'Unknown' };
+    const { branch, status } = (await gitBranch()) || { branch: 'Unknown', status: 'Unknown' };
 
     // Turn into actual names, if valid
     let tagOwners = message.client.configuration.ownersID.map((ownerID) => {
@@ -19,6 +19,9 @@ info.execute = async (message) => {
         return ownerID;
     });
 
+    // Turn into actual names, if valid
+    let tagHosts = message.client.guilds.members.map((member) => member.tag);
+
     // Output information
     await message.channel.send(messageEmbeds.reply({
         message,
@@ -30,11 +33,15 @@ info.execute = async (message) => {
             },
             {
                 name : 'Version & Branch',
-                value: `Branch: '${output.branch}'\n${output.status}`
+                value: `Branch: '${branch}'\n${status}`
             },
             {
                 name : 'Bot Owners',
                 value: tagOwners.toString()
+            },
+            {
+                name : 'Bot Hosts',
+                value: tagHosts.toString()
             },
             {
                 name  : 'CPU Usage',
