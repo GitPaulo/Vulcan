@@ -13,14 +13,14 @@ info.execute = async (message) => {
         let owner = message.client.users.get(ownerID);
 
         if (owner) {
-            return owner.tag;
+            return `<@${owner.id}>`;
         }
 
         return ownerID;
     });
 
     // Turn into actual names, if valid
-    let tagHosts = message.client.guilds.array().map((guild) => guild.owner.tag);
+    let atHosts = message.client.guilds.array().map((guild) => guild.owner);
 
     // Output information
     await message.channel.send(messageEmbeds.reply({
@@ -41,7 +41,7 @@ info.execute = async (message) => {
             },
             {
                 name : 'Bot Hosts',
-                value: tagHosts.toString()
+                value: atHosts.toString()
             },
             {
                 name  : 'CPU Usage',
