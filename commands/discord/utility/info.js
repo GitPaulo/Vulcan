@@ -20,7 +20,7 @@ info.execute = async (message) => {
     });
 
     // Turn into actual names, if valid
-    let tagHosts = message.client.guilds.members.map((member) => member.tag);
+    let tagHosts = message.client.guilds.members.array().map((member) => member.tag);
 
     // Output information
     await message.channel.send(messageEmbeds.reply({
