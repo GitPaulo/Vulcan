@@ -3,7 +3,7 @@ const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 play.execute = async (message) => {
     const musicManager = message.guild.musicManager;
-    const request      = message.parsed.args[0];
+    const request      = message.parsed.argsString;
 
     // If no URL/ID is provided restart playing song or play whatever is at front of queue.
     if (!request) {
@@ -25,28 +25,19 @@ play.execute = async (message) => {
         );
     }
 
+    // Send request
+    await message.channel.send(messageEmbeds.reply(
+        {
+            message,
+            description: `Music player request sent: \`\`\`\n${request}\`\`\``
+        }
+    ));
+
     // Queue song
     await musicManager.loadItem(request, message.channel, message.author);
 
     // Behave depending on queue status
     if (!musicManager.queueEmpty) {
-        await message.channel.send(messageEmbeds.reply(
-            {
-                message,
-                description: 'Queued an item to the music player.',
-                fields     : [
-                    {
-                        name : 'Queued Song',
-                        value: request
-                    },
-                    {
-                        name : 'Queue Size',
-                        value: musicManager.queue.length
-                    }
-                ]
-            }
-        ));
-
         // If nothing is playing and the song was queued
         if (!musicManager.playing) {
             await musicManager.play();

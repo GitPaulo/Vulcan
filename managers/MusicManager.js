@@ -1,4 +1,5 @@
 const got             = xrequire('got');
+const ytsr            = require('ytsr');
 const { promisify }   = xrequire('util');
 const cheerio         = xrequire('cheerio');
 const Discord         = xrequire('discord.js');
@@ -9,6 +10,15 @@ const stringFunctions = xrequire('./utility/modules/stringFunctions');
 const logger          = xrequire('./managers/LogManager').getInstance();
 
 ytdl.getInfoAsync = promisify(ytdl.getBasicInfo);
+
+/**
+ * ! Limitations
+ * Because of the reliance of youtube as the only source of music streaming
+ * there are a few limitations:
+ *  * Regionally restricted (requires a proxy)
+ *  * Private
+ *  * Rentals
+ */
 
 class MusicManager {
     constructor (guild) {
@@ -280,8 +290,8 @@ class MusicManager {
         this.destroy();
     }
 
-    async loadItem (idOrURL, requestChannel, requestAuthor) {
-        if (typeof idOrURL !== 'string') {
+    async loadItem (request, requestChannel, requestAuthor) {
+        if (typeof request !== 'string') {
             throw new Error(`Request must be of type string!`);
         }
 
@@ -293,8 +303,27 @@ class MusicManager {
             throw new Error('Invalid request author!');
         }
 
-        // Transform ID to UR (for now all playlist to be given as URL only)
-        const url = stringFunctions.isURL(idOrURL) ? idOrURL : `http://www.youtube.com/watch?v=${idOrURL}`;
+        // * Parsing request => URL
+        let url = '';
+
+        if (ytdl.validateURL(request)) {
+            url = request;
+        } else if (ytdl.validateID(request)) {
+            url = `http://www.youtube.com/watch?v=${request}`;
+        } else {
+            // ? Search for a video with those keywords.
+            const ytResults = (await ytsr(request)).items;
+
+            if (ytResults.length <= 0) {
+                return this.guild.client.emit(
+                    'channelInformation',
+                    requestChannel,
+                    `Unable to find youtube music videos for the request!`
+                );
+            }
+
+            url = ytResults[0].link;
+        }
 
         // If not playlist then queue song, else load playlist
         if (!stringFunctions.isYoutubePlaylist(url)) {

@@ -180,6 +180,7 @@ connect4:
 #
 music:
   aliases:
+  - 'join'
   - 'voicejoin'
   - 'joinvoice'
   - 'voice'
@@ -194,7 +195,7 @@ music:
   vulcanPermissions: []
   embed:
     color: 0xFFA500
-    title: 'Music'
+    title: 'Music: Join Voice'
     image: './assets/media/images/commands/discord/music.gif'
 
 #
@@ -213,7 +214,7 @@ autoplay:
     - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
-    title: 'Auto Play'
+    title: 'Music: Auto Play'
     image: './assets/media/images/commands/discord/music.gif'
 
 #
@@ -232,7 +233,7 @@ destroy:
     - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
-    title: 'Destroy'
+    title: 'Music: Destroy'
     image: './assets/media/images/commands/discord/music.gif'
 
 #
@@ -254,7 +255,7 @@ forceplay:
     - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
-    title: 'Force Play'
+    title: 'Music: Force Play'
     image: './assets/media/images/commands/discord/music.gif'
 
 #
@@ -275,7 +276,7 @@ list:
     - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
-    title: 'Music List (Queue)'
+    title: 'Music: List (Queue)'
     image: './assets/media/images/commands/discord/music.gif'
 
 #
@@ -294,7 +295,7 @@ pause:
     - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
-    title: 'Pause'
+    title: 'Music: Pause'
     image: './assets/media/images/commands/discord/music.gif'
 
 #
@@ -316,7 +317,7 @@ play:
     - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
-    title: 'Play'
+    title: 'Music: Play'
     image: './assets/media/images/commands/discord/music.gif'
 
 #
@@ -335,7 +336,7 @@ purge:
     - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
-    title: 'Purge'
+    title: 'Music: Purge'
     image: './assets/media/images/commands/discord/music.gif'
 
 #
@@ -354,7 +355,7 @@ leave:
     - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
-    title: 'Leave'
+    title: 'Music: Leave'
     image: './assets/media/images/commands/discord/music.gif'
 
 #
@@ -373,7 +374,7 @@ repeat:
     - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
-    title: 'Repeat'
+    title: 'Music: Repeat'
     image: './assets/media/images/commands/discord/music.gif'
 
 #
@@ -395,7 +396,7 @@ resume:
     - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
-    title: 'Resume'
+    title: 'Music: Resume'
     image: './assets/media/images/commands/discord/music.gif'
 
 #
@@ -414,7 +415,7 @@ shuffle:
     - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
-    title: 'Shuffle'
+    title: 'Music: Shuffle'
     image: './assets/media/images/commands/discord/music.gif'
 
 #
@@ -436,7 +437,7 @@ skip:
     - 'EMBED_LINKS'
   embed:
     color: 0xFFA500
-    title: 'Skip'
+    title: 'Music: Skip'
     image: './assets/media/images/commands/discord/music.gif'
 
 # 

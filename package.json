@@ -69,7 +69,8 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "ytdl-core": "git+https://git@github.com/fent/node-ytdl-core.git",
-    "ytdl-core-discord": "git+https://git@github.com/amishshah/ytdl-core-discord.git"
+    "ytdl-core-discord": "git+https://git@github.com/amishshah/ytdl-core-discord.git",
+    "ytsr": "^0.1.10"
   },
   "devDependencies": {
     "eslint": "^6.7.2",
