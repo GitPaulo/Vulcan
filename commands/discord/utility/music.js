@@ -4,7 +4,7 @@ const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 music.execute = async (message) => {
     const voiceChannelToJoin = message.member.voice.channel;
     const musicManager       = message.guild.musicManager;
-    const request            = message.parsed.args[0];
+    const request            = message.parsed.argsString;
 
     // Join voice if it does not match with requesters
     if (musicManager.voiceChannel === voiceChannelToJoin) {
@@ -27,7 +27,7 @@ music.execute = async (message) => {
     ));
 
     // If request, play immediatly
-    if (request) {
+    if (request && request.length > 0) {
         // Send request
         await message.channel.send(messageEmbeds.reply(
             {

@@ -5,11 +5,11 @@ const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 info.execute = async (message) => {
     const performance        = message.client.performance;
     const statistics         = message.client.statistics;
-    const address            = (await message.client.externalIP()) || { v4: 'Unknown', v5: 'Unknown' };
-    const { branch, status } = (await gitBranch()) || { branch: 'Unknown', status: 'Unknown' };
+    const address            = await message.client.externalIP();
+    const { branch, status } = await gitBranch();
 
     // Turn into actual names, if valid
-    let tagOwners = message.client.configuration.ownersID.map((ownerID) => {
+    let atOwners = message.client.configuration.ownersID.map((ownerID) => {
         let owner = message.client.users.get(ownerID);
 
         if (owner) {
@@ -21,6 +21,15 @@ info.execute = async (message) => {
 
     // Turn into actual names, if valid
     let atHosts = message.client.guilds.array().map((guild) => guild.owner);
+
+    // Get admim tags
+    let atAdmins = Array.from(message.client.usergroups.entries())
+        .filter((entry) => entry[1] === 'administrator')
+        .map((entry) => {
+            let admin = this.command.client.users.get(entry[0]);
+
+            return `<@${admin.id}>`;
+        });
 
     // Output information
     await message.channel.send(messageEmbeds.reply({
@@ -37,11 +46,15 @@ info.execute = async (message) => {
             },
             {
                 name : 'Bot Owners',
-                value: tagOwners.toString()
+                value: atOwners.toString() || '(No Owners)'
+            },
+            {
+                name : 'Bot Administrators',
+                value: atAdmins.toString() || '(No Administrators)'
             },
             {
                 name : 'Bot Hosts',
-                value: atHosts.toString()
+                value: atHosts.toString() || '(No Hosts)'
             },
             {
                 name  : 'CPU Usage',
