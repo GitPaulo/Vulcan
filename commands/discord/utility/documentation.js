@@ -5,31 +5,64 @@ const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 // TODO - Improve this! Make prettier :)
 documentation.execute = async (message) => {
-    const output   = await gitBranch();
-    const commands = message.client.commands;
+    let wrap           = null;
+    const scmd         = message.parsed.args[0];
+    const { commands } = message.client;
 
-    let smallDocumentString = `[Vulcan@${output.branch}]\n=> Total Commands: ${commands.identifiers.length}\n\n`;
-    let documentString      = `=> Vulcan Command Documentation\n\t Branch: ${output.branch}\n\n`;
+    // CMD specific doc
+    if (scmd) {
+        let command = commands.get(scmd);
 
-    // Make a simple long string and upload to hastebin
-    commands.identifiers.forEach((id) => {
-        smallDocumentString += id + ', ';
-        documentString      += commands.get(id).toString() + '\n// [end]\n\n';
-    });
-
-    let url = await hastebin.post(documentString);
-
-    await message.channel.send(messageEmbeds.reply(
-        {
-            message,
-            title      : 'Command Documentation',
-            description: `\`\`\`\n${smallDocumentString.trim().slice(0, -1)}\`\`\``,
-            fields     : [
-                {
-                    name : 'Full Documentation',
-                    value: url
-                }
-            ]
+        if (!command) {
+            return message.client.emit(
+                'invalidCommandUsage',
+                message,
+                `The command **${scmd}** was not found in the list of commands.`
+            );
         }
-    ));
+
+        wrap = messageEmbeds.reply(
+            {
+                message,
+                title      : `Command Documentation: '${command.id}'`,
+                description: `\`\`\`\n${command.description}\`\`\``,
+                fields     : [
+                    {
+                        name : 'Usage Examples',
+                        value: `\`\`\`\n${command.examples.join('\n')}\n\`\`\``
+                    },
+                    {
+                        name : `Alias`,
+                        value: `\`${command.aliases.join(', ')}\``
+                    }
+                ]
+            }
+        );
+    } else { // Full docs
+        let output              = await gitBranch();
+        let smallDocumentString = `[Vulcan@${output.branch}]\n=> Total Commands: ${commands.identifiers.length}\n\n`;
+        let documentString      = `=> Vulcan Command Documentation\n\t Branch: ${output.branch}\n\n`;
+
+        // Make a simple long string and upload to hastebin
+        commands.identifiers.forEach((id) => {
+            smallDocumentString += id + ', ';
+            documentString      += commands.get(id).toString() + '\n// [end]\n\n';
+        });
+
+        wrap = messageEmbeds.reply(
+            {
+                message,
+                title      : 'Command Documentation',
+                description: `\`\`\`\n${smallDocumentString.trim().slice(0, -1)}\`\`\``,
+                fields     : [
+                    {
+                        name : 'Full Documentation',
+                        value: await hastebin.post(documentString)
+                    }
+                ]
+            }
+        );
+    }
+
+    await message.channel.send(wrap);
 };

@@ -13,6 +13,7 @@ module.exports = async () => {
     const header     = `=========================== [ Vulcan Is Ready (branch:${branch}) ] ===========================\n`;
     const footer     = `=`.repeat(header.length);
 
+    // Tell the devs we ready! :)
     logger.plain(
         header
       + `    Vulcan has connected to discord servers sucessfuly and is now ready!            \n`
@@ -28,4 +29,13 @@ module.exports = async () => {
       + `       => Dev-Dependencies: ${Object.keys(pjson.devDependencies).length}            \n`
       + footer
     );
+
+    // Leave if connected to voice? (Happens sometimes)
+    // ! Move logic elsewhere [its stupid!]
+    vulcan.guilds.forEach((guild) => {
+        if (guild.voice && guild.voice.channel) {
+            guild.voice.channel.join().then(() => guild.voice.channel.leave());
+            logger.warn(`Vulcan was connect to voice channel: ${guild.voice.name}(${guild.voice.channel.id}) on start up.`);
+        }
+    });
 };

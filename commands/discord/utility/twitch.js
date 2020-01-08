@@ -6,7 +6,7 @@ const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 // TODO - Improve! Add more functionality and prettier embeds :)
 /* eslint-disable no-unused-vars */
 twitch.load = (commandDescriptor) => {
-    this.endpoint = 'https://api.twitch.tv/helix';
+    this.endpoint = 'http://api.twitch.tv/helix';
     this.id       = this.command.client.credentials.OAuth.twitch.id;
     this.secret   = this.command.client.credentials.OAuth.twitch.secret;
 };

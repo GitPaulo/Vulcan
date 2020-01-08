@@ -1,6 +1,6 @@
 const request = xrequire('request-promise');
 
-let baseURL = 'https://hasteb.in';
+let baseURL = 'http://hasteb.in';
 
 exports.setBaseURL = (url) => {
     if (typeof url !== 'string') {

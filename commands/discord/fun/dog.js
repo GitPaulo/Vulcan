@@ -3,7 +3,7 @@ const request       = xrequire('request-promise');
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 dog.execute = async (message) => {
-    const response = JSON.parse(await request('https://dog.ceo/api/breeds/image/random'));
+    const response = JSON.parse(await request('http://dog.ceo/api/breeds/image/random'));
 
     if (response.status !== 'success') {
         return message.channel.send(messageEmbeds.reply(

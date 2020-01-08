@@ -3,7 +3,7 @@ const request       = xrequire('request-promise');
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 /**
- * Note: This command is dependent on endpoint: 'https://cms.smitegame.com/wp-json/smite-api/all-gods/1'
+ * Note: This command is dependent on endpoint: 'http://cms.smitegame.com/wp-json/smite-api/all-gods/1'
  */
 smiteroulette.loadGodCache = async () => {
     const result = await request('http://cms.smitegame.com/wp-json/smite-api/all-gods/1');

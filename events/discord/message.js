@@ -68,7 +68,7 @@ module.exports = async (message) => {
                 message,
                 `The command request \`${message.parsed.cmdName}\` is invalid.\n`
                 + `\`\`\`\nDid you mean?\n${
-                    message.client.commands.similar(message.parsed.cmdName).map((e) => `- ${e.identifier}`).slice(0, 3).join('\n')
+                    message.client.commands.similar(message.parsed.cmdName).map((s) => `- ${s.reference}`).slice(0, 3).join('\n')
                 }\`\`\``
             );
         }

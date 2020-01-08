@@ -32,6 +32,7 @@ class MusicManager {
         this.repeat      = false;
         this.shouldPause = false;
         this.shuffle     = false;
+        this.afkTimeout  = 60 * 1000; // 1 minute check
 
         // Assigned by methods
         this.requestChannel = null;
@@ -91,7 +92,6 @@ class MusicManager {
                     { name: 'Request Author',  value: this.loadedSong.requestAuthor || 'Unknown', inline: true  },
                     { name: 'Upload Author',   value: this.loadedSong.author || 'Unknown',        inline: true  },
                     { name: 'Duration',        value: this.loadedSong.seconds + 's' || '0s?',     inline: true  },
-                    { name: 'Age Restricted',  value: this.loadedSong.ageRestricted || 'false',   inline: true  },
                     { name: 'URL',             value: this.loadedSong.url || 'Unkonwn',           inline: false }
                 ]
             }
@@ -130,13 +130,19 @@ class MusicManager {
                 this.log(`Autoplay is off and there are songs to play!`);
             }
         } else { // No more songs to play...
-            this.guild.client.emit(
-                'channelInformation',
-                this.requestChannel,
-                `No more songs to play. Leaving voice channel.`
-            );
-            await this.leaveVoice();
-            this.log(`No more songs to play. Purged and left voice channel.`);
+            this.log(`No more songs to play. Starting AFK check.`);
+
+            // Prevent from staying in channel forever.
+            // ? Skip triggers this!
+            this.inactivityCheck((inactive) => {
+                if (inactive) {
+                    this.guild.client.emit(
+                        'channelInformation',
+                        this.requestChannel,
+                        `Voice inactivity detected (\`timeout=${this.afkTimeout}\`).\nLeaving voice channel!`
+                    );
+                }
+            });
         }
     }
 
@@ -151,6 +157,18 @@ class MusicManager {
 
     log (str) {
         logger.log(`[MusicManager] => [${this.guild.name}] => ${str}`);
+    }
+
+    inactivityCheck (cb) {
+        return setTimeout(() => {
+            // If still in after timeout and not playing
+            if (this.voiceChannel && !this.playing) {
+                this.leaveVoice();
+                cb(true);
+            } else {
+                cb(false);
+            }
+        }, this.afkTimeout);
     }
 
     loadPlaylistToArray (data, opt) {
@@ -205,39 +223,23 @@ class MusicManager {
         });
     }
 
-    enqueue (url, requestAuthor) {
+    async enqueue (url, requestAuthor) {
         if (!ytdl.validateURL(url)) {
             throw new Error('URL is not parsable by the youtube download library.');
         }
 
         const cpos = this.queue.length;
-
-        // Do not await for metadata fetch or else load will be slow! [might be buggy tho]
-        ytdl.getInfoAsync(url).then((data) => {
-            if (!this.queue[cpos]) {
-                return Error(
-                    `Async song data fetch could not find song.`
-                    + `\n\tQueue was probably purged during load sequence.`
-                );
-            }
-
-            this.queue[cpos].name          = data.title;
-            this.queue[cpos].loudness      = data.loudness;
-            this.queue[cpos].author        = data.author.name;
-            this.queue[cpos].ageRestricted = data.age_restricted;
-            this.queue[cpos].seconds       = parseInt(data.length_seconds, 10);
-        }).catch((err) => {
-            this.requestChannel.guild.emit('channelError', this.requestChannel, err);
-        });
+        // Perhaps not needed?
+        const data = await ytdl.getInfoAsync(url);
 
         this.queue.push(
             {
                 url,
-                name         : '(loading)',
-                author       : '(loading)',
+                name         : data.title,
+                author       : data.author.name,
                 requestAuthor: (typeof requestAuthor === 'string') && requestAuthor || requestAuthor.tag,
-                loudness     : 0,
-                seconds      : 0
+                loudness     : data.loudness,
+                seconds      : parseInt(data.length_seconds, 10)
             }
         );
 
@@ -270,6 +272,15 @@ class MusicManager {
                 this.voiceChannel = voiceChannel;
                 this.connection   = connection;
                 this.log(`Joined voice channel '${voiceChannel.name}'.`);
+                this.inactivityCheck((inactive) => {
+                    if (inactive) {
+                        this.guild.client.emit(
+                            'channelInformation',
+                            this.requestChannel,
+                            `Voice inactivity detected (\`timeout=${this.afkTimeout}\`).\nLeaving voice channel!`
+                        );
+                    }
+                });
             })
             .catch((err) => {
                 if (String(err).includes('ECONNRESET')) {
@@ -506,13 +517,13 @@ class MusicManager {
         this.shuffle     = false;
 
         // Clean these up at the end of event loop
-        setTimeout(() => {
+        setImmediate(() => {
             this.requestChannel = null;
             this.voiceChannel   = null;
             this.connection     = null;
             this.dispatcher     = null;
             this.loadedSong     = null;
-        }, 0);
+        });
 
         this.log(`Destroyed music controller state.`);
     }

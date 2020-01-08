@@ -79,7 +79,7 @@ class PresenceManager {
     useTwitch () {
         // Twitch Activity
         const requestData = {
-            uri    : 'https://api.twitch.tv/helix/streams?first=1',
+            uri    : 'http://api.twitch.tv/helix/streams?first=1',
             headers: {
                 'Client-ID': this.client.credentials.OAuth.twitch.id
             }
@@ -97,7 +97,7 @@ class PresenceManager {
                             activity: {
                                 name: twitchResponse.data[0].user_name,
                                 type: 'STREAMING',
-                                url : `https://www.twitch.tv/${twitchResponse.data[0].user_name}`
+                                url : `http://www.twitch.tv/${twitchResponse.data[0].user_name}`
                             }
                         };
 

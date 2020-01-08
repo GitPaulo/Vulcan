@@ -14,7 +14,7 @@ botchannel.execute = async (message) => {
             },
             {
                 name : 'Re-Invite',
-                value: `https://discordapp.com/oauth2/authorize?client_id=604662534410207233&scope=bot&permissions=1341644225`
+                value: `http://discordapp.com/oauth2/authorize?client_id=604662534410207233&scope=bot&permissions=1341644225`
             }
         ]
     });

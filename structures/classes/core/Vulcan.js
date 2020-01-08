@@ -25,7 +25,7 @@ const chainPrint = (category, chainee) => (logger.log('Initialised => ' + catego
 
 class Vulcan extends Discord.Client {
     constructor (vulcanOptions, discordOptions = {}) {
-        // https://discord.js.org/#/docs/main/stable/typedef/ClientOptions
+        // http://discord.js.org/#/docs/main/stable/typedef/ClientOptions
         super(discordOptions);
 
         // Easy Clap
@@ -453,10 +453,25 @@ class Vulcan extends Discord.Client {
 
     //  Get External IP :D
     async externalIP () {
+        let v4 = 'Unknown';
+        let v6 = 'Unknown';
+        let er = false;
+
+        try {
+            v4 = await publicIP.v4();
+        } catch (e) { er = true; }
+
+        try {
+            v6 = await publicIP.v4();
+        } catch (e) { er = true; }
+
+        if (er) {
+            logger.error('Unable to fetch external IP through: `vulcan.externalIP()`');
+        }
+
         return {
-            v4: await publicIP.v4(),
-            // ! Todo: Improve and fix
-            v6: global.isLinux ? 'Unknown' : await publicIP.v6()
+            v4,
+            v6
         };
     }
 }

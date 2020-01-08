@@ -184,10 +184,10 @@ music:
   - 'voicejoin'
   - 'joinvoice'
   - 'voice'
-  description: 'Joins voice channel and prepares bot for music.'
+  description: 'Joins voice channel and prepares bot for music. Passing a second argument to this command will play music from the run.'
   group: 'default'
   examples:
-  - '<prefix><id>'
+  - '<prefix><id> <keyword>'
   throttling: 1000
   safe: false
   disabled: false
@@ -419,6 +419,26 @@ shuffle:
     image: './assets/media/images/commands/discord/music.gif'
 
 #
+timeout:
+  aliases:
+  - 'inactivitytimeout'
+  - 'musictimeout'
+  description: 'Sets the inactivity timeout for voice channels.'
+  group: 'default'
+  examples:
+  - '<prefix><id> <timeout>'
+  throttling: 1000
+  safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions:
+    - 'EMBED_LINKS'
+  embed:
+    color: 0xFFA500
+    title: 'Music: Timeout'
+    image: './assets/media/images/commands/discord/music.gif'
+
+#
 skip:
   aliases:
   - 'musicskip'
@@ -528,10 +548,11 @@ documentation:
   - 'docs'
   - 'help'
   - 'commands'
-  description: 'Displays documentation about Vulcan usage.'
+  description: 'Displays documentation about Vulcan usage or a specific command.'
   group: 'default'
   examples:
   - '<prefix><id>'
+  - '<prefix><id> <command>'
   throttling: 1000
   safe: false
   disabled: false

@@ -92,7 +92,7 @@ this.fetchCommits = async (repo, number = 4) => {
         carray.push(dataStr);
     });
 
-    carray.push(`[https://github.com/GitPaulo/Vulcan/commits/master]`);
+    carray.push(`[http://github.com/GitPaulo/Vulcan/commits/master]`);
 
     return carray;
 };

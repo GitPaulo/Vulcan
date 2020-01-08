@@ -1,6 +1,6 @@
 const insult        = module.exports;
 const request       = xrequire('request-promise');
-const apiEndpoint   = `https://insult.mattbas.org/api/insult`;
+const apiEndpoint   = `http://insult.mattbas.org/api/insult`;
 // const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 insult.execute = async (message) => {

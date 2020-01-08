@@ -6,16 +6,18 @@ class CommandMap extends Map {
     constructor (...args) {
         super(...args);
 
-        this.identifiers = [];
+        // Cached (maybe transfer to getter?)
+        this.identifiers = []; // primary cmd names
+        this.references  = []; // all cmd names
     }
 
-    similar (cmdName) {
+    similar (keyword) {
         let similarityHeap = buckets.Heap((a, b) => a.similarity < b.similarity);
 
-        for (let identifier of this.identifiers) {
+        for (let reference of this.references) {
             similarityHeap.add({
-                identifier,
-                similarity: stringFunctions.levenshtein(identifier, cmdName),
+                reference,
+                similarity: stringFunctions.levenshtein(reference, keyword)
             });
         }
 
@@ -27,15 +29,13 @@ class CommandMap extends Map {
             throw new TypeError('CommandMap only accepts instances of Command');
         }
 
-        // Set for id
-        const allAlias = [command.id, ...command.aliases];
-
-        for (let alias of allAlias) {
+        for (let alias of [command.id, ...command.aliases]) {
             if (this.get(alias)) {
                 throw new Error(`Command alias '${alias}' of command '${command.id}' has already been declared in the command map!`);
             }
 
             this.set(alias, command);
+            this.references.push(alias);
         }
 
         this.identifiers.push(command.id);

@@ -4,7 +4,7 @@ const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 lolroulette.loadChampionData = async () => {
     const result = await request(
-        'https://ddragon.leagueoflegends.com/cdn/9.24.2/data/en_GB/champion.json',
+        'http://ddragon.leagueoflegends.com/cdn/9.24.2/data/en_GB/champion.json',
         {
             headers: // Header required or else 403
             {

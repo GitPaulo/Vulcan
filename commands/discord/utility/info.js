@@ -29,7 +29,7 @@ info.execute = async (message) => {
         fields     : [
             {
                 name : 'Github Repo',
-                value: 'https://github.com/GitPaulo/Vulcan'
+                value: 'http://github.com/GitPaulo/Vulcan'
             },
             {
                 name : 'Version & Branch',

@@ -128,7 +128,7 @@ media.storeImageFromMessage = (fileName, message) => {
 
 media.storeImageFromURL = async (url, fileName) => {
     // Only 'http' allowed with GET
-    url = url.replace('https://', 'http://');
+    url = url.replace('http://', 'http://');
 
     let extension = url.substr(url.lastIndexOf('.'));
 

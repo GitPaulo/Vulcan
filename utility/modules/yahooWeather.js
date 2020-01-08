@@ -19,7 +19,7 @@ const yahooWeather = module.exports = function (id, key, secret) {
     this.secret   = secret;
     this.unitType = 'u=c';
     this.format   = 'format=json';
-    this.baseURL  = 'https://weather-ydn-yql.media.yahoo.com/forecastrss?';
+    this.baseURL  = 'http://weather-ydn-yql.media.yahoo.com/forecastrss?';
     this.request  = new OAuth.OAuth(
         null,
         null,

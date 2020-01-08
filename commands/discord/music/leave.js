@@ -13,21 +13,20 @@ leave.execute = async (message) => {
         );
     }
 
-    // Leave voice channel
-    musicManager.leaveVoice();
-
     await message.channel.send(messageEmbeds.reply(
         {
             message,
             description: 'Destroyed music player and left voice channel.',
             fields     : [
                 {
-                    name : 'Is Playing?',
-                    value: musicManager.playing || 'Unknown'
+                    name  : 'Is Playing?',
+                    value : String(musicManager.playing),
+                    inline: true
                 },
                 {
-                    name : 'Queue Size',
-                    value: musicManager.queue.length || 'No Queue'
+                    name  : 'Queue Size',
+                    value : String(musicManager.queue.length),
+                    inline: true
                 }
             ]
         }
