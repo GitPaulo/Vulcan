@@ -6,7 +6,7 @@ botchannel.execute = async (message) => {
     const preventUnauth = Boolean(message.parsed.args[0]);
     const embedWrap     = messageEmbeds.reply({
         message,
-        description: 'Vulcan is **leaving** this guild!\nGood bye! :(',
+        description: 'Vulcan is **leaving** this guild!\n\nGood bye! :(',
         fields     : [
             {
                 name : 'Unauthorised?',

@@ -711,6 +711,25 @@ debuginfo:
     title: 'Debug Info'
     image: './assets/media/images/commands/discord/debuginfo.gif'
 
+# 
+psa:
+  aliases:
+  - 'announcement'
+  - 'guildsay'
+  description: 'Send a PSA to a target guild or as a broadcast.'
+  group: 'administrator'
+  examples:
+  - '<prefix><id> <target/global> <message_text>'
+  throttling: 1000
+  safe: true
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
+  embed:
+    color: 0x00000
+    title: 'PSA'
+    image: './assets/media/images/commands/discord/psa.gif'
+
 #
 disabled:
   aliases:

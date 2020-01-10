@@ -4,15 +4,15 @@ const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 servers.execute = async (message) => message.channel.send(messageEmbeds.reply(
     {
         message,
-        description: `\`\`\`\n[Servers Statistics]\n`
+        description: `\`\`\`\n[Count Statistics]\n`
             + `=> Networked: ${message.client.guilds.size}\n`
             + `=> Authorised: ${message.client.servers.size}\n`
-            + `\n=== List of Authorised Servers ===\n`
+            + `\n=========== [Server Listing (ALL)] ===========\n\n`
             + `${Array.from(message.client.servers.entries()).map((entry) => {
                 let guild = message.client.guilds.get(entry[0]);
                 let date  = new Date(entry[1]).toLocaleDateString();
 
-                return `- ${guild.name} => '${date}'`;
+                return `- ${guild.name}(${guild.id})[${guild.authorised && 'A' || 'U'}] joined '${date}'\n`;
             }).join('\n')}\n\`\`\``
     }
 ));

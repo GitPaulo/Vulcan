@@ -35,30 +35,19 @@ module.exports = async (guild) => {
         return ownerID;
     });
 
-    // New guild? Request auth!
-    if (!guild.authorised) {
-        guild.requestAuthorisation(); // Requestee === client.user
-    }
-
     // Bot channel may not exist because guilds may have no text channel
     const responseChannel = guild.botChannel || await guild.owner.createDM();
 
-    // Welcome message
-    await responseChannel.send({
+    // Message Wrap (save lines of code)
+    const wrap = {
         embed: {
-            title      : `Hello World!`,
-            description: `Thank you for inviting Vulcan to your guild.\n\n`
-                        + `This bot is intended for **private** use and is only maintained by one person.\n\n`
-                        + `Currently, Vulcan is set to 'safe' mode, this means that most of the bot features are restricted by default. `
-                        + `A request has been sent to the authorisation moderators in order grant access for this guild.\n\n`
-                        + `You may send another request using the \`authorise\` command.`,
             color    : 0xFC7B7B, // Red
             thumbnail: {
                 url: `attachment://icon.png`
             },
             timestamp: new Date(),
             footer   : {
-                text: 'Hello everyone, I hope can be of use! C:'
+                text: 'Hello everyone, I hope I can be of use! C:'
             },
             fields: [
                 {
@@ -66,8 +55,12 @@ module.exports = async (guild) => {
                     value: tagOwners.toString()
                 },
                 {
-                    name : 'Previous Authorisation Status',
+                    name : 'Current Authorisation Status',
                     value: guild.authorised && 'authorised' || 'unauthorised'
+                },
+                {
+                    name : 'Bot Prefix Expression',
+                    value: `\`${guild.client.prefixRegex.source}\``
                 }
             ],
             url: ''
@@ -78,5 +71,25 @@ module.exports = async (guild) => {
                 name      : 'icon.png'
             }
         ]
-    });
+    };
+
+    // New guild? Request auth!
+    if (!guild.authorised) {
+        guild.requestAuthorisation(); // Requestee === client.user
+
+        // Welcome message: Unauthorised
+        wrap.embed.title       = `Hello World!`,
+        wrap.embed.description = `Thank you for inviting Vulcan to your guild.\n\n`
+                            + `This bot is intended for **private** use and is only maintained by one person.\n\n`
+                            + `Right now Vulcan is set to \`safe\` mode, this means that, most of the bot features are restricted by default. `
+                            + `A request has been sent to the authorisation moderators in order grant access for this guild.\n\n`
+                            + `You may send another request using the \`authorise\` command.`;
+    } else {
+        // Welcome message: Already Authorised
+        wrap.embed.title       = `Hello again?`,
+        wrap.embed.description = `This guild is already registered as **authorised**!.\n`
+                            + `Full access to Vulcan features is availabled on this guild.\n\n`;
+    }
+
+    await responseChannel.send(wrap);
 };
