@@ -9,17 +9,27 @@ const fs         = xrequire('fs');
 const path       = xrequire('path');
 const chalk      = xrequire('chalk');
 const LogManager = (function () {
-    let instance; // reference to the Singleton
+    // Reference to the Singleton
+    let instance;
 
-    function loggerConstructor () { // 'private' properties
+    // ? Constructor
+    function loggerConstructor () {
         let folderName  = 'logs';
         let rootPath    = __basedir;
         let maxFileSize = 1 * 1024 * 1024;                      // 1Mb
         let nFolderPath = path.join(rootPath, folderName);
         let oFolderPath = path.join(nFolderPath, 'past_logs');
+
         // eslint-disable-next-line no-unused-vars
         let modifiers = [];
 
+        // Useful last output
+        // eslint-disable-next-line no-unused-vars
+        let lastWarning = null;
+        // eslint-disable-next-line no-unused-vars
+        let lastError = null;
+
+        // Type color lookup
         let logTypes    = {
             debug   : chalk.blue,
             log     : chalk.green,
@@ -28,7 +38,8 @@ const LogManager = (function () {
             terminal: chalk.magenta
         };
 
-        let blueprint   = [
+        // File -> log type
+        let blueprint = [
             {
                 fileName: 'logs.txt',
                 logTypes: ['debug', 'log', 'warning', 'error', 'terminal']
@@ -120,14 +131,25 @@ const LogManager = (function () {
                 buffer.push((typeof arg === 'object') ? JSON.stringify(arg) : arg.toString());
             }
 
-            let text = applyModifiers(
+            let content = buffer.join(' ');
+            let text    = applyModifiers(
                 colorFunc(
                     `(${new Date().toLocaleString()})`
                     + `[${logType}] => `
-                    + buffer.join(' ')
+                    + content
                 )
             );
 
+            // Useful
+            if (logType === 'warning') {
+                instance.lastWarning = content;
+            }
+
+            if (logType === 'error') {
+                instance.lastError = content;
+            }
+
+            // Output & Store
             console.log(text);
             store(logType, text);
         };
@@ -198,9 +220,9 @@ const LogManager = (function () {
             warning ()  { this.write(...arguments); },
             error ()    { this.write(...arguments); },
             terminal () { this.write(...arguments); },
-            // Alias of helper
+            // Alias
             warn () { this.warning(...arguments); },
-            err ()  { this.error(...arguments); }
+            err ()  { this.error(...arguments);   }
         };
     }
 

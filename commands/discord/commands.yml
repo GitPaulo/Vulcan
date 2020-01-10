@@ -693,6 +693,24 @@ unauthorise:
     title: 'Guild Authorisation Revoked'
     image: './assets/media/images/commands/discord/authorise.gif'
 
+# 
+debuginfo:
+  aliases:
+  - 'dinfo'
+  description: 'Display useful debugging information about vulcan.'
+  group: 'administrator'
+  examples:
+  - '<prefix><id>'
+  throttling: 1000
+  safe: true
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
+  embed:
+    color: 0x00000
+    title: 'Debug Info'
+    image: './assets/media/images/commands/discord/debuginfo.gif'
+
 #
 disabled:
   aliases:

@@ -462,7 +462,7 @@ class Vulcan extends Discord.Client {
         } catch (e) { er = true; }
 
         try {
-            v6 = "Unknown"; // await publicIP.v6();
+            v6 = 'Unknown'; // await publicIP.v6();
         } catch (e) { er = true; }
 
         if (er) {

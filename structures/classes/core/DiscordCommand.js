@@ -27,10 +27,10 @@ class DiscordCommand extends Command {
 
         // = Defaults
         this.embed             = commandDefinition.embed || {};
-        this.vulcanPermissions = commandDefinition.vulcanPermissions || [];
-        this.userPermissions   = commandDefinition.userPermissions || [];
         this.embed.color       = this.embed.color || 0x0;
         this.embed.title       = this.embed.title || `Command: ${this.id}`;
+        this.userPermissions   = commandDefinition.userPermissions || [];
+        this.vulcanPermissions = commandDefinition.vulcanPermissions || [];
 
         // Default embed Image
         if (!this.embed.image || !fs.existsSync(this.embed.image)) {

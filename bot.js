@@ -32,7 +32,7 @@ const vulcan = module.exports = new Vulcan(
 
 // Start vulcan
 vulcan
-    .loadDatabase()
+    // ! .loadDatabase() // Not used
     .loadCommands()
     .loadEvents()
     .loadPresence()
