@@ -3,6 +3,7 @@ const messageEmbeds = module.exports;
 /*
     * This file should only contained wraps that are used more than once!
     ! Do not create wraps for events.
+    ! Any fields to omit/change from defaults must be force changed post embed wrap usage!
 */
 
 messageEmbeds.reply = (
@@ -26,7 +27,7 @@ messageEmbeds.reply = (
         fields    = [],
         timestamp = new Date(),
         footer    = {
-            text: `[Command] Vulcan's reply to a command request.`
+            text: `[Command request reply]`
         },
         url   = '',
         image = {},
@@ -64,7 +65,7 @@ messageEmbeds.error = (
         },
         timestamp = new Date(),
         footer    = {
-            text: '[Error] An exception thrown by vulcan or something bad! Contact devs pls!'
+            text: '[Expected exception was thrown]'
         },
         fields = [],
         url    = ''
@@ -98,7 +99,7 @@ messageEmbeds.warning = (
         },
         timestamp = new Date(),
         footer    = {
-            text: '[Warning] An unexpected behaviour not controlled by vulcan.'
+            text: '[Unexpected behaviour not controlled by vulcan]'
         },
         fields = [],
         url    = ''
@@ -132,7 +133,7 @@ messageEmbeds.info = (
         },
         timestamp = new Date(),
         footer    = {
-            text: '[Info] Information displayed by vulcan for the users.'
+            text: '[Informative message]'
         },
         fields = [],
         url    = ''
@@ -166,7 +167,7 @@ messageEmbeds.PSA = (
         },
         timestamp = new Date(),
         footer    = {
-            text: 'This is a global message from the system admin.'
+            text: '[Global message]'
         },
         fields = [],
         url    = ''

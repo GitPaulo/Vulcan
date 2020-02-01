@@ -1,4 +1,7 @@
-// *Note: Files on the extensions fodler must be named following pattern: <discord.js_Class>.js
+/*
+*   Handles the loading of all extensions.
+?   Note: Files on the extensions fodler must be named following pattern: <discord.js_Class>.js
+*/
 
 const fs              = xrequire('fs');
 const path            = xrequire('path');
@@ -6,7 +9,7 @@ const Discord         = xrequire('discord.js');
 const { performance } = xrequire('perf_hooks');
 const logger          = xrequire('./managers/LogManager').getInstance();
 
-const extensionsDir = path.join(__basedir, './structures/extensions/');
+const extensionsDir = path.join(global.basedir, './structures/extensions/');
 
 module.exports = () => {
     const files = fs.readdirSync(extensionsDir);

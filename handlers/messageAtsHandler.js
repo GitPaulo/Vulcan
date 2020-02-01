@@ -1,10 +1,9 @@
-// const logger = xrequire('./managers/LogManager').getInstance();
-
 /*
-* Matches all special ats:
-?   @<prefix1>... -> Text channel
-?   @<prefix2>... -> Voice channel
-?  Prefixes are set in the configuration.yaml file (extendedAts.prefixes)
+* Handles translation of special ats to a sequence of discord ats for every message:
+    Matches all special ats:
+?       - @<prefix1>... -> Text channel
+?       - @<prefix2>... -> Voice channel
+    Prefixes are defined in the configuration.yaml file (extendedAts.prefixes)
 */
 
 module.exports = async (message) => {

@@ -1,3 +1,10 @@
+/*
+*   Handles the loading of commands from a specified folder.
+?   Called by:
+        - Vulcan Client class
+        - Terminal Manager
+*/
+
 const { performance } = xrequire('perf_hooks');
 const path            = xrequire('path');
 const fs              = xrequire('fs');
@@ -16,7 +23,7 @@ const dirToClass     = {
 module.exports = (vulcan, folderPath) => {
     // Command Map <ID, DiscordCommand/TerminalCommand>
     const commands         = new CommandMap();
-    const dirPath          = path.join(__basedir, folderPath);
+    const dirPath          = path.join(global.basedir, folderPath);
     const dirName          = path.basename(dirPath);
     const commandClassName = dirToClass[dirName];
 

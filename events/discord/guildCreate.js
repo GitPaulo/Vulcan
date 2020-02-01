@@ -81,13 +81,13 @@ module.exports = async (guild) => {
         wrap.embed.title       = `Hello World!`,
         wrap.embed.description = `Thank you for inviting Vulcan to your guild.\n\n`
                             + `This bot is intended for **private** use and is only maintained by one person.\n\n`
-                            + `Right now Vulcan is set to \`safe\` mode, this means that, most of the bot features are restricted by default. `
-                            + `A request has been sent to the authorisation moderators in order grant access for this guild.\n\n`
+                            + `Right now Vulcan is set to \`safe\` mode, this means that, most of the bot features are **restricted** by default. `
+                            + `A request has been sent to the authorisation moderators to grant access for this guild.\n\n`
                             + `You may send another request using the \`authorise\` command.`;
     } else {
         // Welcome message: Already Authorised
         wrap.embed.title       = `Hello again?`,
-        wrap.embed.description = `This guild is already registered as **authorised**!.\n`
+        wrap.embed.description = `This guild is already registered as **authorised**!\n`
                             + `Full access to Vulcan features is availabled on this guild.\n\n`;
     }
 

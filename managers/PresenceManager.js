@@ -63,7 +63,7 @@ class PresenceManager {
                 status  : 'dnd',
                 afk     : false,
                 activity: {
-                    name: `#C: ${this.client.commands.size} #G: ${this.client.guilds.size} #U: ${this.client.users.size} #AS: ${this.client.servers.size}`,
+                    name: `#C: ${this.client.commands.size} #G: ${this.client.guilds.size} #U: ${this.client.users.size} #AS: ${this.client.authorised.size}`,
                     type: 'WATCHING'
                 }
             };

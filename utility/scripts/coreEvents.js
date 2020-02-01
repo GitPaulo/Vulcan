@@ -1,33 +1,74 @@
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
-const logger        = xrequire('./managers/LogManager').getInstance();
+const logger = xrequire('./managers/LogManager').getInstance();
 
-/*
-    Attempt at controlled exit:
-        ! If the following code errors => infinite loop! (Check for everything!)
-*/
+/* Code Map */
+process.codes = [
+    '(Controlled Exit)', // 0
+    '(Uncontrolled Exit)', // 1
+    '(Bad Code)', // 2
+    '(Program Aborted)' // 3
+];
 
-global._exit = process.exit;
-process.exit = async (code = 0, message = 'Unknown') => {
-    if (!logger || !messageEmbeds) {
-        return console.err(`Requirements for controlled process.exit are invalid.`),
-        global._exit(1);
+/**
+ * Node Event
+ * Emitted whenever a Promise is rejected and no error handler is attached to the promise within a turn of the event loop.
+ */
+process.on('unhandledRejection', (err, promise) => {
+    logger.error(
+        `Unhandeled Rejection\n`
+        + `Stack: ${err.stack}\n`
+        + `Promise: ${promise}`
+    );
+
+    process.emit('beforeExit', 2);
+});
+
+/**
+ * Node Event
+ * Emitted when an uncaught JavaScript exception bubbles all the way back to the event loop.
+ */
+process.on('uncaughtException', (err, origin) => {
+    logger.error(
+        `Uncaught exception\n`
+        + `Stack: ${err.stack}\n`
+        + `File Descriptor: ${process.stderr.fd}\n`
+        + `Exception origin: ${origin}`
+    );
+
+    process.emit('beforeExit', 2);
+});
+
+/**
+ * Node Event
+ * The 'multipleResolves' event is emitted whenever a Promise has been either:
+ * Resolved/Rejected more than once. Rejected after resolve. Resolved after reject.
+ */
+process.on('multipleResolves', (type, promise, reason) => {
+    logger.error(
+        `Multiple Resolved Detected: ${type}, ${promise}, ${reason}`
+    );
+
+    process.emit('beforeExit', 2);
+});
+
+/**
+ * Node Event
+ * The 'beforeExit' event is emitted when Node.js empties its event loop and has no additional work to schedule.
+ * Listeners can make async calls.
+ * This is NOT thrown on explicit process termination.
+ */
+process.on('beforeExit', async (code) => {
+    if (code === 0) {
+        return logger.log('Node application has exited in a controlled manner.');
     }
 
-    // Don't use comma or infinite loop!
-    const vulcan = global.__loaded && xrequire('./bot.js');
+    const vulcan  = xrequire('./index.js');
+    const message = logger.lastError || 'Cause of shutdown is unknown.';
 
-    if (!vulcan) {
-        logger.error(`Vulcan client was invalid before process exit!\n\tMessage: ${message}'`);
-
-        return global._exit(1);
-    }
-
-    if (code !== 0) {
+    if (vulcan) {
         await vulcan.guilds.array().asyncForEach(async (guild) => {
             const botChannel = guild.botChannel;
 
             if (botChannel) {
-                // ? Cannot be outsourced to event because emmiter.emit() won't be promise wrapped
                 await botChannel.send(
                     {
                         embed: {
@@ -43,7 +84,7 @@ process.exit = async (code = 0, message = 'Unknown') => {
                                 },
                                 {
                                     name  : 'Exit Code',
-                                    value : code,
+                                    value : `${process.codes[code]} | [${code}]`,
                                     inline: true
                                 },
                                 {
@@ -71,48 +112,8 @@ process.exit = async (code = 0, message = 'Unknown') => {
         });
     }
 
-    // Clean up before exiting!
-    vulcan.end();
-    logger.log(`Vulcan process is exiting.\n\tMessage: ${message}\n\tExit code: ${code}`);
-
-    global._exit(code);
-};
-
-/**
- * Node Event
- * Emitted whenever a Promise is rejected and no error handler is attached to the promise within a turn of the event loop.
- */
-process.on('unhandledRejection', (err, promise) => {
-    logger.error(
-        `Unhandeled Rejection => ${err}\n`
-        + `Stack: ${err.stack}\n`
-        + `Promise: ${promise}`
-    );
-    process.exit(1, err.message);
-});
-
-/**
- * Node Event
- * Emitted when an uncaught JavaScript exception bubbles all the way back to the event loop.
- */
-process.on('uncaughtException', (err, origin) => {
-    logger.error(
-        `Uncaught exception => ${err}\n`
-        + `Stack: ${err.stack}\n`
-        + `File Descriptor: ${process.stderr.fd}\n`
-        + `Exception origin: ${origin}`
-    );
-    process.exit(1, err.message);
-});
-
-/**
- * Node Event
- * The 'multipleResolves' event is emitted whenever a Promise has been either:
- * Resolved/Rejected more than once. Rejected after resolve. Resolved after reject.
- */
-process.on('multipleResolves', (type, promise, reason) => {
-    logger.error(`Multiple Resolved Detected: ${type}, ${promise}, ${reason}`);
-    setImmediate(() => process.exit(1, reason));
+    // ! Always call this because of custom codes.
+    process.exit(code);
 });
 
 /**
@@ -121,7 +122,18 @@ process.on('multipleResolves', (type, promise, reason) => {
  * Synchronous code only.
  */
 process.on('exit', (code) => {
-    console.log(`Node application exited. (${code})`);
+    // Don't use comma or infinite loop!
+    const vulcan = xrequire('./index.js');
+
+    // Attempt at cleanup
+    if (vulcan) {
+        vulcan.end();
+    } else {
+        logger.debug(`Vulcan was invalid right before exit.`);
+    }
+
+    // Final log :'(
+    logger.log(`Node application exited (${code}).`);
 });
 
 /**
@@ -130,6 +142,8 @@ process.on('exit', (code) => {
  */
 process.on('SIGINT', () => {
     logger.log(`Node application received SIGINT (CTRL + C).`);
+
+    process.emit('beforeExit', 3);
 });
 
 /**

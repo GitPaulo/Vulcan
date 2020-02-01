@@ -83,7 +83,7 @@ info.execute = async (message) => {
             },
             {
                 name  : 'Auth-Server Count',
-                value : `${message.client.servers.size}`,
+                value : `${message.client.authorised.size}`,
                 inline: true
             },
             {

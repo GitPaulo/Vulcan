@@ -7,7 +7,7 @@ const archiver        = xrequire('./utility/modules/promiseArchiver');
 logs.execute = async (message) => {
     const dmOnly  = Boolean(message.parsed.args[0]);
     const t0      = performance.now();
-    const zipPath = path.join(global.__basedir, 'data', 'logs.zip');
+    const zipPath = path.join(global.basedir, 'data', 'logs.zip');
     const archive = archiver(zipPath, 'zip', {
         store: true
     });

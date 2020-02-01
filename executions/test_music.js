@@ -1,8 +1,11 @@
+/*
+*   Execution File
+    This file is used to test Vulcans capability of streaming music.
+*/
+
 const Discord = xrequire('discord.js');
-const pjson   = xrequire('./package.json');
 const ytdl    = xrequire('ytdl-core-discord');
 const Vulcan  = xrequire('./structures/classes/core/Vulcan');
-const logger  = xrequire('./managers/LogManager').getInstance();
 
 // Disable unwanted load options
 [
@@ -14,24 +17,14 @@ const logger  = xrequire('./managers/LogManager').getInstance();
     'loadCLI'
 ].forEach((identifier) => {
     Vulcan.prototype[identifier] = function () {
-        logger.debug(`Vulcan method '${identifier}' disabled for testing`);
+        console.log(`Vulcan method '${identifier}' disabled for testing`);
 
         return this;
     };
 });
 
-const vulcan  = xrequire('./bot');
-const servers = vulcan.servers;
-
-logger.plain(
-    `====================================\n`
-  + `   Vulcan Music Dependencies Test   \n`
-  + `   Server Count: ${servers.length}  \n`
-  + `====================================\n`
-  + `########### Dependencies ###########\n`
-  + `${JSON.stringify(pjson.dependencies)}\n`
-  + `#####################################`
-);
+const vulcan  = xrequire('./executions/bot');
+const servers = vulcan.authorised;
 
 vulcan.on('ready', () => {
     for (const guildID of servers.keys()) {

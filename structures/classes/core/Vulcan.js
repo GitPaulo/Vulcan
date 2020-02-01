@@ -1,3 +1,19 @@
+/****************************************************************************/
+global['couldnt_have_forged_it_better_myself'] = `
+\\ \\    / /   | |                
+ \\ \\  / /   _| | ___ __ _ _ __  
+  \\ \\/ / | | | |/ __/ _\` | \'_ \\ 
+   \\  /| |_| | | (_| (_| | | | |
+    \\/  \\__,_|_|\\___\\__,_|_| |_| Created by: Paulo-kun & Carlos-sama\n`;
+/*****************************************************************************/
+
+// Pre-initialisation scripts
+// ? Required by Vulcan and or dependant on Vulcan.
+xrequire('./utility/scripts/coreEvents');
+xrequire('./handlers/prototypeLoadHandler')();
+xrequire('./handlers/extensionLoadHandler')();
+
+// Constants
 const os              = xrequire('os');
 const fs              = xrequire('fs');
 const pem             = xrequire('pem');
@@ -10,18 +26,7 @@ const DatabaseManager = xrequire('./managers/DatabaseManager');
 const TerminalManager = xrequire('./managers/TerminalManager');
 const PresenceManager = xrequire('./managers/PresenceManager');
 const logger          = xrequire('./managers/LogManager').getInstance();
-
-/****************************************************************/
-global['couldnt_have_forged_it_better_myself'] = `
-\\ \\    / /   | |                
- \\ \\  / /   _| | ___ __ _ _ __  
-  \\ \\/ / | | | |/ __/ _\` | \'_ \\ 
-   \\  /| |_| | | (_| (_| | | | |
-    \\/  \\__,_|_|\\___\\__,_|_| |_| by Pas-kun & Tacos-sama\n`;
-/****************************************************************/
-
-// Dumb function : )
-const chainPrint = (category, chainee) => (logger.log('Initialised => ' + category), chainee);
+const chainPrint      = (category, chainee) => (logger.log('Initialised => ' + category), chainee);
 
 class Vulcan extends Discord.Client {
     constructor (vulcanOptions, discordOptions = {}) {
@@ -67,7 +72,7 @@ class Vulcan extends Discord.Client {
         // ? Initialise 'public' properties
         this.configuration = settings.configuration;
         this.blacklist     = new Map(settings.blacklist);
-        this.servers       = new Map(settings.servers);
+        this.authorised       = new Map(settings.authorised);
         this.usergroups    = new Map(settings.usergroups);
 
         // * Set up hierarchy
@@ -110,7 +115,7 @@ class Vulcan extends Discord.Client {
     }
 
     loadEvents (folderPath = './events/') {
-        const eventsPath          = path.join(__basedir, folderPath);
+        const eventsPath          = path.join(global.basedir, folderPath);
         const vulcanEventsPath    = path.join(eventsPath, 'vulcan');
         const discordjsEventsPath = path.join(eventsPath, 'discord');
 
@@ -278,8 +283,8 @@ class Vulcan extends Discord.Client {
                 if (shouldBreak) {
                     break;
                 }
-            case 'servers':
-                updateSettingsFile('servers', [...this.servers]);
+            case 'authorised':
+                updateSettingsFile('authorised', [...this.authorised]);
                 if (shouldBreak) {
                     break;
                 }
@@ -301,8 +306,8 @@ class Vulcan extends Discord.Client {
         const cachedGuild = this.guilds.get(guildID);
 
         // Add to auth servers list + date of addition
-        this.servers.set(guildID, Date.now());
-        this.update('servers');
+        this.authorised.set(guildID, Date.now());
+        this.update('authorised');
 
         if (!cachedGuild) {
             logger.warning(`Authorised uncached guild!`);
@@ -316,8 +321,8 @@ class Vulcan extends Discord.Client {
     unauthoriseGuild (guildID) {
         const cachedGuild = this.guilds.get(guildID);
 
-        this.servers.delete(guildID);
-        this.update('servers');
+        this.authorised.delete(guildID);
+        this.update('authorised');
 
         if (!cachedGuild) {
             logger.warning(`Unauthorising uncached guild!`);
@@ -419,12 +424,23 @@ class Vulcan extends Discord.Client {
             this.terminalManager.stop();
         }
 
-        // Close other things safely (database perhaps?)
-        // [here]
+        logger.log('Terminal manager closed.');
 
+        // Leave any voice channels
+        this.guilds.array().forEach((g) => g.musicManager.destroy());
+
+        logger.log('Destroyed all voice connections.');
+
+        // Close other things safely (database perhaps?)
+        this.webServer.close();
+        this.fileServer.close();
+
+        logger.log('Closed all web servers.');
+
+        // Call discordjs client to destroy
         super.destroy();
 
-        logger.debug(`Vulcan client has been called for destruction!`);
+        logger.log(`Vulcan client has successfully been destroyed.`);
     }
 
     /************************
@@ -437,7 +453,7 @@ class Vulcan extends Discord.Client {
             broadcastCount     : this.voice.broadcasts.length,
             shardCount         : this.shard,
             guildCount         : this.guilds.size,
-            authGuildCount     : this.servers.size,
+            authGuildCount     : this.authorised.size,
             blacklistCount     : this.blacklist.size,
             channelCount       : this.channels.size,
             userCount          : this.users.size

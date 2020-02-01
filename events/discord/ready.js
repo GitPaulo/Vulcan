@@ -1,9 +1,12 @@
-const vulcan    = xrequire('./bot');
-const pjson     = xrequire('./package.json');
 const gitBranch = xrequire('./utility/modules/gitBranch');
 const logger    = xrequire('./managers/LogManager').getInstance();
 
 module.exports = async () => {
+    // Load every event call.
+    // Vulcan client object should be cached and pjson could have changed.
+    const pjson  = xrequire('./package.json');
+    const vulcan = xrequire('./executions/bot');
+
     // Set statistical presence
     vulcan.presenceManager.useInformational();
 
@@ -22,7 +25,7 @@ module.exports = async () => {
       + `       => Networked users: ${vulcan.users.size}                                     \n`
       + `       => Networked channels: ${vulcan.channels.size}                               \n`
       + `       => Blacklisted users: ${vulcan.blacklist.size}                               \n`
-      + `       => Authenticated guilds: ${vulcan.servers.size}                              \n`
+      + `       => Authenticated guilds: ${vulcan.authorised.size}                           \n`
       + `       => Networked guilds: ${vulcan.guilds.size}                                   \n`
       + `       => Usergroup map: ${vulcan.hierarchy}                                        \n`
       + `       => Dependencies: ${Object.keys(pjson.dependencies).length}                   \n`

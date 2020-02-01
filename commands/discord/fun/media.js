@@ -13,7 +13,7 @@ const readdir = util.promisify(fs.readdir);
 // eslint-disable-next-line no-unused-vars
 media.load = (commandDefinition) => {
     this.omitReplyPrefix   = 'or-';
-    this.folderPath        = path.join(__basedir, 'data', 'media');
+    this.folderPath        = path.join(global.basedir, 'data', 'media');
     this.allowedExtensions = ['.png', '.jpg', '.mp4', '.gif'];
 
     // Create Media folder (where we store all downloaded media)
@@ -166,7 +166,7 @@ media.fetchImage = async (keyword) => {
             hvalue   = cvalue;
         }
     });
-    
+
     return filePath ? path.join(this.folderPath, filePath) : false;
 };
 

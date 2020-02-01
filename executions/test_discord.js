@@ -1,3 +1,8 @@
+/*
+*   Execution File
+    This file is used to test the discord API.
+*/
+
 // Load defaults & settings
 const defaults = xrequire('./utility/defaults');
 const settings = xrequire('./handlers/settingsLoadHandler')(defaults);

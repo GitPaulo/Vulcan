@@ -15,7 +15,7 @@ const LogManager = (function () {
     // ? Constructor
     function loggerConstructor () {
         let folderName  = 'logs';
-        let rootPath    = __basedir;
+        let rootPath    = global.basedir;
         let maxFileSize = 1 * 1024 * 1024;                      // 1Mb
         let nFolderPath = path.join(rootPath, folderName);
         let oFolderPath = path.join(nFolderPath, 'past_logs');

@@ -1,3 +1,7 @@
+/*
+*   Handles loading bot settings.
+*/
+
 const fs     = xrequire('fs');
 const yaml   = xrequire('js-yaml');
 

@@ -1,7 +1,9 @@
+/* eslint-disable class-methods-use-this */
 const got             = xrequire('got');
 const ytsr            = require('ytsr');
 const { promisify }   = xrequire('util');
 const cheerio         = xrequire('cheerio');
+const caller          = xrequire('caller-id');
 const Discord         = xrequire('discord.js');
 const ytdl            = xrequire('ytdl-core');
 const ytdlcd          = xrequire('ytdl-core-discord');
@@ -12,12 +14,20 @@ const logger          = xrequire('./managers/LogManager').getInstance();
 ytdl.getInfoAsync = promisify(ytdl.getBasicInfo);
 
 /**
+ * * Every guild has a copy of this object.
+ *
  * ! Limitations
  * Because of the reliance of youtube as the only source of music streaming
  * there are a few limitations:
  *  * Regionally restricted (requires a proxy)
  *  * Private
  *  * Rentals
+ *
+ * ? Music can be queued via loadItem(keyword)
+ * 'keyword' is either a:
+ *      - URL (yt)
+ *      - ID (yt)
+ *      - Search query
  */
 
 class MusicManager {
@@ -28,18 +38,20 @@ class MusicManager {
         this.queue   = [];
 
         // Defaults
-        this.autoplay    = true;
-        this.repeat      = false;
-        this.shouldPause = false;
-        this.shuffle     = false;
-        this.afkTimeout  = 60 * 1000; // 1 minute check
+        this.autoplay        = true;
+        this.repeat          = false;
+        this.shuffle         = false;
+        this.shouldPause     = false;
+        this.loadingPlaylist = false;
+        this.afkTimeout      = 2 * (60 * 1000); // 2 minutes
+        this.maxHistory      = 100; // History array max size
 
         // Assigned by methods
-        this.requestChannel = null;
-        this.voiceChannel   = null;
-        this.connection     = null;
-        this.dispatcher     = null;
-        this.loadedSong     = null;
+        this.requestChannel = null; // * The text channel from which the latest request was made.
+        this.voiceChannel   = null; // * The voice channel vulcan is in.
+        this.connection     = null; // * The connection object to the voice channel. (assigned on join)
+        this.dispatcher     = null; // * The music dispatcher. (created on music play)
+        this.loadedSong     = null; // * The loaded song object. (created on item load)
     }
 
     /************************
@@ -55,7 +67,7 @@ class MusicManager {
     }
 
     get idle () {
-        return this.voiceConnected && !this.dispatcher;
+        return this.voiceConnected && !this.dispatcher && !this.loadingPlaylist;
     }
 
     get playing () {
@@ -67,16 +79,17 @@ class MusicManager {
     }
 
     /********************
-     * Event functions *
+     * Event functions  *
+     * ? Dispatcher     *
     ********************/
 
     async onVolumeChange (oldValue, newValue) {
         await this.requestChannel.send(messageEmbeds.info(
             {
-                description: `Music Controller has changed stream volume.`,
+                description: `Music Manager has changed stream volume.`,
                 field      : [
                     { name: 'Old Volume', value: oldValue },
-                    { name: 'Old Volume', value: newValue }
+                    { name: 'New Volume', value: newValue }
                 ]
             }
         ));
@@ -85,8 +98,8 @@ class MusicManager {
     async onStartPlaying () {
         await this.requestChannel.send(messageEmbeds.info(
             {
+                description: ``, // Ugly other wise
                 title      : `Now Playing :musical_note: :musical_note:`,
-                description: `Music Controller started playing a song.`,
                 fields     : [
                     { name: 'Song name',       value: this.loadedSong.name || 'Unknown',          inline: false },
                     { name: 'Request Author',  value: this.loadedSong.requestAuthor || 'Unknown', inline: true  },
@@ -102,9 +115,8 @@ class MusicManager {
         // Destroy current dispatcher
         if (this.dispatcher) {
             this.dispatcher.destroy();
+            this.dispatcher = null;
         }
-
-        this.dispatcher = null;
 
         // Sort out repeat
         if (this.repeat) {
@@ -148,7 +160,21 @@ class MusicManager {
 
     /* eslint-disable no-unused-vars */
     async onSpeakEvent (isPlaying) {
-        // TODO ?
+        // TODO
+    }
+
+    /********************
+     * Event functions  *
+     * ? Connection     *
+    ********************/
+
+    async onConnectionError (err) {
+        logger.error(`[Music Manager] ${err.message}`);
+    }
+
+    // ? May trigger after a region change.
+    async onReconnect () {
+        this.log('Vulcan voice connection has reconnected.');
     }
 
     /********************
@@ -156,13 +182,13 @@ class MusicManager {
     ********************/
 
     log (str) {
-        logger.log(`[MusicManager] => [${this.guild.name}] => ${str}`);
+        logger.log(`[MusicManager] => [${this.guild.name}] => [${caller.getData().functionName}] => ${str}`);
     }
 
     inactivityCheck (cb) {
         return setTimeout(() => {
             // If still in after timeout and not playing
-            if (this.voiceChannel && !this.playing) {
+            if (this.idle) {
                 this.leaveVoice();
                 cb(true);
             } else {
@@ -223,35 +249,44 @@ class MusicManager {
         });
     }
 
+    // ! Playlist loading calls this n times, maybe dont do that?
     async enqueue (url, requestAuthor) {
         if (!ytdl.validateURL(url)) {
             throw new Error('URL is not parsable by the youtube download library.');
         }
 
         const cpos = this.queue.length;
-        // Perhaps not needed?
         const data = await ytdl.getInfoAsync(url);
+
+        // ! Can we check this earlier?
+        if (!data.title) {
+            this.log(`Unable to enqueue url: ${url}. Video is likely unavailable!`);
+
+            return;
+        }
 
         this.queue.push(
             {
                 url,
                 name         : data.title,
-                author       : data.author.name,
-                requestAuthor: (typeof requestAuthor === 'string') && requestAuthor || requestAuthor.tag,
                 loudness     : data.loudness,
-                seconds      : parseInt(data.length_seconds, 10)
+                author       : data.author.name || 'Unknown',
+                seconds      : parseInt(data.length_seconds, 10),
+                requestAuthor: (typeof requestAuthor === 'string') && requestAuthor || requestAuthor.tag
             }
         );
 
-        logger.log(`Enqueued song: '${url}' requested by '${requestAuthor.tag}'.`);
+        this.log(`Enqueued song: '${url}' requested by '${requestAuthor.tag}'.`);
     }
 
     queueString () {
         const escmd      = Discord.Util.escapeMarkdown;
         let   buildCache = [];
 
-        this.queue.forEach((next) => {
-            buildCache.push(`**[${buildCache.length + 1}]**: ${escmd(next.name)} => ${escmd(next.url)}\n`);
+        this.queue.forEach((song) => {
+            buildCache.push(
+                `**[${buildCache.length + 1}]**: ${escmd(song.name || '(Loading...)')} => ${escmd(String(song.url))}\n`
+            );
         });
 
         return buildCache.join('\n');
@@ -263,31 +298,29 @@ class MusicManager {
 
     async joinVoice (voiceChannel) {
         if (!(voiceChannel instanceof Discord.VoiceChannel)) {
-            throw new Error(`joinVoice received an invalid voice channel!`);
+            throw new Error(`Received an invalid voice channel!`);
         }
 
-        return voiceChannel
-            .join()
-            .then((connection) => {
-                this.voiceChannel = voiceChannel;
-                this.connection   = connection;
-                this.log(`Joined voice channel '${voiceChannel.name}'.`);
-                this.inactivityCheck((inactive) => {
-                    if (inactive) {
-                        this.guild.client.emit(
-                            'channelInformation',
-                            this.requestChannel,
-                            `Voice inactivity detected (\`timeout=${this.afkTimeout}\`).\nLeaving voice channel!`
-                        );
-                    }
-                });
-            })
-            .catch((err) => {
-                if (String(err).includes('ECONNRESET')) {
-                    throw new Error('There was an issue connecting to the voice channel, please try again.');
-                }
-                throw err;
-            });
+        // Set up voice channel join
+        this.connection   = await voiceChannel.join();
+        this.voiceChannel = voiceChannel;
+        this.log(`Joined voice channel '${voiceChannel.name}'.`);
+
+        // Set up conenction events
+        this.connection.on('warn', logger.warn);
+        this.connection.on('error', this.onConnectionError.bind(this));
+        this.connection.on('reconnecting', this.onReconnect.bind(this));
+
+        // Begin inactivity check
+        this.inactivityCheck((inactive) => {
+            if (inactive) {
+                this.guild.client.emit(
+                    'channelInformation',
+                    this.requestChannel,
+                    `Voice inactivity detected (\`timeout=${this.afkTimeout}\`).\nLeaving voice channel!`
+                );
+            }
+        });
     }
 
     async leaveVoice () {
@@ -340,10 +373,12 @@ class MusicManager {
         if (!stringFunctions.isYoutubePlaylist(url)) {
             // Remove https for now?
             await this.enqueue(url.replace(/^https:\/\//i, 'http://'), requestAuthor);
-        } else {
+        } else { // ? playlist
+            // Playlists take time, we need to know we are not inactive!
+            this.loadingPlaylist = true;
+
             const playlist  = await this.loadPlaylistToArray(url);
-            const queueSize = this.queue.length;
-            const estimate  = 0.125;
+            const estimate  = 0.5;
 
             if (playlist.length === 0) {
                 return this.guild.client.emit(
@@ -357,11 +392,11 @@ class MusicManager {
             const pn = playlist.length;
 
             const embedWrap = messageEmbeds.info({
-                description: `Playlist detected. Loaded playlist into queue.`,
+                description: `Playlist detected.  :notes:\nLoading full playlist into queue...`,
                 fields     : [
                     { name: 'Playlist',            value: url || 'Unkown',                              inline: false },
                     { name: 'Playlist Size',       value: playlist.length || 'N/A',                     inline: true  },
-                    { name: 'Queue Size',          value: queueSize || 'N/A',                           inline: true  },
+                    { name: 'Queue Size',          value: this.queue.length || 0,                       inline: true  },
                     { name: 'Estimated Load Time', value: `${Math.roundDP(estimate * pn, 2) || '??'}s`, inline: true  },
                     { name: 'Load Progress',       value: `0/${pn || '??'} songs`,                      inline: true  }
                 ]
@@ -376,11 +411,7 @@ class MusicManager {
 
             for (let song of playlist) {
                 if (song.name === '[Deleted video]') {
-                    requestChannel.client.emit(
-                        'channelInformation',
-                        requestChannel,
-                        `Encountered deleted video on playlist: ${song.url}`
-                    );
+                    this.log(`Encoutnered deleted video: ${song}`);
                 } else {
                     await this.enqueue(song.url, requestAuthor);
                 }
@@ -388,10 +419,15 @@ class MusicManager {
                 loadedSongs++;
 
                 if ((loadedSongs % step) === 0 || loadedSongs === pn) {
+                    embedWrap.embed.fields[2].value = this.queue.length;
                     embedWrap.embed.fields[4].value = `${loadedSongs}/${pn} songs`;
+
                     await message.edit(embedWrap);
                 }
             }
+
+            // done
+            this.loadingPlaylist = false;
         }
 
         // Update last request channel.
@@ -446,22 +482,16 @@ class MusicManager {
         this.loadedSong = loadedSong;
         this.queue.shift();
 
-        // Debug
-        console.log(this.dispatcher && this.connection && this.loadedSong, '<<<<<< true?');
-
         // Setup events for song dispatcher
-        this.dispatcher.on('error', (e) => logger.error(e));
-        this.dispatcher.on('debug', (d) => logger.debug(d));
-
+        this.dispatcher.on('error', logger.error);
+        this.dispatcher.on('debug', logger.debug);
         this.dispatcher.on('start', this.onStartPlaying.bind(this));
         this.dispatcher.on('speaking', this.onSpeakEvent.bind(this));
         this.dispatcher.on('finish', this.onFinishPlaying.bind(this));
         this.dispatcher.on('volumeChange', this.onVolumeChange.bind(this));
 
         // Update history
-        const max = 100;
-
-        if (this.history.length > max) {
+        if (this.history.length > this.maxHistory) {
             this.history = [];
         }
 
@@ -473,20 +503,22 @@ class MusicManager {
     pause () {
         this.shouldPause = true;
         this.dispatcher.pause();
-        this.log(`Requesting pause. Song should have paused!`);
+        this.log(`Requesting pause. Song will be paused!`);
     }
 
     resume () {
         this.shouldPause = false;
         this.dispatcher.resume();
-        this.log(`Requesting resume. Song should have resumed!`);
+        this.log(`Requesting resume. Song will be resumed!`);
     }
 
     skip (force = false) {
-        this.dispatcher.end();
+        if (this.dispatcher) {
+            this.dispatcher.end();
 
-        if (force) {
-            this.dispatcher.destroy();
+            if (force) {
+                this.dispatcher.destroy();
+            }
         }
 
         this.log(`Skipping current song. Force: ${force}`);
@@ -494,12 +526,21 @@ class MusicManager {
 
     prune () {
         this.queue = [];
-        this.log(`Pruned music controller state.`);
+        this.log(`Removed all elements from player queue.`);
     }
 
     purge () {
-        this.queue = [];
-        this.log(`Destroyed queue.`);
+        // Destroy dispatcher via skip
+        this.skip(true);
+
+        // Reset to defaults
+        this.queue       = [];
+        this.autoplay    = true;
+        this.repeat      = false;
+        this.shouldPause = false;
+        this.shuffle     = false;
+
+        this.log(`Reset Music Manager state to defaults.`);
     }
 
     destroy () {
@@ -510,22 +551,16 @@ class MusicManager {
         // Purge
         this.purge();
 
-        // Reset to defaults
-        this.autoplay    = true;
-        this.repeat      = false;
-        this.shouldPause = false;
-        this.shuffle     = false;
-
         // Clean these up at the end of event loop
-        setImmediate(() => {
+        setTimeout(() => {
             this.requestChannel = null;
             this.voiceChannel   = null;
             this.connection     = null;
             this.dispatcher     = null;
             this.loadedSong     = null;
-        });
+        }, 0);
 
-        this.log(`Destroyed music controller state.`);
+        this.log(`Destroyed Music Manager.`);
     }
 }
 

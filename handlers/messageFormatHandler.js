@@ -1,3 +1,8 @@
+/*
+*   Handles the preprocessing of all messages before they are sent by vulcan.
+!   Code in this file may heavily impact performance. Be effecient.
+*/
+
 const fs       = xrequire('fs');
 const path     = xrequire('path');
 const Discord  = xrequire('discord.js');
@@ -51,7 +56,7 @@ module.exports = async (channel, ...args) => {
             let localFilePath = options.files[i];
 
             if (typeof localFilePath === 'object') {
-                localFilePath = path.join(global.__basedir, localFilePath.attachment);
+                localFilePath = path.join(global.basedir, localFilePath.attachment);
             }
 
             if (typeof localFilePath !== 'string') {

@@ -11,7 +11,7 @@ skip.execute = async (message) => {
         return message.client.emit(
             'channelInformation',
             message.channel,
-            'Cannot skip because queue is empty and there is nothing playing!'
+            'There is nothing to skip!'
         );
     }
 
@@ -23,14 +23,12 @@ skip.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            fields: [
+            title      : ':fast_forward:  - Skipped Song',
+            description: '',
+            fields     : [
                 {
                     name : 'Skipped Song',
                     value: lsName
-                },
-                {
-                    name : 'Was Forced?',
-                    value: force.toString()
                 }
             ]
         }

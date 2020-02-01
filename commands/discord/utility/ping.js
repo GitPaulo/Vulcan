@@ -20,21 +20,28 @@ ping.load = (commandDefinition) => {
 };
 
 ping.execute = async (message) => {
+    // TODO: Message edit seems to not have the ability of laoding a file as thumbnail.
     const phrase = this.phrases[Math.floor(Math.random() * this.phrases.length)];
-    const m      = await message.channel.send(phrase);
-
-    const mWrap = messageEmbeds.reply(
+    const m      = await message.channel.send(`\`${phrase}\``);
+    const mWrap  = messageEmbeds.reply(
         {
             message,
-            title : 'Pong!',
-            fields: [
+            description: '',
+            title      : 'Pong!',
+            fields     : [
                 {
-                    name : 'API Latency',
-                    value: `${m.createdTimestamp - message.createdTimestamp}ms`
+                    name  : 'Test Latency',
+                    value : `${m.createdTimestamp - message.createdTimestamp}ms`,
+                    inline: true
+                },
+                {
+                    name  : 'WS Latency',
+                    value : `${message.client.ws.ping}ms`,
+                    inline: true
                 }
             ]
         }
     );
 
-    await message.channel.send(mWrap);
+    await m.edit(mWrap);
 };

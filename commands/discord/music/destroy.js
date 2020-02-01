@@ -9,17 +9,7 @@ destroy.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            description: 'Destroyed the music player.',
-            fields     : [
-                {
-                    name : 'Is Playing?',
-                    value: musicManager.playing || 'No'
-                },
-                {
-                    name : 'Queue Size',
-                    value: musicManager.queue.length || '0'
-                }
-            ]
+            description: 'Destroyed the music player and voice connection.\n\`This should only be used when the player has errored.\`'
         }
     ));
 };

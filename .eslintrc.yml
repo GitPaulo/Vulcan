@@ -4,7 +4,7 @@ extends:
   - 'mudamuda/node' # superior rule set
 globals:
   xrequire: readonly
-  __basedir: readonly
+  global.basedir: readonly
   oldLog: readonly
   print: readonly
   PrintHistory: readonly

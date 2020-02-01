@@ -221,7 +221,7 @@ autoplay:
 destroy:
   aliases:
   - 'musicdestroy'
-  description: 'Destroys music player.'
+  description: 'Destroys music player, connection and resets state to default. Use on erro only.'
   group: 'default'
   examples:
   - '<prefix><id>'
@@ -234,6 +234,26 @@ destroy:
   embed:
     color: 0xFFA500
     title: 'Music: Destroy'
+    image: './assets/media/images/commands/discord/music.gif'
+
+#
+prune:
+  aliases:
+  - 'musicprune'
+  - 'cleanqueue'
+  description: 'Cleans the music queue'
+  group: 'default'
+  examples:
+  - '<prefix><id>'
+  throttling: 1000
+  safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'EMBED_LINKS'
+  embed:
+    color: 0xFFA500
+    title: 'Music: Prune'
     image: './assets/media/images/commands/discord/music.gif'
 
 #
@@ -324,7 +344,7 @@ play:
 purge:
   aliases:
   - 'musicpurge'
-  description: 'Purges music controller.'
+  description: 'Purges music player to defaults and stops music.'
   group: 'default'
   examples:
   - '<prefix><id>'
@@ -600,6 +620,24 @@ kill:
     color: 0x00000
     title: 'Kill'
     image: './assets/media/images/commands/discord/kill.gif'
+
+# 
+bypass:
+  aliases:
+  - 'sudo'
+  description: 'Bypasses command restrictions and executes command'
+  group: 'root'
+  examples:
+  - '<prefix><id> <command_args>'
+  throttling: 0
+  safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
+  embed:
+    color: 0x00000
+    title: 'Bypass'
+    image: './assets/media/images/commands/discord/bypass.gif'
 
 # 
 blacklist:
@@ -942,3 +980,21 @@ insult:
     color: 0xC0D0B0
     title: 'Restart Vulcan'
     image: './assets/media/images/commands/discord/restart.gif'
+
+#
+rule34:
+  aliases:
+  - 'r34'
+  description: 'Outputs search results from rule34.xxx.'
+  group: 'default'
+  examples:
+  - '<prefix><id> <search>'
+  throttling: 1000
+  safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
+  embed:
+    color: 0xC0D0B0
+    title: 'Rule34.xxx'
+    image: './assets/media/images/commands/discord/rule34.gif'

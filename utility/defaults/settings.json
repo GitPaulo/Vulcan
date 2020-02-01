@@ -15,6 +15,9 @@
                 "166176374036365312",
                 "207606117159796737"
             ],
+            "logMessages": true,
+            "filterMessages": true,
+            "registerCmdCalls": true,
             "extendedAts": {
                 "enabled": true,
                 "atLimit": 40,
@@ -62,7 +65,7 @@
         "data": []
     },
     {
-        "name": "servers",
+        "name": "authorised",
         "extension": "yml",
         "data": []
     }

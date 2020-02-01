@@ -2,15 +2,15 @@ const botchannel    = module.exports;
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 botchannel.execute = async (message) => {
-    const guild         = message.guild;
-    const preventUnauth = Boolean(message.parsed.args[0]);
-    const embedWrap     = messageEmbeds.reply({
+    const guild     = message.guild;
+    const unauth    = Boolean(message.parsed.args[0]);
+    const embedWrap = messageEmbeds.reply({
         message,
         description: 'Vulcan is **leaving** this guild!\n\nGood bye! :(',
         fields     : [
             {
-                name : 'Unauthorised?',
-                value: String(!preventUnauth)
+                name : 'Unauthorise on Leave?',
+                value: String(unauth)
             },
             {
                 name : 'Re-Invite',
@@ -21,7 +21,7 @@ botchannel.execute = async (message) => {
 
     await message.channel.send(embedWrap);
 
-    if (!preventUnauth) {
+    if (unauth) {
         await message.client.unauthoriseGuild(guild.id);
     }
 

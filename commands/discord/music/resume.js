@@ -14,7 +14,9 @@ resume.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            fields: [
+            title      : ':play_pause:  - Shuffled Queue',
+            description: '',
+            fields     : [
                 {
                     name : 'Resumed Song',
                     value: Discord.Util.escapeMarkdown(musicManager.loadedSong.name)

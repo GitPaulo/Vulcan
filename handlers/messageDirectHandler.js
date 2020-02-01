@@ -1,7 +1,9 @@
-// TODO Allow direct message commands. Should they be specified in the command descriptor?
-/*  Notes:
-*       - message.command is validated and authorised for execution at this point.
-*       - must return true or false defining success
+/*
+*   Handles all direct messages.
+    TODO: Allow direct message commands. Should they be specified in the command descriptor?
+?   Notes:
+        - message.command is validated and authorised for execution at this point.
+        - must return true or false defining success
 */
 
 const messageEmbeds = xrequire('./utility/modules/messageEmbeds');

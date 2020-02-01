@@ -86,3 +86,6 @@ key.pem
 # Kind of useless!
 package-lock.json*
 package-lock.json
+
+# Clinic.js
+.clinic

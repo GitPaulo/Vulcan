@@ -53,7 +53,7 @@ fs.readdirSync(__dirname).forEach((descriptorFileName) => {
     }
 
     // Create directory
-    const dirPath = path.join(global.__basedir, dirName);
+    const dirPath = path.join(global.basedir, dirName);
 
     if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath);

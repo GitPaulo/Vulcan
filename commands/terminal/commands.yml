@@ -47,3 +47,12 @@ cmds:
   examples:
     - '<prefix><id>'
   throttling: 1000
+
+#
+exit:
+  aliases:
+    - 'quit'
+  description: 'Safely exits vulcan process.'
+  examples:
+    - '<prefix><id>'
+  throttling: 0

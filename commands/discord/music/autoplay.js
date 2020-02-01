@@ -12,7 +12,9 @@ autoplay.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            fields: [
+            title      : ':musical_note:  - Autoplay Status',
+            description: '',
+            fields     : [
                 {
                     name : 'Autoplay Status',
                     value: bool.toString()

@@ -96,7 +96,7 @@ module.exports = class _Guild extends xrequire('discord.js').Guild {
     }
 
     get authorised () {
-        return this.client.servers.get(this.id);
+        return this.client.authorised.get(this.id);
     }
 
     findChannelsByName (name, type = 'text') {

@@ -14,7 +14,8 @@ timeout.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            fields: [
+            description: 'Music player inactivity check interval has been changed.',
+            fields     : [
                 {
                     name : 'Inactivity Timeout',
                     value: input

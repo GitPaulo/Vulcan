@@ -1,13 +1,13 @@
-
 /*
-* Prototype - Tasked with dynamically loading all extensions found in (./structures/prototypes/)
-  Files on that dir must be named following pattern: <discord.js_Class>.js
+*   Handles all prototype overriding loading.
+    Prototype - Tasked with dynamically loading all extensions found in (./structures/prototypes/)
+    Files on that dir must be named following pattern: <discord.js_Class>.js
 
-  ? Files of type (1): <Class>.prototype.js
+?   Files of type (1): <Class>.prototype.js
     - Will have the module.exports methods added
     - With enumerate property as false, to the prototype of <Class>.
 
-  ? Files of type (2): <Class>.js
+?   Files of type (2): <Class>.js
     - Will have the module.exports methods added
     - To the <Class> object.
 */
@@ -18,7 +18,7 @@ const { performance } = xrequire('perf_hooks');
 const logger          = xrequire('./managers/LogManager').getInstance();
 
 // Needs to be absolute REEE fs lib
-const prototypesDir = path.join(__basedir, './structures/prototypes/');
+const prototypesDir = path.join(global.basedir, './structures/prototypes/');
 
 module.exports = () => {
     let files = fs.readdirSync(prototypesDir);

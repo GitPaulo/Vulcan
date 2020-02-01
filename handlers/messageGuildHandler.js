@@ -1,10 +1,10 @@
-/*  Notes:
-*       - message.command is validated and authorised for execution at this point.
-*       - must return true or false defining success
+/*
+*   Handles all direct messages.
+    TODO: Permissions checking may be slowing down things?
+?   Notes:
+        - message.command is validated and authorised for execution at this point.
+        - must return true or false defining success
 */
-
-// TODO Permissions checking may be slowing down things?
-// const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
 
 module.exports = async (message) => {
     const command = message.command;
@@ -15,7 +15,7 @@ module.exports = async (message) => {
             'vulcanMissingPermissions',
             message,
             `Vulcan doesn't have the essential permission: \`SEND_MESSAGES\` thus he cannot reply!`
-        ), false;
+        );
     }
 
     // Disable unsafe interaction from unauthorised guilds
@@ -25,7 +25,7 @@ module.exports = async (message) => {
             message,
             `This guild is **unauthorised**. Only \`safe\` commands are enabled.\n`
             + `You may submit an authorisation request by using the \`authorise\` command!`
-        ), false;
+        );
     }
 
     // Discord Permissions: User
@@ -41,7 +41,7 @@ module.exports = async (message) => {
             `User does not have the permissions required to execute this command!\n`
             + `\n==== Permissions Required ====\n`
             + '```' + upDifference + '```'
-        ), false;
+        );
     }
 
     // Discord Permissions: Vulcan
@@ -57,10 +57,6 @@ module.exports = async (message) => {
             `Vulcan does not have the permissions required to execute this command!\n`
             + `\n==== Permissions Required ====\n`
             + '```' + vpDifference + '```'
-        ), false;
+        );
     }
-
-    await command.execute(message);
-
-    return true;
 };

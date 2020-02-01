@@ -176,7 +176,7 @@ connect4.execute = async (message) => {
             let timeFrame = Date.now() - lastMoveTime;
 
             // ? Reduces amount of rate limits. Not working too well but it's better!
-            if (timeFrame <= global.RateLimits.reactions) {
+            if (timeFrame <= global.discordRL) {
                 continue;
             }
 
