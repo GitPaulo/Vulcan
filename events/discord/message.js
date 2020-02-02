@@ -132,11 +132,20 @@ module.exports = async (message) => {
         }
 
         // Assign correct handler depending on cmd env
-        // * For now, these functions make the call.
-        if (message.direct) {
-            await dmHandler(message);
-        } else {
-            await gdHandler(message);
+        // ! Nested catch is needed.
+        // Some hacky throwing shit going on here :)
+        try {
+            if (message.direct) {
+                await dmHandler(message);
+            } else {
+                await gdHandler(message);
+            }
+        } catch (err) {
+            return message.client.emit(
+                err.event,
+                message,
+                err.message
+            );
         }
 
         // Call

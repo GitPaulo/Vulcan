@@ -49,9 +49,7 @@ class PresenceManager {
                 }
             };
 
-            this.client.user.setPresence(presenceData).then((presence) => {
-                logger.debug('Presence has been updated!', presence);
-            }).catch(() => {
+            this.client.user.setPresence(presenceData).catch(() => {
                 logger.error(`Failed to set activity.\n`, presenceData);
             });
         });

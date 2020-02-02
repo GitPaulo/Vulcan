@@ -630,7 +630,7 @@ bypass:
   examples:
   - '<prefix><id> <command_args>'
   throttling: 0
-  safe: false
+  safe: true
   disabled: false
   userPermissions: []
   vulcanPermissions: []
@@ -844,7 +844,7 @@ info:
   vulcanPermissions: []
   embed:
     color: 0xDC91FF
-    title: 'Command Disable'
+    title: 'Vulcan Information'
     image: './assets/media/images/commands/discord/info.gif'
 
 #
@@ -991,7 +991,7 @@ rule34:
   - '<prefix><id> <search>'
   throttling: 1000
   safe: false
-  disabled: false
+  disabled: true
   userPermissions: []
   vulcanPermissions: []
   embed:

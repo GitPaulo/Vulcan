@@ -1,9 +1,10 @@
+/* eslint-disable no-throw-literal */
 /*
 *   Handles all direct messages.
     TODO: Permissions checking may be slowing down things?
 ?   Notes:
         - message.command is validated and authorised for execution at this point.
-        - must return true or false defining success
+!       - throws hacky object literal (caught on message event)
 */
 
 module.exports = async (message) => {
@@ -11,21 +12,19 @@ module.exports = async (message) => {
 
     // Check if vulcan can even respond!
     if (!message.guild.me.hasPermission('SEND_MESSAGES')) {
-        return message.client.emit(
-            'vulcanMissingPermissions',
-            message,
-            `Vulcan doesn't have the essential permission: \`SEND_MESSAGES\` thus he cannot reply!`
-        );
+        throw {
+            message: `Vulcan doesn't have the essential permission: \`SEND_MESSAGES\` thus he cannot reply!`,
+            event  : `vulcanMissingPermissions`
+        };
     }
 
     // Disable unsafe interaction from unauthorised guilds
     if (!message.guild.authorised && !message.command.safe) {
-        return message.client.emit(
-            'invalidCommandCall',
-            message,
-            `This guild is **unauthorised**. Only \`safe\` commands are enabled.\n`
-            + `You may submit an authorisation request by using the \`authorise\` command!`
-        );
+        throw {
+            message: `This guild is **unauthorised**. Only \`safe\` commands are enabled.\n`
+                    + `You may submit an authorisation request by using the \`authorise\` command!`,
+            event: 'invalidCommandCall'
+        };
     }
 
     // Discord Permissions: User
@@ -35,13 +34,12 @@ module.exports = async (message) => {
     const upDifference            = expectedUserPermissions.difference(upCorrectPermissions);
 
     if (upDifference.length > 0) {
-        return message.client.emit(
-            'userMissingPermissions',
-            message,
-            `User does not have the permissions required to execute this command!\n`
-            + `\n==== Permissions Required ====\n`
-            + '```' + upDifference + '```'
-        );
+        throw {
+            message: `User does not have the permissions required to execute this command!\n`
+                    + `\n==== Permissions Required ====\n`
+                    + '```' + upDifference + '```',
+            event: 'userMissingPermissions'
+        };
     }
 
     // Discord Permissions: Vulcan
@@ -51,12 +49,11 @@ module.exports = async (message) => {
     const vpDifference              = expectedVulcanPermissions.difference(vpCorrectPermissions);
 
     if (vpDifference.length > 0) {
-        return message.client.emit(
-            'vulcanMissingPermissions',
-            message,
-            `Vulcan does not have the permissions required to execute this command!\n`
-            + `\n==== Permissions Required ====\n`
-            + '```' + vpDifference + '```'
-        );
+        throw {
+            message: `Vulcan does not have the permissions required to execute this command!\n`
+                    + `\n==== Permissions Required ====\n`
+                    + '```' + vpDifference + '```',
+            event: 'vulcanMissingPermissions'
+        };
     }
 };
