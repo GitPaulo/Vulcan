@@ -54,7 +54,6 @@ Make sure you have updated versions of your host machine's OS services and follo
 
 ## Supported Platforms
 
-The master branch uses node-opus. **Unlike** the production branch. (compatibility issues - soon to be fixed)
 Because of the use of node-opus, the bot can only be hosted in the following platforms:
 
 - Linux x64 & ia32
@@ -63,7 +62,7 @@ Because of the use of node-opus, the bot can only be hosted in the following pla
 - Mac OS X x64
 - Windows x64
 
-It is possible for compatibility with other OSs but that requires node-opus installation tinkering.
+It is possible to create compatibility with other OSs but that requires node-opus installation tinkering.
 
 More information can be found in the [node-opus repository.](https://github.com/Rantanen/node-opus)
 
@@ -76,3 +75,7 @@ May I use code in this repository?
 May I host this program publicly?
 
 - **Yes.** Credit this repository and follow the license.
+
+May I invite the bot?
+
+- **Yes.** However there is a good chance of your guild being denied. The bot is mostly for **personal** use.
