@@ -1,7 +1,7 @@
 {
   "name": "Vulcan",
   "version": "1.0.0",
-  "description": "Collaboration discord bot by Paulo & Carlos, using discord.js.",
+  "description": "Personal collaboration discord bot created by Paulo & Carlos.",
   "main": "bot.js",
   "scripts": {
     "_COMMENT0": "============================ BUILD SCRIPTS  ============================",
