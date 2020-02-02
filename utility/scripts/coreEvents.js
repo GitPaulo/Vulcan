@@ -2,10 +2,10 @@ const logger = xrequire('./managers/LogManager').getInstance();
 
 /* Code Map */
 process.codes = [
-    '(Controlled Exit)', // 0
-    '(Uncontrolled Exit)', // 1
-    '(Bad Code)', // 2
-    '(Program Aborted)' // 3
+    'Controlled Exit', // 0
+    'Uncontrolled Exit', // 1
+    'Bad Code', // 2
+    'Program Aborted' // 3
 ];
 
 /**
@@ -19,7 +19,7 @@ process.on('unhandledRejection', (err, promise) => {
         + `Promise: ${promise}`
     );
 
-    process.emit('beforeExit', 2);
+    process.emit('beforeExit', 2, err.stack);
 });
 
 /**
@@ -34,7 +34,7 @@ process.on('uncaughtException', (err, origin) => {
         + `Exception origin: ${origin}`
     );
 
-    process.emit('beforeExit', 2);
+    process.emit('beforeExit', 2, err.stack);
 });
 
 /**
@@ -47,7 +47,8 @@ process.on('multipleResolves', (type, promise, reason) => {
         `Multiple Resolved Detected: ${type}, ${promise}, ${reason}`
     );
 
-    process.emit('beforeExit', 2);
+    // ! For now, don't shut down.
+    logger.warn('Vulcan may be in an non-deterministic state.');
 });
 
 /**
@@ -55,16 +56,16 @@ process.on('multipleResolves', (type, promise, reason) => {
  * The 'beforeExit' event is emitted when Node.js empties its event loop and has no additional work to schedule.
  * Listeners can make async calls.
  * This is NOT thrown on explicit process termination.
+ * ! Make sure logic here is not too scuffed or RIP.
  */
-process.on('beforeExit', async (code) => {
-    if (code === 0) {
-        return logger.log('Node application has exited in a controlled manner.');
-    }
+process.on('beforeExit', async (
+    code,
+    reason = 'Cause of shutdown is unknown.',
+    shouldNotify = true
+) => {
+    const vulcan = xrequire('./index.js');
 
-    const vulcan  = xrequire('./index.js');
-    const message = logger.lastError || 'Cause of shutdown is unknown.';
-
-    if (vulcan) {
+    if (vulcan && shouldNotify) {
         await vulcan.guilds.array().asyncForEach(async (guild) => {
             const botChannel = guild.botChannel;
 
@@ -72,19 +73,19 @@ process.on('beforeExit', async (code) => {
                 await botChannel.send(
                     {
                         embed: {
-                            title      : 'Critical Error',
+                            title      : 'Vulcan Shutdown',
                             timestamp  : new Date(),
                             color      : 0x000000,
-                            description: `Vulcan process is exiting.`,
+                            description: `Exit sequence initiated.`,
                             fields     : [
                                 {
                                     name  : 'Message',
-                                    value : `\`\`\`\n${message}\`\`\``,
+                                    value : `\`\`\`\n${reason}\`\`\``,
                                     inline: false
                                 },
                                 {
                                     name  : 'Exit Code',
-                                    value : `${process.codes[code]} | [${code}]`,
+                                    value : `${process.codes[code]} | ${code}`,
                                     inline: true
                                 },
                                 {
@@ -97,7 +98,7 @@ process.on('beforeExit', async (code) => {
                                 url: `attachment://critical.png`
                             },
                             footer: {
-                                text: '[Error] This is bad. Vulcan main process has crashed. Restart imminent!'
+                                text: '[Emmited before process exit]'
                             }
                         },
                         files: [
@@ -113,7 +114,8 @@ process.on('beforeExit', async (code) => {
     }
 
     // ! Always call this because of custom codes.
-    process.exit(code);
+    // ? process.exit is overriden to call this event. (old = _exit)
+    process._exit(code);
 });
 
 /**
@@ -143,7 +145,7 @@ process.on('exit', (code) => {
 process.on('SIGINT', () => {
     logger.log(`Node application received SIGINT (CTRL + C).`);
 
-    process.emit('beforeExit', 3);
+    process.emit('beforeExit', 3, 'Vulcan process was terminated.\nSignal: SIGINT (CTRL + C)');
 });
 
 /**
@@ -154,3 +156,17 @@ process.on('SIGINT', () => {
 process.on('warning', (warning) => {
     logger.warning(`[Node Warning] => ${warning}`);
 });
+
+/*
+* Overwrite: process.exit
+? Likely to give trouble in future.
+! beforeExit will call process._exit.
+*/
+process._exit = process.exit;
+process.exit  = function (
+    code,
+    reason = 'Explicit process exit via \'process.exit\'.',
+    shouldNotify = true
+) {
+    process.emit('beforeExit', code, reason, shouldNotify);
+};

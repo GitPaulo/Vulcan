@@ -15,21 +15,23 @@ module.exports = async () => {
     const { v4, v6 } = await vulcan.externalIP();
     const header     = `=========================== [ Vulcan Is Ready (branch:${branch}) ] ===========================\n`;
     const footer     = `=`.repeat(header.length);
+    const WSP        = vulcan.webServer && vulcan.webServer.port || '(Offline)';
+    const FSP        = vulcan.fileServer && vulcan.fileServer.port || '(Offline)';
 
     // Tell the devs we ready! :)
     logger.plain(
         header
-      + `    Vulcan has connected to discord servers sucessfuly and is now ready!            \n`
-      + `       (${v4})(${v6})[WSP:${vulcan.webServer.port}][FSP:${vulcan.fileServer.port}]  \n`
-      + `       => Commands: ${vulcan.commands.identifiers.length}                           \n`
-      + `       => Networked users: ${vulcan.users.size}                                     \n`
-      + `       => Networked channels: ${vulcan.channels.size}                               \n`
-      + `       => Blacklisted users: ${vulcan.blacklist.size}                               \n`
-      + `       => Authenticated guilds: ${vulcan.authorised.size}                           \n`
-      + `       => Networked guilds: ${vulcan.guilds.size}                                   \n`
-      + `       => Usergroup map: ${vulcan.hierarchy}                                        \n`
-      + `       => Dependencies: ${Object.keys(pjson.dependencies).length}                   \n`
-      + `       => Dev-Dependencies: ${Object.keys(pjson.devDependencies).length}            \n`
+      + `    Vulcan has connected to discord servers sucessfuly and is now ready!\n`
+      + `       (${v4})(${v6})[WSP:${WSP}][FSP:${FSP}]                           \n`
+      + `       => Commands: ${vulcan.commands.identifiers.length}               \n`
+      + `       => Networked users: ${vulcan.users.size}                         \n`
+      + `       => Networked channels: ${vulcan.channels.size}                   \n`
+      + `       => Blacklisted users: ${vulcan.blacklist.size}                   \n`
+      + `       => Authenticated guilds: ${vulcan.authorised.size}               \n`
+      + `       => Networked guilds: ${vulcan.guilds.size}                       \n`
+      + `       => Usergroup map: ${vulcan.hierarchy}                            \n`
+      + `       => Dependencies: ${Object.keys(pjson.dependencies).length}       \n`
+      + `       => Dev-Dependencies: ${Object.keys(pjson.devDependencies).length}\n`
       + footer
     );
 

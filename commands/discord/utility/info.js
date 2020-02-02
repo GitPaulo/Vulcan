@@ -93,12 +93,12 @@ info.execute = async (message) => {
             },
             {
                 name  : 'File Server Port',
-                value : `${message.client.fileServer.port}`,
+                value : `${message.client.fileServer && message.client.fileServer.port || '(Offline)'}`,
                 inline: true
             },
             {
                 name  : 'Web Server Port',
-                value : `${message.client.webServer.port}`,
+                value : `${message.client.webServer && message.client.webServer.port || '(Offline)'}`,
                 inline: true
             }
         ]

@@ -189,9 +189,6 @@ class Vulcan extends Discord.Client {
     }
 
     loadWebServer (port = 443) {
-        // For display purposes
-        this.webServer = { port };
-
         // Generate certificate for HTTPS protocol
         pem.createCertificate({ days: 31, selfSigned: true }, (err, keys) => {
             if (err) {
@@ -418,6 +415,7 @@ class Vulcan extends Discord.Client {
         };
     }
 
+    // ? Existance checks are needed here.
     end () {
         // Stop Vulcan CLI
         if (this.terminalManager) {
@@ -431,9 +429,15 @@ class Vulcan extends Discord.Client {
 
         logger.log('Destroyed all voice connections.');
 
-        // Close other things safely (database perhaps?)
-        this.webServer.close();
-        this.fileServer.close();
+        // Close Webserver
+        if (this.webServer) {
+            this.webServer.close();
+        }
+
+        // Close Fileserver
+        if (this.fileServer) {
+            this.fileServer.close();
+        }
 
         logger.log('Closed all web servers.');
 

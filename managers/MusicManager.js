@@ -36,6 +36,7 @@ class MusicManager {
         this.guild   = guild;
         this.history = [];
         this.queue   = [];
+        this.checks  = [];
 
         // Defaults
         this.autoplay        = true;
@@ -186,7 +187,7 @@ class MusicManager {
     }
 
     inactivityCheck (cb) {
-        return setTimeout(() => {
+        this.checks.push(setTimeout(() => {
             // If still in after timeout and not playing
             if (this.idle) {
                 this.leaveVoice();
@@ -194,7 +195,10 @@ class MusicManager {
             } else {
                 cb(false);
             }
-        }, this.afkTimeout);
+        }, this.afkTimeout));
+
+        // Peek
+        return this.checks[this.checks.length - 1];
     }
 
     loadPlaylistToArray (data, opt) {
@@ -559,6 +563,9 @@ class MusicManager {
             this.dispatcher     = null;
             this.loadedSong     = null;
         }, 0);
+
+        // Clear checks
+        this.checks.forEach((check) => clearTimeout(check));
 
         this.log(`Destroyed Music Manager.`);
     }

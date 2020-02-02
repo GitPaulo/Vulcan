@@ -5,6 +5,7 @@ leave.execute = async (message) => {
     const musicManager = message.guild.musicManager;
     const voiceChannel = message.member.voice.channel;
 
+    // If not in voice, don't leave!
     if (!voiceChannel) {
         return message.client.emit(
             'channelInformation',
@@ -13,6 +14,10 @@ leave.execute = async (message) => {
         );
     }
 
+    // Leave
+    await musicManager.leaveVoice();
+
+    // Notify
     await message.channel.send(messageEmbeds.reply(
         {
             message,
