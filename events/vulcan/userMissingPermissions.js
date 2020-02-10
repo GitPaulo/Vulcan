@@ -1,8 +1,9 @@
 /*
- * Happens when a user does not have enough permissions to do something.
- */
+?   Invalid Command Usage (Vulcan Event)
+*   Happens when a user does not have enough permissions to do something.
+*/
 
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 const logger        = xrequire('./managers/LogManager').getInstance();
 
 module.exports = (

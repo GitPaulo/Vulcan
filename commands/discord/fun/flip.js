@@ -1,5 +1,5 @@
 const filp            = module.exports;
-const messageEmbeds   = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds   = xrequire('./modules/standalone/messageEmbeds');
 const MersenneTwister = xrequire('./structures/classes/external/MersenneTwister');
 
 const generator = new MersenneTwister();

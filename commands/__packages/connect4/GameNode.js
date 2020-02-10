@@ -1,4 +1,4 @@
-const Board = xrequire('./structures/packages/connect4/Board');
+const Board = xrequire('./commands/__packages/connect4/Board');
 
 class GameNode {
     constructor (board, player, column) {

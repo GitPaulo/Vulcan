@@ -6,7 +6,7 @@
         - must return true or false defining success
 */
 
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 module.exports = async (message) => {
     await message.channel.send(messageEmbeds.error(

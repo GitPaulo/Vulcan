@@ -36,3 +36,7 @@ Object.flip = function (obj) {
 
     return ret;
 };
+
+Object.createLookup = function (obj) {
+    return Object.assign(Object.create(null), obj);
+};

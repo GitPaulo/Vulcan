@@ -1,3 +1,9 @@
+/*
+?   Rate Limit (Discord Event)
+*   Emitted when the client hits a rate limit while making a request.
+    https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-rateLimit
+*/
+
 const logger = xrequire('./managers/LogManager').getInstance();
 
 module.exports = (

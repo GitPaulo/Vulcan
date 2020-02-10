@@ -1,6 +1,6 @@
 const weather       = module.exports;
-const yahooWeather  = xrequire('./utility/modules/yahooWeather');
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const yahooWeather  = xrequire('./modules/standalone/yahooWeather');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 // eslint-disable-next-line no-unused-vars
 weather.load = (commandDescriptor) => {

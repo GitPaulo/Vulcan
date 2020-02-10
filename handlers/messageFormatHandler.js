@@ -6,7 +6,7 @@
 const fs       = xrequire('fs');
 const path     = xrequire('path');
 const Discord  = xrequire('discord.js');
-const hastebin = xrequire('./utility/modules/hastebin');
+const hastebin = xrequire('./modules/standalone/hastebin');
 const logger   = xrequire('./managers/LogManager').getInstance();
 
 // File Constants
@@ -155,7 +155,7 @@ module.exports = async (channel, ...args) => {
         // ! Copy files? what if sensitive?
         largeFiles.forEach((largeFilePath) => {
             let fileName   = path.basename(largeFilePath);
-            let publicPath = path.join(vulcan.fileServer.publicFolderPath, fileName);
+            let publicPath = path.join(vulcan.webFiles.publicFolderPath, fileName);
 
             fs.copyFileSync(largeFilePath, publicPath);
             logger.debug(`Copied file to public realm: ${largeFilePath} => ${publicPath}`);
@@ -167,7 +167,7 @@ module.exports = async (channel, ...args) => {
         let externalIP = (await vulcan.externalIP()).v4;
 
         publicPaths.forEach((publicPath, i) => {
-            publicPaths[i] = `http://${externalIP}:${vulcan.fileServer.port}/${publicPath}`;
+            publicPaths[i] = `http://${externalIP}:${vulcan.webFiles.port}/${publicPath}`;
         });
 
         // Finally output

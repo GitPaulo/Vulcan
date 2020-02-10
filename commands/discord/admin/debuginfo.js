@@ -1,5 +1,5 @@
 const debuginfo     = module.exports;
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 const logger        = xrequire('./managers/LogManager').getInstance();
 
 debuginfo.execute = async (message) => {

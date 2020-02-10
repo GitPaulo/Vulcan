@@ -1,5 +1,5 @@
 const botchannel    = module.exports;
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 botchannel.execute = async (message) => {
     const guild     = message.guild;

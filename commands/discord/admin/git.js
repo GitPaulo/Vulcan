@@ -1,6 +1,6 @@
 const git           = module.exports;
 const GithubAPI     = xrequire('github-api');
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 // eslint-disable-next-line no-unused-vars
 git.load = (commandDescriptor) => {

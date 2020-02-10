@@ -7,8 +7,8 @@ const caller          = xrequire('caller-id');
 const Discord         = xrequire('discord.js');
 const ytdl            = xrequire('ytdl-core');
 const ytdlcd          = xrequire('ytdl-core-discord');
-const messageEmbeds   = xrequire('./utility/modules/messageEmbeds');
-const stringFunctions = xrequire('./utility/modules/stringFunctions');
+const messageEmbeds   = xrequire('./modules/standalone/messageEmbeds');
+const stringFunctions = xrequire('./modules/standalone/stringFunctions');
 const logger          = xrequire('./managers/LogManager').getInstance();
 
 ytdl.getInfoAsync = promisify(ytdl.getBasicInfo);

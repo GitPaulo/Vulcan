@@ -1,7 +1,7 @@
 const documentation = module.exports;
-const hastebin      = xrequire('./utility/modules/hastebin');
-const gitBranch     = xrequire('./utility/modules/gitBranch');
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const hastebin      = xrequire('./modules/standalone/hastebin');
+const gitBranch     = xrequire('./modules/standalone/gitBranch');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 // TODO - Improve this! Make prettier :)
 documentation.execute = async (message) => {

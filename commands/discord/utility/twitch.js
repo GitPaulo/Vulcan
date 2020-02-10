@@ -1,6 +1,6 @@
 const twitch        = module.exports;
 const request       = xrequire('request-promise');
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 // const logger     = xrequire('./managers/LogManager').getInstance();
 
 // TODO - Improve! Add more functionality and prettier embeds :)

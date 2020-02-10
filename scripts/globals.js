@@ -3,7 +3,7 @@ const path = require('path');
 
 // Extra Globals
 // * Note __dirname is NOT global, dont adopt indentifier style
-global.basedir   = path.join(__dirname, '..', '..');
+global.basedir   = path.join(__dirname, '..');
 global.platform  = os.platform();
 global.isLinux   = global.__platform === 'linux';
 global.isWindows = global.__platform === 'win32';

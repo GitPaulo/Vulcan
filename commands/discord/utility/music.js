@@ -1,5 +1,5 @@
 const music         = module.exports;
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 music.execute = async (message) => {
     const voiceChannelToJoin = message.member.voice.channel;

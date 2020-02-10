@@ -1,14 +1,15 @@
 const overwatchroulette = module.exports;
 const cheerio           = xrequire('cheerio');
 const request           = xrequire('request-promise');
-const messageEmbeds     = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds     = xrequire('./modules/standalone/messageEmbeds');
 
 /*
-* Note: This command is dependent on the uptime of 'www.overbuff.com/heroes'
-* All data is web scrapped.
- */
-overwatchroulette.loadHeroCache = async () => {
-    // Let error bubble up?
+*   This command is reliant on the structure and uptime of 'http://www.overbuff.com/heroes'
+?   All data is web scrapped.
+*/
+
+/* eslint-disable no-unused-vars */
+overwatchroulette.load = async (commandDescriptor) => {
     const html      = await request('http://www.overbuff.com/heroes');
     const $         = cheerio.load(html);
     const heroTable = $('.table-data tbody tr');
@@ -41,20 +42,7 @@ overwatchroulette.loadHeroCache = async () => {
     this.cache = cache;
 };
 
-/* eslint-disable no-unused-vars */
-overwatchroulette.load = (commandDescriptor) => {
-    this.loadHeroCache();
-};
-
 overwatchroulette.execute = async (message) => {
-    if (!this.cache) {
-        return message.client.emit(
-            'channelWarning',
-            message.channel,
-            `Please wait. Overwatch hero cache is still loading!`
-        );
-    }
-
     const role      = message.parsed.args[0] || 'ALL';
     const heroArray = this.cache.get(role);
 

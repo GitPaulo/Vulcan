@@ -1,4 +1,10 @@
-const gitBranch = xrequire('./utility/modules/gitBranch');
+/*
+?   Ready (Discord Event)
+*   Emitted when the client becomes ready to start working.
+    https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-ready
+*/
+
+const gitBranch = xrequire('./modules/standalone/gitBranch');
 const logger    = xrequire('./managers/LogManager').getInstance();
 
 module.exports = async () => {
@@ -15,23 +21,23 @@ module.exports = async () => {
     const { v4, v6 } = await vulcan.externalIP();
     const header     = `=========================== [ Vulcan Is Ready (branch:${branch}) ] ===========================\n`;
     const footer     = `=`.repeat(header.length);
-    const WSP        = vulcan.webServer && vulcan.webServer.port || '(Offline)';
-    const FSP        = vulcan.fileServer && vulcan.fileServer.port || '(Offline)';
+    const WSP        = vulcan.webHooks && vulcan.webHooks.port || '(Offline)';
+    const FSP        = vulcan.webFiles && vulcan.webFiles.port || '(Offline)';
 
     // Tell the devs we ready! :)
     logger.plain(
         header
-      + `    Vulcan has connected to discord servers sucessfuly and is now ready!\n`
-      + `       (${v4})(${v6})[WSP:${WSP}][FSP:${FSP}]                           \n`
-      + `       => Commands: ${vulcan.commands.identifiers.length}               \n`
-      + `       => Networked users: ${vulcan.users.size}                         \n`
-      + `       => Networked channels: ${vulcan.channels.size}                   \n`
-      + `       => Blacklisted users: ${vulcan.blacklist.size}                   \n`
-      + `       => Authenticated guilds: ${vulcan.authorised.size}               \n`
-      + `       => Networked guilds: ${vulcan.guilds.size}                       \n`
-      + `       => Usergroup map: ${vulcan.hierarchy}                            \n`
-      + `       => Dependencies: ${Object.keys(pjson.dependencies).length}       \n`
-      + `       => Dev-Dependencies: ${Object.keys(pjson.devDependencies).length}\n`
+      + `    Vulcan has connected to discord servers sucessfully and is now ready!\n`
+      + `       (${v4})(${v6})[WSP:${WSP}][FSP:${FSP}]                            \n`
+      + `       => Commands: ${vulcan.commands.identifiers.length}                \n`
+      + `       => Networked users: ${vulcan.users.size}                          \n`
+      + `       => Networked channels: ${vulcan.channels.size}                    \n`
+      + `       => Blacklisted users: ${vulcan.blacklist.size}                    \n`
+      + `       => Authenticated guilds: ${vulcan.authorised.size}                \n`
+      + `       => Networked guilds: ${vulcan.guilds.size}                        \n`
+      + `       => Usergroup map: ${vulcan.hierarchy}                             \n`
+      + `       => Dependencies: ${Object.keys(pjson.dependencies).length}        \n`
+      + `       => Dev-Dependencies: ${Object.keys(pjson.devDependencies).length} \n`
       + footer
     );
 

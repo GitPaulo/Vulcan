@@ -65,3 +65,11 @@ global.extendPrototype(proto, 'nthOccurrenceOf', function (pat, n) {
 
     return i;
 });
+
+global.extendPrototype(proto, 'hasUpperCase', function () {
+    return (/[A-Z]/.test(this));
+});
+
+global.extendPrototype(proto, 'hasLowerCase', function () {
+    return (/[a-z]/.test(this));
+});

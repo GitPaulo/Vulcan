@@ -1,3 +1,9 @@
+/*
+?   Guild Create (Discord Event)
+*   Emitted whenever the client joins a guild.
+    https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-guildCreate
+*/
+
 const logger = xrequire('./managers/LogManager').getInstance();
 
 module.exports = async (guild) => {

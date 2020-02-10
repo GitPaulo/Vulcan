@@ -10,5 +10,5 @@
 *   Happy coding! :)
 */
 
-module.exports = (require('./utility/scripts/globals'), // Universal dependency
-xrequire(process.argv[2] || './executions/bot.js'));    // Parameter: Any of the files in ./executions
+module.exports = (require('./scripts/globals'),      // Universal dependency
+xrequire(process.argv[2] || './executions/bot.js')); // Any of the files in ./executions

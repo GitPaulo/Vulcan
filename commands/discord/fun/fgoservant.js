@@ -1,15 +1,15 @@
 const fgoservant      = module.exports;
 const cheerio         = xrequire('cheerio');
 const request         = xrequire('request-promise');
-const messageEmbeds   = xrequire('./utility/modules/messageEmbeds');
-const stringFunctions = xrequire('./utility/modules/stringFunctions');
+const messageEmbeds   = xrequire('./modules/standalone/messageEmbeds');
+const stringFunctions = xrequire('./modules/standalone/stringFunctions');
 
 /*
-* Note: This command is dependent on the uptime of 'www.overbuff.com/heroes'
-* All data is web scrapped.
- */
+*   This command is reliant on the structure and uptime of 'http://grandorder.wiki'
+?   All data is web scrapped.
+*/
 
-let wikiTableExtractor = (html, cache, baseURL) => {
+const wikiTableExtractor = (html, cache, baseURL) => {
     const lbRgx   = /(\r\n|\n|\r)/gm;
 
     // ? Fetch and sort JP first
@@ -85,8 +85,8 @@ let wikiTableExtractor = (html, cache, baseURL) => {
     });
 };
 
-fgoservant.loadServantCache = async () => {
-    // Let error bubble up?
+/* eslint-disable no-unused-vars */
+fgoservant.load = async (commandDescriptor) => {
     const baseURL = 'http://grandorder.wiki';
     const htmlJP  = await request(`${baseURL}/Servant_List`);
     const htmlEN  = await request(`${baseURL}/Servant_List/EN`);
@@ -103,20 +103,7 @@ fgoservant.loadServantCache = async () => {
     this.cache = cache;
 };
 
-/* eslint-disable no-unused-vars */
-fgoservant.load = (commandDescriptor) => {
-    this.loadServantCache();
-};
-
 fgoservant.execute = async (message) => {
-    if (!this.cache) {
-        return message.client.emit(
-            'channelWarning',
-            message.channel,
-            `Please wait. F:GO servant cache is still loading!`
-        );
-    }
-
     const region = (message.parsed.args[0] || '').toUpperCase();
 
     if (!(region === 'JP' || region === 'EN')) {

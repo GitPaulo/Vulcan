@@ -1,5 +1,5 @@
 const shuffle       = module.exports;
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 shuffle.execute = async (message) => {
     const musicManager = message.guild.musicManager;

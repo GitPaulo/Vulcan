@@ -9,7 +9,7 @@ global['couldnt_have_forged_it_better_myself'] = `
 
 // Pre-initialisation scripts
 // ? Required by Vulcan and or dependant on Vulcan.
-xrequire('./utility/scripts/coreEvents');
+xrequire('./scripts/coreEvents');
 xrequire('./handlers/prototypeLoadHandler')();
 xrequire('./handlers/extensionLoadHandler')();
 
@@ -174,10 +174,10 @@ class Vulcan extends Discord.Client {
     }
 
     loadFileServer (port = 442) {
-        this.fileServer      = xrequire('./webfiles')(this);
-        this.fileServer.port = 442;
+        this.webFiles      = xrequire('./webfiles')(this);
+        this.webFiles.port = 442;
 
-        this.fileServer.listen(port, (err) => {
+        this.webFiles.listen(port, (err) => {
             if (err) {
                 return logger.error(`Something bad happened while starting file server!\n\tERROR: ${err.message}`);
             }
@@ -195,10 +195,10 @@ class Vulcan extends Discord.Client {
                 throw err;
             }
 
-            this.webServer      = xrequire('./webhooks')(this, keys);
-            this.webServer.port = port;
+            this.webHooks      = xrequire('./webhooks')(this, keys);
+            this.webHooks.port = port;
 
-            this.webServer.listen(port, (err) => {
+            this.webHooks.listen(port, (err) => {
                 if (err) {
                     return logger.error(`Something bad happened while starting web server!\n\tERROR: ${err.message}`);
                 }
@@ -430,13 +430,13 @@ class Vulcan extends Discord.Client {
         logger.log('Destroyed all voice connections.');
 
         // Close Webserver
-        if (this.webServer) {
-            this.webServer.close();
+        if (this.webHooks) {
+            this.webHooks.close();
         }
 
         // Close Fileserver
-        if (this.fileServer) {
-            this.fileServer.close();
+        if (this.webFiles) {
+            this.webFiles.close();
         }
 
         logger.log('Closed all web servers.');

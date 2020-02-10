@@ -4,7 +4,8 @@ const fs     = require('fs');
 const path   = require('path');
 const logger = xrequire('./managers/LogManager').getInstance();
 
-const publicFolderPath = `./${path.dirname(__filename).split(path.sep).pop()}/public/`;
+// ? This folder can be manipulated via HTTP requests
+const publicFolderPath = path.join(__dirname, 'public');
 
 // Create public folder (where files can be seen)
 if (!fs.existsSync(publicFolderPath)) {
@@ -23,20 +24,20 @@ module.exports = (vulcan) => {
         // Nased on the URL path, extract the file extention. e.g. .js, .doc, ...
         const ext = path.parse(pathname).ext;
         // Maps file extention to MIME typere
-        const map = {
-            '.ico' : 'image/x-icon',
-            '.html': 'text/html',
-            '.js'  : 'text/javascript',
-            '.json': 'application/json',
-            '.css' : 'text/css',
-            '.png' : 'image/png',
-            '.jpg' : 'image/jpeg',
-            '.wav' : 'audio/wav',
-            '.mp3' : 'audio/mpeg',
-            '.svg' : 'image/svg+xml',
-            '.pdf' : 'application/pdf',
-            '.doc' : 'application/msword'
-        };
+        const map = new Map([
+            ['.ico',  'image/x-icon'],
+            ['.html', 'text/html'],
+            ['.js',   'text/javascript'],
+            ['.json', 'application/json'],
+            ['.css',  'text/css'],
+            ['.png',  'image/png'],
+            ['.jpg',  'image/jpeg'],
+            ['.wav',  'audio/wav'],
+            ['.mp3',  'audio/mpeg'],
+            ['.svg',  'image/svg+xml'],
+            ['.pdf',  'application/pdf'],
+            ['.doc',  'application/msword']
+        ]);
 
         fs.exists(pathname, (exist) => {
             if (!exist) {
@@ -76,7 +77,7 @@ module.exports = (vulcan) => {
                         res.end(`[File Server] => Error getting the file: ${err}.`);
                     } else {
                         // If the file is found, set Content-type and send data
-                        res.setHeader('Content-type', map[ext] || 'text/plain');
+                        res.setHeader('Content-type', map.get(ext) || 'text/plain');
                         res.end(data);
                     }
                 });

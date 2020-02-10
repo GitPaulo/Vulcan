@@ -4,12 +4,13 @@
 */
 
 // Load defaults & settings
-const defaults = xrequire('./utility/defaults');
+const defaults = xrequire('./modules/congregate/defaults');
 const settings = xrequire('./handlers/settingsLoadHandler')(defaults);
+const Vulcan   = xrequire('./structures/classes/core/Vulcan');
 
 // Instantiate & export Vulcan client
 module.exports = (
-    new (xrequire('./structures/classes/core/Vulcan'))(
+    new Vulcan(
         // Vulcan options
         {
             defaults,
@@ -34,4 +35,5 @@ module.exports = (
         .loadWebServer()
         .loadCLI()
         .connect()
+    // ? All load functions are synchronous to avoid dragging.
 );

@@ -1,5 +1,5 @@
 const blacklist     = module.exports;
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 blacklist.execute = async (message) => {
     const vulcan = this.command.client;

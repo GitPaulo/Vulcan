@@ -1,5 +1,5 @@
 const psa           = module.exports;
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 psa.execute = (line) => {
     const vulcan     = this.command.client;

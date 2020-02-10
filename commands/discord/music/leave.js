@@ -1,5 +1,5 @@
 const leave         = module.exports;
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 leave.execute = async (message) => {
     const musicManager = message.guild.musicManager;

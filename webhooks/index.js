@@ -1,40 +1,77 @@
-const fs     = xrequire('fs');
-const path   = xrequire('path');
-const https  = xrequire('https');
-const logger = xrequire('./managers/LogManager').getInstance();
+const fs      = xrequire('fs');
+const path    = xrequire('path');
+const https   = xrequire('https');
+const sstream = require('stream-stream');
+const logger  = xrequire('./managers/LogManager').getInstance();
 
-// ===== Generate key
-const keyPath  = './settings/webhook_key.txt';
-let webhookKey = null;
+// ? Load key from file
+const loadWebhookKey = () => {
+    const path     = './settings/webhook_key.txt';
+    let webhookKey = null;
 
-fs.existsSync(keyPath)
-    ? (webhookKey = fs.readFileSync(keyPath, 'utf8'))
-    : ((webhookKey = Math.simpleUUID()), fs.writeFileSync(keyPath, webhookKey));
+    fs.existsSync(path)
+        ? (webhookKey = fs.readFileSync(path, 'utf8'))
+        : ((webhookKey = Math.simpleUUID()), fs.writeFileSync(path, webhookKey));
 
-logger.debug(`Webhook key loaded: ${webhookKey}`);
+    logger.debug(`Webhook key loaded: ${webhookKey}`);
+
+    return webhookKey;
+};
 
 module.exports = (vulcan, keys) => {
     // ===== Generated before
-    const key  = keys.serviceKey;
-    const cert = keys.certificate;
+    const webhookKey = loadWebhookKey();
+    const key        = keys.serviceKey;
+    const cert       = keys.certificate;
 
     // ===== Web server constants
     const server = https.createServer({ key, cert }, (request, response) => {
-        // Lazy D:<
-        if (request.statusCode >= 300 && request.statusCode <= 600) {
-            return logger.error(`[Web Hooks] => Caught bad status code from request!\n\tCODE: ${request.statusCode}\n\tURL: ${request.url}`);
-        }
+        // * Quick accces
+        let cmdString = '(unknown)';
 
-        const end = (message, prefix = '[Denied]') => {
-            logger.warn(
+        // ? Nested utility function
+        const end = (output, accepted = false) => {
+            const requestData = cmdString;
+            const prefix      = accepted ? 'ACCEPTED' : 'DENIED';
+
+            // Log response end
+            logger.log(
                 `[Web Hooks] => HTTPS request has successfully completed!\n\t`
-                + `MESSAGE: ${message}\n\t`
-                + `PREFIX: ${prefix}`
+                + `PREFIX: ${prefix}\n\t`
+                + `URL & PATH: ${request.url} & ${request.path}\n\t`
+                + `CODE: ${request.code}\n\t`
+                + `CMDS: ${requestData}\n\t`
+                + `OUTPUT: ${output}`
             );
-            response.end(`[Web Hooks] => ${prefix} => ${message}`);
+
+            // End response (gets sent to requestee)
+            response.end(
+                `=====| Response Ended\n`
+                + `Endpoint: webhooks\n`
+                + `Status: ${prefix}\n`
+                + `Command(s): ${requestData}\n`
+                + `Output: ${output}`
+            );
         };
 
-        // ! For now only allow POST (the commands)
+        // * Lazy catch bad codes
+        if (request.statusCode >= 300 && request.statusCode <= 600) {
+            logger.error(
+                `[Web Hooks] => Caught bad status code from request!\n`
+                + `\tCODE: ${request.statusCode}\n\tURL: ${request.url}`
+            );
+
+            return end('Bad status.');
+        }
+
+        // ? Check if vulcan is ready
+        if (vulcan.readyAt > Date.now()) {
+            logger.warn(`[Web Hooks] => Webhook request was recevied before vulcan being ready.\n`);
+
+            return end('Request received before vulcan was ready.');
+        }
+
+        // For now only allow POST (the commands)
         // ! Passcode needed?
         if (request.method === 'POST') {
             let body = '';
@@ -60,6 +97,9 @@ module.exports = (vulcan, keys) => {
                 }
 
                 const { key, cmds } = requestObject;
+
+                // Set up quick access for 'end'
+                cmdString = cmds.join(', ');
 
                 if (!key) {
                     return end('No authorisation key parameter detected!');
@@ -97,15 +137,32 @@ module.exports = (vulcan, keys) => {
                     output.push(returnValue);
                 });
 
-                end(`Request has been completed!\n\n========[Output]========\n[${output.join(', ')}]`, '[Accepted]');
+                // ? Success!
+                end(output.join(', '), true);
             });
         }
 
+        // ? GET requests return the client page
         if (request.method === 'GET') {
-            end('Currently there is no functionality tied to GET requests :(');
-        }
+            const clFolderPath = path.join(__dirname, 'client');
+            const clFiles      = fs.readdirSync(clFolderPath);
 
-        logger.log(`[Web Hooks] => Parsing request: '${request.method}' with URL: '${request.url}'`);
+            // Oh no no
+            clFiles.reverse();
+
+            // Stream-Stream
+            let multiStream = sstream();
+
+            clFiles.forEach((file, _index) => {
+                let filePath = path.join(clFolderPath, file);
+
+                // Write to multi stream
+                multiStream.write(fs.createReadStream(filePath));
+            });
+
+            multiStream.end();
+            multiStream.pipe(response);
+        }
     });
 
     return server;

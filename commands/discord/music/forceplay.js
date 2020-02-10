@@ -1,5 +1,5 @@
 const forceplay     = module.exports;
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 forceplay.execute = async (message) => {
     const musicManager = message.guild.musicManager;

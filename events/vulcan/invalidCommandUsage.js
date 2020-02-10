@@ -1,13 +1,13 @@
 /*
- * Happens when validation inside the command.execute() fails
-    ? This could be for many reasons:
-       - Invalid #arguments
-       - Authenticity
-       - Validity
-       - etc...
-    ! DO NOT mistaken this for 'invalidCommandCall' which acts
-    ! at a higher level (before command.execute())
- */
+?   Invalid Command Usage (Vulcan Event)
+*   Happens when validation inside the command.execute() fails.
+*   This could be for many reasons:
+        - Invalid #arguments
+        - Authenticity
+        - Validity
+        - etc...
+!   Note: Do not mistaken this for 'invalidCommandCall' which acts at a higher level (before command.execute()).
+*/
 
 module.exports = (
     message,

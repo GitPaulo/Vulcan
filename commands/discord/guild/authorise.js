@@ -1,5 +1,5 @@
 const authorise     = module.exports;
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 authorise.execute = async (message) => {
     const guild = message.guild;

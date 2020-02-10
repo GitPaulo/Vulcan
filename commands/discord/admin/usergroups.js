@@ -1,5 +1,5 @@
 const usergroups    = module.exports;
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 usergroups.execute = async (message) => {
     const vulcan = this.command.client;
@@ -20,7 +20,7 @@ usergroups.execute = async (message) => {
 
     switch (scmd) {
         case 'set':
-        case 'write':
+        case 'write': {
             let newGroupName = message.parsed.args[2] || vulcan.defaultGroupName;
 
             if (!vulcan.hierarchy.get(newGroupName)) {
@@ -35,20 +35,23 @@ usergroups.execute = async (message) => {
                 ? `Usergroup '${newGroupName}' set for id: ${targetID}.`
                 : `Could not set usergroup for id: ${targetID}`;
             break;
+        }
         case 'get':
-        case 'read':
+        case 'read': {
             let checkedGroup = await this.get(targetID);
 
             output = (checkedGroup)
                 ? `Usergroup of ${targetID} is '${checkedGroup}'`
                 : `Could not find a usergroup linked to id: ${targetID}`;
             break;
+        }
         case 'hierarchy':
         case 'list':
-        case 'usergroups':
+        case 'usergroups': {
             output = `\`\`\`js\n${this.list().join('\n')}\`\`\``
                 + `\`\`\`js\n${JSON.stringify(this.hierarchy())}\`\`\``;
             break;
+        }
         default:
             return vulcan.emit(
                 'invalidCommandUsage',

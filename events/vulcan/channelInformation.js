@@ -1,9 +1,11 @@
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 const logger        = xrequire('./managers/LogManager').getInstance();
 
 /*
-*  Happens when vulcan tries to inform a channel of something.
+?   Channel Information (Vulcan Event)
+*   Happens when vulcan tries to inform a channel of something.
 */
+
 module.exports = (
     channel,
     description = 'Vulcan attempted to communicate information but nothing was passed.'

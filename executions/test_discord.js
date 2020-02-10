@@ -4,7 +4,7 @@
 */
 
 // Load defaults & settings
-const defaults = xrequire('./utility/defaults');
+const defaults = xrequire('./modules/congregate/defaults');
 const settings = xrequire('./handlers/settingsLoadHandler')(defaults);
 
 // Discord

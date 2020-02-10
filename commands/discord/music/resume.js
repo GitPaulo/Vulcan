@@ -1,6 +1,6 @@
 const resume        = module.exports;
 const Discord       = xrequire('discord.js');
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 resume.execute = async (message) => {
     const musicManager = message.guild.musicManager;

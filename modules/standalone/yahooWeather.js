@@ -1,4 +1,4 @@
-const OAuth = xrequire('./utility/modules/oauth-promise');
+const OAuth = xrequire('./modules/standalone/oauth-promise');
 
 const yahooWeather = module.exports = function (id, key, secret) {
     if (typeof id !== 'string') {

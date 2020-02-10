@@ -1,5 +1,5 @@
 const servers       = module.exports;
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 servers.execute = async (message) => message.channel.send(messageEmbeds.reply(
     {

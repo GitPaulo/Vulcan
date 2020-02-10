@@ -1,6 +1,6 @@
 const list          = module.exports;
-const hastebin      = xrequire('./utility/modules/hastebin');
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const hastebin      = xrequire('./modules/standalone/hastebin');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 list.execute = async (message) => {
     const musicManager = message.guild.musicManager;

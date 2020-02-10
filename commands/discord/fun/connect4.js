@@ -1,6 +1,7 @@
+/* eslint-disable no-await-in-loop */
 const connect4 = module.exports;
-const mcts     = xrequire('./structures/packages/connect4/Mcts');
-const Board    = xrequire('./structures/packages/connect4/Board');
+const mcts     = xrequire('./commands/__packages/connect4/Mcts');
+const Board    = xrequire('./commands/__packages/connect4/Board');
 const logger   = xrequire('./managers/LogManager').getInstance();
 
 const numberEmojiSuffix = '%E2%83%A3';
@@ -59,6 +60,7 @@ connect4.execute = async (message) => {
         }
     }
 
+    // ! Could really outsource this to a class
     // Create new game object literal (class would be overkill? but you could make one)
     const outerScope = this;
     const game       = {
@@ -137,7 +139,7 @@ connect4.execute = async (message) => {
         async updateView () {
             await this.updateBoardMessage();
             await this.updateTurnMessage();
-            // await this.resetControls();
+            // --await this.resetControls();
         }
     };
 
@@ -180,7 +182,10 @@ connect4.execute = async (message) => {
                 continue;
             }
 
+            // Reset Controls
             await game.resetControls();
+
+            // Collect Move
             let move = await game.nextMove();
 
             // Surrender
@@ -193,6 +198,7 @@ connect4.execute = async (message) => {
             } else {
                 let state = game.makeMove(move);
 
+                // Update view
                 await game.updateState(state);
                 await game.updateView();
             }

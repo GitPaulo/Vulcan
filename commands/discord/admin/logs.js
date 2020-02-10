@@ -1,8 +1,8 @@
 const logs            = module.exports;
 const path            = xrequire('path');
 const { performance } = xrequire('perf_hooks');
-const messageEmbeds   = xrequire('./utility/modules/messageEmbeds.js');
-const archiver        = xrequire('./utility/modules/promiseArchiver');
+const messageEmbeds   = xrequire('./modules/standalone/messageEmbeds.js');
+const archiver        = xrequire('./modules/standalone/promiseArchiver');
 
 logs.execute = async (message) => {
     const dmOnly  = Boolean(message.parsed.args[0]);

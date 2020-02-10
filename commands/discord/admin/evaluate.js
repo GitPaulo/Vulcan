@@ -2,7 +2,7 @@ const evaluate        = module.exports;
 const vm              = xrequire('vm');
 const util            = xrequire('util');
 const { performance } = xrequire('perf_hooks');
-const messageEmbeds   = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds   = xrequire('./modules/standalone/messageEmbeds');
 const logger          = xrequire('./managers/LogManager').getInstance();
 
 // eslint-disable-next-line no-unused-vars

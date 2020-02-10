@@ -1,6 +1,6 @@
 const cat           = module.exports;
 const request       = xrequire('request-promise');
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 cat.execute = async (message) => {
     const response = JSON.parse(await request('http://aws.random.cat/meow'));

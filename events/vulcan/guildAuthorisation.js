@@ -1,8 +1,9 @@
 /*
- * Happens when a response is given to a authorisation request
- */
+?   Guild Authorisation (Vulcan Event)
+*   Happens when a response is given to a authorisation request
+*/
 
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 module.exports = async (
     guild,
@@ -12,8 +13,8 @@ module.exports = async (
 ) => {
     const authStr1 = response ? 'APPROVED' : 'REJECTED';
     const authStr2 = response
-        ? 'This guild now has access to all vulcan features.\n\nGet started by using the \`docs\` command!'
-        : 'Vulcan features will remained locked.\n\nYou may resubmit request with the \`authorise\` command.';
+        ? `This guild now has access to all vulcan features.\n\nGet started by using the \`docs\` command!`
+        : `Vulcan features will remained locked.\n\nYou may resubmit request with the \`authorise\` command.`;
 
     // Bot channel may not exist because guilds may have no text channel
     await (guild.botChannel || await requestee.createDM()).send(messageEmbeds.info(

@@ -1,4 +1,4 @@
-const GameNode   = xrequire('./structures/packages/connect4/GameNode');
+const GameNode   = xrequire('./commands/__packages/connect4/GameNode');
 const TIME_LIMIT = 1000;
 
 const C = Math.sqrt(2);

@@ -3,8 +3,8 @@ const util            = xrequire('util');
 const fs              = xrequire('fs');
 const path            = xrequire('path');
 const http            = xrequire('http');
-const messageEmbeds   = xrequire('./utility/modules/messageEmbeds');
-const stringFunctions = xrequire('./utility/modules/stringFunctions');
+const messageEmbeds   = xrequire('./modules/standalone/messageEmbeds');
+const stringFunctions = xrequire('./modules/standalone/stringFunctions');
 // const logger       = xrequire('./managers/LogManager').getInstance();
 
 // Promisify fs functions

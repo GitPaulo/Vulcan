@@ -1,10 +1,11 @@
 /* eslint-disable key-spacing */
+
 /*
- * Implemented as a Singleton.
- * Note: There is no particular reason for this besides a whim of the developer.
- * I enjoyed working on it tho!
- * (Should write async because logger gets called on node exit event!)
- */
+* Implemented as a 'Singleton'.
+    There is no particular reason for the 'why?' besides the whim of the developer.
+    TODO: Could use a lot of improvement.
+*/
+
 const fs         = xrequire('fs');
 const path       = xrequire('path');
 const chalk      = xrequire('chalk');
@@ -30,13 +31,13 @@ const LogManager = (function () {
         let lastError = null;
 
         // Type color lookup
-        let logTypes    = {
-            debug   : chalk.blue,
-            log     : chalk.green,
-            warning : chalk.yellowBright,
-            error   : chalk.redBright,
-            terminal: chalk.magenta
-        };
+        let logTypes = new Map([
+            ['debug', chalk.blue],
+            ['log', chalk.green],
+            ['warning', chalk.yellowBright],
+            ['error', chalk.redBright],
+            ['terminal', chalk.magenta]
+        ]);
 
         // File -> log type
         let blueprint = [
@@ -59,6 +60,11 @@ const LogManager = (function () {
 
         let applyModifiers = function (text) {
             for (let modifier of modifiers) {
+                if (!chalk[modifier]) {
+                    instance.warn(`Invalid chalk modifier: ${modifier}`);
+                    continue;
+                }
+
                 text = chalk[modifier](text);
             }
 
@@ -78,11 +84,11 @@ const LogManager = (function () {
         };
 
         let shouldLog = function () {
-            return true; // currently not used (but could be in future!)
+            return true; // Currently not used (but could be in future!)
         };
 
         let store = function (logType, str) {
-            if (!logTypes[logType]) {
+            if (!logTypes.get(logType)) {
                 throw new Error(`Log type '${logType}' not valid for 'write' function!`);
             }
 
@@ -118,7 +124,7 @@ const LogManager = (function () {
         };
 
         let write = function (logType, ...args) {
-            let colorFunc = logTypes[logType];
+            let colorFunc = logTypes.get(logType);
 
             if (!colorFunc) {
                 throw new Error(`Log type '${logType}' not valid for 'write' function!`);
@@ -194,7 +200,7 @@ const LogManager = (function () {
             clearModifiers () {
                 modifiers = [];
             },
-            write: function () {  /* eslint-disable-line object-shorthand */ // if not like this it errors because of strict mode??
+            write: function () {  /* eslint-disable-line object-shorthand */
                 if (shouldLog(...arguments)) {
                     write(this.write.caller.name, ...arguments);
                 }
@@ -206,6 +212,7 @@ const LogManager = (function () {
                     throw new Error(`Invalid color '${color}' for 'logger.plain'!`);
                 }
 
+                // ? Finally, print it out :D
                 console.log(
                     applyModifiers(
                         colorFunc(
@@ -214,13 +221,13 @@ const LogManager = (function () {
                     )
                 );
             },
-            // Helper
+            // ? Helper
             debug ()    { this.write(...arguments); },
             log ()      { this.write(...arguments); },
             warning ()  { this.write(...arguments); },
             error ()    { this.write(...arguments); },
             terminal () { this.write(...arguments); },
-            // Alias
+            // ? Alias
             warn () { this.warning(...arguments); },
             err ()  { this.error(...arguments);   }
         };

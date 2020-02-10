@@ -1,6 +1,6 @@
 const dog           = module.exports;
 const request       = xrequire('request-promise');
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 dog.execute = async (message) => {
     const response = JSON.parse(await request('http://dog.ceo/api/breeds/image/random'));

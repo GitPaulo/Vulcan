@@ -2,6 +2,7 @@ plugins:
   - security
 extends:
   - 'mudamuda/node' # superior rule set
+  - 'plugin:security/recommended' # have security warnings
 globals:
   xrequire: readonly
   global.basedir: readonly

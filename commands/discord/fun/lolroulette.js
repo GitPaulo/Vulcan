@@ -1,8 +1,14 @@
 const lolroulette   = module.exports;
 const request       = xrequire('request-promise');
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
-lolroulette.loadChampionData = async () => {
+/*
+*   This command is reliant on the structure and uptime of 'http://ddragon.leagueoflegends.com/'
+?   All data is web scrapped.
+*/
+
+/* eslint-disable no-unused-vars */
+lolroulette.load = async (commandDescriptor) => {
     const result = await request(
         'http://ddragon.leagueoflegends.com/cdn/9.24.2/data/en_GB/champion.json',
         {
@@ -16,20 +22,7 @@ lolroulette.loadChampionData = async () => {
     this.cache = JSON.parse(result).data;
 };
 
-/* eslint-disable no-unused-vars */
-lolroulette.load = (commandDescriptor) => {
-    this.loadChampionData();
-};
-
 lolroulette.execute = async (message) => {
-    if (!this.cache) {
-        return message.client.emit(
-            'channelWarning',
-            message.channel,
-            `Please wait. League of legends champion cache is still loading!`
-        );
-    }
-
     const champions = Object.keys(this.cache);
     const champion  = this.cache[champions.random()];
 

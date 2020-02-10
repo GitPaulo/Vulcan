@@ -1,3 +1,9 @@
+/*
+?   Message (Discord Event)
+*   Emitted whenever a message is created.
+    https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-message
+*/
+
 /* eslint-disable complexity */
 /* eslint-disable max-statements-per-line */
 
@@ -91,6 +97,16 @@ module.exports = async (message) => {
                 'invalidCommandCall',
                 message,
                 `This command has been disabled!`
+            );
+        }
+
+        // Check if command is loaded
+        if (!message.command.loaded) {
+            return client.emit(
+                'invalidCommandCall',
+                message,
+                `This command has not yet been **loaded**!\n`
+                + `Please wait a while longer. If the issue persists, contact the developers.`
             );
         }
 

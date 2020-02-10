@@ -1,8 +1,8 @@
 const unauthorise   = module.exports;
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 unauthorise.execute = async (message) => {
-    const guild = message.guild;
+    const { guild } = message;
 
     if (!guild.authorised) {
         return message.client.emit(
@@ -12,7 +12,9 @@ unauthorise.execute = async (message) => {
         );
     }
 
+    // Send unauthorise request
     await message.client.unauthoriseGuild(guild.id);
+
     await message.channel.send(messageEmbeds.reply(
         {
             message,

@@ -1,3 +1,9 @@
+/*
+?   Guild Delete (Discord Event)
+*   Emitted whenever the client leaves a guild.
+    https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-guildDelete
+*/
+
 const logger =  xrequire('./managers/LogManager').getInstance();
 
 module.exports = (guild) => {

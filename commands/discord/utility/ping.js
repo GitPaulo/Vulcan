@@ -1,5 +1,5 @@
 const ping          = module.exports;
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 // eslint-disable-next-line no-unused-vars
 ping.load = (commandDefinition) => {

@@ -1,7 +1,7 @@
 const clearpublic   = module.exports;
 const fs            = xrequire('fs');
 const path          = xrequire('path');
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 clearpublic.execute = async (message) => {
     fs.readdir('./public/', async (err, files) => {
@@ -10,7 +10,11 @@ clearpublic.execute = async (message) => {
         }
 
         for (let file of files) {
-            fs.unlink(path.join('./public/', file), (err) => {
+            let santized = path.normalize(file).replace(/^(\.\.(\/|\\|$))+/, '');
+            let filePath = path.join('./public/', santized);
+
+            // eslint-disable-next-line security/detect-non-literal-fs-filename
+            fs.unlink(filePath, (err) => {
                 if (err) {
                     throw err;
                 }

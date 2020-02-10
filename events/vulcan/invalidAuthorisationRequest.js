@@ -1,9 +1,10 @@
 /*
- * Happens when an invalid guild authorisation request happens
-    ? This is usually because of an invalid guild parsed.
- */
+?   Invalid Authorisation Request (Vulcan Event)
+*   Happens when an invalid guild authorisation request happens.
+*   This is usually because of an invalid guild parsed.
+*/
 
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 const logger        = xrequire('./managers/LogManager').getInstance();
 
 module.exports = (

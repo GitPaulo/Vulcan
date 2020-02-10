@@ -1,5 +1,5 @@
 const restart       = module.exports;
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 const exec          = xrequire('util').promisify(xrequire('child_process').exec);
 
 restart.execute = async (message) => {

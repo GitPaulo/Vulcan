@@ -1,14 +1,15 @@
 /*
- * Happens when validation inside the message event fails.
-    ? This could be for many reasons:
-       - Spam filtering
-       - Blacklisting
-       - Permissions
-       - etc...
-    ! message.command is not guaranteed to be defined
- */
+?   Invalid Command Call (Vulcan Event)
+*   Happens when validation inside the message event fails.
+*   This could be for many reasons:
+        - Spam filtering
+        - Blacklisting
+        - Permissions
+        - etc...
+!   Note: message.command is not guaranteed to be defined.
+*/
 
-// ? Rate limit this event? (Could be abused)
+// * Rate limit this event? (Could be abused)
 module.exports = (
     message,
     description,

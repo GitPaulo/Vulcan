@@ -1,6 +1,6 @@
 const info          = module.exports;
-const gitBranch     = xrequire('./utility/modules/gitBranch');
-const messageEmbeds = xrequire('./utility/modules/messageEmbeds');
+const gitBranch     = xrequire('./modules/standalone/gitBranch');
+const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 
 info.execute = async (message) => {
     const performance        = message.client.performance;
@@ -93,12 +93,12 @@ info.execute = async (message) => {
             },
             {
                 name  : 'File Server Port',
-                value : `${message.client.fileServer && message.client.fileServer.port || '(Offline)'}`,
+                value : `${message.client.webFiles && message.client.webFiles.port || '(Offline)'}`,
                 inline: true
             },
             {
                 name  : 'Web Server Port',
-                value : `${message.client.webServer && message.client.webServer.port || '(Offline)'}`,
+                value : `${message.client.webHooks && message.client.webHooks.port || '(Offline)'}`,
                 inline: true
             }
         ]

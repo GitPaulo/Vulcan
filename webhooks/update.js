@@ -1,35 +1,55 @@
-const gitBranch = xrequire('./utility/modules/gitBranch');
+const gitBranch = xrequire('./modules/standalone/gitBranch');
 const logger    = xrequire('./managers/LogManager').getInstance();
 const exec      = xrequire('util').promisify(xrequire('child_process').exec);
 
+// Update Command Sequence
+const updateCommands = [
+    'git pull origin',
+    'rm -f package-lock.json',
+    'rm -f -rf node_modules',
+    'npm install'
+];
+
 /* eslint-disable no-unused-vars */
+// TODO: Make sure bot is useable while update or npm install?
 module.exports = async (vulcan, request, response) => {
     const output     = await gitBranch();
     const branchName = output.branch;
+
+    // Return
+    let exitString = 'Updated sequence was succesfull.';
 
     // Simple sanitize (although i can't see how gitBranch would be modified)
     if (/\s/.test(branchName)) {
         throw new Error(`'gitBranch' module should only return one word for the branch name!`);
     }
 
-    const command = (global.isLinux ? 'sudo ' : '')
-        // * We need to make sure we perform a full update! (Packages may change)
-        + `git pull origin ${branchName} && rm -f package-lock.json && rm -f -rf node_modules && npm install`;
+    // Log start
+    logger.log('Vulcan remote update sequence started.');
 
     // Update presence :)
     vulcan.presenceManager.useUpdating();
 
     try {
-        let { stdout, stderr } = await exec(command);
+        for (let command of updateCommands) {
+            logger.log(`Update command executing: ${command}`);
 
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
+            // ? Dynamically add branch name to git command
+            if (command === updateCommands[0]) {
+                command = command + ' ' + branchName;
+            }
 
-        logger.log(`Successfully fetched updates from git repository!`);
-        vulcan.presenceManager.switchToPrevious();
+            let { stdout, stderr } = await exec(command);
+
+            logger.plain(`stdout: ${stdout || '(empty)'}`);
+            logger.plain(`stderr: ${stderr || '(empty)'}`);
+        }
     } catch (err) {
-        return `Update failed: ${err.message}`;
+        exitString = `Update failed: ${err.message}`;
     }
 
-    return 'Update completed!';
+    // Swap back to old presence
+    vulcan.presenceManager.switchToPrevious();
+
+    return exitString;
 };

@@ -1,6 +1,6 @@
 const buckets         = require('buckets-js');
 const Command         = xrequire('./structures/classes/core/Command');
-const stringFunctions = xrequire('./utility/modules/stringFunctions');
+const stringFunctions = xrequire('./modules/standalone/stringFunctions');
 
 class CommandMap extends Map {
     constructor (...args) {
