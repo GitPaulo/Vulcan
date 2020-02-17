@@ -71,7 +71,7 @@
     "discord.js": "github:discordjs/discord.js",
     "ffmpeg-static": "^4.0.0",
     "github-api": "^3.3.0",
-    "got": "^9.6.0",
+    "got": "^10.5.7",
     "js-yaml": "^3.13.1",
     "mongoose": "^5.8.7",
     "node-opus": "^0.3.3",
