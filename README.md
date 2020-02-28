@@ -20,9 +20,9 @@
 
 # Overview
 
-**Vulcan** is a multi-purpose discord bot built with [discord.js](https://github.com/discordjs/discord.js). Vulcan was created to acomplish the tasks of administration, utility and entertainment for the discord server of our group of friends and, as such, its design and features are tailored to our needs.
+**Vulcan** is a multi-purpose discord bot built with [discord.js](https://github.com/discordjs/discord.js). Vulcan's goal is to enhance the environment within our discord server. Note that its design and features are exclusively tailored to our needs.
   
-The project is maintained by only a few people, but you are welcome to join.
+This project is maintained only by a few people, but you are welcome to join!
 
 # Invite Vulcan
 
