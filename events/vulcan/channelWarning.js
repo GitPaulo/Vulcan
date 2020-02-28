@@ -1,10 +1,10 @@
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
-const logger        = xrequire('./managers/LogManager').getInstance();
+/**
+ * ? Channel Warning (Vulcan Event)
+ * Happens when an internal error surfaces in a controlled space due to some action requested in a text channel.
+ */
 
-/*
-?   Channel Warning (Vulcan Event)
-*   Happens when an internal error surfaces in a controlled space due to some action requested in a text channel.
-*/
+const messageEmbeds = xrequire('./modules/messageEmbeds');
+const logger        = xrequire('./modules/logger').getInstance();
 
 module.exports = (
     channel,

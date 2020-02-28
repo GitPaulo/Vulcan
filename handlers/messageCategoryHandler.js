@@ -1,23 +1,47 @@
-/*
-*   Handles the checks for specific comamnd categories.
-    IF return true, command doesnt run.
-!   This probably should be in the message.js event
-*/
+/**
+ * ? Handler file
+ * Handles the checks for specific comamnd categories.
+ * * IF return false, command doesnt run.
+ * ! This probably should be in the message.js event
+ */
 
 module.exports = async (message) => {
     // ? Music commands
-    // Requires caller to be in the same voice channel as bot
+    // Can only use music commands if in a voice channel.
     if (
         message.command.category === 'music'
-        && message.member.voice.channel
-        && !message.member.voice.channel.members.get(message.client.user.id)
+        && !message.member.voice.channel
     ) {
         return message.client.emit(
-            'invalidCommandCall',
+            'commandBlocked',
             message,
-            `Commands from the category \`music\` require the requestee to share a voice channel with the bot.\n\n`
-            + `Use the command \`music\` to have the bot join your voice channel first!`
-        );
+            `Commands of type \`music\` require the requester to be in a voice channel.`,
+            [
+                {
+                    name : 'Tip',
+                    value: `Join a voice channel!`
+                }
+            ]
+        ), false;
+    }
+
+    // Bot must have a connection for music control commands to operate.
+    if (
+        message.command.category === 'music'
+        && message.command.id !== 'music'
+        && !message.guild.musicManager.connected
+    ) {
+        return message.client.emit(
+            'commandBlocked',
+            message,
+            `Vulcan must be in a voice channel.`,
+            [
+                {
+                    name : 'Tip',
+                    value: `Use the command \`music\` first.`
+                }
+            ]
+        ), false;
     }
 
     // ? NSFW commands
@@ -27,11 +51,11 @@ module.exports = async (message) => {
         && !message.channel.nsfw
     ) {
         return message.client.emit(
-            'invalidCommandCall',
+            'commandBlocked',
             message,
-            `Commands from the category \`nsfw\` require the requestee to be in a NSFW enabled channel.\n\n`
-        );
+            `Commands from the category \`nsfw\` require the requester to be in a NSFW enabled channel.\n\n`
+        ), false;
     }
 
-    return false;
+    return true;
 };

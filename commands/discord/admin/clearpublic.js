@@ -1,7 +1,7 @@
 const clearpublic   = module.exports;
 const fs            = xrequire('fs');
 const path          = xrequire('path');
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 clearpublic.execute = async (message) => {
     fs.readdir('./public/', async (err, files) => {

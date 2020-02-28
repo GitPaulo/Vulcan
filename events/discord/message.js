@@ -1,13 +1,14 @@
-/*
-?   Message (Discord Event)
-*   Emitted whenever a message is created.
-    https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-message
-*/
+/**
+ * ? Message (Discord Event)
+ * Emitted whenever a message is created.
+ * (https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-message)
+ */
 
 /* eslint-disable complexity */
 /* eslint-disable max-statements-per-line */
 
 // ? Load handlers
+const settings  = xrequire('./prerequisites/settings');
 const lgHandler = xrequire('./handlers/messageLogHandler');
 const atHandler = xrequire('./handlers/messageAtsHandler');
 const gdHandler = xrequire('./handlers/messageGuildHandler');
@@ -16,24 +17,27 @@ const prHandler = xrequire('./handlers/messageParserHandler');
 const flHandler = xrequire('./handlers/messageFilterHandler');
 const cgHandler = xrequire('./handlers/messageCategoryHandler');
 
-/*
-*   [Note]
-    In this file, Handlers are conditionally bound independent code sections.
-!   Do NOT call handlers within contitional statements.
-    All controlling logic must be done in this file.
-    Handlers can also be used to reduce the complexity of this file. But don't over do it.
+// Avoid new object every message
+const prefixes    = settings.configuration.prefixes;
+const prefixRegex = new RegExp(`^(${prefixes.join('|').regexEscape(['|'])})`, 'u');
+
+/**
+ * ? Notes:
+ * In this file, jandlers are conditionally bound independent code sections.
+ * ! Do NOT call handlers within contitional statements.
+ * All controlling logic must be done in this file.
 */
 
 module.exports = async (message) => {
     // Destructoring
     let client; const {
         user,
-        commands,
-        hierarchy,
-        blacklist,
-        prefixRegex,
-        configuration
+        blacklist
     } = (client = message.client);
+
+    const {
+        configuration
+    } = settings;
 
     try {
         // Log messages
@@ -70,98 +74,68 @@ module.exports = async (message) => {
         // Check if author is blacklisted
         if (blacklist.get(message.author.id)) {
             return client.emit(
-                'invalidCommandCall',
+                'commandRestricted',
                 message,
-                `The user ${message.author.tag} is blocked from using Vulcan commands.`
+                `You are blacklisted and therefore blocked from using Vulcan commands.`
             );
         }
 
         // Parse message and initialise message.command & parse data
-        await prHandler(message);
+        await prHandler(prefixRegex, message);
 
         // Check if message was a valid command. Output similarity aid if not
         if (!message.command) {
             return client.emit(
-                'invalidCommandCall',
-                message,
-                `The command request \`${message.parsed.cmdName}\` is invalid.\n`
-                + `\`\`\`\nDid you mean?\n${
-                    commands.similar(message.parsed.cmdName).map((s) => `- ${s.reference}`).slice(0, 3).join('\n')
-                }\`\`\``
+                'commandInvalid',
+                message
             );
         }
 
         // Check if command is disabled
         if (message.command.disabled) {
             return client.emit(
-                'invalidCommandCall',
+                'commandBlocked',
                 message,
-                `This command has been disabled!`
+                `Command '${message.command.id}' has been disabled!`
             );
         }
 
         // Check if command is loaded
         if (!message.command.loaded) {
             return client.emit(
-                'invalidCommandCall',
+                'commandBlocked',
                 message,
-                `This command has not yet been **loaded**!\n`
-                + `Please wait a while longer. If the issue persists, contact the developers.`
+                `Command '${message.command.id}' has not yet loaded!`
             );
         }
 
         // Check Authorisation level of message author
-        if (!message.command.authenticate(message)) {
+        if (!message.command.allowsUser(message)) {
             return client.emit(
-                'invalidCommandCall',
+                'commandRestricted',
                 message,
-                `Not authorised to run command.\n\t(User Lacking Authority)`,
-                [
-                    {
-                        name  : 'Usergroup',
-                        value : `${JSON.stringify(client.fetchUsergroup(message.author.id))}`,
-                        inline: true
-                    },
-                    {
-                        name  : 'Required',
-                        value : `${JSON.stringify({ name: message.command.group, level: hierarchy.get(message.command.group) })}`,
-                        inline: true
-                    }
-                ]
+                `Not authorised to run command '${message.command.id}'!`
             );
         }
 
         // Check for spam
         if (message.command.isSpamming(message.author)) {
             return client.emit(
-                'invalidCommandCall',
+                'commandBlocked',
                 message,
-                `Potential spamming has been detected.\nCommand '${message.command.id}' was **blocked**.`
+                `Potential spamming has been detected.`
             );
         }
 
-        // Certain command categories require extra chegs
-        // ? music & nsfw
+        // Certain command categories require extra checks (music & nsfw)
         // TODO: Remove handler from IF expression
-        if (configuration.categoryLocks && (await cgHandler(message))) {
+        if (configuration.categoryLocks && !(await cgHandler(message))) {
             return;
         }
 
         // Assign correct handler depending on cmd env
-        // ! Nested catch is needed.
-        // Some hacky throwing shit going on here :)
-        try {
-            if (message.direct) {
-                await dmHandler(message);
-            } else {
-                await gdHandler(message);
-            }
-        } catch (err) {
-            return message.client.emit(
-                err.event,
-                message,
-                err.message
-            );
+        if (!(await (message.direct ? dmHandler : gdHandler)(message))) {
+            return;
         }
 
         // Call
@@ -169,7 +143,7 @@ module.exports = async (message) => {
 
         // Register a successful call
         if (configuration.registerCmdCalls) {
-            message.command.addCall(message.author);
+            message.command.registerCall(message.author);
         }
     } catch (err) {
         client.emit(

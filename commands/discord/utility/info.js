@@ -1,16 +1,18 @@
 const info          = module.exports;
-const gitBranch     = xrequire('./modules/standalone/gitBranch');
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const gitBranch     = xrequire('./modules/gitBranch');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
+const settings      = xrequire('./prerequisites/settings');
 
 info.execute = async (message) => {
     const performance        = message.client.performance;
     const statistics         = message.client.statistics;
-    const address            = await message.client.externalIP();
+    const address            = await message.client.resolveIp();
     const { branch, status } = await gitBranch();
+    const { configuration }  = settings;
 
     // Turn into actual names, if valid
-    let atOwners = message.client.configuration.ownersID.map((ownerID) => {
-        let owner = message.client.users.get(ownerID);
+    let atOwners = configuration.ownersID.map((ownerID) => {
+        let owner = message.client.users.cache.get(ownerID);
 
         if (owner) {
             return `<@${owner.id}>`;
@@ -20,16 +22,7 @@ info.execute = async (message) => {
     });
 
     // Turn into actual names, if valid
-    let atHosts = message.client.guilds.array().map((guild) => guild.owner);
-
-    // Get admim tags
-    let atAdmins = Array.from(message.client.usergroups.entries())
-        .filter((entry) => entry[1] === 'administrator')
-        .map((entry) => {
-            let admin = this.command.client.users.get(entry[0]);
-
-            return `<@${admin.id}>`;
-        });
+    let atHosts = message.client.guilds.cache.map((guild) => guild.owner);
 
     // Output information
     await message.channel.send(messageEmbeds.reply({
@@ -38,7 +31,7 @@ info.execute = async (message) => {
         fields     : [
             {
                 name : 'Github Repo',
-                value: 'http://github.com/GitPaulo/Vulcan'
+                value: message.client.constants.client.github
             },
             {
                 name : 'Version & Branch',
@@ -47,10 +40,6 @@ info.execute = async (message) => {
             {
                 name : 'Bot Owners',
                 value: atOwners.toString() || '(No Owners)'
-            },
-            {
-                name : 'Bot Administrators',
-                value: atAdmins.toString() || '(No Administrators)'
             },
             {
                 name : 'Bot Hosts',
@@ -78,7 +67,7 @@ info.execute = async (message) => {
             },
             {
                 name  : 'Perfixes',
-                value : `${message.client.configuration.prefixes.join(', ')}`,
+                value : `${configuration.prefixes.join(', ')}`,
                 inline: true
             },
             {

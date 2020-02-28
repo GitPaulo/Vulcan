@@ -1,5 +1,5 @@
 const blacklist     = module.exports;
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 blacklist.execute = async (message) => {
     const vulcan = this.command.client;
@@ -7,14 +7,14 @@ blacklist.execute = async (message) => {
 
     if (!scmd) {
         return vulcan.emit(
-            'invalidCommandUsage',
+            'commandMisused',
             message,
             `Blacklist command requires subcommand usage!`
         );
     }
 
     // Avoid writing it twice :)
-    const maybeFirst = message.mentions.users.first();
+    const maybeFirst = message.mentions.users.cache.first();
     const targetID   = (maybeFirst && maybeFirst.id) || message.parsed.args[1];
 
     let output = '';
@@ -37,7 +37,7 @@ blacklist.execute = async (message) => {
         }
         default: {
             return vulcan.emit(
-                'invalidCommandUsage',
+                'commandMisused',
                 message,
                 `Invalid subcommand as first argument!\n\tInput: \`${scmd}`
             );

@@ -1,6 +1,6 @@
 const proto = Error.prototype;
 
-global.extendPrototype(proto, 'shortMessage', function () {
+global.extend(proto, 'shortMessage', function () {
     let err   = this;
     let stack = err.stack.split('\n');
 

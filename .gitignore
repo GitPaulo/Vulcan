@@ -67,7 +67,9 @@ $RECYCLE.BIN/
 
 # Vulcan (defaults)
 data/
+data.zip
 settings/
+settings.zip
 
 # Vulcan logs
 logs/

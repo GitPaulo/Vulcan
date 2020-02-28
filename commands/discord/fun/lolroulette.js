@@ -1,6 +1,6 @@
 const lolroulette   = module.exports;
-const request       = xrequire('request-promise');
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const httpFetch     = xrequire('node-fetch');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 /*
 *   This command is reliant on the structure and uptime of 'http://ddragon.leagueoflegends.com/'
@@ -8,18 +8,18 @@ const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 */
 
 /* eslint-disable no-unused-vars */
-lolroulette.load = async (commandDescriptor) => {
-    const result = await request(
-        'http://ddragon.leagueoflegends.com/cdn/9.24.2/data/en_GB/champion.json',
+lolroulette.load = async (descriptor, packages) => {
+    const response = await httpFetch(
+        'https://ddragon.leagueoflegends.com/cdn/9.24.2/data/en_GB/champion.json',
         {
             headers: // Header required or else 403
             {
-                'user-agent': 'node.js'
+                'agent': 'node.js'
             }
         }
     );
 
-    this.cache = JSON.parse(result).data;
+    this.cache = (await response.json()).data;
 };
 
 lolroulette.execute = async (message) => {

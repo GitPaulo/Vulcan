@@ -1,11 +1,12 @@
 const git           = module.exports;
 const GithubAPI     = xrequire('github-api');
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
+const settings      = xrequire('./prerequisites/settings');
 
 // eslint-disable-next-line no-unused-vars
-git.load = (commandDescriptor) => {
+git.load = (descriptor, packages) => {
     this.git = new GithubAPI({
-        token: this.command.client.credentials.apiKeys.github
+        token: settings.credentials.apiKeys.github
     });
 };
 
@@ -16,7 +17,7 @@ git.execute = async (message) => {
     const embedWrap  = messageEmbeds.reply(
         {
             message,
-            title : `**Git** request received: **${scmd}**`,
+            title : `**Git:** ${scmd}`,
             fields: [
                 {
                     name : 'Request',
@@ -25,6 +26,10 @@ git.execute = async (message) => {
                 {
                     name : 'Output',
                     value: '`Processing...`'
+                },
+                {
+                    name : 'Repository',
+                    value: message.client.constants.client.github
                 }
             ]
         }
@@ -36,7 +41,7 @@ git.execute = async (message) => {
 
     switch (scmd) {
         case 'collaborators': {
-            action = this.fetchCollaborators;
+            action = async (...args) => (await this.fetchCollaborators(...args)).map((e) => `${e} `);
             parameters.push(vulcanRepo);
             break;
         }
@@ -50,7 +55,7 @@ git.execute = async (message) => {
         }
         default: {
             return message.client.emit(
-                'invalidCommandUsage',
+                'commandMisused',
                 message,
                 `The command **${scmd}** was not found in the list of sub-commands for this operation.`
             );
@@ -91,8 +96,6 @@ this.fetchCommits = async (repo, number = 4) => {
 
         carray.push(dataStr);
     });
-
-    carray.push(`[http://github.com/GitPaulo/Vulcan/commits/master]`);
 
     return carray;
 };

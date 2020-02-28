@@ -1,10 +1,11 @@
-/*
-*   Handles filtering for messages sent from all channels belonging to the union of all joined guilds:
-?   Filter important contents such as:
-        - Bot credentials
-        - Bad words
-        - etc..
-*/
+/**
+ * ? Handler file
+ * Handles filtering for messages sent from all channels belonging to the union of all joined guilds:
+ * ? Filter important contents such as:
+ *  - Bot credentials
+ *  - Bad words
+ *  - etc..
+ */
 
 module.exports = async (message) => {
     const vulcan = message.client;

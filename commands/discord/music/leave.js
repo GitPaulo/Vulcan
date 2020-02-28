@@ -1,5 +1,5 @@
 const leave         = module.exports;
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 leave.execute = async (message) => {
     const musicManager = message.guild.musicManager;
@@ -8,14 +8,14 @@ leave.execute = async (message) => {
     // If not in voice, don't leave!
     if (!voiceChannel) {
         return message.client.emit(
-            'channelInformation',
-            message.channel,
+            'commandMisused',
+            message,
             `Vulcan is currently not in voice!`
         );
     }
 
     // Leave
-    await musicManager.leaveVoice();
+    await musicManager.leave();
 
     // Notify
     await message.channel.send(messageEmbeds.reply(

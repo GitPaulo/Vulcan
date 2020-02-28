@@ -1,5 +1,5 @@
 const autoplay      = module.exports;
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 autoplay.execute = async (message) => {
     const musicManager = message.guild.musicManager;

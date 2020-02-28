@@ -2,11 +2,11 @@ const fs      = xrequire('fs');
 const path    = xrequire('path');
 const https   = xrequire('https');
 const sstream = require('stream-stream');
-const logger  = xrequire('./managers/LogManager').getInstance();
+const logger  = xrequire('./modules/logger').getInstance();
 
 // ? Load key from file
 const loadWebhookKey = () => {
-    const path     = './settings/webhook_key.txt';
+    const path     = './data/webhook_key.txt';
     let webhookKey = null;
 
     fs.existsSync(path)
@@ -44,7 +44,7 @@ module.exports = (vulcan, keys) => {
                 + `OUTPUT: ${output}`
             );
 
-            // End response (gets sent to requestee)
+            // End response (gets sent to requester)
             response.end(
                 `=====| Response Ended\n`
                 + `Endpoint: webhooks\n`

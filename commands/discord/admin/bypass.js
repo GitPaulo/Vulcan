@@ -1,6 +1,6 @@
 const bypass = module.exports;
 const parser = xrequire('./handlers/messageParserHandler');
-const logger = xrequire('./managers/LogManager').getInstance();
+const logger = xrequire('./modules/logger').getInstance();
 
 // TODO: IMPROVE THIS?
 bypass.execute = async (message) => {
@@ -8,7 +8,7 @@ bypass.execute = async (message) => {
 
     if (!cmd) {
         return message.client.emit(
-            'invalidCommandUsage',
+            'commandMisused',
             message,
             `The first argument needs to be a string.`
         );
@@ -18,7 +18,7 @@ bypass.execute = async (message) => {
 
     if (!cmdObject) {
         return message.client.emit(
-            'invalidCommandUsage',
+            'commandMisused',
             message,
             `The first argument needs to be a valid command string identifier.`
         );
@@ -35,7 +35,7 @@ bypass.execute = async (message) => {
 
     // Check if valid command (again)
     if (!message.command) {
-        throw Error('Bypass command failed.\nProblems with parsing target bypass command.');
+        throw new Error('Bypass command failed.\nProblems with parsing target bypass command.');
     }
 
     // Force call

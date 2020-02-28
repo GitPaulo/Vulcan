@@ -1,11 +1,14 @@
 const filp            = module.exports;
-const messageEmbeds   = xrequire('./modules/standalone/messageEmbeds');
-const MersenneTwister = xrequire('./structures/classes/external/MersenneTwister');
+const messageEmbeds   = xrequire('./modules/messageEmbeds');
 
-const generator = new MersenneTwister();
+filp.load = (descriptor, packages) => {
+    const { MersenneTwister } = packages;
+
+    this.generator = new MersenneTwister();
+};
 
 filp.execute = async (message) => {
-    const randomNumber         = generator.random();
+    const randomNumber         = this.generator.random();
     const resultantProbability = randomNumber;
 
     await message.channel.send(messageEmbeds.reply(

@@ -3,12 +3,6 @@ plugins:
 extends:
   - 'mudamuda/node' # superior rule set
   - 'plugin:security/recommended' # have security warnings
-globals:
+globals: # Only require functions
   xrequire: readonly
-  global.basedir: readonly
-  oldLog: readonly
-  print: readonly
-  PrintHistory: readonly
-  platform: readonly
-  isLinux: readonly
-  isWindows: readonly
+  sxrequire: readonly

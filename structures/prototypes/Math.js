@@ -9,5 +9,12 @@ Math.simpleUUID = () => ('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
         let v = (c === 'x') ? r : (r & 0x3 | 0x8);
 
         return v.toString(16);
-    })
-);
+    }
+));
+
+Math.formatMilliseconds = (ms) => {
+    let minutes = Math.floor(ms / 60000);
+    let seconds = ((ms % 60000) / 1000).toFixed(0);
+
+    return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+};

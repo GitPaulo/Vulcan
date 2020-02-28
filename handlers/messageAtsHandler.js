@@ -1,15 +1,25 @@
-/*
-* Handles translation of special ats to a sequence of discord ats for every message:
-    Matches all special ats:
-?       - @<prefix1>... -> Text channel
-?       - @<prefix2>... -> Voice channel
-    Prefixes are defined in the configuration.yaml file (extendedAts.prefixes)
-*/
+/**
+ * ? Handler file
+ * Handles translation of special ats to a sequence of discord ats for every message:
+ * Matches all special ats:
+ * * - @<prefix1>... -> Text channel
+ * * - @<prefix2>... -> Voice channel
+ * Prefixes are defined in the configuration.yaml file (extendedAts.prefixes)
+ */
 
+const { configuration } = xrequire('./prerequisites/settings');
+
+// Avoid recalculations
+const exAtLimit   = configuration.extendedAts.AtLimit;
+const exAtsConfig = configuration.extendedAts.prefixes;
+const exAtsMapStr = Object.entries(exAtsConfig).map((prefix) => '\\' + prefix[1]).join('|');
+const exAtsRegex  = new RegExp(`@(${exAtsMapStr})[^\\s]*`, 'g');
+const exAtsLookup = new Map(Object.entries(Object.flip(exAtsConfig)));
+
+// Export handler
 module.exports = async (message) => {
     const vulcan  = message.client;
-    const matches = message.cleanContent.match(vulcan.eatsRegex) || [];
-    const atLimit = vulcan.configuration.extendedAts.AtLimit;
+    const matches = message.cleanContent.match(exAtsRegex) || [];
 
     // Avoid computation: nothing atted!
     if (matches.length <= 0) {
@@ -23,7 +33,7 @@ module.exports = async (message) => {
     for (const extendedAt of matches) {
         let separator   = extendedAt[1];
         let textID      = extendedAt.substring(2);
-        let channelType = vulcan.eatsLookup[separator];
+        let channelType = exAtsLookup[separator];
 
         // Get all channels by the same name
         let filteredChannels = message.guild.findChannelsByName(textID, channelType);
@@ -37,7 +47,7 @@ module.exports = async (message) => {
             let fcMembers = filteredChannel.members;
 
             // Skip channels that go over limit
-            if (fcMembers.size > atLimit) {
+            if (fcMembers.size > exAtLimit) {
                 continue;
             }
 
@@ -51,11 +61,11 @@ module.exports = async (message) => {
     }
 
     // Avoid message limit and spam.
-    if (atArray.length > atLimit) {
+    if (atArray.length > exAtLimit) {
         return vulcan.emit(
             'channelInformation',
             message.channel,
-            `The @ limit was reached.\nYou pinged channels with total #@s > ${atLimit}!`
+            `The @ limit was reached.\nYou pinged channels with total #@s > ${exAtLimit}!`
         );
     }
 

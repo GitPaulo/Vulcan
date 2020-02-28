@@ -1,7 +1,7 @@
 const overwatchroulette = module.exports;
 const cheerio           = xrequire('cheerio');
-const request           = xrequire('request-promise');
-const messageEmbeds     = xrequire('./modules/standalone/messageEmbeds');
+const httpFetch         = xrequire('node-fetch');
+const messageEmbeds     = xrequire('./modules/messageEmbeds');
 
 /*
 *   This command is reliant on the structure and uptime of 'http://www.overbuff.com/heroes'
@@ -9,8 +9,9 @@ const messageEmbeds     = xrequire('./modules/standalone/messageEmbeds');
 */
 
 /* eslint-disable no-unused-vars */
-overwatchroulette.load = async (commandDescriptor) => {
-    const html      = await request('http://www.overbuff.com/heroes');
+overwatchroulette.load = async (descriptor, packages) => {
+    const response  = await httpFetch('http://www.overbuff.com/heroes');
+    const html      = await response.text();
     const $         = cheerio.load(html);
     const heroTable = $('.table-data tbody tr');
     const cache     = new Map();
@@ -43,7 +44,13 @@ overwatchroulette.load = async (commandDescriptor) => {
 };
 
 overwatchroulette.execute = async (message) => {
-    const role      = message.parsed.args[0] || 'ALL';
+    let role = message.parsed.args[0] || 'ALL';
+
+    // Pls overbuff...
+    if (role.toLowerCase() === 'dps') {
+        role = 'offense';
+    }
+
     const heroArray = this.cache.get(role);
 
     if (!heroArray) {

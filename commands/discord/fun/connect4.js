@@ -1,17 +1,19 @@
 /* eslint-disable no-await-in-loop */
 const connect4 = module.exports;
-const mcts     = xrequire('./commands/__packages/connect4/Mcts');
-const Board    = xrequire('./commands/__packages/connect4/Board');
-const logger   = xrequire('./managers/LogManager').getInstance();
+const logger   = xrequire('./modules/logger').getInstance();
 
+// Consts
 const numberEmojiSuffix = '%E2%83%A3';
 const whiteFlagEmoji    = '%F0%9F%8F%B3';
 
-// ! Rate limit on reaction based moves!
-connect4.getControlEmojis = () => this.emojiPlays.concat([whiteFlagEmoji]);
-
 /* eslint-disable no-unused-vars */
-connect4.load = (commandDefinition) => {
+connect4.load = (commandDefinition, packages) => {
+    const { mcts, Board } = packages;
+
+    // Store packages
+    this.mcts  = mcts;
+    this.Board = Board;
+
     // Default board size
     this.boardWidth  = 7;
     this.boardHeight = 6;
@@ -28,7 +30,7 @@ connect4.load = (commandDefinition) => {
 connect4.execute = async (message) => {
     if (message.parsed.args.length < 1) {
         return message.client.emit(
-            'invalidCommandUsage',
+            'commandMisused',
             message,
             `You need to challenge someone. Invalid #args.`
         );
@@ -36,7 +38,7 @@ connect4.execute = async (message) => {
 
     // Sort out challenge request
     const challenger = message.author;
-    const challengee = message.mentions.users.first() || message.client.user;
+    const challengee = message.mentions.users.cache.first() || message.client.user;
 
     // Let them know we mean business
     const challengeMessage = await message.channel.send(
@@ -65,7 +67,7 @@ connect4.execute = async (message) => {
     const outerScope = this;
     const game       = {
         // Properties
-        board       : new Board(outerScope.boardHeight, outerScope.boardWidth),
+        board       : new outerScope.Board(outerScope.boardHeight, outerScope.boardWidth),
         players     : [challenger, challengee],
         winner      : null,
         boardMessage: await message.channel.send('Initializing...'),
@@ -93,7 +95,7 @@ connect4.execute = async (message) => {
             let move = -1;
 
             if (this.players[this.turn - 1].bot) {
-                move = mcts(this.board, this.turn);
+                move = this.mcts(this.board, this.turn);
             } else {
                 const filter    = (reaction, user) => this.currentPlayer.id === user.id && outerScope.getControlEmojis().includes(reaction.emoji.identifier);
                 const collected = await this.boardMessage.awaitReactions(filter, { max: 1 });
@@ -107,7 +109,7 @@ connect4.execute = async (message) => {
                     move = parseInt(reaction.emoji.identifier.slice(0, 1), 10);
                 }
 
-                await reaction.users.remove(this.currentPlayer.id);
+                await reaction.users.cache.remove(this.currentPlayer.id);
             }
 
             return move;
@@ -116,10 +118,10 @@ connect4.execute = async (message) => {
             return this.board.makeMoveAndCheckWin(this.turn, move);
         },
         async resetControls () {
-            let reactionsThatNeedRemoving = this.boardMessage.reactions.array().filter((reaction) => reaction.count > 1);
+            let reactionsThatNeedRemoving = this.boardMessage.reactions.cache.filter((reaction) => reaction.count > 1);
 
             for (let reaction of reactionsThatNeedRemoving) {
-                reaction.users.array().filter((user) => user !== this.boardMessage.client.user).forEach((user) => reaction.users.remove(user.id));
+                reaction.users.cache.cache.filter((user) => user !== this.boardMessage.client.user).forEach((user) => reaction.users.cache.remove(user.id));
             }
         },
         async updateTurnMessage (str) {
@@ -214,3 +216,6 @@ connect4.execute = async (message) => {
     await game.updateBoardMessage();
     await game.updateTurnMessage(`Game (${gameID}) finished.\n\t**Result:** ${game.state.win ? `<@${game.winner.id}> won!` : `Game ended in draw!`}`);
 };
+
+// ! Rate limit on reaction based moves!
+connect4.getControlEmojis = () => this.emojiPlays.concat([whiteFlagEmoji]);

@@ -1,6 +1,6 @@
 const debuginfo     = module.exports;
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
-const logger        = xrequire('./managers/LogManager').getInstance();
+const messageEmbeds = xrequire('./modules/messageEmbeds');
+const logger        = xrequire('./modules/logger').getInstance();
 
 debuginfo.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(

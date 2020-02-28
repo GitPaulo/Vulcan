@@ -1,0 +1,27 @@
+{
+    "prefixes": [
+        "?v",
+        "$v"
+    ],
+    "extraGroups": [
+        ["admin", 2],
+        ["mod", 1]
+    ],
+    "ownersID": [],
+    "devsID": [
+        "166176374036365312",
+        "207606117159796737"
+    ],
+    "logMessages": true,
+    "filterMessages": true,
+    "registerCmdCalls": true,
+    "categoryLocks": true,
+    "extendedAts": {
+        "enabled": true,
+        "atLimit": 40,
+        "prefixes": {
+            "voice": "$",
+            "text": "#"
+        }
+    }
+}

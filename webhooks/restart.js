@@ -1,6 +1,6 @@
 const { exec, spawn } = xrequire('child_process');
 const pexec           = xrequire('util').promisify(exec);
-const logger          = xrequire('./managers/LogManager').getInstance();
+const logger          = xrequire('./modules/logger').getInstance();
 
 // Commands
 const pm2Check   = 'npm run production:exists';

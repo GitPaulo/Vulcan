@@ -1,20 +1,20 @@
 const botchannel    = module.exports;
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 botchannel.execute = async (message) => {
     const guild     = message.guild;
     const unauth    = Boolean(message.parsed.args[0]);
     const embedWrap = messageEmbeds.reply({
         message,
-        description: 'Vulcan is **leaving** this guild!\n\nGood bye! :(',
+        description: 'Vulcan has **left** this guild!',
         fields     : [
             {
-                name : 'Unauthorise on Leave?',
+                name : 'Unauthorised?',
                 value: String(unauth)
             },
             {
                 name : 'Re-Invite',
-                value: `http://discordapp.com/oauth2/authorize?client_id=604662534410207233&scope=bot&permissions=1341644225`
+                value: message.client.constants.client.invite
             }
         ]
     });

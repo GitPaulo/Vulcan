@@ -1,10 +1,10 @@
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
-const logger        = xrequire('./managers/LogManager').getInstance();
+/**
+ * ? Channel Information (Vulcan Event)
+ * Happens when vulcan tries to inform a channel of something.
+ */
 
-/*
-?   Channel Information (Vulcan Event)
-*   Happens when vulcan tries to inform a channel of something.
-*/
+const messageEmbeds = xrequire('./modules/messageEmbeds');
+const logger        = xrequire('./modules/logger').getInstance();
 
 module.exports = (
     channel,

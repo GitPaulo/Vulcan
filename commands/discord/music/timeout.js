@@ -1,5 +1,5 @@
 const timeout       = module.exports;
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 timeout.execute = async (message) => {
     const musicManager = message.guild.musicManager;

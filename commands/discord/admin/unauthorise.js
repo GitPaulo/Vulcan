@@ -1,12 +1,12 @@
 const unauthorise   = module.exports;
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 unauthorise.execute = async (message) => {
     const { guild } = message;
 
     if (!guild.authorised) {
         return message.client.emit(
-            'invalidCommandUsage',
+            'commandMisused',
             message,
             `This guild is not authorised!`
         );

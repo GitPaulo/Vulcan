@@ -1,7 +1,7 @@
 const documentation = module.exports;
-const hastebin      = xrequire('./modules/standalone/hastebin');
-const gitBranch     = xrequire('./modules/standalone/gitBranch');
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const hastebin      = xrequire('./modules/hastebin');
+const gitBranch     = xrequire('./modules/gitBranch');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 // TODO - Improve this! Make prettier :)
 documentation.execute = async (message) => {
@@ -15,7 +15,7 @@ documentation.execute = async (message) => {
 
         if (!command) {
             return message.client.emit(
-                'invalidCommandUsage',
+                'commandMisused',
                 message,
                 `The command **${scmd}** was not found in the list of commands.`
             );

@@ -1,5 +1,5 @@
 const disabled      = module.exports;
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 disabled.execute = async (message) => {
     const vulcan  = message.client;

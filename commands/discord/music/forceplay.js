@@ -1,6 +1,7 @@
 const forceplay     = module.exports;
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
+// TODO: Must finish
 forceplay.execute = async (message) => {
     const musicManager = message.guild.musicManager;
 
@@ -8,7 +9,7 @@ forceplay.execute = async (message) => {
 
     if (!request) {
         return message.client.emit(
-            'invalidCommandUsage',
+            'commandMisused',
             message,
             `Expected 1 argument (song source), instead got nothing!`
         );

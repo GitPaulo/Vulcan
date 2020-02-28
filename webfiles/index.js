@@ -2,7 +2,7 @@ const http   = require('http');
 const url    = require('url');
 const fs     = require('fs');
 const path   = require('path');
-const logger = xrequire('./managers/LogManager').getInstance();
+const logger = xrequire('./modules/logger').getInstance();
 
 // ? This folder can be manipulated via HTTP requests
 const publicFolderPath = path.join(__dirname, 'public');

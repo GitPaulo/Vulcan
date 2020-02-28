@@ -1,5 +1,5 @@
-const gitBranch = xrequire('./modules/standalone/gitBranch');
-const logger    = xrequire('./managers/LogManager').getInstance();
+const gitBranch = xrequire('./modules/gitBranch');
+const logger    = xrequire('./modules/logger').getInstance();
 const exec      = xrequire('util').promisify(xrequire('child_process').exec);
 
 // Update Command Sequence

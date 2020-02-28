@@ -1,12 +1,25 @@
 const pause         = module.exports;
 const Discord       = xrequire('discord.js');
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 pause.execute = async (message) => {
     const musicManager = message.guild.musicManager;
 
+    if (!musicManager.connected) {
+        return message.client.emit(
+            'commandMisused',
+            message.channel,
+            'Bot mus be in a voice channel.\n'
+            + 'Use the `music` command.'
+        );
+    }
+
     if (!musicManager.playing) {
-        return message.client.emit('channelInformation', message.channel, 'No music is playing. Therefore cannot pause.');
+        return message.client.emit(
+            'commandMisused',
+            message,
+            `No music playing. Cannot pause!`
+        );
     }
 
     musicManager.pause();
@@ -14,7 +27,7 @@ pause.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            title      : ':pause_button:  - Skipped Song',
+            title      : ':pause_button:  - Pause',
             description: '',
             fields     : [
                 {

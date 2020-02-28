@@ -1,5 +1,5 @@
 const kill          = module.exports;
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 kill.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(

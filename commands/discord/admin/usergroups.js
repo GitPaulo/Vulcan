@@ -1,5 +1,5 @@
 const usergroups    = module.exports;
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 usergroups.execute = async (message) => {
     const vulcan = this.command.client;
@@ -7,7 +7,7 @@ usergroups.execute = async (message) => {
 
     if (!scmd) {
         return vulcan.emit(
-            'invalidCommandUsage',
+            'commandMisused',
             message,
             `Usergroups command requires subcommand usage!`
         );
@@ -23,17 +23,17 @@ usergroups.execute = async (message) => {
         case 'write': {
             let newGroupName = message.parsed.args[2] || vulcan.defaultGroupName;
 
-            if (!vulcan.hierarchy.get(newGroupName)) {
+            if (!vulcan.hierarchy.groups.get(newGroupName)) {
                 return vulcan.emit(
-                    'invalidCommandUsage',
+                    'commandMisused',
                     message,
-                    `Invalid usergroup! Input: ${newGroupName}`
+                    `Invalid usergroup! Input: \`${newGroupName}\``
                 );
             }
 
             output = (await this.set(targetID, newGroupName))
                 ? `Usergroup '${newGroupName}' set for id: ${targetID}.`
-                : `Could not set usergroup for id: ${targetID}`;
+                : `Could not set usergroup for \`${targetID}\``;
             break;
         }
         case 'get':
@@ -41,8 +41,8 @@ usergroups.execute = async (message) => {
             let checkedGroup = await this.get(targetID);
 
             output = (checkedGroup)
-                ? `Usergroup of ${targetID} is '${checkedGroup}'`
-                : `Could not find a usergroup linked to id: ${targetID}`;
+                ? `Usergroup of \`${targetID}\` is \`${checkedGroup}\``
+                : `Could not find a usergroup linked to id \`${targetID}\``;
             break;
         }
         case 'hierarchy':
@@ -54,9 +54,9 @@ usergroups.execute = async (message) => {
         }
         default:
             return vulcan.emit(
-                'invalidCommandUsage',
+                'commandMisused',
                 message,
-                `Invalid subcommand as first argument!\n\tInput: \`${scmd}`
+                `Invalid subcommand as first argument!\n\tInput: \`${scmd}\``
             );
     }
 
@@ -87,11 +87,15 @@ usergroups.set = async (targetID, newGroupName) => {
 };
 
 
-usergroups.list = () => Array.from(this.command.client.usergroups.entries())
+usergroups.list = () => Array.from(this.command.client.hierarchy.rank.entries())
     .map((entry) => {
-        let user = this.command.client.users.get(entry[0]);
+        let user = this.command.client.users.cache.get(entry[0]);
 
-        return `- ${user.tag} => ${entry[1]}`;
+        if (!user) {
+            return `- (NN)[${entry[0]}] => ${entry[1]}`;
+        }
+
+        return `- ${user.username}#${user.discriminator} => ${entry[1]}`;
     });
 
-usergroups.hierarchy = () => Array.from(this.command.client.hierarchy.entries());
+usergroups.hierarchy = () => Array.from(this.command.client.hierarchy.groups.entries());

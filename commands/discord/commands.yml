@@ -32,26 +32,6 @@
 #  There are default REQUIRED bot premissions that may be omitted like: 
 
 #
-botchannel:
-  aliases:
-  - 'botc'
-  - 'botdump'
-  - 'botd'
-  description: 'Set caller channel as the "bot dump" channel for the caller guild.'
-  examples:
-  - '<prefix><id>'
-  group: 'host'
-  throttling: 250
-  safe: true
-  disabled: false
-  userPermissions: []
-  vulcanPermissions: []
-  embed:  
-    color: 0xAACE6D
-    title: 'Bot Channel Configuration'
-    image: './assets/media/images/commands/discord/configuration.gif'
-
-#
 evaluate: 
   aliases:
   - 'evaluation'
@@ -73,7 +53,7 @@ evaluate:
   embed:
     color: 0xFFCE6D
     title: 'JavaScript Evaluation'
-    image: './assets/media/images/commands/discord/evaluate.gif'
+    image: './assets/media/embeds/commands/discord/evaluate.gif'
 
 #
 git:
@@ -81,11 +61,11 @@ git:
   - 'github'
   - 'repository'
   - 'repo'
-  description: 'Git API access for things related to the Github Vulcan repository.'
+  description: 'Collection of commands to access Git information.'
   examples:
   - '<prefix><id> commits <number to display>'
   - '<prefix><id> collaborators'
-  group: 'administrator'
+  group: 'admin'
   throttling: 1000
   safe: false
   disabled: false
@@ -94,7 +74,7 @@ git:
   embed:
     color: 0x1e5fc7
     title: 'Git'
-    image: './assets/media/images/commands/discord/git.gif'
+    image: './assets/media/embeds/commands/discord/git.gif'
 
 #
 usergroups:
@@ -115,7 +95,7 @@ usergroups:
   embed:
     color: 0x8c047c
     title: 'Usergroups System'
-    image: './assets/media/images/commands/discord/usergroups.gif'
+    image: './assets/media/embeds/commands/discord/usergroups.gif'
 
 #
 ping:
@@ -134,7 +114,7 @@ ping:
   embed:
     color: 0xAF0000
     title: 'Ping...'
-    image: './assets/media/images/commands/discord/ping.gif'
+    image: './assets/media/embeds/commands/discord/ping.gif'
 
 #
 media:
@@ -156,7 +136,7 @@ media:
   embed:
     color: 0x6e4f67
     title: 'Media'
-    image: './assets/media/images/commands/discord/media.gif'
+    image: './assets/media/embeds/commands/discord/media.gif'
 
 #
 connect4:
@@ -175,7 +155,7 @@ connect4:
   embed:
     color: 0x666666
     title: 'Connect 4'
-    image: './assets/media/images/commands/discord/connect4.gif'
+    image: './assets/media/embeds/commands/discord/connect4.gif'
 
 #
 music:
@@ -194,9 +174,9 @@ music:
   userPermissions: []
   vulcanPermissions: []
   embed:
-    color: 0xFFA500
+    color: 0xFFBFC8
     title: 'Music: Join Voice'
-    image: './assets/media/images/commands/discord/music.gif'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 #
 autoplay:
@@ -213,9 +193,9 @@ autoplay:
   vulcanPermissions: 
     - 'EMBED_LINKS'
   embed:
-    color: 0xFFA500
+    color: 0xFFBFC8
     title: 'Music: Auto Play'
-    image: './assets/media/images/commands/discord/music.gif'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 #
 destroy:
@@ -232,9 +212,9 @@ destroy:
   vulcanPermissions: 
     - 'EMBED_LINKS'
   embed:
-    color: 0xFFA500
+    color: 0xFFBFC8
     title: 'Music: Destroy'
-    image: './assets/media/images/commands/discord/music.gif'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 #
 prune:
@@ -252,9 +232,9 @@ prune:
   vulcanPermissions: 
     - 'EMBED_LINKS'
   embed:
-    color: 0xFFA500
+    color: 0xFFBFC8
     title: 'Music: Prune'
-    image: './assets/media/images/commands/discord/music.gif'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 #
 forceplay:
@@ -274,9 +254,9 @@ forceplay:
     - 'USE_VAD'
     - 'EMBED_LINKS'
   embed:
-    color: 0xFFA500
+    color: 0xFFBFC8
     title: 'Music: Force Play'
-    image: './assets/media/images/commands/discord/music.gif'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 #
 list:
@@ -295,9 +275,9 @@ list:
   vulcanPermissions: 
     - 'EMBED_LINKS'
   embed:
-    color: 0xFFA500
+    color: 0xFFBFC8
     title: 'Music: List (Queue)'
-    image: './assets/media/images/commands/discord/music.gif'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 #
 pause:
@@ -314,15 +294,15 @@ pause:
   vulcanPermissions: 
     - 'EMBED_LINKS'
   embed:
-    color: 0xFFA500
+    color: 0xFFBFC8
     title: 'Music: Pause'
-    image: './assets/media/images/commands/discord/music.gif'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 #
-play:
+enqueue:
   aliases:
   - 'musicplay'
-  description: 'Plays the audio of youtube videos or playlists.'
+  description: 'Enqueues the audio of youtube videos or playlists.'
   group: 'default'
   examples:
   - '<prefix><id> <youtubeurl>'
@@ -336,9 +316,31 @@ play:
     - 'USE_VAD'
     - 'EMBED_LINKS'
   embed:
-    color: 0xFFA500
-    title: 'Music: Play'
-    image: './assets/media/images/commands/discord/music.gif'
+    color: 0xFFBFC8
+    title: 'Music: Enqueue'
+    image: './assets/media/embeds/commands/discord/music.gif'
+
+#
+reproduce:
+  aliases:
+  - 'musicreproduce'
+  description: 'Restarts the currently playing audio.'
+  group: 'default'
+  examples:
+  - '<prefix><id> <youtubeurl>'
+  throttling: 1000
+  safe: false
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: 
+    - 'CONNECT'
+    - 'SPEAK'
+    - 'USE_VAD'
+    - 'EMBED_LINKS'
+  embed:
+    color: 0xFFBFC8
+    title: 'Music: Reproduce'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 #
 purge:
@@ -355,9 +357,9 @@ purge:
   vulcanPermissions: 
     - 'EMBED_LINKS'
   embed:
-    color: 0xFFA500
+    color: 0xFFBFC8
     title: 'Music: Purge'
-    image: './assets/media/images/commands/discord/music.gif'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 #
 leave:
@@ -374,9 +376,9 @@ leave:
   vulcanPermissions: 
     - 'EMBED_LINKS'
   embed:
-    color: 0xFFA500
+    color: 0xFFBFC8
     title: 'Music: Leave'
-    image: './assets/media/images/commands/discord/music.gif'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 #
 repeat:
@@ -393,9 +395,9 @@ repeat:
   vulcanPermissions: 
     - 'EMBED_LINKS'
   embed:
-    color: 0xFFA500
+    color: 0xFFBFC8
     title: 'Music: Repeat'
-    image: './assets/media/images/commands/discord/music.gif'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 #
 resume:
@@ -415,9 +417,9 @@ resume:
     - 'USE_VAD'
     - 'EMBED_LINKS'
   embed:
-    color: 0xFFA500
+    color: 0xFFBFC8
     title: 'Music: Resume'
-    image: './assets/media/images/commands/discord/music.gif'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 #
 shuffle:
@@ -434,9 +436,9 @@ shuffle:
   vulcanPermissions:
     - 'EMBED_LINKS'
   embed:
-    color: 0xFFA500
+    color: 0xFFBFC8
     title: 'Music: Shuffle'
-    image: './assets/media/images/commands/discord/music.gif'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 #
 timeout:
@@ -454,9 +456,9 @@ timeout:
   vulcanPermissions:
     - 'EMBED_LINKS'
   embed:
-    color: 0xFFA500
+    color: 0xFFBFC8
     title: 'Music: Timeout'
-    image: './assets/media/images/commands/discord/music.gif'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 #
 skip:
@@ -476,9 +478,9 @@ skip:
     - 'USE_VAD'
     - 'EMBED_LINKS'
   embed:
-    color: 0xFFA500
+    color: 0xFFBFC8
     title: 'Music: Skip'
-    image: './assets/media/images/commands/discord/music.gif'
+    image: './assets/media/embeds/commands/discord/music.gif'
 
 # 
 smiteroulette:
@@ -499,7 +501,7 @@ smiteroulette:
   embed:
     color: 0xffa500
     title: 'Smite God Roulette'
-    image: './assets/media/images/commands/discord/smiteroulette.gif'
+    image: './assets/media/embeds/commands/discord/smiteroulette.gif'
 
 # 
 overwatchroulette:
@@ -521,7 +523,7 @@ overwatchroulette:
   embed:
     color: 0xFFF500
     title: 'Overwatch Hero Roulette'
-    image: './assets/media/images/commands/discord/overwatchroulette.gif'
+    image: './assets/media/embeds/commands/discord/overwatchroulette.gif'
 
 # 
 lolroulette:
@@ -542,7 +544,7 @@ lolroulette:
   embed:
     color: 0xC9FFA0
     title: 'League Of Legends Champion Roulette'
-    image: './assets/media/images/commands/discord/lolroulette.gif'
+    image: './assets/media/embeds/commands/discord/lolroulette.gif'
 
 # 
 fgoservant:
@@ -560,7 +562,7 @@ fgoservant:
   embed:
     color: 0xCB8AFF
     title: 'F:GO Servant'
-    image: './assets/media/images/commands/discord/fgoservant.gif'
+    image: './assets/media/embeds/commands/discord/fgoservant.gif'
 
 # 
 documentation:
@@ -582,7 +584,7 @@ documentation:
   embed:
     color: 0xFF6B4A
     title: 'Vulcan Documentation'
-    image: './assets/media/images/commands/discord/documentation.gif'
+    image: './assets/media/embeds/commands/discord/documentation.gif'
 
 # 
 logs:
@@ -601,7 +603,7 @@ logs:
   embed:
     color: 0x00000
     title: 'Logs'
-    image: './assets/media/images/commands/discord/logs.gif'
+    image: './assets/media/embeds/commands/discord/logs.gif'
 
 # 
 kill:
@@ -619,7 +621,7 @@ kill:
   embed:
     color: 0x00000
     title: 'Kill'
-    image: './assets/media/images/commands/discord/kill.gif'
+    image: './assets/media/embeds/commands/discord/kill.gif'
 
 # 
 bypass:
@@ -637,14 +639,14 @@ bypass:
   embed:
     color: 0x00000
     title: 'Bypass'
-    image: './assets/media/images/commands/discord/bypass.gif'
+    image: './assets/media/embeds/commands/discord/bypass.gif'
 
 # 
 blacklist:
   aliases:
   - 'naughtylist'
   description: 'Handles the blacklist of Vulcan.'
-  group: 'administrator'
+  group: 'admin'
   examples:
   - '<prefix><id> add <user_id>'
   - '<prefix><id> remove <user_id>'
@@ -657,14 +659,14 @@ blacklist:
   embed:
     color: 0x00000
     title: 'Blacklist'
-    image: './assets/media/images/commands/discord/blacklist.gif'
+    image: './assets/media/embeds/commands/discord/blacklist.gif'
 
 # 
 servers:
   aliases:
   - 'serverlist'
   description: 'Displays statistics about the networked servers.'
-  group: 'administrator'
+  group: 'admin'
   examples:
   - '<prefix><id>'
   throttling: 0
@@ -675,7 +677,7 @@ servers:
   embed:
     color: 0x00000
     title: 'Server Statistics'
-    image: './assets/media/images/commands/discord/servers.gif'
+    image: './assets/media/embeds/commands/discord/servers.gif'
 
 # 
 exit:
@@ -693,7 +695,25 @@ exit:
   embed:
     color: 0x00000
     title: 'Exiting Guild'
-    image: './assets/media/images/commands/discord/exit.gif'
+    image: './assets/media/embeds/commands/discord/exit.gif'
+
+# 
+invite:
+  aliases:
+  - 'invitelink'
+  description: 'Returns an invite link for vulcan.'
+  group: 'default'
+  examples:
+  - '<prefix><id>'
+  throttling: 0
+  safe: true
+  disabled: false
+  userPermissions: []
+  vulcanPermissions: []
+  embed:
+    color: 0x00000
+    title: 'Invite'
+    image: './assets/media/embeds/commands/discord/invite.gif'
 
 # 
 authorise:
@@ -711,14 +731,14 @@ authorise:
   embed:
     color: 0x00000
     title: 'Guild Authorisation Request'
-    image: './assets/media/images/commands/discord/authorise.gif'
+    image: './assets/media/embeds/commands/discord/authorise.gif'
 
 # 
 unauthorise:
   aliases:
   - 'guildunauthorise'
   description: 'Revokes guild authorisation.'
-  group: 'administrator'
+  group: 'admin'
   examples:
   - '<prefix><id>'
   throttling: 1000
@@ -729,14 +749,14 @@ unauthorise:
   embed:
     color: 0x00000
     title: 'Guild Authorisation Revoked'
-    image: './assets/media/images/commands/discord/authorise.gif'
+    image: './assets/media/embeds/commands/discord/authorise.gif'
 
 # 
 debuginfo:
   aliases:
   - 'dinfo'
   description: 'Display useful debugging information about vulcan.'
-  group: 'administrator'
+  group: 'admin'
   examples:
   - '<prefix><id>'
   throttling: 1000
@@ -747,7 +767,7 @@ debuginfo:
   embed:
     color: 0x00000
     title: 'Debug Info'
-    image: './assets/media/images/commands/discord/debuginfo.gif'
+    image: './assets/media/embeds/commands/discord/debuginfo.gif'
 
 # 
 psa:
@@ -755,7 +775,7 @@ psa:
   - 'announcement'
   - 'guildsay'
   description: 'Send a PSA to a target guild or as a broadcast.'
-  group: 'administrator'
+  group: 'admin'
   examples:
   - '<prefix><id> <target/global> <message_text>'
   throttling: 1000
@@ -766,7 +786,7 @@ psa:
   embed:
     color: 0x00000
     title: 'PSA'
-    image: './assets/media/images/commands/discord/psa.gif'
+    image: './assets/media/embeds/commands/discord/psa.gif'
 
 #
 disabled:
@@ -784,7 +804,7 @@ disabled:
   embed:
     color: 0x00000
     title: 'Command Disable'
-    image: './assets/media/images/commands/discord/disabled.gif'
+    image: './assets/media/embeds/commands/discord/disabled.gif'
 
 #
 dog:
@@ -805,7 +825,7 @@ dog:
   embed:
     color: 0x32CD32
     title: 'Dog'
-    image: './assets/media/images/commands/discord/dog.gif'
+    image: './assets/media/embeds/commands/discord/dog.gif'
 
 #
 cat:
@@ -826,7 +846,7 @@ cat:
   embed:
     color: 0x32CD32
     title: 'Cat'
-    image: './assets/media/images/commands/discord/cat.gif'
+    image: './assets/media/embeds/commands/discord/cat.gif'
 
 #
 info:
@@ -845,7 +865,7 @@ info:
   embed:
     color: 0xDC91FF
     title: 'Vulcan Information'
-    image: './assets/media/images/commands/discord/info.gif'
+    image: './assets/media/embeds/commands/discord/info.gif'
 
 #
 roll:
@@ -864,7 +884,7 @@ roll:
   embed:
     color: 0x2CC646
     title: 'Roll'
-    image: './assets/media/images/commands/discord/roll.gif'
+    image: './assets/media/embeds/commands/discord/roll.gif'
 
 #
 flip:
@@ -883,7 +903,7 @@ flip:
   embed:
     color: 0x209834
     title: 'Flip'
-    image: './assets/media/images/commands/discord/flip.gif'
+    image: './assets/media/embeds/commands/discord/flip.gif'
 
 #
 twitch:
@@ -903,7 +923,7 @@ twitch:
   embed:
     color: 0x551a8b
     title: 'Twitch'
-    image: './assets/media/images/commands/discord/twitch.gif'
+    image: './assets/media/embeds/commands/discord/twitch.gif'
 
 #
 weather:
@@ -922,7 +942,7 @@ weather:
   embed:
     color: 0xC0C0C0
     title: 'Weather'
-    image: './assets/media/images/commands/discord/weather.gif'
+    image: './assets/media/embeds/commands/discord/weather.gif'
 
 #
 clearpublic:
@@ -941,7 +961,7 @@ clearpublic:
   embed:
     color: 0xC0D0B0
     title: 'Public Folder Cleared'
-    image: './assets/media/images/commands/discord/clearpublic.gif'
+    image: './assets/media/embeds/commands/discord/clearpublic.gif'
 
 #
 restart:
@@ -959,7 +979,7 @@ restart:
   embed:
     color: 0xC0D0B0
     title: 'Restart Vulcan'
-    image: './assets/media/images/commands/discord/restart.gif'
+    image: './assets/media/embeds/commands/discord/restart.gif'
 
 #
 insult:
@@ -979,7 +999,7 @@ insult:
   embed:
     color: 0xC0D0B0
     title: 'Restart Vulcan'
-    image: './assets/media/images/commands/discord/restart.gif'
+    image: './assets/media/embeds/commands/discord/restart.gif'
 
 #
 rule34:
@@ -997,4 +1017,4 @@ rule34:
   embed:
     color: 0xC0D0B0
     title: 'Rule34.xxx'
-    image: './assets/media/images/commands/discord/rule34.gif'
+    image: './assets/media/embeds/commands/discord/rule34.gif'

@@ -1,0 +1,14 @@
+---
+author:
+  name: Paulo
+  url: https://github.com/GitPaulo
+  id: '166176374036365312'
+contributors: []
+guild:
+  botChannel: 'bot-dump'
+client:
+  github: https://github.com/GitPaulo/Vulcan
+  id: '604662534410207233'
+  invite: https://discordapp.com/oauth2/authorize?client_id=604662534410207233&scope=bot&permissions=1341652433
+api:
+  rate: 500

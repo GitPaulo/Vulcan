@@ -3,9 +3,8 @@ const util            = xrequire('util');
 const fs              = xrequire('fs');
 const path            = xrequire('path');
 const http            = xrequire('http');
-const messageEmbeds   = xrequire('./modules/standalone/messageEmbeds');
-const stringFunctions = xrequire('./modules/standalone/stringFunctions');
-// const logger       = xrequire('./managers/LogManager').getInstance();
+const messageEmbeds   = xrequire('./modules/messageEmbeds');
+// const logger       = xrequire('./modules/logger').getInstance();
 
 // Promisify fs functions
 const readdir = util.promisify(fs.readdir);
@@ -51,7 +50,7 @@ media.execute = async (message) => {
         case 'put': {
             if (numArgs < 3) {
                 return message.client.emit(
-                    'invalidCommandUsage',
+                    'commandMisused',
                     `Expected 3 arguments got ${numArgs}.`,
                     message
                 );
@@ -69,7 +68,7 @@ media.execute = async (message) => {
         case 'get': {
             if (numArgs < 2) {
                 return message.client.emit(
-                    'invalidCommandUsage',
+                    'commandMisused',
                     message,
                     `Expected 1 arguments got ${numArgs}.`
                 );
@@ -89,7 +88,7 @@ media.execute = async (message) => {
         }
         default: {
             return message.client.emit(
-                'invalidCommandUsage',
+                'commandMisused',
                 message,
                 `The command **${scmd}** was not found in the list of sub-commands for this operation.`
             );
@@ -159,7 +158,7 @@ media.fetchImage = async (keyword) => {
     let hvalue   = 0;
 
     files.forEach((file) => {
-        let cvalue = stringFunctions.levenshtein(keyword, file);
+        let cvalue = String.levenshtein(keyword, file);
 
         if (cvalue > hvalue) {
             filePath = file;
@@ -176,7 +175,7 @@ media.fetchImage = async (keyword) => {
 
 media.store = async (id, url, channel) => {
     try {
-        if (stringFunctions.isURL(url)) {
+        if (String.isURL(url)) {
             await this.storeImageFromURL(url, id);
         } else { // It is a file upload
             let messageWithImage = await channel.fetchMessage(String(url));

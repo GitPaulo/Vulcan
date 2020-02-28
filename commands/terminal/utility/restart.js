@@ -1,6 +1,6 @@
 const restart  = module.exports;
 const { exec } = require('child_process');
-const logger   = xrequire('./managers/LogManager').getInstance();
+const logger   = xrequire('./modules/logger').getInstance();
 
 // eslint-disable-next-line no-unused-vars
 restart.execute = (line) => {

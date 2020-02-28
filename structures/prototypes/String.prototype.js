@@ -1,6 +1,6 @@
 const proto = String.prototype;
 
-global.extendPrototype(proto, 'toHHMMSS', function () {
+global.extend(proto, 'toHHMMSS', function () {
     let sec     = parseInt(this, 10); // Don't forget the second param
     let hours   = Math.floor(sec / 3600);
     let minutes = Math.floor((sec - (hours * 3600)) / 60);
@@ -23,13 +23,13 @@ global.extendPrototype(proto, 'toHHMMSS', function () {
     return time;
 });
 
-global.extendPrototype(proto, 'replaceAll', function (search, replacement) {
+global.extend(proto, 'replaceAll', function (search, replacement) {
     let target = this;
 
     return target.split(search).join(replacement);
 });
 
-global.extendPrototype(proto, 'regexEscape', function (exceptions) {
+global.extend(proto, 'regexEscape', function (exceptions) {
     let regexString = '[.*+?^${}()|[\\]\\\\]';
 
     exceptions.forEach((exclude) => {
@@ -44,14 +44,14 @@ global.extendPrototype(proto, 'regexEscape', function (exceptions) {
     return this.replace(new RegExp(regexString, 'g'), '\\$&'); // $& means the whole matched string
 });
 
-global.extendPrototype(proto, 'isIdentile', function () {
+global.extend(proto, 'isIdentile', function () {
     const letters = this.split('');
     const unique  = new Set(letters);
 
     return (unique.size === 1) ? true : false;
 });
 
-global.extendPrototype(proto, 'nthOccurrenceOf', function (pat, n) {
+global.extend(proto, 'nthOccurrenceOf', function (pat, n) {
     let L = this.length;
     let i = -1;
 
@@ -66,10 +66,10 @@ global.extendPrototype(proto, 'nthOccurrenceOf', function (pat, n) {
     return i;
 });
 
-global.extendPrototype(proto, 'hasUpperCase', function () {
+global.extend(proto, 'hasUpperCase', function () {
     return (/[A-Z]/.test(this));
 });
 
-global.extendPrototype(proto, 'hasLowerCase', function () {
+global.extend(proto, 'hasLowerCase', function () {
     return (/[a-z]/.test(this));
 });

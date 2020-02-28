@@ -79,3 +79,6 @@ May I host this program publicly?
 May I invite the bot?
 
 - **Yes.** However there is a good chance of your guild being denied. The bot is mostly for **personal** use.
+
+How to contribute?
+- For contributions please read the [contribution guideline](./.github/CONTRIBUTING.md).

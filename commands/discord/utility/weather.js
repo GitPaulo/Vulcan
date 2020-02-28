@@ -1,15 +1,16 @@
 const weather       = module.exports;
-const yahooWeather  = xrequire('./modules/standalone/yahooWeather');
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const yahooWeather  = xrequire('./modules/yahooWeather');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
+const settings      = xrequire('./prerequisites/settings');
 
 // eslint-disable-next-line no-unused-vars
-weather.load = (commandDescriptor) => {
-    const settings = this.command.client.credentials.OAuth.yahooWeather;
+weather.load = (descriptor, packages) => {
+    let options = settings.credentials.OAuth.yahooWeather;
 
     this.api = new yahooWeather(
-        settings.appid,
-        settings.id,
-        settings.secret
+        options.appid,
+        options.id,
+        options.secret
     );
 };
 
@@ -18,7 +19,7 @@ weather.execute = async (message) => {
 
     if (!regionCode) {
         return message.client.emit(
-            'invalidCommandUsage',
+            'commandMisused',
             message,
             `You are required to specify a \`regionCode\` for the weather query.\n\tExample: \`london,uk\`!`
         );
@@ -44,7 +45,7 @@ weather.execute = async (message) => {
         displayedDates = forecasts;
     } else {
         return message.client.emit(
-            'invalidCommandUsage',
+            'commandMisused',
             message,
             `Invalid date specifier.\n\tExample: \`tomorrow\`!`
         );

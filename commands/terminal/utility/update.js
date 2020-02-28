@@ -2,7 +2,7 @@ const update  = module.exports;
 const command = (global.isLinux ? 'sudo ' : '') + 'git pull origin master';
 
 const { exec } = require('child_process');
-const logger   = xrequire('./managers/LogManager').getInstance();
+const logger   = xrequire('./modules/logger').getInstance();
 
 // eslint-disable-next-line no-unused-vars
 update.execute = (line) => {

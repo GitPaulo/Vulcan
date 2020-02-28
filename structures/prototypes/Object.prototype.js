@@ -1,6 +1,6 @@
 const proto = Object.prototype;
 
-global.extendPrototype(proto, 'methodNames', function () {
+global.extend(proto, 'methodNames', function () {
     const obj      = this;
     let properties = new Set();
     let currentObj = obj;

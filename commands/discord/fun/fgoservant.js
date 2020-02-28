@@ -1,8 +1,7 @@
-const fgoservant      = module.exports;
-const cheerio         = xrequire('cheerio');
-const request         = xrequire('request-promise');
-const messageEmbeds   = xrequire('./modules/standalone/messageEmbeds');
-const stringFunctions = xrequire('./modules/standalone/stringFunctions');
+const fgoservant    = module.exports;
+const cheerio       = xrequire('cheerio');
+const httpFetch     = xrequire('node-fetch');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 /*
 *   This command is reliant on the structure and uptime of 'http://grandorder.wiki'
@@ -86,29 +85,30 @@ const wikiTableExtractor = (html, cache, baseURL) => {
 };
 
 /* eslint-disable no-unused-vars */
-fgoservant.load = async (commandDescriptor) => {
+fgoservant.load = async (descriptor, packages) => {
     const baseURL = 'http://grandorder.wiki';
-    const htmlJP  = await request(`${baseURL}/Servant_List`);
-    const htmlEN  = await request(`${baseURL}/Servant_List/EN`);
+    const resJP   = await httpFetch(`${baseURL}/Servant_List`);
+    const resEN   = await httpFetch(`${baseURL}/Servant_List/EN`);
     const cache   = new Map();
 
     // Set cache per region
     cache.set('JP', new Map());
     cache.set('EN', new Map());
 
-    // 'shorten' code - lol
-    wikiTableExtractor(htmlJP, cache.get('JP'), baseURL);
-    wikiTableExtractor(htmlEN, cache.get('EN'), baseURL);
+    // Webscrap info for both realms
+    wikiTableExtractor((await resJP.text()), cache.get('JP'), baseURL);
+    wikiTableExtractor((await resEN.text()), cache.get('EN'), baseURL);
 
+    // Cache info
     this.cache = cache;
 };
 
 fgoservant.execute = async (message) => {
     const region = (message.parsed.args[0] || '').toUpperCase();
 
-    if (!(region === 'JP' || region === 'EN')) {
+    if (region !== 'JP' && region !== 'EN') {
         return message.client.emit(
-            'invalidCommandUsage',
+            'commandMisused',
             message,
             `The first argument needs to be a valid region.\n\tRegions: JP/EN`
         );
@@ -116,7 +116,7 @@ fgoservant.execute = async (message) => {
 
     if (message.parsed.args.length <= 1) {
         return message.client.emit(
-            'invalidCommandUsage',
+            'commandMisused',
             message,
             `Second argument must be a valid string.`
         );
@@ -133,7 +133,7 @@ fgoservant.execute = async (message) => {
 
     while (!iteratorValue.done) {
         let name            = (iteratorValue.value || '');
-        let similarityValue = stringFunctions.levenshtein(input.toLowerCase(), name.toLowerCase());
+        let similarityValue = String.levenshtein(input.toLowerCase(), name.toLowerCase());
 
         if (similarityValue > mostSimilarValue) {
             mostSimilarValue = similarityValue;

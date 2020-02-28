@@ -1,6 +1,6 @@
 const smiteroulette = module.exports;
-const request       = xrequire('request-promise');
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
+const httpFetch     = xrequire('node-fetch');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 /*
 *   This command is reliant on the structure and uptime of 'http://cms.smitegame.com/wp-json/smite-api/all-gods/1'
@@ -8,10 +8,18 @@ const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
 */
 
 /* eslint-disable no-unused-vars */
-smiteroulette.load = async (commandDescriptor) => {
-    const result = await request('http://cms.smitegame.com/wp-json/smite-api/all-gods/1');
-    const gods   = JSON.parse(result);
-    const cache  = new Map();
+smiteroulette.load = async (descriptor, packages) => {
+    const result = await httpFetch(
+        'https://cms.smitegame.com/wp-json/smite-api/all-gods/1',
+        {
+            headers: // Header required or else 403
+            {
+                'agent': 'node.js'
+            }
+        }
+    );
+    const gods  = await result.json();
+    const cache = new Map();
 
     const dynamicInsert = (god, key) => {
         god[key]        = god[key].toLowerCase().trim(); // ok hirez!

@@ -9,11 +9,11 @@ Discord commands are the commands executed via the Discord API. Terminal command
 
 ## The 'commands.yml' file
 
-Each of the folders representing a command 'package' contains a file named 'commands.yml'. This file specifies the meta information about each of the commands within their respective realm. It is designed in such a way that anyone should be able to edit without much programming experience. The structure for each command descriptor should be defined at the top of each file. Please follow the instruction detailed in the commented sections.
+Each of the folders directly under './commands' represents a command type realm. These folders contain a single file named 'commands.yml'. This file specifies the meta information about each of the commands belonging to the enclosing folder. For each command, the structured information is known as a command 'descriptor'. Instructions on the expected structure of descriptors are written atop each 'commands.yml' file.
 
 ## The '__packages' folder
 
-Complex commands may require modularisation to avoid excessively large files. In order to keep things organised, all custom written files included by the main command file must go in the '__packages' folder. In this folder, each command has its own subfolder acting as the root of the package.
+Complex commands may require modularisation to avoid excessively large files. In order to keep things organised, all custom written files included by the main command file must go in the '__packages' folder. In this folder each command has its own subfolder acting as the root of the package. The subfolder has to be named as: 'realm.command_id'.
 
 ## Adding a new command
 
@@ -25,7 +25,7 @@ Complex commands may require modularisation to avoid excessively large files. In
   4. Copy and paste the appropriate command **template** into your new command file.
   5. __(optional)__ Extra code can be placed in the [packages](./commands/__packages/) folder.
   6. Add the descriptor for your command inside the appropriate 'commands.yml' file.
-  7. __(optional)__ Add a thumbnail for your command's embed within the [assets](./assets/media/images/commands) folder.
+  7. __(optional)__ Add a thumbnail for your command's embed within the [assets](./assets/media/commands) folder.
         * Image name must be a **capitalization** of command file name.
 
 ### Discord Command Template (./discord/mytype/mycommand.js)
@@ -33,28 +33,33 @@ Complex commands may require modularisation to avoid excessively large files. In
 ```js
 const mycommand = module.exports;
 
-// Called once before any execution.
-// Parameters:
-//      - 'commandDescriptor': a JSON object representing the entry for this command in commands.yaml
-mycommand.load = async (commandDescriptor) => {
+/**
+ * Called once only before all discord command executions.
+ * Parameters:
+ *   - 'descriptor': a JSON object representing the entry for this command in commands.yaml.
+ *   - 'packages': an object containing all the exports for the command corresponding package folder.
+ */
+mycommand.load = async (descriptor, packages) => {
     // You can access the vulcan object (discord.js client) in two ways:
     //      - 'message.client'
     //      - 'this.command.client'
 
     // Code Here
-    console.log(`Loaded command: ${commandDescriptor.id}`);
+    console.log(`Loaded command: ${descriptor.id}`);
 };
 
-// Called once for every user request.
-// Parameters:
-//      - 'message': a discord.js message object
+/**
+ * Called once for every discord command request.
+ * Parameters:
+ *   - 'message': a discord.js message object.
+ */
 mycommand.execute = async (message) => {
     // You can access the vulcan object (discord.js client) in two ways:
     //      - 'message.client'
     //      - 'this.command.client'
 
-    // Code Here
-    await message.channel.send('Hello World!');
+    // Code here
+    await message.channel.send(`Hello World!`);
 };
 ```
 
@@ -63,19 +68,23 @@ mycommand.execute = async (message) => {
 ```js
 const mycommand = module.exports;
 
-// Called once before any execution.
-// Parameters:
-//      - 'commandDescriptor': a JSON object representing the entry for this command in commands.yaml
-mycommand.load = (commandDescriptor) => {
+/**
+ * Called once only before all terminal command executions.
+ * Parameters:
+ *   - 'descriptor': a JSON object representing the entry for this command in commands.yaml.
+ */
+mycommand.load = (descriptor, packages) => {
     // Can only access the vulcan object with 'this.command.client'
 
     // Code Here
-    console.log(`Loaded command: ${commandDescriptor.id}`);
+    console.log(`Loaded command: ${descriptor.id}`);
 };
 
-// Called once for every user request.
-// Parameters:
-//      - 'line': the input command as a string from the terminal.
+/**
+ * Called once for every terminal command request.
+ * Parameters:
+ *   - 'line': the input command as a string from the terminal.
+ */
 mycommand.execute = (line) => {
     // Can only access the vulcan object with 'this.command.client'
 
@@ -84,9 +93,43 @@ mycommand.execute = (line) => {
 };
 ```
 
+### Using Packages & Accessing Parsed Message Content
+
+```js
+const mycommand = module.exports;
+
+mycommand.load = async (descriptor, packages) => {
+    // Example of loading generic command 'data'
+    // packages.fetcher => ./__packages/discord.mycommand/fetcher.js
+    this.data = packages.fetcher.fetchSomeData();
+};
+
+mycommand.execute = async (message) => {
+    // Parsed content is stored in 'message.parsed'
+    // Example: !mycommand Hello? hmmm? Paul#4234 @Paul
+    const {
+        raw,        // "!mycommand Hello? hmmm? Paul#4234 @Paul"
+        args,       // ["Hello?", "hmmm?", "Paul#4234", "@Paul"]
+        tags,       // ["Paul#4234"]
+        head,       // "!mycommand"
+        tail,       // "@Paul"
+        cmdName,    // "mycommand"
+        argsString, // "Hello? hmmm?"
+        mentions    // ["@Paul"]
+    } = message.parsed;
+
+    // Send message
+    await message.channel.send(`Response to command ${cmdName}: ${this.data}`);
+};
+```
+```
+Packages work the same way for Terminal Commands.
+```
+
 ### Extra Notes
 
     * On the Discord Command Template, load functions may also be synchronous.
     * On the Terminal Command Template, load functions may also be asynchrnous.
     * On all templates, load functions can be ommited but execution functions must be defined.
     * A command will never execute before its loaded function has completed execution.
+    * Load functions exist primarly because we do not want disabled commands to load their dependencies.

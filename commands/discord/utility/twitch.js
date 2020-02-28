@@ -1,14 +1,15 @@
 const twitch        = module.exports;
-const request       = xrequire('request-promise');
-const messageEmbeds = xrequire('./modules/standalone/messageEmbeds');
-// const logger     = xrequire('./managers/LogManager').getInstance();
+const httpFetch     = xrequire('node-fetch');
+const messageEmbeds = xrequire('./modules/messageEmbeds');
+const settings      = xrequire('./prerequisites/settings');
+// const logger     = xrequire('./modules/logger').getInstance();
 
 // TODO - Improve! Add more functionality and prettier embeds :)
 /* eslint-disable no-unused-vars */
-twitch.load = (commandDescriptor) => {
+twitch.load = (descriptor, packages) => {
     this.endpoint = 'http://api.twitch.tv/helix';
-    this.id       = this.command.client.credentials.OAuth.twitch.id;
-    this.secret   = this.command.client.credentials.OAuth.twitch.secret;
+    this.id       = settings.credentials.OAuth.twitch.id;
+    this.secret   = settings.credentials.OAuth.twitch.secret;
 };
 
 twitch.execute = async (message) => {
@@ -35,7 +36,7 @@ twitch.execute = async (message) => {
 
             if (isNaN(num)) {
                 return message.client.emit(
-                    'invalidCommandUsage',
+                    'commandMisused',
                     message,
                     `Expected number as first argument for this subcommand!`
                 );
@@ -60,7 +61,7 @@ twitch.execute = async (message) => {
 
             if (isNaN(num)) {
                 return this.command.client.emit(
-                    'invalidCommandUsage',
+                    'commandMisused',
                     message,
                     `Expected number as first argument for this subcommand!`
                 );
@@ -83,7 +84,7 @@ twitch.execute = async (message) => {
         }
         default: {
             return message.client.emit(
-                'invalidCommandUsage',
+                'commandMisused',
                 message,
                 `Invalid twitch subcommand: ${scmd}`
             );
@@ -98,14 +99,14 @@ twitch.topStreams = async (num) => {
         throw new Error(`Number of requested streams is limited from 0-100 by the API. Received: ${num}`);
     }
 
-    const requestData = {
-        uri    : `${this.endpoint}/streams?first=${num}`,
-        headers: {
-            'Client-ID': this.id
+    const response = await httpFetch(
+        `${this.endpoint}/streams?first=${num}`,
+        {
+            headers: {
+                'Client-ID': this.id
+            }
         }
-    };
-
-    const response = await request(requestData);
+    );
 
     return JSON.parse(response).data;
 };
@@ -115,14 +116,14 @@ twitch.topGames = async (num) => {
         throw new Error(`Number of requested games is limited from 0-100 by the API. Received: ${num}`);
     }
 
-    const requestData = {
-        uri    : `${this.endpoint}/games/top?first=${num}`,
-        headers: {
-            'Client-ID': this.id
+    const response = await httpFetch(
+        `${this.endpoint}/games/top?first=${num}`,
+        {
+            headers: {
+                'Client-ID': this.id
+            }
         }
-    };
-
-    const response = await request(requestData);
+    );
 
     return JSON.parse(response).data;
 };
