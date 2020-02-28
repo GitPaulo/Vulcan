@@ -26,9 +26,9 @@ This project is maintained only by a few people, but you are welcome to join!
 
 # Invite Vulcan
 
-Vulcan's features are **disabled by default** on __new guilds__: they must be activated by one of the bot owners.
+Vulcan's features are **disabled by default** on __new guilds__; they must be activated by one of the bot owners.
 
-Note that this is **intended**. Once Vulcan is invited to a new server an automatic request to enable its features on the new guild is sent to the bot owners. You may also use the `authorise` command to manually send a request.
+Note that this is **intended**. Once Vulcan is invited to a new server, an automatic request to enable its features on the new guild is sent to the bot owners. You may also use the `authorise` command to manually send a request.
 
 To invite Vulcan to your discord server simply click the image link below:
 
@@ -54,7 +54,7 @@ Make sure you have updated versions of your host machine's OS services and follo
 
 ## Supported Platforms
 
-Because of the use of node-opus, the bot can only be hosted in the following platforms:
+Because of the use of [node-opus](https://github.com/Rantanen/node-opus), the bot can only be hosted in the following platforms:
 
 - Linux x64 & ia32
 - Linux ARM (Raspberry Pi 1 & 2)
