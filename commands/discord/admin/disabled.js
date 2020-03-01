@@ -7,7 +7,11 @@ disabled.execute = async (message) => {
     const command = vulcan.commands.retrieveCommand(cmdName);
 
     if (!command) {
-        return vulcan.emit('');
+        return vulcan.emit(
+            'commandMisused',
+            message,
+            `The first argument needs to be a valid command id.`
+        );
     }
 
     const bool      = message.parsed.args[1] ? Boolean(message.parsed.args[1]) : !command.disabled;

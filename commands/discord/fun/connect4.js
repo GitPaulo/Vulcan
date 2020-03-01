@@ -8,10 +8,10 @@ const whiteFlagEmoji    = '%F0%9F%8F%B3';
 
 /* eslint-disable no-unused-vars */
 connect4.load = (commandDefinition, packages) => {
-    const { mcts, Board } = packages;
+    const { Mcts, Board } = packages;
 
     // Store packages
-    this.mcts  = mcts;
+    this.Mcts  = Mcts;
     this.Board = Board;
 
     // Default board size
@@ -38,7 +38,7 @@ connect4.execute = async (message) => {
 
     // Sort out challenge request
     const challenger = message.author;
-    const challengee = message.mentions.users.cache.first() || message.client.user;
+    const challengee = message.mentions.users.first() || message.client.user;
 
     // Let them know we mean business
     const challengeMessage = await message.channel.send(
@@ -95,7 +95,7 @@ connect4.execute = async (message) => {
             let move = -1;
 
             if (this.players[this.turn - 1].bot) {
-                move = this.mcts(this.board, this.turn);
+                move = outerScope.Mcts(this.board, this.turn);
             } else {
                 const filter    = (reaction, user) => this.currentPlayer.id === user.id && outerScope.getControlEmojis().includes(reaction.emoji.identifier);
                 const collected = await this.boardMessage.awaitReactions(filter, { max: 1 });
@@ -109,7 +109,7 @@ connect4.execute = async (message) => {
                     move = parseInt(reaction.emoji.identifier.slice(0, 1), 10);
                 }
 
-                await reaction.users.cache.remove(this.currentPlayer.id);
+                await reaction.users.remove(this.currentPlayer.id);
             }
 
             return move;
@@ -121,7 +121,7 @@ connect4.execute = async (message) => {
             let reactionsThatNeedRemoving = this.boardMessage.reactions.cache.filter((reaction) => reaction.count > 1);
 
             for (let reaction of reactionsThatNeedRemoving) {
-                reaction.users.cache.cache.filter((user) => user !== this.boardMessage.client.user).forEach((user) => reaction.users.cache.remove(user.id));
+                reaction.users.cache.filter((user) => user !== this.boardMessage.client.user).forEach((user) => reaction.users.cache.remove(user.id));
             }
         },
         async updateTurnMessage (str) {

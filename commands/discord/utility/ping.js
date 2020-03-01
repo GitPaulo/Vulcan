@@ -26,9 +26,8 @@ ping.execute = async (message) => {
     const mWrap  = messageEmbeds.reply(
         {
             message,
-            description: '',
-            title      : 'Pong!',
-            fields     : [
+            title : 'Pong!',
+            fields: [
                 {
                     name  : 'Test Latency',
                     value : `${m.createdTimestamp - message.createdTimestamp}ms`,

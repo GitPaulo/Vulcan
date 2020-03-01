@@ -154,9 +154,8 @@ class MusicManager extends EventEmitter {
         const line = '=======';
         const wrap = messageEmbeds.musicManager(
             {
-                description: ``, // Remove description for aesthetics
-                title      : `Now Playing :musical_note: :musical_note:`,
-                fields     : [
+                title : `Now Playing :musical_note: :musical_note:`,
+                fields: [
                     { name: 'Song',                        value: song.name || df,            inline: false },
                     { name: 'Requester',                   value: `<@${requester.id}>` || df, inline: true  },
                     { name: 'Author',                      value: song.author || df,          inline: true  },

@@ -12,9 +12,8 @@ shuffle.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            title      : ':stop_button: :notes:  - Shuffled Queue',
-            description: '',
-            fields     : [
+            title : ':stop_button: :notes:  - Shuffled Queue',
+            fields: [
                 {
                     name : 'Shuffle Status',
                     value: bool.toString()

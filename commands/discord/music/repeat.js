@@ -12,9 +12,8 @@ repeat.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            title      : ':notes:  - Song Repeat',
-            description: '',
-            fields     : [
+            title : ':notes:  - Song Repeat',
+            fields: [
                 {
                     name : 'Repeat Status',
                     value: bool.toString()

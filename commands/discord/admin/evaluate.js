@@ -61,8 +61,7 @@ evaluate.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            description: ``, // Beautify
-            fields     : [
+            fields: [
                 { name: 'Code',              value: '```js\n' + code + '\n```'                        }, // \n stops .md break
                 { name: 'Benchmark',         value: `${execTime}ms`,                     inline: true },
                 { name: 'Size',              value: `${code.length} (chars)`,            inline: true },

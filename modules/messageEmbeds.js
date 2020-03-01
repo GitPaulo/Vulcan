@@ -16,11 +16,11 @@ messageEmbeds.reply = (
         color   = cmd.embed.color,
         title   = cmd.embed.title,
         author  = {
-            name    : `Replying@${message.author.tag}`,
+            name    : message.author.tag,
             icon_url: message.author.displayAvatarURL(),   /* eslint-disable-line camelcase */
             url     : message.author.displayAvatarURL()
         },
-        description = `Replying to a request from **${message.author.tag}** for command **${message.command.id}**.`,
+        description = ``,
         // ! if this is changed, image will be attached
         thumbnail   = {
             url: `attachment://${imgName}`
@@ -28,7 +28,7 @@ messageEmbeds.reply = (
         fields    = [],
         timestamp = new Date(),
         footer    = {
-            text: `[Command Request]`
+            text: `[Command Response]`
         },
         url   = '',
         image = {},

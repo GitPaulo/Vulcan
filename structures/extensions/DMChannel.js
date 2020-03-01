@@ -10,6 +10,7 @@ module.exports = class _DMChannel extends xrequire('discord.js').DMChannel {
 
         // ! Detour message.send
         this._send = super.send;
-        this.send  = (...args) => mfHandler(this, ...args);
+        // https://github.com/discordjs/discord.js/blob/master/src/structures/interfaces/TextBasedChannel.js#L14
+        this.send  = async (content, options) => this._send(await mfHandler(this, content), options);
     }
 };

@@ -27,12 +27,12 @@ const CharacterLimits = {
 };
 
 module.exports = async (channel, wrap) => {
-    if (channel.constructor.name !== '_TextChannel') {
+    if (!(channel instanceof Discord.DMChannel || channel instanceof Discord.TextChannel)) {
         throw new Error(`Message format handler only for text channels.`);
     }
 
     // ? Already a message!
-    if (wrap.constructor.name === 'APIMessage') {
+    if (!(wrap instanceof Discord.APIMessage)) {
         return wrap;
     }
 

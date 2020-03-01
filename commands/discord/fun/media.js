@@ -4,7 +4,7 @@ const fs              = xrequire('fs');
 const path            = xrequire('path');
 const http            = xrequire('http');
 const messageEmbeds   = xrequire('./modules/messageEmbeds');
-// const logger       = xrequire('./modules/logger').getInstance();
+const logger          = xrequire('./modules/logger').getInstance();
 
 // Promisify fs functions
 const readdir = util.promisify(fs.readdir);
@@ -22,12 +22,22 @@ media.load = (commandDefinition) => {
 };
 
 media.execute = async (message) => {
-    const omitReply = (message.parsed.args[0].substr(0, 3) === this.omitReplyPrefix);
-    const scmd      = omitReply && message.parsed.args[0].substr(3) || message.parsed.args[0];
+    const scmd = message.parsed.args[0];
+
+    if (!scmd) {
+        return message.client.emit(
+            'commandMisused',
+            message,
+            `This command requires usage of subcommands!`
+        );
+    }
+
+    const omitReply = scmd.substr(0, 3) === this.omitReplyPrefix;
+    const pcmd      = omitReply && scmd.substr(3) || scmd;
     const numArgs   = message.parsed.args.length;
     const embedWrap = messageEmbeds.reply({
         message,
-        title : `**Media** request received: **${scmd}**`,
+        title : `Media: ${pcmd}`,
         fields: [
             {
                 name : 'Arguments',
@@ -90,7 +100,7 @@ media.execute = async (message) => {
             return message.client.emit(
                 'commandMisused',
                 message,
-                `The command **${scmd}** was not found in the list of sub-commands for this operation.`
+                `The command **${pcmd}** was not found in the list of sub-commands for this operation.`
             );
         }
     }
@@ -127,7 +137,7 @@ media.storeImageFromMessage = (fileName, message) => {
 
 media.storeImageFromURL = async (url, fileName) => {
     // Only 'http' allowed with GET
-    url = url.replace('http://', 'http://');
+    url = url.replace('https://', 'http://');
 
     let extension = url.substr(url.lastIndexOf('.'));
 
@@ -146,7 +156,11 @@ media.storeImageFromURL = async (url, fileName) => {
             });
         });
     } catch (err) {
-        fs.unlink(this.folderPath); // Delete the file async. (But we don't check the result)
+        fs.unlink(
+            this.folderPath,
+            (x) => logger.warn(x)    
+        ); // Delete the file async. (But we don't check the result)
+        
         throw err;
     }
 };
@@ -178,7 +192,7 @@ media.store = async (id, url, channel) => {
         if (String.isURL(url)) {
             await this.storeImageFromURL(url, id);
         } else { // It is a file upload
-            let messageWithImage = await channel.fetchMessage(String(url));
+            let messageWithImage = await channel.messages.fetch(String(url));
 
             this.storeImageFromMessage(id, messageWithImage);
         }

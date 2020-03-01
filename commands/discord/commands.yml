@@ -127,7 +127,7 @@ media:
   - '<prefix><id> fetch <id>'
   - '<prefix><id> list'
   group: 'default'
-  throttling: 2000
+  throttling: 1500
   safe: false
   disabled: false
   userPermissions: []

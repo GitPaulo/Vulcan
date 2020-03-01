@@ -27,9 +27,8 @@ pause.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            title      : ':pause_button:  - Pause',
-            description: '',
-            fields     : [
+            title : ':pause_button:  - Pause',
+            fields: [
                 {
                     name : 'Paused Song',
                     value: Discord.Util.escapeMarkdown(musicManager.loadedSong.name)

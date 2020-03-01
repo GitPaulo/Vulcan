@@ -32,9 +32,8 @@ skip.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            title      : ':fast_forward:  - Skipped Song',
-            description: '',
-            fields     : [
+            title : ':fast_forward:  - Skipped Song',
+            fields: [
                 {
                     name : 'Skipped Song',
                     value: lsName
