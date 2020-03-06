@@ -1,13 +1,14 @@
 const weather       = module.exports;
-const yahooWeather  = xrequire('./modules/yahooWeather');
 const messageEmbeds = xrequire('./modules/messageEmbeds');
 const settings      = xrequire('./prerequisites/settings');
 
 // eslint-disable-next-line no-unused-vars
 weather.load = (descriptor, packages) => {
+    const { YahooWeather } = packages;
+
     let options = settings.credentials.OAuth.yahooWeather;
 
-    this.api = new yahooWeather(
+    this.api = new YahooWeather(
         options.appid,
         options.id,
         options.secret
@@ -25,18 +26,32 @@ weather.execute = async (message) => {
         );
     }
 
+    // For the dates
     let displayedDates = null;
-    const timePeriod   = message.parsed.args[1] || 'today';
+
+    // Destructor
     const {
         location,
         // eslint-disable-next-line camelcase
         current_observation,
         forecasts
-    } = await this.api.forecast({ location: regionCode });
-
+    }                 = await this.api.forecast({ location: regionCode });
     // eslint-disable-next-line camelcase
     const observation = current_observation;
+    const timePeriod  = message.parsed.args[1] || 'today';
 
+    // ! This should probably be handled better in the api wrap but fuck it
+    if (Object.isEmpty(location) && Object.isEmpty(current_observation)) {
+        return message.channel.send(messageEmbeds.reply(
+            {
+                message,
+                title      : `Weather Forecast`,
+                description: `Unable to find any weather results for:\n\`\`\`${regionCode}\`\`\``
+            }
+        ));
+    }
+
+    // Sort out forecast time period
     if (timePeriod === 'today') {
         displayedDates = forecasts[0];
     } else if (timePeriod === 'tomorrow') {
@@ -51,7 +66,8 @@ weather.execute = async (message) => {
         );
     }
 
-    const mWrap = messageEmbeds.reply(
+    // Send message
+    await message.channel.send(messageEmbeds.reply(
         {
             message,
             title : `Weather Forecast`,
@@ -88,7 +104,5 @@ weather.execute = async (message) => {
                 }
             ]
         }
-    );
-
-    await message.channel.send(mWrap);
+    ));
 };

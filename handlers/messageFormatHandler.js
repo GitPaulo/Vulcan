@@ -7,9 +7,15 @@
 
 const fs       = xrequire('fs');
 const path     = xrequire('path');
-const Discord  = xrequire('discord.js');
 const hastebin = xrequire('./modules/hastebin');
 const logger   = xrequire('./modules/logger').getInstance();
+
+// Structures
+const {
+    DMChannel,
+    TextChannel,
+    APIMessage
+}  = xrequire('discord.js');
 
 // File Constants
 const MaxFileSizeMB   = 8;
@@ -27,15 +33,21 @@ const CharacterLimits = {
 };
 
 module.exports = async (channel, wrap) => {
-    if (!(channel instanceof Discord.DMChannel || channel instanceof Discord.TextChannel)) {
-        throw new Error(`Message format handler only for text channels.`);
-    }
-
     // ? Already a message!
-    if (!(wrap instanceof Discord.APIMessage)) {
+    if (!(wrap instanceof APIMessage)) {
         return wrap;
     }
 
+    // ? We only apply these to these channels
+    if (!(channel instanceof DMChannel
+        || channel instanceof TextChannel)) {
+        return APIMessage.create(
+            channel,
+            wrap
+        );
+    }
+
+    // ? Create wrap
     if (typeof wrap === 'string') {
         wrap = {
             content: wrap,
@@ -152,7 +164,7 @@ module.exports = async (channel, wrap) => {
     // WeirdChamp
     if (!largeContent && largeFiles.length <= 0) {
         // Create and send. API Message.
-        return Discord.APIMessage.create(
+        return APIMessage.create(
             channel,
             wrap
         );
@@ -234,7 +246,7 @@ module.exports = async (channel, wrap) => {
     }
 
     // Create and send. API Message.
-    return Discord.APIMessage.create(
+    return APIMessage.create(
         channel,
         wrap
     );

@@ -4,6 +4,23 @@ const fs     = require('fs');
 const path   = require('path');
 const logger = xrequire('./modules/logger').getInstance();
 
+// Constants
+// Maps file extention to MIME typere
+const extToMime = new Map([
+    ['.ico',  'image/x-icon'],
+    ['.html', 'text/html'],
+    ['.js',   'text/javascript'],
+    ['.json', 'application/json'],
+    ['.css',  'text/css'],
+    ['.png',  'image/png'],
+    ['.jpg',  'image/jpeg'],
+    ['.wav',  'audio/wav'],
+    ['.mp3',  'audio/mpeg'],
+    ['.svg',  'image/svg+xml'],
+    ['.pdf',  'application/pdf'],
+    ['.doc',  'application/msword']
+]);
+
 // ? This folder can be manipulated via HTTP requests
 const publicFolderPath = path.join(__dirname, 'public');
 
@@ -14,36 +31,24 @@ if (!fs.existsSync(publicFolderPath)) {
 
 /* eslint-disable no-unused-vars */
 module.exports = (vulcan) => {
-    const server = http.createServer((req, res) => {
-        logger.log(`[File Server] => ${req.method} ${req.url}`);
+    const server = http.createServer((request, response) => {
+        logger.log(`[File Server] => ${request.method} ${request.url}`);
 
         // Parse URL
-        const parsedUrl = url.parse(req.url);
+        const parsedUrl = url.parse(request.url);
+
         // Extract URL path
         let pathname = `.${parsedUrl.pathname}`;
+
         // Nased on the URL path, extract the file extention. e.g. .js, .doc, ...
         const ext = path.parse(pathname).ext;
-        // Maps file extention to MIME typere
-        const map = new Map([
-            ['.ico',  'image/x-icon'],
-            ['.html', 'text/html'],
-            ['.js',   'text/javascript'],
-            ['.json', 'application/json'],
-            ['.css',  'text/css'],
-            ['.png',  'image/png'],
-            ['.jpg',  'image/jpeg'],
-            ['.wav',  'audio/wav'],
-            ['.mp3',  'audio/mpeg'],
-            ['.svg',  'image/svg+xml'],
-            ['.pdf',  'application/pdf'],
-            ['.doc',  'application/msword']
-        ]);
 
+        // ? Check if public subfolder exists
         fs.exists(pathname, (exist) => {
             if (!exist) {
                 // If the file is not found, return 404
-                res.statusCode = 404;
-                res.end(`[File Server] => File ${pathname} not found!`);
+                response.statusCode = 404;
+                response.end(`[File Server] => File ${pathname} not found!`);
 
                 return;
             }
@@ -54,8 +59,8 @@ module.exports = (vulcan) => {
             // Check for Authentication (public folder)
             if (!pathname.startsWith(publicFolderPath)) {
                 // Cheeky!
-                res.statusCode = 403;
-                res.end(`[File Server] => Access denied to this part of the file system.`);
+                response.statusCode = 403;
+                response.end(`[File Server] => Access denied to this part of the file system.`);
 
                 return;
             }
@@ -64,21 +69,21 @@ module.exports = (vulcan) => {
             if (isDir) {
                 fs.readdir(pathname, (err, files) => {
                     if (err) {
-                        res.statusCode = 500;
-                        res.end(`[File Server] => Error getting the file: ${err}.`);
+                        response.statusCode = 500;
+                        response.end(`[File Server] => Error getting the file: ${err}.`);
                     } else {
-                        res.end(JSON.stringify(files));
+                        response.end(JSON.stringify(files));
                     }
                 });
             } else { // Read file from file system
                 fs.readFile(pathname, (err, data) => {
                     if (err) {
-                        res.statusCode = 500;
-                        res.end(`[File Server] => Error getting the file: ${err}.`);
+                        response.statusCode = 500;
+                        response.end(`[File Server] => Error getting the file: ${err}.`);
                     } else {
                         // If the file is found, set Content-type and send data
-                        res.setHeader('Content-type', map.get(ext) || 'text/plain');
-                        res.end(data);
+                        response.setHeader('Content-type', extToMime.get(ext) || 'text/plain');
+                        response.end(data);
                     }
                 });
             }

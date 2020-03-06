@@ -74,3 +74,7 @@ Object.assignByKeyPath = function (obj, is, value) {
 
     return Object.assignByKeyPath(obj[is[0]], is.slice(1), value);
 };
+
+Object.isEmpty = function (obj) {
+    return Object.entries(obj).length === 0 && obj.constructor === Object;
+};

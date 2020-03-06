@@ -30,6 +30,7 @@ class Vulcan extends Discord.Client {
         this.authorised      = null;
         this.webFiles        = null;
         this.webHooks        = null;
+        this.webClient       = null;
         this.commands        = null;
         this.terminalManager = null;
         this.databaseManager = null;
@@ -51,6 +52,7 @@ class Vulcan extends Discord.Client {
         // ? Load essentials: Web Servers
         this.wfPort = 442;
         this.whPort = 443;
+        this.wcPort = 80;
 
         // Generate SSL cert & keys, load servers.
         pem.createCertificate({ days: 31, selfSigned: true }, (err, keys) => {
@@ -61,15 +63,17 @@ class Vulcan extends Discord.Client {
             // Log
             logger.debug('Generated SSL key/cert via pem module.');
 
-            this.webFiles = xrequire('./webfiles')(this);
-            this.webHooks = xrequire('./webhooks')(this, keys);
+            this.webFiles  = xrequire('./webfiles')(this);
+            this.webHooks  = xrequire('./webhooks')(this, keys);
+            this.webClient = xrequire('./webclient')(this, keys);
 
             // Attach ports
-            this.webFiles.port = this.wfPort;
-            this.webHooks.port = this.whPort;
+            this.webFiles.port  = this.wfPort;
+            this.webHooks.port  = this.whPort;
+            this.webClient.port = this.wcPort;
 
             // Emit ready event!
-            this.emit('webServersReady', this.webFiles, this.webHooks);
+            this.emit('webServersReady', this);
         });
 
         // Vulcan is here!
@@ -92,8 +96,7 @@ class Vulcan extends Discord.Client {
             throw new Error(`Invalid discord token format.`);
         }
 
-        return this.login(token).then(
-            () => logger.log(`Sucessfully logged in to discord servers with token: ${token}`));
+        return this.login(token);
     }
 
     /**

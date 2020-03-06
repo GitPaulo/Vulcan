@@ -62,9 +62,6 @@ class MusicManager extends EventEmitter {
 
         // Self events
         this.on('timeoutLeave', this._onTimeoutLeave);
-
-        // Log
-        logger.log(`[Managers] => Instance of Music Manager created for '${this.guild.name}'`);
     }
 
     /************************

@@ -1,7 +1,6 @@
 const fs      = xrequire('fs');
 const path    = xrequire('path');
 const https   = xrequire('https');
-const sstream = require('stream-stream');
 const logger  = xrequire('./modules/logger').getInstance();
 
 // ? Load key from file
@@ -144,24 +143,7 @@ module.exports = (vulcan, keys) => {
 
         // ? GET requests return the client page
         if (request.method === 'GET') {
-            const clFolderPath = path.join(__dirname, 'client');
-            const clFiles      = fs.readdirSync(clFolderPath);
-
-            // Oh no no
-            clFiles.reverse();
-
-            // Stream-Stream
-            let multiStream = sstream();
-
-            clFiles.forEach((file, _index) => {
-                let filePath = path.join(clFolderPath, file);
-
-                // Write to multi stream
-                multiStream.write(fs.createReadStream(filePath));
-            });
-
-            multiStream.end();
-            multiStream.pipe(response);
+            return end(`GET requests not supported!`);
         }
     });
 
