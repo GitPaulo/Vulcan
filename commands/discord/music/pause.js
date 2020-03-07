@@ -31,7 +31,7 @@ pause.execute = async (message) => {
             fields: [
                 {
                     name : 'Paused Song',
-                    value: Discord.Util.escapeMarkdown(musicManager.loadedSong.name)
+                    value: Discord.Util.escapeMarkdown(musicManager.currentTask.song.name)
                 }
             ]
         }

@@ -19,7 +19,7 @@ authorise.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            description: 'Guild authorisation request has been sent to the bot owners.\n'
+            description: 'A request has been sent to the bot owners.\n'
                         + 'Please await review.\n\n'
                         + 'Approval **may** take a long time!'
         }

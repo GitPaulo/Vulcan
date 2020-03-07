@@ -5,9 +5,6 @@ const messageEmbeds = xrequire('./modules/messageEmbeds');
 list.execute = async (message) => {
     const musicManager = message.guild.musicManager;
 
-    if (musicManager.queueEmpty) {
-        return message.client.emit('channelInformation', message.channel, 'Music player queue is empty!');
-    }
 
     let queueString = musicManager.queueString();
 
@@ -15,13 +12,17 @@ list.execute = async (message) => {
         queueString = await hastebin.post(queueString);
     }
 
+    if (!queueString || queueString.length <= 0) {
+        queueString = 'Queue is empty!';
+    }
+
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            title : ':musical_note: | :notepad_spiral:  - Queue List',
+            title : ':musical_note: | :notepad_spiral:  -  List',
             fields: [
                 {
-                    name : 'Queue (as list)',
+                    name : 'Song Queue',
                     value: queueString
                 }
             ]

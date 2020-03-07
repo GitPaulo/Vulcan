@@ -127,7 +127,7 @@ messageEmbeds.warning = (
 messageEmbeds.info = (
     {
         title       = `Information`,
-        description = 'Vulcan has something to say?',
+        description = ``,
         color       = 0x89CFF0, // Blue
         thumbnail   = {
             url: `attachment://info.png`
@@ -161,7 +161,7 @@ messageEmbeds.info = (
 messageEmbeds.PSA = (
     {
         title       = `Public Service Announcement (PSA)`,
-        description = 'A PSA has been attempted.',
+        description = ``,
         color       = 0xFF7063, // Vulcan Red
         thumbnail   = {
             url: `attachment://psa.png`
@@ -195,7 +195,7 @@ messageEmbeds.PSA = (
 messageEmbeds.musicManager = (
     {
         title       = `Music Manager`,
-        description = `Music Manager wishes to notify you about something?`,
+        description = ``,
         color       = 0xFFC07A,
         thumbnail   = {
             url: `attachment://musicManager.gif`

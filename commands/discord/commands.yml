@@ -246,7 +246,7 @@ forceplay:
   - '<prefix><id> <youtubeurl>'
   throttling: 1000
   safe: false
-  disabled: false
+  disabled: true
   userPermissions: []
   vulcanPermissions: 
     - 'CONNECT'
@@ -330,7 +330,7 @@ reproduce:
   - '<prefix><id> <youtubeurl>'
   throttling: 1000
   safe: false
-  disabled: false
+  disabled: true
   userPermissions: []
   vulcanPermissions: 
     - 'CONNECT'

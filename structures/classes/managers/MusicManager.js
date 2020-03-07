@@ -676,9 +676,9 @@ class MusicManager extends EventEmitter {
         const escmd      = Discord.Util.escapeMarkdown;
         let   buildCache = [];
 
-        this.queue.forEach((song) => {
+        this.queue.forEach((task) => {
             buildCache.push(
-                `**[${buildCache.length + 1}]**: ${escmd(song.name || '(Loading...)')} => ${escmd(String(song.url))}\n`
+                `**[${buildCache.length + 1}]**: ${escmd(task.song.name || '(Loading...)')} => ${escmd(String(task.song.url))}\n`
             );
         });
 

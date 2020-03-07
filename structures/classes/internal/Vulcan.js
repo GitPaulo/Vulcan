@@ -160,7 +160,7 @@ class Vulcan extends Discord.Client {
         this._update(['authorised']);
 
         // Log
-        logger.log(`Authorised guild with id: ${guild.d}.`);
+        logger.log(`Authorised guild with id: ${guild.id}.`);
 
         return guild;
     }
