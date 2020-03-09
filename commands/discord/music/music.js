@@ -34,8 +34,8 @@ music.execute = async (message) => {
     if (hasRequest) {
         wrap.embed.fields = [
             {
-                name : 'Request (attached)',
-                value: `\`${request}\``
+                name : 'Request',
+                value: `\`\`\`${request}\`\`\``
             }
         ];
     }

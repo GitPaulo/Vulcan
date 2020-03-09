@@ -22,7 +22,13 @@ vulcan.on('ready', () => {
             }
 
             vc.join().then((connection) => {
-                ytdl('http://youtu.be/PynIGY0b6HM').then((r) => {
+                ytdl(
+                    'http://youtu.be/PynIGY0b6HM',
+                    {
+                        filter       : () => ['251'],
+                        highWaterMark: 1 << 20
+                    }
+                ).then((r) => {
                     connection.play(r, { type: 'opus' });
                     connection.dispatcher.on('debug', logger.warn);
                     connection.dispatcher.on('error', logger.error);

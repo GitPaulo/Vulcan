@@ -161,9 +161,13 @@ connect4:
 music:
   aliases:
   - 'join'
+  - 'musicjoin'
   - 'voicejoin'
+  - 'musicvoicejoin'
   - 'joinvoice'
+  - 'musicjoinvoice'
   - 'voice'
+  - 'musicvoice'
   description: 'Joins voice channel and prepares bot for music. Passing a second argument to this command will play music from the run.'
   group: 'default'
   examples:
@@ -175,7 +179,7 @@ music:
   vulcanPermissions: []
   embed:
     color: 0xFFBFC8
-    title: 'Music: Join Voice'
+    title: 'Music: Join & Play'
     image: './assets/media/embeds/commands/discord/music.gif'
 
 #
@@ -261,10 +265,10 @@ forceplay:
 #
 list:
   aliases:
-  - 'queue'
+  - 'songlist'
   - 'musiclist'
-  - 'musicqueue'
-  description: 'Displays the music player queue as a list.'
+  - 'musicsonglist'
+  description: 'Displays the music player song list.'
   group: 'default'
   examples:
   - <prefix><id>'
@@ -276,14 +280,14 @@ list:
     - 'EMBED_LINKS'
   embed:
     color: 0xFFBFC8
-    title: 'Music: List (Queue)'
+    title: 'Music: Song List'
     image: './assets/media/embeds/commands/discord/music.gif'
 
 #
 pause:
   aliases:
   - 'musicpause'
-  description: 'Pauses the currently playing track.'
+  description: 'Pauses the track currently playing.'
   group: 'default'
   examples:
   - '<prefix><id>'
@@ -301,8 +305,11 @@ pause:
 #
 enqueue:
   aliases:
+  - 'queue'
+  - 'musicqueue'
+  - 'play'
   - 'musicplay'
-  description: 'Enqueues the audio of youtube videos or playlists.'
+  description: 'Enqueues a music player request.'
   group: 'default'
   examples:
   - '<prefix><id> <youtubeurl>'

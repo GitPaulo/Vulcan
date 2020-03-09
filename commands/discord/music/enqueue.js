@@ -10,7 +10,7 @@ enqueue.execute = async (message) => {
         return message.client.emit(
             'commandMisused',
             message.channel,
-            'Bot mus be in a voice channel.\n'
+            'Bot must be in a voice channel.\n'
             + 'Use the `music` command.'
         );
     }
@@ -19,7 +19,13 @@ enqueue.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            description: `Processing music request: \`\`\`\n${request}\`\`\``
+            description: `A request has been queued.`,
+            fields     : [
+                {
+                    name : `Request`,
+                    value: `\`\`\`${request}\`\`\``
+                }
+            ]
         }
     ));
 

@@ -2,6 +2,7 @@
  * ? Manager File: Music
  * Represents a layer of control between the music commands and the music stream.
  * TODO: Abstract for more than just 'youtube' links.
+ * TODO: Fix errors with autoplay and songs being processed in between.
  */
 
 /* eslint-disable class-methods-use-this */
@@ -19,20 +20,20 @@ const logger        = xrequire('./modules/logger').getInstance();
 ytdl.getInfoAsync = promisify(ytdl.getBasicInfo);
 
 /**
- * * Every guild has a copy of this object.
+ * ! Every guild has a copy of this object.
  *
- * ! Limitations
+ * ? Limitations
  * Because of the reliance of youtube as the only source of music streaming
  * there are a few limitations:
- *  * Regionally restricted (requires a proxy)
- *  * Private
- *  * Rentals
+ *   - Regionally restricted (requires a proxy)
+ *   - Private
+ *   - Rentals
  *
  * ? Music can be queued via the .request() which parses a request
  * Thus far a request resolvable can be:
- *      - URL (yt)
- *      - ID (yt)
- *      - Search query (yt)
+ *   - URL (yt)
+ *   - ID (yt)
+ *   - Search query (yt)
  */
 
 class MusicManager extends EventEmitter {
@@ -62,6 +63,7 @@ class MusicManager extends EventEmitter {
 
         // Self events
         this.on('timeoutLeave', this._onTimeoutLeave);
+        this.on('taskRepeat',   this._onTaskRepeat);
     }
 
     /************************
@@ -105,12 +107,26 @@ class MusicManager extends EventEmitter {
 
         await source.send(messageEmbeds.musicManager(
             {
-                title      : `Inactivity Prevention`,
-                description: `Voice inactivity detected.\nLeft voice to save resources.`,
+                title      : `Inactivity Leave`,
+                description: `Voice **inactivity** detected.\nLeft voice to save resources.`,
                 fields     : [
-                    { name: 'Timeout', value: `${f(this.afkTimeout)}`      || df, inline: true },
-                    { name: 'Channel', value: this.connection.channel.name || df, inline: true }
+                    { name: 'Timeout', value: `${f(this.afkTimeout)}`               || df, inline: true },
+                    { name: 'Channel', value: `\`${this.connection.channel.name}\`` || df, inline: true }
                 ]
+            }
+        ));
+    }
+
+    async _onTaskRepeat () {
+        // May happen if always idle
+        const source = this.currentTask
+            ? this.currentTask.source
+            : this.guild.botChannel;
+
+        await source.send(messageEmbeds.musicManager(
+            {
+                title      : `Task Repeat`,
+                description: `Task repeat is **enabled**.\nRepeating previously queued task.`
             }
         ));
     }
@@ -151,9 +167,9 @@ class MusicManager extends EventEmitter {
         const line = '=======';
         const wrap = messageEmbeds.musicManager(
             {
-                title : `Now Playing :musical_note: :musical_note:`,
+                title : `:notes:  Now Playing`,
                 fields: [
-                    { name: 'Song',                        value: song.name || df,            inline: false },
+                    { name: 'Song',                        value: `\`${song.name}\`` || df,   inline: false },
                     { name: 'Requester',                   value: `<@${requester.id}>` || df, inline: true  },
                     { name: 'Author',                      value: song.author || df,          inline: true  },
                     { name: 'Duration',                    value: f(duration) || df,          inline: true  },
@@ -168,7 +184,7 @@ class MusicManager extends EventEmitter {
 
         // Hold message
         await source.send(wrap);
-        let timeMsg = await source.send(`:clock1: \`Elapsed Time: ${f(duration)}\``);
+        let timeMsg = await source.send(`:clock1: \`Time Remaning: ${f(duration)}\``);
 
         // * Move?
         const updateInterval = 5 * 1000;
@@ -178,13 +194,13 @@ class MusicManager extends EventEmitter {
             let timeLeft = endTime - Date.now();
 
             if (timeLeft <= 0) {
-                await timeMsg.edit(`:clock1: \`Elapsed Time: (Finished)\``);
+                await timeMsg.edit(`:clock12: \`[Finished Playing]\``);
                 clearInterval(timer);
 
                 return;
             }
 
-            await timeMsg.edit(`:clock1: \`Elapsed Time: ${f(timeLeft)}\``);
+            await timeMsg.edit(`:clock1: \`Time Remaning: ${f(timeLeft)}\``);
         }, updateInterval);
     }
 
@@ -194,13 +210,23 @@ class MusicManager extends EventEmitter {
             this.dispatcher = null;
         }
 
-        // ? Repeat
-        if (this.repeat) {
-            this._log(`Repeating song.`);
+        // ? Repeat Task
+        // (TASK REPETITION !== SONG REPETITION)
+        if (this.repeat
+            && this.currentTask.complete) {
+            // Reset task
+            this.currentTask.reset();
+            this.currentTask.next();
 
-            // Queue back in & dequeue to play
+            // Manually Requeue task (avoid refetching data)
             this.queue.unshift(this.currentTask);
-            this._dequeue();
+
+            // Emit event
+            this.emit('taskRepeat', this.currentTask);
+
+            // Play task
+            await this._play(this.currentTask);
+            this._log(`Repeating task.`);
 
             return;
         }
@@ -219,16 +245,20 @@ class MusicManager extends EventEmitter {
             return;
         }
 
-        // ? Shuffle Feature
+        // ? Shuffle Tasks
         if (this.shuffle) {
             this.queue.shuffle();
-            this._log(`Shuffled queue!`);
+            this._log(`Shuffled task queue.`);
         }
 
-        // ? Next Song Decision
+        // ? Autoplay
         if (this.autoplay) {
             this._log(`Autoplay: Dequeuing next task.`);
-            this._dequeue();
+            const task = this._dequeue();
+
+            // Play next
+            this._log(`Autoplay: Playing dequeued task.`);
+            await this._play(task);
         } else {
             this._log(`Autoplay is off. Will not start next song.`);
         }
@@ -357,10 +387,11 @@ class MusicManager extends EventEmitter {
 
     /**
      * Dequeues a task.
-     * ! Creates stream and plays song through connection.
-     * Updates Music Manager state.
+     * Tasks may be composed of many songs.
+     * * If many songs, shifts internal task song queue.
+     * @returns {MusicManager.Task} The task that was dequeued.
      */
-    async _dequeue () {
+    _dequeue () {
         if (this.free) {
             throw new Error('Queue is empty!');
         }
@@ -369,11 +400,28 @@ class MusicManager extends EventEmitter {
         const task = this.queue[0];
 
         // Pick song from task
-        task.ready();
+        task.next();
 
         // Dequeue task, if no more songs
-        if (task.songs.length <= 0) {
+        if (task.complete) {
             this.queue.shift();
+            this._log('Task marked as complete and shifted');
+        }
+
+        // Log
+        this._log('Dequeued a task.');
+
+        return task;
+    }
+
+    /**
+     * Plays a given task.
+     * Establishes a connection and stream.
+     * @param {MusicManager.Taskl} task The task to play.
+     */
+    async _play (task) {
+        if (!task || !task.song) {
+            throw new Error(`Music player tried to played a corrupted or invalid task.`);
         }
 
         // Create stream
@@ -381,8 +429,8 @@ class MusicManager extends EventEmitter {
             task.song.url,
             // ? ytdl options (ytdlcd is optimised for discord but uses ytdl options)
             {
-                filter : 'audioonly',
-                quality: 'highestaudio'
+                filter       : (format) => ['251'],
+                highWaterMark: 1 << 20
             }
         );
 
@@ -401,9 +449,10 @@ class MusicManager extends EventEmitter {
                 }
             );
         } catch (err) {
-            this.destroy();
+            this.destroy(),
+            logger.warn(err);
 
-            return logger.warn(err);
+            return;
         }
 
         // ? Setup events
@@ -427,7 +476,7 @@ class MusicManager extends EventEmitter {
         this.history.push(task);
 
         // Log
-        this._log(`Dequeued a task.`);
+        this._log(`Playing a task.`);
     }
 
     /********************
@@ -540,7 +589,7 @@ class MusicManager extends EventEmitter {
         source = this.guild.channels.resolve(source);
 
         if (!source) {
-            throw new Error(`Could not resolve channel`);
+            throw new Error(`Could not resolve channel.`);
         }
 
         requester = this.guild.members.resolve(requester);
@@ -552,7 +601,7 @@ class MusicManager extends EventEmitter {
         // Notify of request resolving
         const m = await source.send(`:gear: \`Resolving Request...\``);
 
-        // Resolve
+        // Resolve request
         request = await this.resolveRequest(request);
 
         // There may be no resolve!
@@ -580,7 +629,11 @@ class MusicManager extends EventEmitter {
         if (this.idle) {
             this._log('Music Player idle, dequeuing task from request.');
 
-            await this._dequeue();
+            // Dequeue task
+            const task = this._dequeue();
+
+            // Play dequeued task
+            await this._play(task);
         }
 
         // Log
@@ -676,10 +729,13 @@ class MusicManager extends EventEmitter {
         const escmd      = Discord.Util.escapeMarkdown;
         let   buildCache = [];
 
+        // Loop through all task lists
         this.queue.forEach((task) => {
-            buildCache.push(
-                `**[${buildCache.length + 1}]**: ${escmd(task.song.name || '(Loading...)')} => ${escmd(String(task.song.url))}\n`
-            );
+            task.songs.forEach((song) => {
+                buildCache.push(
+                    `**[${buildCache.length + 1}]**: ${escmd(song.name || '(Loading...)')}\n${escmd(String(song.url))}\n`
+                );
+            });
         });
 
         return buildCache.join('\n');
@@ -712,7 +768,11 @@ MusicManager.Task = class {
         this.manager   = manager;
         this.client    = manager.client;
         this.songs     = [];
-        this.song      = null;
+        this._counter  = -1;
+    }
+
+    _log (str, type = 'log') {
+        this.manager._log(`[Task] => ${str}`, type);
     }
 
     async load () {
@@ -760,8 +820,22 @@ MusicManager.Task = class {
         return this.songs;
     }
 
-    ready () {
-        this.song = this.songs.shift();
+    get complete () {
+        return this._counter >= this.songs.length - 1;
+    }
+
+    get song () {
+        return this.songs[this._counter];
+    }
+
+    reset () {
+        this._counter = -1;
+        this._log(`Task reset called`);
+    }
+
+    next () {
+        this._counter++;
+        this._log(`Next task called.`);
     }
 };
 

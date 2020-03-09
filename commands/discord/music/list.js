@@ -19,10 +19,10 @@ list.execute = async (message) => {
     await message.channel.send(messageEmbeds.reply(
         {
             message,
-            title : ':musical_note: | :notepad_spiral:  -  List',
+            title : ':musical_note: | :notepad_spiral:  -  Song List',
             fields: [
                 {
-                    name : 'Song Queue',
+                    name : 'Ordering',
                     value: queueString
                 }
             ]

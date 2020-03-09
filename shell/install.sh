@@ -34,6 +34,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     echo "Refereshing and updating packages..."
     sudo apt update
     sudo apt upgrade
+    sudo apt install gcc g++ make build-essential
     echo "Installing python 2.7..."
     sudo apt install python2.7 python-pip
 elif [[ "$OSTYPE" == "msys" ]]; then
