@@ -169,11 +169,11 @@ class MusicManager extends EventEmitter {
             {
                 title : `:notes:  Now Playing`,
                 fields: [
-                    { name: 'Song',                        value: `\`${song.name}\`` || df,   inline: false },
-                    { name: 'Requester',                   value: `<@${requester.id}>` || df, inline: true  },
-                    { name: 'Author',                      value: song.author || df,          inline: true  },
-                    { name: 'Duration',                    value: f(duration) || df,          inline: true  },
-                    { name: `${line} [ Preview ] ${line}`, value: song.url || df,             inline: false }
+                    { name: 'Song',                        value: `\`${song.name}\`` || df,         inline: false },
+                    { name: 'Requester',                   value: `<@${requester.id}>` || df,       inline: true  },
+                    { name: 'Author',                      value: song.author || df,                inline: true  },
+                    { name: 'Duration',                    value: f(duration) || df,                inline: true  },
+                    { name: `${line} [ Preview ] ${line}`, value: this._shortenURL(song.url) || df, inline: false }
                 ],
                 image: {
                     // Smalles thumbnail
@@ -184,7 +184,7 @@ class MusicManager extends EventEmitter {
 
         // Hold message
         await source.send(wrap);
-        let timeMsg = await source.send(`:clock1: \`Time Remaning: ${f(duration)}\``);
+        let timeMsg = await source.send(`:clock1: \`Time Remaining: ${f(duration)}\``);
 
         // * Move?
         const updateInterval = 5 * 1000;
@@ -193,7 +193,7 @@ class MusicManager extends EventEmitter {
         const timer = setInterval(async () => {
             let timeLeft = endTime - Date.now();
 
-            if (timeLeft <= 0) {
+            if (timeLeft <= 0 || (this.currentTask && this.currentTask.song !== song)) {
                 await timeMsg.edit(`:clock12: \`[Finished Playing]\``);
                 clearInterval(timer);
 
@@ -306,17 +306,46 @@ class MusicManager extends EventEmitter {
         return this.checks[this.checks.length - 1];
     }
 
+    // TODO: Improve this LMAO
     _URLtoID (url) {
-        const match = url.match(
-            /(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-        );
+        url = String(url);
 
-        return match && match[1];
+        let result = null;
+
+        // Cheat
+        this.uiReg1 = this.uiReg1
+            || new RegExp(
+                '(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})'
+            );
+
+        const attempt1 = url.match(this.uiReg1);
+
+        result = attempt1 && attempt1[1];
+
+        if (result) {
+            return result;
+        }
+
+        // Cheat
+        this.uiReg2 = this.uiReg2
+            || new RegExp(
+                '^(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?.*?(?:v|list)=(.*?)(?:&|$)|^(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?(?:(?!=).)*\/(.*)$'
+            );
+
+        const attempt2 = url.match(this.uiReg2);
+
+        result = attempt2 && attempt2[1];
+
+        if (!result) {
+            throw new Error(`Could not find youtube id from url: ${url}`);
+        }
+
+        return result;
     }
 
     _isPlaylist (url) {
         // * Improve regex?
-        let regExp = /^.*(youtu.be\/|list=)([^#\&\?]*).*/;
+        let regExp = /^.*(list=)([^#\&\?]*).*/;
         let match  = url.match(regExp);
 
         if (match && match[2]) {
@@ -443,7 +472,7 @@ class MusicManager extends EventEmitter {
                 stream,
                 {
                     bitrate: 'auto', // Use voice channel's bit rate
-                    passes : 4,      // Proportional to bandwidth
+                    passes : 3,      // Proportional to bandwidth
                     volume : false,  // Disallow volume control
                     type   : 'opus'
                 }
@@ -537,37 +566,33 @@ class MusicManager extends EventEmitter {
      * @returns {Request} A Music Manager Request
      */
     async resolveRequest (request) {
-        // ? Right now all requests come as strings.
         request = String(request);
+
+        // In case of id
+        if (ytdl.validateID(request)) {
+            request = `http://www.youtube.com/watch?v=${request}`;
+        }
 
         // Request type
         let url  = null;
         let type = null;
 
-        // Resolve url
+        // ? Resolve request (URL or Playlist or Search & Recurse)
         if (this._isPlaylist(request)) {
-            url = request;
+            url  = request;
+            type = MusicManager.Request.YOUTUBE_PLAYLIST;
         } else if (ytdl.validateURL(request)) {
-            url = request;
-        } else if (ytdl.validateID(request)) {
-            url = `http://www.youtube.com/watch?v=${request}`;
-        } else { // ? Search for a video with those keywords.
+            url  = request;
+            type = MusicManager.Request.YOUTUBE_VIDEO;
+        } else {
             const ytResults = (await ytsr(request)).items;
 
-            if (ytResults.length <= 0) {
+            if (!ytResults || ytResults.length <= 0) {
                 return null;
             }
 
-            url = ytResults[0].link;
-        }
-
-        // Resolve type
-        if (this._isPlaylist(url)) {
-            type = MusicManager.Request.YOUTUBE_PLAYLIST;
-        } else {
-            type = MusicManager.Request.YOUTUBE_VIDEO;
-            // * Only single video supported, check _isPlaylist!
-            url = this._shortenURL(url);
+            // Resolve search
+            return this.resolveRequest(ytResults[0].link);
         }
 
         return new MusicManager.Request(
@@ -606,9 +631,10 @@ class MusicManager extends EventEmitter {
 
         // There may be no resolve!
         if (!request) {
-            await m.edit(`:gear: \`Found no results for request! :(\``);
+            await m.edit(`:gear: \`Found no results for that request! :(\``);
+            this._log(`Could not resolve request: ${request}`, 'warn');
 
-            return this._log('Could not resolve request.', 'warn');
+            return;
         }
 
         // Notify of enqueue
@@ -730,10 +756,10 @@ class MusicManager extends EventEmitter {
         let   buildCache = [];
 
         // Loop through all task lists
-        this.queue.forEach((task) => {
-            task.songs.forEach((song) => {
+        this.queue.forEach((task, i) => {
+            task.songs.forEach((song, j) => {
                 buildCache.push(
-                    `**[${buildCache.length + 1}]**: ${escmd(song.name || '(Loading...)')}\n${escmd(String(song.url))}\n`
+                    `**[${i}][${j}]**: ${escmd(song.name || '(Loading...)')}\n${escmd(String(song.url))}\n`
                 );
             });
         });
@@ -781,20 +807,27 @@ MusicManager.Task = class {
         let i    = 1;
 
         if (this.request.type === MusicManager.Request.YOUTUBE_PLAYLIST) {
+            this._log(`Preparing to load playlist.`);
             urls = await this.manager._loadPlaylistToArray(urls[0]);
-
-            // Notify of playlist
-            rmsg = await this.source.send(`:musical_note: :notepad_spiral: \`Playlist Detected!\``);
+            rmsg = await this.source.send(`:notepad_spiral: \`Playlist Detected!\``);
         }
 
-        const etime = urls.length * 550;
+        const proms = [];
+        const uStep = 5;
+        const etime = Math.formatMilliseconds(urls.length * 550);
 
         for (let url of urls) {
             if (!url) {
                 continue;
             }
 
-            const info = await ytdl.getInfoAsync(url);
+            const info   = await ytdl.getInfoAsync(url);
+            const status = info.player_response.playabilityStatus.status;
+
+            if (status !== 'OK') {
+                this._log(`Skipped unplayable song. STATUS=${status}`);
+                continue;
+            }
 
             // * Weird properties :c
             this.songs.push({
@@ -807,14 +840,28 @@ MusicManager.Task = class {
             });
 
             // Notify playlist loading
-            if (rmsg && (i === urls.length) || (i % 5 === 0)) {
-                rmsg.edit(
-                    `:musical_note: :notepad_spiral: \`Playlist Loading | Song ${i}/${urls.length} | Expected Time: ${Math.formatMilliseconds(etime)}\``
-                );
+            if (rmsg && (i === urls.length) || (i % uStep === 0)) {
+                proms.push(rmsg.edit(
+                    `:notepad_spiral: \`Loading Playlist | Song ${i}/${urls.length} | Expected Time: ${etime}\``
+                ));
             }
 
             i++;
-            this.manager._log(`Loaded a song: ${url}`);
+            this._log(`Loaded a song: ${url}`);
+        }
+
+        await Promise.all(proms);
+
+        // Final update
+        if (rmsg) {
+            await rmsg.edit(
+                `:notepad_spiral: \`Playlist Loaded | #Songs: ${this.songs.length}\``
+            );
+        }
+
+        // Extra status
+        if (this.songs.length < urls.length) {
+            this.source.send(`:warning: \`Some songs were unreachable!\``);
         }
 
         return this.songs;

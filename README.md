@@ -6,7 +6,6 @@
     </p>
     <p> 
     <a href="https://travis-ci.org/GitPaulo/Vulcan" title="Build Status"><img src="https://travis-ci.org/GitPaulo/Vulcan.svg?branch=master"></a>
-    <a href="https://david-dm.org/GitPaulo/Vulcan" title="Dependencies"><img src="https://david-dm.org/GitPaulo/Vulcan/status.svg"/></a>
     <a href="https://github.com/GitPaulo/eslint-config-mudamuda" title="Code Style"><img src="https://img.shields.io/badge/codestyle-mudamuda-success.svg"></a>
     <a href="https://www.codacy.com/app/GitPaulo/Vulcan?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GitPaulo/Vulcan&amp;utm_campaign=Badge_Grade" title="Code Quality"><img src="https://api.codacy.com/project/badge/Grade/f7e68b17b25b4f43b2bfd74756e488fb"/></a>
     </p>

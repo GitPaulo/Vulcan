@@ -475,7 +475,7 @@ skip:
   group: 'default'
   examples:
   - '<prefix><id> <boolean>'
-  throttling: 1000
+  throttling: 2000
   safe: false
   disabled: false
   userPermissions: []

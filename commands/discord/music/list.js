@@ -22,8 +22,19 @@ list.execute = async (message) => {
             title : ':musical_note: | :notepad_spiral:  -  Song List',
             fields: [
                 {
-                    name : 'Ordering',
-                    value: queueString
+                    name  : 'Playing',
+                    value : `\`${musicManager.currentTask && musicManager.currentTask.song.name || '(Not Playing)'}\``,
+                    inline: true
+                },
+                {
+                    name  : '#Tasks',
+                    value : musicManager.queue.length,
+                    inline: true
+                },
+                {
+                    name  : 'Ordering',
+                    value : queueString,
+                    inline: false
                 }
             ]
         }

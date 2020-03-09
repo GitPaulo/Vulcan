@@ -123,7 +123,13 @@ module.exports = async (message) => {
             return client.emit(
                 'commandBlocked',
                 message,
-                `Potential spamming has been detected.`
+                `\`${message.command.id}\` spam has been detected.`,
+                [
+                    {
+                        name : 'Buffer',
+                        value: `\`${message.command.throttling}ms\` `
+                    }
+                ]
             );
         }
 
