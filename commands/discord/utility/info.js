@@ -11,7 +11,7 @@ info.execute = async (message) => {
     const { configuration }  = settings;
 
     // Turn into actual names, if valid
-    let atOwners = configuration.ownersID.map((ownerID) => {
+    let atOwners = configuration.hosts.map((ownerID) => {
         let owner = message.client.users.cache.get(ownerID);
 
         if (owner) {

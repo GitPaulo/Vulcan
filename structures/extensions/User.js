@@ -2,11 +2,11 @@ const { configuration } = xrequire('./prerequisites/settings');
 
 module.exports = class _User extends xrequire('discord.js').User {
     get developer () {
-        return configuration.devsID.contains(this.id);
+        return configuration.developers.contains(this.id);
     }
 
     get owner () {
-        return configuration.ownersID.contains(this.id);
+        return configuration.hosts.contains(this.id);
     }
 
     get blacklisted () {

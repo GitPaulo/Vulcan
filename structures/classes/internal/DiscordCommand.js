@@ -128,16 +128,21 @@ class DiscordCommand extends Command {
             throw new Error(`Could not resolve author.`);
         }
 
-        const commandGroupLevel = this.client.hierarchy.groups.get(this.group);
-        const authorGroup       = this.client.fetchUsergroup(author);
+        const commandLevel = this.client.hierarchy.groups.get(this.group);
 
         // Integer 0 is falsey
-        if (typeof commandGroupLevel === 'undefined') {
+        if (typeof commandLevel === 'undefined') {
             throw new Error(`Command '${this.id}' has invalid group: ${this.group}`);
         }
 
+        const authorGroup = this.client.fetchUsergroup(author);
+
+        if (typeof authorGroup.level === 'undefined') {
+            throw new Error(`Author usergroup has no level?`);
+        }
+
         // Authenticate: if author level >= group level
-        return commandGroupLevel <= authorGroup.level;
+        return authorGroup.level >= commandLevel;
     }
 
     /**

@@ -1,14 +1,14 @@
 {
     "prefixes": [
-        "?v",
-        "$v"
+        "v!",
+        "v$"
     ],
     "extraGroups": [
         ["admin", 2],
         ["mod", 1]
     ],
-    "ownersID": [],
-    "devsID": [
+    "hosts": [],
+    "developers": [
         "166176374036365312",
         "207606117159796737"
     ],

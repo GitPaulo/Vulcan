@@ -93,7 +93,7 @@ module.exports = async (guild) => {
     }
 
     // Resolve owners by config id. Fetch bot channel, else dm.
-    const owners = configuration.ownersID.map((id) => vulcan.users.resolve(id));
+    const owners = configuration.hosts.map((id) => vulcan.users.resolve(id));
 
     // Temp
     let title;

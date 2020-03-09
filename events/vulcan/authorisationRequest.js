@@ -25,7 +25,7 @@ module.exports = async (
 
     // Resolve owners
     const vulcan = guild.client;
-    const owners = configuration.ownersID
+    const owners = configuration.hosts
         .map((id) => vulcan.users.resolve(id) || id);
 
     // If no owners, grant auth!

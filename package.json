@@ -73,7 +73,7 @@
     "github-api": "^3.3.0",
     "got": "^9.6.0",
     "js-yaml": "^3.13.1",
-    "mongoose": "^5.9.1",
+    "mongoose": "^5.9.3",
     "node-fetch": "^2.6.0",
     "node-opus": "^0.3.3",
     "oauth": "^0.9.15",
@@ -89,7 +89,7 @@
     "eslint-plugin-security": "^1.4.0",
     "nodemon": "^1.19.4",
     "pm2": "^3.5.2",
-    "snyk": "^1.296.1"
+    "snyk": "^1.298.1"
   },
   "snyk": true
 }
