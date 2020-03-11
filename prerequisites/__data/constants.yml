@@ -12,3 +12,17 @@ client:
   invite: https://discordapp.com/oauth2/authorize?client_id=604662534410207233&scope=bot&permissions=1341652433
 api:
   rate: 500
+  maxUpload:
+    base: 8
+    nitro: 100
+  messageLimits:
+    content: 2000
+    embed:
+      title: 256
+      author: 256
+      description: 2048
+      fields:
+        title: 256
+        value: 1024
+        limit: 25
+      footer: 2048

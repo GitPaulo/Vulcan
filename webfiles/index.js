@@ -16,13 +16,17 @@ const extToMime = new Map([
     ['.jpg',  'image/jpeg'],
     ['.wav',  'audio/wav'],
     ['.mp3',  'audio/mpeg'],
+    ['.mp4',  'video/mp4'],
     ['.svg',  'image/svg+xml'],
     ['.pdf',  'application/pdf'],
     ['.doc',  'application/msword']
 ]);
 
-// ? This folder can be manipulated via HTTP requests
-const publicFolderPath = path.join(__dirname, 'public');
+// ! This folder can be manipulated via HTTP requests
+const rootFolderName    = 'webfiles';
+const publicFolderName  = 'public';
+const publicFolderPath  = path.join(global.basedir, rootFolderName, publicFolderName);
+const rpublicFolderPath = './' + rootFolderName + '/' + publicFolderName;
 
 // Create public folder (where files can be seen)
 if (!fs.existsSync(publicFolderPath)) {
@@ -57,7 +61,8 @@ module.exports = (vulcan) => {
             const isDir = sync.isDirectory();
 
             // Check for Authentication (public folder)
-            if (!pathname.startsWith(publicFolderPath)) {
+            console.log({pathname, rpublicFolderPath, publicFolderPath})
+            if (!pathname.startsWith(rpublicFolderPath)) {
                 // Cheeky!
                 response.statusCode = 403;
                 response.end(`[File Server] => Access denied to this part of the file system.`);
@@ -91,7 +96,9 @@ module.exports = (vulcan) => {
     });
 
     // It is useful
-    server.publicFolderPath = publicFolderPath;
+    server.rpublicFolderPath = rpublicFolderPath;
+    server.publicFolderPath  = publicFolderPath;
+    server.publicFolderName  = publicFolderName;
 
     return server;
 };

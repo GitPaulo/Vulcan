@@ -300,9 +300,14 @@ class Vulcan extends Discord.Client {
             throw new Error(`Could not resolve a user.`);
         }
 
-        const name  = this.hierarchy.rank.get(user.id) || this.defaultGroupName;
-        const level = this.hierarchy.groups.get(name);
+        // Resolve data
+        // ! Defaults are assigned here
+        const name  = this.hierarchy.rank.get(user.id)
+                        || this.hierarchy.defaultGroup[0];
+        const level = this.hierarchy.groups.get(name)
+                        || this.hierarchy.defaultGroup[1];
 
+        // User data
         return {
             name,
             level

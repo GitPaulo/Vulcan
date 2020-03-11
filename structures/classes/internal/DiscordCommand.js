@@ -27,24 +27,21 @@ class DiscordCommand extends Command {
             throw new TypeError(`Essential command 'embed' property is undefined for command '${commandDefinition.id}'!`);
         }
 
-        // ====== Discord Command Specific Properties
-        // = No defaults
+        //  ? Discord Command Specific Properties
+        // No defaults
         this.group = commandDefinition.group;
 
-        // = Defaults
+        // Defaults
         this.embed             = commandDefinition.embed || {};
         this.embed.color       = this.embed.color || 0x0;
         this.embed.title       = this.embed.title || `Command: ${this.id}`;
         this.userPermissions   = commandDefinition.userPermissions || [];
         this.vulcanPermissions = commandDefinition.vulcanPermissions || [];
+        this.embed.image       = `./assets/media/embeds/commands/discord/${commandDefinition.id}.gif`;
 
-        // Default embed Image
-        if (!this.embed.image || !fs.existsSync(this.embed.image)) {
-            const expectedDefaultPath = `./assets/media/embeds/commands/discord/${commandDefinition.id}.gif`;
-            const defaultPath         = `./assets/media/embeds/general/default.gif`;
-
-            // Try looking for it, if not found use default.
-            this.embed.image = fs.existsSync(expectedDefaultPath) ? expectedDefaultPath : defaultPath;
+        // Delete if not found
+        if (!fs.existsSync(this.embed.image)) {
+            this.embed.image = `./assets/media/icons/icon.png`;
         }
 
         // By default no command is disabled

@@ -1,12 +1,13 @@
 /**
  * ? Handler file
- * Handles the preprocessing of all messages before they are sent by vulcan.
- * ! Code in this file may heavily impact performance. Be effecient.
- * TODO: Could use A LOT of improvement.
+ * Handles the preprocessing of all messages before they are sent by client.
+ * ! APIMessage.create has internal error checks.
+ * ! Code in this file may heavily impact performance.
  */
 
 const fs       = xrequire('fs');
 const path     = xrequire('path');
+const yaml     = xrequire('js-yaml');
 const hastebin = xrequire('./modules/hastebin');
 const logger   = xrequire('./modules/logger').getInstance();
 
@@ -17,28 +18,17 @@ const {
     APIMessage
 }  = xrequire('discord.js');
 
-// File Constants
-const MaxFileSizeMB   = 8;
-const CharacterLimits = {
-    content: 2000,
-    embed  : {
-        title      : 256,
-        authorName : 256,
-        description: 2048,
-        fieldTitle : 256,
-        fieldValue : 1024,
-        fieldLimit : 25,
-        footer     : 2048
-    }
-};
+// Handler
+const handler = async (channel, wrap) => {
+    const { client } = channel;
+    const { api }    = client.constants;
 
-module.exports = async (channel, wrap) => {
-    // ? Already a message!
-    if (!(wrap instanceof APIMessage)) {
+    // Already a message!
+    if (wrap instanceof APIMessage) {
         return wrap;
     }
 
-    // ? We only apply these to these channels
+    // We only apply these to these channels
     if (!(channel instanceof DMChannel
         || channel instanceof TextChannel)) {
         return APIMessage.create(
@@ -47,7 +37,7 @@ module.exports = async (channel, wrap) => {
         );
     }
 
-    // ? Create wrap
+    // In case of string, still apply a wrap.
     if (typeof wrap === 'string') {
         wrap = {
             content: wrap,
@@ -56,21 +46,17 @@ module.exports = async (channel, wrap) => {
         };
     }
 
-    // Debug
-    // console.log('MF HANDLER =========\n');
-    // console.log(wrap);
-
-    // Shorten code
-    const vulcan = channel.client;
+    // Reasons for modification
+    const reasons = [];
+    const stamp   = `[${channel.guild.name}@${channel.name}]`;
 
     /**
-     * ? Attachements Check (Size)
-     * Go through all files and check for discord size limit.
+     * ? File Size Handling
+     * Go through all files and check for transgressions of the api size limit.
      */
-    let largeFiles = [];
+    const largeFiles = [];
 
     if (wrap.files) {
-        // Check for large files
         for (let i = 0; i < wrap.files.length; i++) {
             let localFilePath = wrap.files[i];
 
@@ -90,7 +76,7 @@ module.exports = async (channel, wrap) => {
             const stats    = fs.statSync(localFilePath);
             const fileSize = stats['size'] / 1000000;
 
-            if (fileSize > MaxFileSizeMB) {
+            if (fileSize > api.maxUpload.base) {
                 largeFiles.push(localFilePath);
                 wrap.files.splice(i, 1);
             }
@@ -99,47 +85,52 @@ module.exports = async (channel, wrap) => {
 
     /**
      * ? Message Content Check
-     * Check content only of message.
+     * Size checks for:
+     *  - (if) message content
+     *  - (if) message embed properties content
      */
-    let largeContent = ''; // * reminder that '' is falsey in JS
-    let reasons      = [];
+    const largeContent = [];
 
     // Check message content
-    if (wrap.content && (wrap.content.length > CharacterLimits.content)) {
-        largeContent += `\n========[Message Content]========\n`;
-        largeContent += wrap.content;
-        reasons.push(`Message content limit reached >${CharacterLimits.content}`);
+    if (wrap.content
+            && (wrap.content.length > api.messageLimits.content)
+    ) {
+        largeContent.push(`\n[Message Content]${stamp}\n`);
+        largeContent.push(wrap.content);
+        reasons.push(`Message content limit reached >${api.messageLimits.content}`);
     }
 
     // Check embed content
     if (wrap.embed) {
         const scount = reasons.length;
 
-        if (wrap.embed.title && (wrap.embed.title.length > CharacterLimits.embed.title)) {
-            reasons.push(`Embed limit reached for 'title' >${CharacterLimits.embed.title}`);
+        if (wrap.embed.title
+                && (wrap.embed.title.length > api.messageLimits.embed.title)) {
+            reasons.push(`Embed limit reached for 'title' >${api.messageLimits.embed.title}`);
         }
 
-        if (wrap.embed.author && (wrap.embed.author.name.length > CharacterLimits.embed.authorName)) {
-            reasons.push(`Embed limit reached for 'author' >${CharacterLimits.embed.authorName}`);
+        if (wrap.embed.author
+                && (wrap.embed.author.name.length > api.messageLimits.embed.author)) {
+            reasons.push(`Embed limit reached for 'author' >${api.messageLimits.embed.author}`);
         }
 
-        if (wrap.embed.description && (wrap.embed.description.length > CharacterLimits.embed.description)) {
-            reasons.push(`Embed limit reached for 'description >${CharacterLimits.embed.description}`);
+        if (wrap.embed.description
+                && (wrap.embed.description.length > api.messageLimits.embed.description)) {
+            reasons.push(`Embed limit reached for 'description >${api.messageLimits.embed.description}`);
         }
 
         if (wrap.embed.fields) {
-            if (wrap.embed.fields.length >= CharacterLimits.embed.fieldLimit) {
-                reasons.push(`Embed count limit reached >${CharacterLimits.embed.fieldLimit}`);
+            if (wrap.embed.fields.length >= api.messageLimits.embed.fieldLimit) {
+                reasons.push(`Embed count limit reached >${api.messageLimits.embed.fieldLimit}`);
             } else {
                 let counter = 0;
 
-                // Check field values & titles
                 wrap.embed.fields.forEach((field) => {
                     if (
-                        // Name check
-                        field.name && (field.name.length > CharacterLimits.embed.fieldTitle)
-                        // Value check
-                        || field.value && (field.value.length > CharacterLimits.embed.fieldValue)
+                        field.name
+                            && (field.name.length > api.messageLimits.embed.fields.title)
+                    ||  field.value
+                            && (field.value.length > api.messageLimits.embed.fields.value)
                     ) {
                         counter++;
                     }
@@ -151,26 +142,30 @@ module.exports = async (channel, wrap) => {
             }
         }
 
-        if (wrap.embed.footer && (wrap.embed.footer.text.length > CharacterLimits.embed.footer)) {
-            reasons.push(`Embed limit reached for 'description >${CharacterLimits.embed.description}`);
+        if (wrap.embed.footer
+            && (wrap.embed.footer.text.length > api.messageLimits.embed.footer)) {
+            reasons.push(`Embed limit reached for 'description >${api.messageLimits.embed.description}`);
         }
 
         if (reasons.length !== scount) {
-            largeContent += `\n========[Embed Content]========\n`;
-            largeContent += JSON.stringify(wrap.embed, null, 4);
+            largeContent.push(`\n[Embed Content]${stamp}\n`);
+            largeContent.push(yaml.safeDump(wrap.embed));
         }
     }
 
-    // WeirdChamp
-    if (!largeContent && largeFiles.length <= 0) {
-        // Create and send. API Message.
+    // ? Nothing to declare
+    if (largeContent.length + largeFiles.length <= 0) {
         return APIMessage.create(
             channel,
             wrap
         );
     }
 
-    // Embed time (but dont touch if embed already exists :))
+    /**
+     * ? Creating new message
+     * Received message was illegal!
+     * Time to generate a new legal message w/ embed :)
+     */
     wrap.embed = wrap.embed || {
         description: wrap.content,
         fields     : []
@@ -188,7 +183,7 @@ module.exports = async (channel, wrap) => {
         // ! Copy files? what if sensitive?
         largeFiles.forEach((largeFilePath) => {
             let fileName   = path.basename(largeFilePath);
-            let publicPath = path.join(vulcan.webFiles.publicFolderPath, fileName);
+            let publicPath = path.join(client.webFiles.publicFolderPath, fileName);
 
             fs.copyFileSync(largeFilePath, publicPath);
             logger.debug(`Copied file to public realm: ${largeFilePath} => ${publicPath}`);
@@ -197,19 +192,23 @@ module.exports = async (channel, wrap) => {
         });
 
         // Add IP and http
-        let resolveIp = (await vulcan.resolveIp()).v4;
+        let resolveIp = (await client.resolveIp()).v4;
 
         publicPaths.forEach((publicPath, i) => {
-            publicPaths[i] = `http://${resolveIp}:${vulcan.webFiles.port}/${publicPath}`;
+            publicPaths[i] = `http://${resolveIp}:${client.webFiles.port}`
+                + `${publicPath.replace(global.basedir, '')}`;
         });
 
-        // Finally output
+        // Outsource
         wrap.embed.fields.push(
             {
-                name : 'Large Files Found',
-                value: `Number of large files: ${largeFiles.length}\nOutsource: ${publicPaths}`
+                name : 'Outsource',
+                value: publicPaths
             }
         );
+
+        // Notifty
+        channel.send(`:warning: \`Large files detected!\``);
     }
 
 
@@ -219,30 +218,43 @@ module.exports = async (channel, wrap) => {
      *  *  Hastebin upload
      *  *  Discord file upload (fallback)
      */
-    if (largeContent) {
+    if (largeContent.length > 0) {
         logger.debug('Found large content in message!');
 
+        // Large Content String
+        const dataDir       = `./data/`;
+        const contentString = largeContent.join('\n');
+
+        // Wrap
         wrap.content           = null;
         wrap.embed.fields      = [];
-        wrap.embed.description = `Content **exceeded** discord limits!`;
+        wrap.embed.description = `*Content moved.*`;
 
         try {
             wrap.embed.fields.push({
-                name : 'Reupload',
-                value: await hastebin.post(largeContent)
+                name : 'Outsource',
+                value: await hastebin.post(contentString)
             });
         } catch (error) {
-            logger.warn('In this case, a few things could happen. 1- The file was really big. Exceed discord upload. 2- Hastebin was down. 3- Exploit/Bug.');
+            logger.warn(
+                `In this case, a few things could happen.`
+                + `\n\t1- The file was really big. Exceed discord upload.`
+                + `\n\t2- Hastebin was down.`
+                + `\n\t3- Exploit/Bug.`
+            );
 
-            const dataDir  = `./data/`;
-            const id       = fs.readdirSync(dataDir).length + 1;
-            const filePath = path.join(dataDir, `${channel.id}_${id}.txt`);
+            let id       = fs.readdirSync(dataDir).length + 1;
+            let filePath = path.join(dataDir, `${channel.id}_${id}.txt`);
 
-            fs.writeFileSync(filePath, largeContent);
+            fs.writeFileSync(filePath, contentString);
 
-            wrap.embed.description += `\nI also detected hastebin to be **down**? Or file was incompatible with hastebin!\nI am uploading content via Discord file system!`;
+            wrap.embed.description += `\nDetected hastebin to be **down**?`
+                                    + `\nUploaded content via Discord file system!`;
             wrap.files = [filePath];
         }
+
+        // Notify
+        channel.send(`:warning: \`Large content detected!\``);
     }
 
     // Create and send. API Message.
@@ -250,4 +262,20 @@ module.exports = async (channel, wrap) => {
         channel,
         wrap
     );
+};
+
+// ! Performance logging
+module.exports = async (...args) => {
+    const clock = Date.now();
+
+    logger.logTimeStart('FormatHandler@' + clock);
+
+    const msg = await handler(...args);
+
+    logger.logTimeEnd(
+        'FormatHandler@' + clock,
+        `Performance checks on '${__filename}'`
+    );
+
+    return msg;
 };

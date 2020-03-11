@@ -14,14 +14,19 @@ module.exports.load = () => {
     const file = fs.readFileSync(filePath);
     const rank = new Map(yaml.safeLoad(file));
 
+    // Users that have no group get this one!
+    const defaultGroup = ['default', 0];
+
+    // ! Hierarchy object
     return {
         rank,
         groups: new Map([
             ['root', Infinity], // ? Root is always top
             ...settings.configuration.extraGroups,
             ['host', 0], // ? Guild Owners
-            ['default', 0] // ? Non assigined
-        ])
+            ['default', 0]  // ? Non assigined
+        ]),
+        defaultGroup
     };
 };
 

@@ -1,21 +1,21 @@
 ---
-###############################################
-######  Discord Command Definition File  ######
-###############################################
+##################################################
+######  (Discord Commands) Descriptor File  ######
+##################################################
 
 ### [Command Structure]
-# ========== [REQUIRED FIELDS] ==========
+# [Required]
 # command_id:
 #   aliases     => (String Array) => The other unique strings that identify the command (excluding command_id).
 #   description => (String)       => Description of the command.
 #   examples    => (String Array) => Descriptions of example usage.
-# ========== [OPTIONAL FIELDS] ==========
+# [Optional]
 #   group             => (String Array) => The usergroup lowerbound that is allowed to call the command.
 #   throttling        => (Number)       => The number of milliseconds the command goes under cooldown.
 #   vulcanPermissions => (String Array) => The permissions required for the bot to execute the command.
 #   userPermissions   => (String Array) => The user permissions required for the user to execute the command.
 #   safe              => (Boolean)      => Whether unauthorised guilds can used this command. 
-#   disabled          => (Boolean)      =>  Whether this command is disabled.
+#   disabled          => (Boolean)      => Whether this command is disabled.
 #   embed => (Object) =>
 #     - color => (Number) => Color of the embed as hex number.
 #     - title => (String) => The title of the embed.
@@ -26,10 +26,9 @@
 # <id>: will be replaced by the command id.
 # <aliases>: will be replaced by a joined alias string.
 
-### [NOTES]
-#  Write example arguments in the form: <arg1:DataType>.
-#  Dont diverge from file or yaml format used.
-#  There are default REQUIRED bot premissions that may be omitted like: 
+### [Notes]
+# Write example arguments in the form: <arg1:DataType>.
+# Dont diverge from file or yaml format used.
 
 #
 evaluate: 

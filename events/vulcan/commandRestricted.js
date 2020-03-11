@@ -14,7 +14,7 @@ module.exports = (
         {
             embed: {
                 title      : `Restricted Access`,
-                description: `You cannot **access** this command.`,
+                description: `Access to the command was **denied**.`,
                 color      : 0xE5F2AA, // Red
                 thumbnail  : {
                     url: `attachment://commandRestricted.gif`

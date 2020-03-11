@@ -76,7 +76,7 @@ module.exports = async (message) => {
             return client.emit(
                 'commandRestricted',
                 message,
-                `You are **blacklisted** and therefore blocked from using Vulcan commands.`
+                `User **blacklisted** from using Vulcan commands.`
             );
         }
 
@@ -114,7 +114,7 @@ module.exports = async (message) => {
             return client.emit(
                 'commandRestricted',
                 message,
-                `Not authorised to run command \`${message.command.id}\`!`
+                `User not authorised to run command \`${message.command.id}\`!`
             );
         }
 
