@@ -43,13 +43,19 @@ Make sure you have updated versions of your host machine's OS services and follo
 2. Download and install [python (v2.x)](https://www.python.org/downloads/).
 3. Download and install [node & npm (stable)](https://nodejs.org/en/download/).
     
-    2.1. If on Linux machine we recommend using [NVM](https://stackabuse.com/using-nvm-to-install-node/).
+    2.1. We recommend using [NVM](https://stackabuse.com/using-nvm-to-install-node/).
 4. Clone repository using [git](https://git-scm.com/) OR Download and extract the [zipped repository code](https://github.com/GitPaulo/Vulcan.git).
 5. Open a [shell](https://git-scm.com/downloads) in the location of directory of the extraced zip.
 6. Run the following command: `npm ci && npm test`.
 7. Navigate to the new `'settings/'` folder and fill in the required configuration & credentials details.
 8. Afterwards, run the following command: `sudo npm run production`.
 9. If using the webhook server. Make sure port 443 is open. (or use a service such as [ngrok](https://ngrok.com/))
+
+### Easy installation
+
+For an easy installation use the [installation script](./shell/install.sh).
+
+To execute this script, please make sure you have [bash](https://www.gnu.org/software/bash/) installed.
 
 ## Supported Platforms
 
@@ -64,6 +70,13 @@ Because of the use of [node-opus](https://github.com/Rantanen/node-opus), the bo
 It is possible to create compatibility with other OSs but that requires node-opus installation tinkering.
 
 More information can be found in the [node-opus repository.](https://github.com/Rantanen/node-opus)
+
+### Tested Platforms
+
+This bot has been tested to work on:
+
+- Ubuntu 18.04.4 LTS (Bionic Beaver)
+- Windows 10 (x64)
 
 # FAQ
 
