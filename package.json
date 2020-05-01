@@ -43,7 +43,9 @@
     "debug:install": "npm install -g clinic",
     "debug:debugger": "node --nolazy --inspect-brk index.js",
     "debug:analyse": "clinic doctor -- node index.js",
-    "debug:profile": "clinic bubbleprof -- node index.js"
+    "debug:profile": "clinic bubbleprof -- node index.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -81,15 +83,15 @@
     "public-ip": "^4.0.0",
     "stream-stream": "^1.2.6",
     "ytdl-core-discord": "^1.1.0",
-    "ytsr": "^0.1.10"
+    "ytsr": "^0.1.10",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "eslint": "^6.7.2",
     "eslint-config-mudamuda": "^1.0.15",
     "eslint-plugin-security": "^1.4.0",
     "nodemon": "^1.19.4",
-    "pm2": "^3.5.2",
-    "snyk": "^1.298.1"
+    "pm2": "^3.5.2"
   },
   "snyk": true
 }
