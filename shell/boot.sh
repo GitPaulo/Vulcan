@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Greetings
 cat "./shell/ascii_logo.txt"

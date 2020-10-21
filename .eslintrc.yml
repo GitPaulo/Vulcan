@@ -1,4 +1,5 @@
 plugins:
+  - prettier
   - security
 extends:
   - 'mudamuda/node' # superior rule set
@@ -6,3 +7,9 @@ extends:
 globals: # Only require functions
   xrequire: readonly
   sxrequire: readonly
+prettierOptions:
+  bracketSpacing: true
+fallbackPrettierOptions:
+  singleQuote: true
+rules:
+  prettier/prettier": "error"
