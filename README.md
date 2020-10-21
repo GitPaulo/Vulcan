@@ -57,6 +57,11 @@ For an easy installation use the [installation script](./shell/install.sh).
 
 To execute this script, please make sure you have [bash](https://www.gnu.org/software/bash/) installed.
 
+```sh
+(on admin shell)
+./shell/install.sh
+```
+
 ## Supported Platforms
 
 Because of the use of [node-opus](https://github.com/Rantanen/node-opus), the bot can only be hosted in the following platforms:
