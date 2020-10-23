@@ -1,2 +1,8 @@
-# Ignore pretty main script
+# pretty main script
 index.js
+
+# deps
+node_modules
+
+# data defaults
+__*/

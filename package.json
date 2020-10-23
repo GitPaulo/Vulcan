@@ -33,7 +33,7 @@
     "exec:connection": "node index.js ./executions/connection.js",
     "exec:music": "node index.js ./executions/music.js",
     "_COMMENT4": "==================== [ LINT & FORMAT ] ====================",
-    "format:run": "prettier --write '**/*.js'",
+    "format:run": "prettier --write .",
     "linter:install": "npm install -g eslint",
     "linter:run": "eslint .",
     "linter:errors-only": "eslint . --quiet",

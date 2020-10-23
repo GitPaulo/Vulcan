@@ -10,7 +10,7 @@ const logger = xrequire('./modules/logger').getInstance();
 
 // ? Check folder
 const dataPath     = './data/';
-const defaultsPath = './prerequisites/__data';
+const defaultsPath = './prerequisites/_data';
 
 if (!fs.existsSync(dataPath)) {
     fs.mkdirSync(dataPath);

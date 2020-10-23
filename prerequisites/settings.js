@@ -22,7 +22,7 @@ const logger = xrequire('./modules/logger').getInstance();
 
 const settings     = {};
 const settingsPath = './settings/';
-const defaultsPath = './prerequisites/__settings';
+const defaultsPath = './prerequisites/_settings';
 
 // ? Directory Generation
 if (!fs.existsSync(settingsPath)) {

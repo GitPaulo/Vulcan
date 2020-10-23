@@ -11,9 +11,9 @@ Discord commands are the commands executed via the Discord API. Terminal command
 
 Each of the folders directly under './commands' represents a command type realm. These folders contain a single file named 'commands.yml'. This file specifies the meta information about each of the commands belonging to the enclosing folder. For each command, the structured information is known as a command 'descriptor'. Instructions on the expected structure of descriptors are written atop each 'commands.yml' file.
 
-## The '__packages' folder
+## The '$packages' folder
 
-Complex commands may require modularisation to avoid excessively large files. In order to keep things organised, all custom written files included by the main command file must go in the '__packages' folder. In this folder each command has its own subfolder acting as the root of the package. The subfolder has to be named as: 'realm.command_id'.
+Complex commands may require modularisation to avoid excessively large files. In order to keep things organised, all custom written files included by the main command file must go in the '$packages' folder. In this folder each command has its own subfolder acting as the root of the package. The subfolder has to be named as: 'realm.command_id'.
 
 ## Adding a new command
 
@@ -23,7 +23,7 @@ Complex commands may require modularisation to avoid excessively large files. In
   3. Inside the command type folder, create a new JavaScript file. This is where your main code will be for your new command. 
         * The name of this file will be the primary command id (excluding aliases) and must be **lowercase** and **unique.**
   4. Copy and paste the appropriate command **template** into your new command file.
-  5. __(optional)__ Extra code can be placed in the [packages](./commands/__packages/) folder.
+  5. __(optional)__ Extra code can be placed in the [packages](./commands/$packages/) folder.
   6. Add the descriptor for your command inside the appropriate 'commands.yml' file.
   7. __(optional)__ Add a thumbnail for your command's embed within the [assets](./assets/media/commands) folder.
         * Image name must be a **capitalization** of command file name.
@@ -100,7 +100,7 @@ const mycommand = module.exports;
 
 mycommand.load = async (descriptor, packages) => {
     // Example of loading generic command 'data'
-    // packages.fetcher => ./__packages/discord.mycommand/fetcher.js
+    // packages.fetcher => ./$packages/discord.mycommand/fetcher.js
     this.data = packages.fetcher.fetchSomeData();
 };
 

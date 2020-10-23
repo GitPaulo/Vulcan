@@ -1,4 +1,4 @@
-const GameNode   = xrequire('./commands/__packages/discord.connect4/GameNode');
+const GameNode   = xrequire('./commands/$packages/discord.connect4/GameNode');
 const TIME_LIMIT = 1000;
 
 const C = Math.sqrt(2);

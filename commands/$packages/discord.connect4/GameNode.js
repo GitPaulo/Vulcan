@@ -1,4 +1,4 @@
-const Board = xrequire('./commands/__packages/discord.connect4/Board');
+const Board = xrequire('./commands/$packages/discord.connect4/Board');
 
 class GameNode {
     constructor (board, player, column) {

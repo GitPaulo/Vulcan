@@ -14,7 +14,7 @@ const logger          = xrequire('./modules/logger').getInstance();
 const CommandMap      = xrequire('./structures/classes/internal/CommandMap');
 
 // Folder structure constants
-const packagesFolderName = '__packages';
+const packagesFolderName = '$packages';
 const cmdsFolderName     = 'commands';
 const cmdsDefinitionFile = `${cmdsFolderName}.yml`;
 const cmdsFolderPath     = path.join(global.basedir, cmdsFolderName);
@@ -43,7 +43,7 @@ module.exports = (vulcan, folder) => {
         );
     }
 
-    // Check if __packages folder exists
+    // Check if $packages folder exists
     if (!fs.existsSync(cmdsPackagesPath)) {
         throw new Error(
             `The '${packagesFolderName}' folder must exist.`
