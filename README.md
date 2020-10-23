@@ -83,6 +83,11 @@ This bot has been tested to work on:
 - Ubuntu 18.04.4 LTS (Bionic Beaver)
 - Windows 10 (x64)
 
+# Contributing
+
+In most cases, only friends are allowed to contribute. \
+For contributions please read the [contribution guideline](./.github/CONTRIBUTING.md).
+
 # FAQ
 
 May I use code in this repository?
@@ -96,6 +101,3 @@ May I host this program publicly?
 May I invite the bot?
 
 - **Yes.** However there is a good chance of your guild being denied. The bot is mostly for **personal** use.
-
-How to contribute?
-- For contributions please read the [contribution guideline](./.github/CONTRIBUTING.md).

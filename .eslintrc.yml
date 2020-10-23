@@ -1,8 +1,12 @@
+env:
+  es6: true
+parserOptions:
+  ecmaVersion: 2018
 plugins:
   - node
   - security
 extends:
-  - 'eslint:recommended',
+  - 'eslint:recommended'
   - 'plugin:node/recommended'
   - 'plugin:security/recommended'
 globals:

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Discord bot for our friend group guilds.",
   "main": "bot.js",
+  "engines": {
+    "node": ">=12.6.0"
+  },
   "scripts": {
     "_COMMENT0": "===================== [ EXTRA ] ============================",
     "wintools": "npm install -g windows-build-tools",
