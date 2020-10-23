@@ -1,15 +1,10 @@
 plugins:
-  - prettier
+  - node
   - security
 extends:
-  - 'mudamuda/node' # superior rule set
-  - 'plugin:security/recommended' # have security warnings
-globals: # Only require functions
+  - 'eslint:recommended',
+  - 'plugin:node/recommended'
+  - 'plugin:security/recommended'
+globals:
   xrequire: readonly
   sxrequire: readonly
-prettierOptions:
-  bracketSpacing: true
-fallbackPrettierOptions:
-  singleQuote: true
-rules:
-  prettier/prettier": "error"
