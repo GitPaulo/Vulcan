@@ -19,5 +19,5 @@ module.exports = (
     xrequire('./prerequisites/settings'),
     xrequire('./prerequisites/data'),
     xrequire('./prerequisites/coreEvents'),
-    xrequire(process.argv[2] || './executions/bot.js')
+    xrequire(process.argv[2] || './executions/main.js')
 );
