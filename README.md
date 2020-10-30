@@ -61,7 +61,7 @@ To execute this script, please make sure you have [bash](https://www.gnu.org/sof
 ./shell/install.sh
 ```
 
-After running it only once, run the follwing to start the bot:
+After running it only once, run the following to start the bot:
 
 ```sh
 ./shell/run.sh
