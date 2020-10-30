@@ -60,6 +60,13 @@ To execute this script, please make sure you have [bash](https://www.gnu.org/sof
 ```sh
 ./shell/install.sh
 ```
+
+After running it only once, run the follwing to start the bot:
+
+```sh
+./shell/run.sh
+```
+
 **admin shell required*
 
 ## Supported Platforms
