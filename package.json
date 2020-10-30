@@ -14,6 +14,7 @@
     "boot": "./shell/boot.sh",
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "test": "npm run exec:components",
     "production": "pm2 start index.js --name=vulcan",
     "_COMMENT2": "===================== [ PRODUCTION ] =======================",
     "production:install": "npm install -g pm2",
