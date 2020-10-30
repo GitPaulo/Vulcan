@@ -37,25 +37,25 @@ To invite Vulcan to your discord server simply click the image link below:
 
 # Self Hosting
 
-There is no executable at this moment in time. \
-To self host, you must make sure you are on a tested platform and follow these steps:
+There is no bundle/executable at this moment in time. \
+To self host, you must make sure you are on a compatible platform and follow these steps:
 
-1. Download and install [ffmpeg](https://ffmpeg.org/download.html).
-2. Download and install [python (v2.x)](https://www.python.org/downloads/).
-3. Download and install [node & npm (stable)](https://nodejs.org/en/download/).
+1. Download and install [python (v2.x)](https://www.python.org/downloads/).
+2. Download and install [node & npm (stable)](https://nodejs.org/en/download/).
     - We recommend using [NVM](https://stackabuse.com/using-nvm-to-install-node/).
-4. Clone repository using [git](https://git-scm.com/) OR Download and extract the [zipped repository code](https://github.com/GitPaulo/Vulcan.git).
-5. Open a [shell](https://git-scm.com/downloads) in the location of directory of the extraced zip.
-6. Run the following command: `npm ci && npm run exec:components`.
-7. Navigate to the new `'settings'` folder and fill in the required configuration & credentials details.
-8. Afterwards, run the following command: `npm run production`.
-9. If using the webhook server. Make sure port 443 is open. (or use a service such as [ngrok](https://ngrok.com/))
+3. Clone repository using [git](https://git-scm.com/) OR Download and extract the [zipped repository code](https://github.com/GitPaulo/Vulcan.git).
+4. Open a [shell](https://git-scm.com/downloads) in the location of directory of the downloaded source code.
+5. Run the following command: `npm ci && npm run exec:components`.
+6. Navigate to the new `'settings'` folder and fill in the required configuration & credentials details.
+7. After updating the default settings, run the following command: `npm start`.
+    -  If using the webhook server, make sure port `443` is open. (or use a service such as [ngrok.](https://ngrok.com/)
+    - Production mode can be started with `npm run production`.
 
 ## Easy installation
 
-For an easy installation use the [installation script](./shell/install.sh).
-
-To execute this script, please make sure you have [bash](https://www.gnu.org/software/bash/) installed.
+Bad at following steps? \
+Use the [installation script](./shell/install.sh). \
+To execute this script, please make sure you have [bash](https://www.gnu.org/software/bash/) installed and run the command from the root of the project:
 
 ```sh
 ./shell/install.sh

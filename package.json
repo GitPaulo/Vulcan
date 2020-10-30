@@ -1,7 +1,7 @@
 {
   "name": "Vulcan",
   "version": "1.0.0",
-  "description": "Discord bot for our friend group guilds.",
+  "description": "Discord bot made for our friend group.",
   "main": "./executions/main.js",
   "engines": {
     "node": ">=12.6.0"
@@ -11,7 +11,7 @@
     "wintools": "npm install -g windows-build-tools",
     "fixhttps": "npm config set registry http://registry.npmjs.org/",
     "_COMMENT1": "===================== [ MAIN ] =============================",
-    "boot": "./shell/boot.sh",
+    "install": "./shell/install.sh",
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "npm run exec:components",

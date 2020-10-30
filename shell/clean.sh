@@ -2,8 +2,8 @@
 
 # Clean npm things
 echo "Cleaning npm repo..."
-eval "rm package-lock.json"
-eval "rm -rf node_modules"
+rm package-lock.json
+rm -rf node_modules
 echo "Cleaning complete."
 
 # npm install prompt

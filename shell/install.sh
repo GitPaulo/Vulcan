@@ -7,7 +7,7 @@ cat "./shell/ascii_logo.txt"
 bold=$(tput bold)
 normal=$(tput sgr0)
 
-# Check admin priv
+# Admin: Required to install some software
 net session > /dev/null 2>&1
 
 if [ $? -eq 0 ]; then 
@@ -21,7 +21,7 @@ fi
 echo "Installing system prerequisites."
 source ~/.nvm/nvm.sh
 
-# NVM
+# NVM: To install node & npm
 if ! command -v nvm > /dev/null; then
     echo "Installing nvm."
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
@@ -32,7 +32,7 @@ else
     echo "Skipping installation: nvm already found."
 fi
 
-# Node.js
+# Node: To run the bot
 if ! which npm > /dev/null; then
     echo "Installing node.js."
     nvm install --lts
@@ -40,7 +40,7 @@ else
     echo "Skipping installation: node already found."
 fi
 
-# OS dependent prereq
+# OS dependent: Oh no no no
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     echo "Refereshing and updating packages."
     apt update
@@ -63,12 +63,21 @@ elif [[ "$OSTYPE" == "msys" ]]; then
     echo "Installing windows build tools."
     npm i windows-build-tools --production --vs2015 --add-python-to-PATH --global
 else
-    echo "Unsupported os detected."
+    echo "Unsupported OS detected."
     echo "${bold}Installation script incompatible!"
-    exit
+    exit 1
 fi
 
-# Finish off strong
+# Install project dependencies
 echo "Finally, installing local npm dependencies..."
 npm install
+
+# Build bot components & data
+echo "Running components execution..."
+npm run exec:components
+
+# Check for settings update and finish!
+echo "Visit the new 'settings' folder and fill in credentials."
+read -p "Press enter to continue...."
+
 echo "${bold}Vulcan installation DONE!"
