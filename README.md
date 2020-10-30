@@ -43,7 +43,7 @@ To self host, you must make sure you are on a tested platform and follow these s
 1. Download and install [ffmpeg](https://ffmpeg.org/download.html).
 2. Download and install [python (v2.x)](https://www.python.org/downloads/).
 3. Download and install [node & npm (stable)](https://nodejs.org/en/download/).
-    3.1. We recommend using [NVM](https://stackabuse.com/using-nvm-to-install-node/).
+    - We recommend using [NVM](https://stackabuse.com/using-nvm-to-install-node/).
 4. Clone repository using [git](https://git-scm.com/) OR Download and extract the [zipped repository code](https://github.com/GitPaulo/Vulcan.git).
 5. Open a [shell](https://git-scm.com/downloads) in the location of directory of the extraced zip.
 6. Run the following command: `npm ci && npm run exec:components`.
