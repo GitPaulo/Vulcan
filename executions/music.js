@@ -4,7 +4,7 @@
  */
 
 const ytdl   = xrequire('ytdl-core-discord');
-const vulcan = xrequire('./executions/bot.js');
+const vulcan = xrequire('./executions/main.js');
 const logger = xrequire('./modules/logger').getInstance();
 const guilds = vulcan.guilds.cache;
 

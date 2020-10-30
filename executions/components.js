@@ -1,6 +1,6 @@
 /**
  * ? Execution File
- * This files calls the 'bot.js' execution file without connecting to discord.
+ * This files calls the 'main.js' execution file without connecting to discord.
  * Used to test for errors in the Vulcan loading process.
  */
 
@@ -19,7 +19,7 @@ console.log(
 let startTime = performance.now();
 
 {
-    module.exports = xrequire('./executions/bot.js');
+    module.exports = xrequire('./executions/main.js');
 }
 
 let finishTime = performance.now();
