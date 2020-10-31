@@ -5,6 +5,7 @@ node_js:
   - lts/*
 before_install:
   - sudo apt-get update
+  - chmod -R -x ./shell
 install:
   - npm run required
   - npm ci
