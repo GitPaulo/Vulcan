@@ -48,7 +48,7 @@ To self host, you must make sure you are on a compatible platform and follow the
 5. Run the following command: `npm ci && npm run exec:components`.
 6. Navigate to the new `'settings'` folder and fill in the required configuration & credentials details.
 7. After updating the default settings, run the following command: `npm start`.
-    -  If using the webhook server, make sure port `443` is open. (or use a service such as [ngrok.](https://ngrok.com/)
+    -  If using the webhook server, make sure port `443` is open. (or use a service such as [ngrok.](https://ngrok.com/))
     - Production mode can be started with `npm run production`.
 
 ## Easy installation

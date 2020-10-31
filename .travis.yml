@@ -1,25 +1,27 @@
+quiet: true
+os: linux
+sudo: true
 language: node_js
-
 node_js:
   - lts/*
-
 install:
-  - npm config set registry http://registry.npmjs.org/
-  # - 'npm install -g windows-build-tools' [Windows machine only]
+  - chmod +x ./shell/install.sh
+  - sudo npm run preinstall
+  - 'npm config set registry http://registry.npmjs.org/'
   - npm ci
-
 script:
   - npm test
-
 notifications:
   email: false
-
 after_success:
-  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - >-
+    wget
+    https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
   - ./send.sh success $WEBHOOK_URL_SHOGUNATE
-
 after_failure:
-  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - >-
+    wget
+    https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
   - ./send.sh failure $WEBHOOK_URL_SHOGUNATE
