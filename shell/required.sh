@@ -15,24 +15,26 @@ if [[ isLin -eq "0" ]] && [[ isWin -eq "0" ]]; then
     exit;
 fi
 
-# Perminssions check
-if [[ isWin -eq "1" ]]; then 
-    # win perms check
-    net session > /dev/null 2>&1
+# Perminssions check - ifnore if CI
+if [[ $RAN_BY_CI -eq "0" ]]; then
+    if [[ isWin -eq "1" ]]; then 
+        # win perms check
+        net session > /dev/null 2>&1
 
-    if [ $? -eq 0 ]; then 
-        echo "Administrator privileges detected."
-    else 
-        echo "No administrator privileges detected."
-        echo "${bold}Execute this script with an adminstrative terminal."
-        exit
-    fi
-elif [[ isLin -eq "1" ]]; then
-    # sudo check
-    if [ "$EUID" -ne 0 ]; then
-        echo "No administrator privileges detected."
-        echo "${bold}Execute this script with an adminstrative terminal."
-        exit
+        if [ $? -eq 0 ]; then 
+            echo "Administrator privileges detected."
+        else 
+            echo "No administrator privileges detected."
+            echo "${bold}Execute this script with an adminstrative terminal."
+            exit
+        fi
+    elif [[ isLin -eq "1" ]]; then
+        # sudo check
+        if [ "$EUID" -ne 0 ]; then
+            echo "No administrator privileges detected."
+            echo "${bold}Execute this script with an adminstrative terminal."
+            exit
+        fi
     fi
 fi
 
