@@ -11,6 +11,7 @@
     "wintools": "npm install -g windows-build-tools",
     "fixhttps": "npm config set registry http://registry.npmjs.org/",
     "_COMMENT1": "===================== [ MAIN ] =============================",
+    "required": "./shell/required.sh",
     "start": "node index.js",
     "dev": "nodemon index.js",
     "setup": "npm run exec:components",
