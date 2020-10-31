@@ -7,15 +7,34 @@ cat "./shell/ascii_logo.txt"
 bold=$(tput bold)
 normal=$(tput sgr0)
 
-# Admin: Required to install some software
-net session > /dev/null 2>&1
+# Allowed OS
+[ "$(expr substr $(uname -s) 1 5)" == "Linux" ] || [ "$(uname)" == "Darwin" ] && isLin=1 || isLin=0
+[ "$(expr substr $(uname -s) 1 5)" == "MINGW" ] || [ "$(expr substr $(uname -s) 1 6)" == "CYGWIN" ] && isWin=1 || isWin=0
 
-if [ $? -eq 0 ]; then 
-    echo "Administrator privileges detected."
-else 
-    echo "No administrator privileges detected."
-    echo "${bold}Execute this script with an adminstrative terminal."
-    exit
+if [[ isLin -eq "0" ]] && [[ isWin -eq "0" ]]; then
+    echo "Unsupported OS detected."
+    exit;
+fi
+
+# Perminssions check
+if [[ isWin -eq "1" ]]; then 
+    # win perms check
+    net session > /dev/null 2>&1
+
+    if [ $? -eq 0 ]; then 
+        echo "Administrator privileges detected."
+    else 
+        echo "No administrator privileges detected."
+        echo "${bold}Execute this script with an adminstrative terminal."
+        exit
+    fi
+elif [[ isLin -eq "1" ]]; then
+    # sudo check
+    if [ "$EUID" -ne 0 ]; then
+        echo "No administrator privileges detected."
+        echo "${bold}Execute this script with an adminstrative terminal."
+        exit
+    fi
 fi
 
 echo "Installing system prerequisites."
@@ -41,7 +60,7 @@ else
 fi
 
 # OS dependent: Oh no no no
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
+if [[ isLin -eq "1" ]]; then
     # Compiler tools
     if [ $(dpkg-query -W -f='${Status}' gcc g++ make build-essential 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
         apt install gcc g++ make build-essential
@@ -54,14 +73,10 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     else
         echo "Skipping installation: python 2.7. already found."
     fi
-elif [[ "$OSTYPE" == "msys" ]]; then
+elif [[ isWin -eq "1" ]]; then
     # node gyp might complain (VS 2017 + Desktop dev C++ package)
     echo "Installing windows build tools."
     npm i windows-build-tools --production --vs2015 --add-python-to-PATH --global
-else
-    echo "Unsupported OS detected."
-    echo "${bold}Installation script incompatible!"
-    exit 1
 fi
 
 # Install project dependencies
@@ -72,8 +87,17 @@ npm install
 echo "Running components execution..."
 npm run exec:components
 
-# Check for settings update and finish!
-echo "Visit the new 'settings' folder and fill in credentials."
-read -p "Press enter to continue...."
+# CI cant edit settings!
+if [[ $RAN_BY_CI -eq "0" ]]; then
+    # Check for settings update and finish!
+    echo "Visit the new 'settings' folder and fill in credentials."
+    while : ; do
+        lmod=$(stat -c %y ./settings/credentials.yml)
+        read -p "Save new settings and press enter to continue...."
+        nmod=$(stat -c %y ./settings/credentials.yml)
+        
+        [[ $lmod == $nmod ]] || break;
+    done
+fi
 
 echo "${bold}Vulcan installation DONE!"
