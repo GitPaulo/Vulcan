@@ -1,7 +1,8 @@
 ## TODO - 'The Comeback' - SD: 21/10/2020
 
 - [x] **(Task)** Comeback configuration/installation/CI testing. Fix any problems.
-- [ ] **(Task)** Reform eslint & add prettier w/ proper configuration & format everything to a standard.
+- [ ] **(Task)** Reform eslint & add prettier w/ proper configuration & format everything to a standard & add EditorConfig.
+- [ ] **(Task)** Test and make sure everything is ready for receiving more devs.
 - [ ] **(Bug)** Developers cannot bypass unauthorised guild block.
 - [ ] **(Task)** Hosts vs Owners inconsitency in naming.
 - [ ] **(Bug)** No bot hosts -> permission granted by default (on request) -> no guild notification (fix).
