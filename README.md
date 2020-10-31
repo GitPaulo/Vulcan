@@ -51,23 +51,18 @@ To self host, you must make sure you are on a compatible platform and follow the
     -  If using the webhook server, make sure port `443` is open. (or use a service such as [ngrok.](https://ngrok.com/))
     - Production mode can be started with `npm run production`.
 
-## Easy installation
+## Easy Booting
 
-Bad at following steps? \
-Use the [installation script](./shell/install.sh). \
-To execute this script, please make sure you have [bash](https://www.gnu.org/software/bash/) installed and run the command from the root of the project:
+If you want, you may ignore the steps above and just run the following command:
 
 ```sh
-./shell/install.sh
+./shell/boot.sh
 ```
-
-After running it only once, run the following to start the bot:
-
-```sh
-./shell/run.sh
-```
-
 **admin shell required*
+
+### Not working?
+
+Please make sure you have [bash](https://www.gnu.org/software/bash/) installed and run the command from the **root** of the project.
 
 ## Supported Platforms
 

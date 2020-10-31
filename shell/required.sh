@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-# Greetings
-cat "./shell/ascii_logo.txt"
+echo "=> Vulcan - Pre installation"
+cdir="$(dirname "$0")"
 
-# Session Vars
-bold=$(tput bold)
-normal=$(tput sgr0)
+# Lib Imports
+source "$cdir/lib/vars.sh"
 
 # Allowed OS
 [ "$(expr substr $(uname -s) 1 5)" == "Linux" ] || [ "$(uname)" == "Darwin" ] && isLin=1 || isLin=0
@@ -78,26 +77,3 @@ elif [[ isWin -eq "1" ]]; then
     echo "Installing windows build tools."
     npm i windows-build-tools --production --vs2015 --add-python-to-PATH --global
 fi
-
-# Install project dependencies
-echo "Finally, installing local npm dependencies..."
-npm install
-
-# Build bot components & data
-echo "Running components execution..."
-npm run exec:components
-
-# CI cant edit settings!
-if [[ $RAN_BY_CI -eq "0" ]]; then
-    # Check for settings update and finish!
-    echo "Visit the new 'settings' folder and fill in credentials."
-    while : ; do
-        lmod=$(stat -c %y ./settings/credentials.yml)
-        read -p "Save new settings and press enter to continue...."
-        nmod=$(stat -c %y ./settings/credentials.yml)
-        
-        [[ $lmod == $nmod ]] || break;
-    done
-fi
-
-echo "${bold}Vulcan installation DONE!"
