@@ -42,10 +42,6 @@ fi
 
 # OS dependent: Oh no no no
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    echo "Refereshing and updating packages."
-    apt update
-    apt upgrade
-    echo "Beggining to install packages."
     # Compiler tools
     if [ $(dpkg-query -W -f='${Status}' gcc g++ make build-essential 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
         apt install gcc g++ make build-essential
