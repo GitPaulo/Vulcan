@@ -4,7 +4,7 @@
  */
 
 // Vulcan client
-const Vulcan = xrequire('./structures/classes/internal/Vulcan');
+const Vulcan = xrequire('./structures/core/Vulcan');
 let vulcan = new Vulcan(
   // Discord.js options
   {

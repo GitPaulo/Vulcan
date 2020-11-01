@@ -1,5 +1,4 @@
 const os = xrequire('os');
-const pem = xrequire('pem');
 const publicIP = xrequire('public-ip');
 const Discord = xrequire('discord.js');
 const settings = xrequire('./prerequisites/settings');
@@ -10,71 +9,40 @@ const cdHandler = xrequire('./handlers/constantsDataHandler');
 const bdHandler = xrequire('./handlers/blacklistDataHandler');
 const hdHandler = xrequire('./handlers/hierarchyDataHandler');
 const adHandler = xrequire('./handlers/authorisedDataHandler');
-const DatabaseManager = xrequire('./structures/classes/managers/DatabaseManager');
-const TerminalManager = xrequire('./structures/classes/managers/TerminalManager');
-const PresenceManager = xrequire('./structures/classes/managers/PresenceManager');
+const { DatabaseManager } = xrequire('./modules/database');
+const { TerminalManager } = xrequire('./modules/terminal');
+const { PresenceManager } = xrequire('./modules/presence');
 
 class Vulcan extends Discord.Client {
   constructor(
-    options = {} // http://discord.js.org/#/docs/main/stable/typedef/ClientOptions
+    // http://discord.js.org/#/docs/main/stable/typedef/ClientOptions
+    options = {}
   ) {
     super(options);
 
-    // ? Load essentials: Events
+    // ? Events
+    // Loads all events in the 'event' folder
     elHandler(this);
 
-    // ? Default (major) properties
-    // To allow disabling of features, load chain commands are used
-    this.blacklist = null;
-    this.hierarchy = null;
-    this.authorised = null;
-    this.webFiles = null;
-    this.webHooks = null;
-    this.webClient = null;
-    this.commands = null;
+    // ? Null state properties
+    // Properties that can be disabled
     this.terminalManager = null;
     this.databaseManager = null;
     this.presenceManager = null;
 
-    // ? Load essentials: Data
-    // Load them
+    // ? Data Access
+    // All vulcan data access properties
     this.constants = cdHandler.load();
     this.blacklist = bdHandler.load();
     this.hierarchy = hdHandler.load();
     this.authorised = adHandler.load();
     this.commands = clHandler(this, 'discord');
 
-    // ? Load essentials: Managers
+    // ? Managers
+    // Most big modules have a manager
     this.databaseManager = new DatabaseManager(this);
     this.presenceManager = new PresenceManager(this);
     this.terminalManager = new TerminalManager(this);
-
-    // ? Load essentials: Web Servers
-    this.wfPort = 442;
-    this.whPort = 443;
-    this.wcPort = 80;
-
-    // Generate SSL cert & keys, load servers.
-    pem.createCertificate({ days: 31, selfSigned: true }, (err, keys) => {
-      if (err) {
-        throw err;
-      }
-
-      // Log
-      logger.debug('Generated SSL key/cert via pem module.');
-
-      this.webFiles = xrequire('./webfiles')(this);
-      this.webHooks = xrequire('./webhooks')(this, keys);
-      this.webClient = xrequire('./webclient')(this, keys);
-
-      // Attach ports
-      this.webFiles.port = this.wfPort;
-      this.webHooks.port = this.whPort;
-      this.webClient.port = this.wcPort;
-
-      // Emit ready event!
-      this.emit('webServersReady', this);
-    });
 
     // Vulcan is here!
     logger.plain(global.couldnt_have_forged_it_better_myself, logger.colors.random());
@@ -323,29 +291,14 @@ class Vulcan extends Discord.Client {
     if (this.terminalManager) {
       this.terminalManager.stop();
     }
-
     logger.log('Terminal manager closed.');
 
     // Leave any voice channels
     this.guilds.cache.forEach(g => g.musicManager.destroy());
-
     logger.log('Destroyed all voice connections.');
-
-    // Close Webserver
-    if (this.webHooks) {
-      this.webHooks.close();
-    }
-
-    // Close Fileserver
-    if (this.webFiles) {
-      this.webFiles.close();
-    }
-
-    logger.log('Closed all web servers.');
 
     // Call discordjs client to destroy
     super.destroy();
-
     logger.log(`Vulcan client has successfully been destroyed.`);
   }
 

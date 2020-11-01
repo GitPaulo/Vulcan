@@ -8,11 +8,11 @@ plugins:
   - prettier
   - security
 extends:
-  - "eslint:recommended"
-  - "plugin:node/recommended"
-  - "plugin:jsdoc/recommended"
-  - "plugin:prettier/recommended"
-  - "plugin:security/recommended"
+  - 'eslint:recommended'
+  - 'plugin:node/recommended'
+  - 'plugin:jsdoc/recommended'
+  - 'plugin:prettier/recommended'
+  - 'plugin:security/recommended'
 globals:
   xrequire: readonly
   sxrequire: readonly

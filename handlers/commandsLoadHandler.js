@@ -11,7 +11,7 @@ const path = xrequire('path');
 const yaml = xrequire('js-yaml');
 const fileFunctions = xrequire('./modules/fileFunctions');
 const logger = xrequire('./modules/logger').getInstance();
-const CommandMap = xrequire('./structures/classes/internal/CommandMap');
+const CommandMap = xrequire('./structures/core/CommandMap');
 
 // Folder structure constants
 const packagesFolderName = '$packages';
@@ -83,7 +83,7 @@ module.exports = (vulcan, folder) => {
   // Instantiate Command Map <main_id, Class => (dirToClass[i][1])>
   // Command Map of CommandClass!
   const commands = new CommandMap();
-  const CommandClass = xrequire(`./structures/classes/internal/${cmdClassName}`);
+  const CommandClass = xrequire(`./structures/core/${cmdClassName}`);
 
   // Load and create cmd objects from 'cmdFiles'
   for (let fileName of cmdFiles) {

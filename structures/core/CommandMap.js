@@ -1,5 +1,5 @@
 const buckets = require('buckets-js');
-const Command = xrequire('./structures/classes/internal/Command');
+const Command = xrequire('./structures/core/Command');
 
 /**
  * A map abstraction that holds any type of command.

@@ -1,24 +1,15 @@
 {
   "tags": {
     "allowUnknownTags": true,
-    "dictionaries": [
-      "jsdoc",
-      "closure"
-    ]
+    "dictionaries": ["jsdoc", "closure"]
   },
   "source": {
-    "exclude": [
-      "node_modules"
-    ],
-    "include": [
-      "."
-    ],
+    "exclude": ["node_modules"],
+    "include": ["."],
     "includePattern": ".+\\.js(doc|x)?$",
     "excludePattern": "(^|\\/|\\\\)_"
   },
-  "plugins": [
-    "plugins/markdown"
-  ],
+  "plugins": ["plugins/markdown"],
   "templates": {
     "cleverLinks": true,
     "monospaceLinks": true

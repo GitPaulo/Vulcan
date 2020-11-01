@@ -2,7 +2,7 @@
  * https://github.com/discordjs/discord.js/blob/master/src/structures/Guild.js
  */
 
-const MusicManager = xrequire('./structures/classes/managers/MusicManager');
+const { MusicManager } = xrequire('./modules/music');
 
 module.exports = class _Guild extends xrequire('discord.js').Guild {
   constructor(...args) {

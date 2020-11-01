@@ -162,22 +162,28 @@ const handler = async (channel, wrap) => {
     let publicPaths = [];
 
     // ! Copy files? what if sensitive?
-    largeFiles.forEach(largeFilePath => {
-      let fileName = path.basename(largeFilePath);
-      let publicPath = path.join(client.webFiles.publicFolderPath, fileName);
+    // TODO: New way of doing this, moved webserver to its own repo.
+    /*
+      largeFiles.forEach(largeFilePath => {
+        let fileName = path.basename(largeFilePath);
+        let publicPath = path.join(client.webFiles.publicFolderPath, fileName);
 
-      fs.copyFileSync(largeFilePath, publicPath);
-      logger.debug(`Copied file to public realm: ${largeFilePath} => ${publicPath}`);
+        fs.copyFileSync(largeFilePath, publicPath);
+        logger.debug(`Copied file to public realm: ${largeFilePath} => ${publicPath}`);
 
-      publicPaths.push(publicPath);
-    });
+        publicPaths.push(publicPath);
+      });
+    */
 
     // Add IP and http
     let resolveIp = (await client.resolveIp()).v4;
 
+    // TODO: New way of doing this (read above)
+    /*
     publicPaths.forEach((publicPath, i) => {
       publicPaths[i] = `http://${resolveIp}:${client.webFiles.port}` + `${publicPath.replace(global.basedir, '')}`;
     });
+    */
 
     // Outsource
     wrap.embed.fields.push({

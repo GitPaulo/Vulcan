@@ -7,7 +7,7 @@
 const { performance } = xrequire('perf_hooks');
 
 // Disable connect
-xrequire('./structures/classes/internal/Vulcan').prototype.connect = () => null;
+xrequire('./structures/core/Vulcan').prototype.connect = () => null;
 
 console.log(
   `=======================================\n` +

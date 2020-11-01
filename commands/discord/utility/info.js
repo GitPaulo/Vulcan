@@ -80,16 +80,6 @@ info.execute = async message => {
           name: 'Blacklist Size',
           value: `${message.client.blacklist.size}`,
           inline: true
-        },
-        {
-          name: 'File Server Port',
-          value: `${(message.client.webFiles && message.client.webFiles.port) || '(Offline)'}`,
-          inline: true
-        },
-        {
-          name: 'Web Server Port',
-          value: `${(message.client.webHooks && message.client.webHooks.port) || '(Offline)'}`,
-          inline: true
         }
       ]
     })

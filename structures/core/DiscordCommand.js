@@ -1,5 +1,5 @@
 const fs = xrequire('fs');
-const Command = xrequire('./structures/classes/internal/Command');
+const Command = xrequire('./structures/core/Command');
 
 /**
  * Subclass of Command specific for discord requests.

@@ -43,13 +43,10 @@ To self host, you must make sure you are on a compatible platform and follow the
 1. Download and install [python (v2.x)](https://www.python.org/downloads/).
 2. Download and install [node & npm (stable)](https://nodejs.org/en/download/).
    - We recommend using [NVM](https://stackabuse.com/using-nvm-to-install-node/).
-3. Clone repository using [git](https://git-scm.com/) OR Download and extract the [zipped repository code](https://github.com/GitPaulo/Vulcan.git).
+3. Clone repository using [git](https://git-scm.com/) OR Download and extract the [zipped repository code](https://github.com/Vulcan-Group/Vulcan.git).
 4. Open a [shell](https://git-scm.com/downloads) in the location of directory of the downloaded source code.
 5. Run the following command: `npm ci && npm run exec:components`.
 6. Navigate to the new `'settings'` folder and fill in the required configuration & credentials details.
-7. After updating the default settings, run the following command: `npm start`.
-   - If using the webhook server, make sure port `443` is open. (or use a service such as [ngrok.](https://ngrok.com/))
-   - Production mode can be started with `npm run production`.
 
 ## Easy Booting
 
