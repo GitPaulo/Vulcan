@@ -1,40 +1,35 @@
-const resume        = module.exports;
-const Discord       = xrequire('discord.js');
+const resume = module.exports;
+const Discord = xrequire('discord.js');
 const messageEmbeds = xrequire('./modules/messageEmbeds');
 
-resume.execute = async (message) => {
-    const musicManager = message.guild.musicManager;
+resume.execute = async message => {
+  const musicManager = message.guild.musicManager;
 
-    // If already in voice channel, we are performing a move.
-    if (!musicManager.connected) {
-        return message.client.emit(
-            'commandMisused',
-            message.channel,
-            'Bot must be in a voice channel.\n'
-            + 'Use the `music` command.'
-        );
-    }
+  // If already in voice channel, we are performing a move.
+  if (!musicManager.connected) {
+    return message.client.emit(
+      'commandMisused',
+      message.channel,
+      'Bot must be in a voice channel.\n' + 'Use the `music` command.'
+    );
+  }
 
-    if (musicManager.playing) {
-        return message.client.emit(
-            'commandMisused',
-            message.channel,
-            'Music is already playing. Therefore cannot resume.'
-        );
-    }
+  if (musicManager.playing) {
+    return message.client.emit('commandMisused', message.channel, 'Music is already playing. Therefore cannot resume.');
+  }
 
-    musicManager.resume();
+  musicManager.resume();
 
-    await message.channel.send(messageEmbeds.reply(
+  await message.channel.send(
+    messageEmbeds.reply({
+      message,
+      title: ':play_pause:  - Resume',
+      fields: [
         {
-            message,
-            title : ':play_pause:  - Resume',
-            fields: [
-                {
-                    name : 'Resumed Song',
-                    value: Discord.Util.escapeMarkdown(musicManager.currentTask.song.name)
-                }
-            ]
+          name: 'Resumed Song',
+          value: Discord.Util.escapeMarkdown(musicManager.currentTask.song.name)
         }
-    ));
+      ]
+    })
+  );
 };

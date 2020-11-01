@@ -5,18 +5,13 @@
 
 // Vulcan client
 const Vulcan = xrequire('./structures/classes/internal/Vulcan');
-const vulcan = new Vulcan(
-    // Discord.js options
-    {
-        disabledEvents: [
-            'USER_NOTE_UPDATE',
-            'TYPING_START',
-            'RELATIONSHIP_ADD',
-            'RELATIONSHIP_REMOVE'
-        ],
-        disableEveryone    : true,
-        messageCacheMaxSize: 1000
-    }
+let vulcan = new Vulcan(
+  // Discord.js options
+  {
+    disabledEvents: ['USER_NOTE_UPDATE', 'TYPING_START', 'RELATIONSHIP_ADD', 'RELATIONSHIP_REMOVE'],
+    disableEveryone: true,
+    messageCacheMaxSize: 1000
+  }
 );
 
 // Connect

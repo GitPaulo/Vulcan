@@ -8,6 +8,7 @@
 - [ ] **(Bug)** Music player `v!play <no url>` command errors (SyntaxError - dep - node_modules/ytsr/lib/main.js).
 - [ ] **(Bug)** Exiting CLI still buggy (test on dev and start scripts)
 - [ ] **(Bug)** `weather` command crashes bot.
+
 ```sh
   (10/30/2020, 22:56:31)[error] => [saikono-memes] => Internal error has occured due to an action originating from this channel.
         Error message: undefined
@@ -23,4 +24,5 @@ Promise: [object Promise]
 (10/30/2020, 22:56:31)[log] => [Clock: 0001ms] => Performance checks on 'C:\Users\santosp\Documents\Work\Personal\Vulcan\handlers\messageFormatHandler.js'
 (10/30/2020, 22:56:31)[error] => [Multiple Resolved Detected] => reject, [object Promise], Error: This log clock (FormatHandler@1604098591675) already exits.
 ```
+
 - [ ] ....

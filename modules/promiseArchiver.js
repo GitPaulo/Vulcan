@@ -1,65 +1,65 @@
-const fs       = xrequire('fs');
+const fs = xrequire('fs');
 const archiver = xrequire('archiver');
-const logger   = xrequire('./modules/logger').getInstance();
+const logger = xrequire('./modules/logger').getInstance();
 
 module.exports = (outputPath, fileType, options) => {
-    // Flags
-    let done;
-    let error;
-    let promise;
-    let onSuccess;
-    let onError;
+  // Flags
+  let done;
+  let error;
+  let promise;
+  let onSuccess;
+  let onError;
 
-    // Main Objects & Events
-    const output  = fs.createWriteStream(outputPath);
-    const archive = archiver(fileType, options);
+  // Main Objects & Events
+  const output = fs.createWriteStream(outputPath);
+  const archive = archiver(fileType, options);
 
-    output.on('close', () => {
-        logger.debug(archive.pointer() + ' total bytes');
-        logger.log(`Archiver finalised.\n\tPath: ${outputPath}\n\tOptions: ${options}`);
+  output.on('close', () => {
+    logger.debug(archive.pointer() + ' total bytes');
+    logger.log(`Archiver finalised.\n\tPath: ${outputPath}\n\tOptions: ${options}`);
 
-        done = true;
+    done = true;
 
-        if (onSuccess) {
-            onSuccess();
-        }
-    });
+    if (onSuccess) {
+      onSuccess();
+    }
+  });
 
-    archive.on('error', (err) => {
-        error = err;
+  archive.on('error', err => {
+    error = err;
 
-        if (onError) {
-            onError(err);
-        }
+    if (onError) {
+      onError(err);
+    }
 
-        throw err;
-    });
+    throw err;
+  });
 
-    // Pipe archive data to the file
-    archive.pipe(output);
+  // Pipe archive data to the file
+  archive.pipe(output);
 
-    let finalize = archive.finalize;
+  let finalize = archive.finalize;
 
-    archive.finalize = () => {
-        if (error) {
-            return Promise.reject(error);
-        }
+  archive.finalize = () => {
+    if (error) {
+      return Promise.reject(error);
+    }
 
-        if (done) {
-            return Promise.resolve();
-        }
+    if (done) {
+      return Promise.resolve();
+    }
 
-        if (!promise) {
-            promise = new Promise((resolve, reject) => {
-                onSuccess = resolve;
-                onError   = reject;
-            });
+    if (!promise) {
+      promise = new Promise((resolve, reject) => {
+        onSuccess = resolve;
+        onError = reject;
+      });
 
-            finalize.call(archive);
-        }
+      finalize.call(archive);
+    }
 
-        return promise;
-    };
+    return promise;
+  };
 
-    return archive;
+  return archive;
 };

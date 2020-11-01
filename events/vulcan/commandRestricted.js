@@ -5,39 +5,33 @@
  *   - Is a unauthorised user.
  */
 
-module.exports = (
-    message,
-    reason,
-    extraFields = []
-) => {
-    message.channel.send(
+module.exports = (message, reason, extraFields = []) => {
+  message.channel.send({
+    embed: {
+      title: `Restricted Access`,
+      description: `Access to the command was **denied**.`,
+      color: 0xe5f2aa, // Red
+      thumbnail: {
+        url: `attachment://commandRestricted.gif`
+      },
+      timestamp: new Date(),
+      footer: {
+        text: `Request by ${message.author.tag}`
+      },
+      fields: [
         {
-            embed: {
-                title      : `Restricted Access`,
-                description: `Access to the command was **denied**.`,
-                color      : 0xE5F2AA, // Red
-                thumbnail  : {
-                    url: `attachment://commandRestricted.gif`
-                },
-                timestamp: new Date(),
-                footer   : {
-                    text: `Request by ${message.author.tag}`
-                },
-                fields: [
-                    {
-                        name : 'Reason',
-                        value: reason
-                    },
-                    ...extraFields
-                ],
-                url: ''
-            },
-            files: [
-                {
-                    attachment: './assets/media/embeds/events/commandRestricted.gif',
-                    name      : 'commandRestricted.gif'
-                }
-            ]
-        }
-    );
+          name: 'Reason',
+          value: reason
+        },
+        ...extraFields
+      ],
+      url: ''
+    },
+    files: [
+      {
+        attachment: './assets/media/embeds/events/commandRestricted.gif',
+        name: 'commandRestricted.gif'
+      }
+    ]
+  });
 };

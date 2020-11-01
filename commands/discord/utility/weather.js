@@ -1,108 +1,100 @@
-const weather       = module.exports;
+const weather = module.exports;
 const messageEmbeds = xrequire('./modules/messageEmbeds');
-const settings      = xrequire('./prerequisites/settings');
+const settings = xrequire('./prerequisites/settings');
 
 // eslint-disable-next-line no-unused-vars
 weather.load = (descriptor, packages) => {
-    const { YahooWeather } = packages;
+  const { YahooWeather } = packages;
 
-    let options = settings.credentials.OAuth.yahooWeather;
+  let options = settings.credentials.OAuth.yahooWeather;
 
-    this.api = new YahooWeather(
-        options.appid,
-        options.id,
-        options.secret
-    );
+  this.api = new YahooWeather(options.appid, options.id, options.secret);
 };
 
-weather.execute = async (message) => {
-    const regionCode = message.parsed.args[0];
+weather.execute = async message => {
+  const regionCode = message.parsed.args[0];
 
-    if (!regionCode) {
-        return message.client.emit(
-            'commandMisused',
-            message,
-            `You are required to specify a \`regionCode\` for the weather query.\n\tExample: \`london,uk\`!`
-        );
-    }
+  if (!regionCode) {
+    return message.client.emit(
+      'commandMisused',
+      message,
+      `You are required to specify a \`regionCode\` for the weather query.\n\tExample: \`london,uk\`!`
+    );
+  }
 
-    // For the dates
-    let displayedDates = null;
+  // For the dates
+  let displayedDates = null;
 
-    // Destructor
-    const {
-        location,
-        // eslint-disable-next-line camelcase
-        current_observation,
-        forecasts
-    }                 = await this.api.forecast({ location: regionCode });
+  // Destructor
+  const {
+    location,
     // eslint-disable-next-line camelcase
-    const observation = current_observation;
-    const timePeriod  = message.parsed.args[1] || 'today';
+    current_observation,
+    forecasts
+  } = await this.api.forecast({ location: regionCode });
+  // eslint-disable-next-line camelcase
+  const observation = current_observation;
+  const timePeriod = message.parsed.args[1] || 'today';
 
-    // ! This should probably be handled better in the api wrap but fuck it
-    if (Object.isEmpty(location) && Object.isEmpty(current_observation)) {
-        return message.channel.send(messageEmbeds.reply(
-            {
-                message,
-                title      : `Weather Forecast`,
-                description: `Unable to find any weather results for:\n\`\`\`${regionCode}\`\`\``
-            }
-        ));
-    }
+  // ! This should probably be handled better in the api wrap but fuck it
+  if (Object.isEmpty(location) && Object.isEmpty(current_observation)) {
+    return message.channel.send(
+      messageEmbeds.reply({
+        message,
+        title: `Weather Forecast`,
+        description: `Unable to find any weather results for:\n\`\`\`${regionCode}\`\`\``
+      })
+    );
+  }
 
-    // Sort out forecast time period
-    if (timePeriod === 'today') {
-        displayedDates = forecasts[0];
-    } else if (timePeriod === 'tomorrow') {
-        displayedDates = forecasts[1];
-    } else if (timePeriod === 'week') {
-        displayedDates = forecasts;
-    } else {
-        return message.client.emit(
-            'commandMisused',
-            message,
-            `Invalid date specifier.\n\tExample: \`tomorrow\`!`
-        );
-    }
+  // Sort out forecast time period
+  if (timePeriod === 'today') {
+    displayedDates = forecasts[0];
+  } else if (timePeriod === 'tomorrow') {
+    displayedDates = forecasts[1];
+  } else if (timePeriod === 'week') {
+    displayedDates = forecasts;
+  } else {
+    return message.client.emit('commandMisused', message, `Invalid date specifier.\n\tExample: \`tomorrow\`!`);
+  }
 
-    // Send message
-    await message.channel.send(messageEmbeds.reply(
+  // Send message
+  await message.channel.send(
+    messageEmbeds.reply({
+      message,
+      title: `Weather Forecast`,
+      fields: [
         {
-            message,
-            title : `Weather Forecast`,
-            fields: [
-                {
-                    name  : 'Country/Region/City',
-                    value : `${location.country}/${location.region}/${location.city}`,
-                    inline: true
-                },
-                {
-                    name  : 'Unit System',
-                    value : `${this.api.getUnitSystemName()}`,
-                    inline: true
-                },
-                {
-                    name : 'Wind',
-                    value: `Speed of ${observation.wind.speed} and direction of ${observation.wind.direction}.`
-                },
-                {
-                    name : 'Atmosphere',
-                    value: `Humidity of ${observation.atmosphere.humidity} and visibility of ${observation.atmosphere.visibility} with pressure ${observation.atmosphere.pressure}.`
-                },
-                {
-                    name : 'Astronomy',
-                    value: `Sun rise is at ${observation.astronomy.sunrise} and sunset ${observation.astronomy.sunset}.`
-                },
-                {
-                    name : 'Condition',
-                    value: `Temperature of ${observation.condition.temperature}. The condition is ${observation.condition.text}.`
-                },
-                {
-                    name : `Forecast (${timePeriod})`,
-                    value: `\`\`\`js\n${JSON.stringify(displayedDates)}\`\`\``
-                }
-            ]
+          name: 'Country/Region/City',
+          value: `${location.country}/${location.region}/${location.city}`,
+          inline: true
+        },
+        {
+          name: 'Unit System',
+          value: `${this.api.getUnitSystemName()}`,
+          inline: true
+        },
+        {
+          name: 'Wind',
+          value: `Speed of ${observation.wind.speed} and direction of ${observation.wind.direction}.`
+        },
+        {
+          name: 'Atmosphere',
+          value: `Humidity of ${observation.atmosphere.humidity} and visibility of ${observation.atmosphere.visibility} with pressure ${observation.atmosphere.pressure}.`
+        },
+        {
+          name: 'Astronomy',
+          value: `Sun rise is at ${observation.astronomy.sunrise} and sunset ${observation.astronomy.sunset}.`
+        },
+        {
+          name: 'Condition',
+          value: `Temperature of ${observation.condition.temperature}. The condition is ${observation.condition.text}.`
+        },
+        {
+          name: `Forecast (${timePeriod})`,
+          value: `\`\`\`js\n${JSON.stringify(displayedDates)}\`\`\``
         }
-    ));
+      ]
+    })
+  );
 };

@@ -1,16 +1,16 @@
-const prune       = module.exports;
+const prune = module.exports;
 const messageEmbeds = xrequire('./modules/messageEmbeds');
 
-prune.execute = async (message) => {
-    const musicManager = message.guild.musicManager;
+prune.execute = async message => {
+  const musicManager = message.guild.musicManager;
 
-    musicManager.prune();
+  musicManager.prune();
 
-    await message.channel.send(messageEmbeds.reply(
-        {
-            message,
-            title      : ':notes:  - Queue Pruned',
-            description: 'Cleaned all of the music queue.'
-        }
-    ));
+  await message.channel.send(
+    messageEmbeds.reply({
+      message,
+      title: ':notes:  - Queue Pruned',
+      description: 'Cleaned all of the music queue.'
+    })
+  );
 };

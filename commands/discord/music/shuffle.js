@@ -1,24 +1,24 @@
-const shuffle       = module.exports;
+const shuffle = module.exports;
 const messageEmbeds = xrequire('./modules/messageEmbeds');
 
-shuffle.execute = async (message) => {
-    const musicManager = message.guild.musicManager;
+shuffle.execute = async message => {
+  const musicManager = message.guild.musicManager;
 
-    let input = message.parsed.args[0];
-    let bool  = input ? Boolean(input) : !musicManager.shuffle;
+  let input = message.parsed.args[0];
+  let bool = input ? Boolean(input) : !musicManager.shuffle;
 
-    musicManager.shuffle = bool;
+  musicManager.shuffle = bool;
 
-    await message.channel.send(messageEmbeds.reply(
+  await message.channel.send(
+    messageEmbeds.reply({
+      message,
+      title: ':stop_button: :notes:  - Shuffled Queue',
+      fields: [
         {
-            message,
-            title : ':stop_button: :notes:  - Shuffled Queue',
-            fields: [
-                {
-                    name : 'Shuffle Status',
-                    value: bool.toString()
-                }
-            ]
+          name: 'Shuffle Status',
+          value: bool.toString()
         }
-    ));
+      ]
+    })
+  );
 };

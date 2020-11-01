@@ -4,19 +4,18 @@
  */
 
 const messageEmbeds = xrequire('./modules/messageEmbeds');
-const logger        = xrequire('./modules/logger').getInstance();
+const logger = xrequire('./modules/logger').getInstance();
 
-module.exports = (
-    channel,
-    description = 'Somehing has gone wrong. Likely to not be vulcan\'s fault.'
-) => {
-    logger.warning(`[${channel.name}] => ${description}`);
-    channel.send(messageEmbeds.warning(
-        {
-            title: 'Vulcan Warning',
-            description
-        }
-    )).catch((err) => {
-        logger.error(err.message);
+module.exports = (channel, description = "Somehing has gone wrong. Likely to not be vulcan's fault.") => {
+  logger.warning(`[${channel.name}] => ${description}`);
+  channel
+    .send(
+      messageEmbeds.warning({
+        title: 'Vulcan Warning',
+        description
+      })
+    )
+    .catch(err => {
+      logger.error(err.message);
     });
 };

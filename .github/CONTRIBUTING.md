@@ -14,20 +14,20 @@ There are only a few things one must consider before contributing:
 
 | Folder        | Description                                                     | Generated |
 | :------------ | :-------------------------------------------------------------- | :-------: |
-| assets        | Contains all project assets. (hardcoded data & valuables)       | No        |
-| commands      | Contains all command definitions and their code.                | No        |
-| data          | Meaningfully structured storage directory for application data. | Yes       |
-| events        | Contains all event oriented code.                               | No        |
-| executions    | Different ways of booting up vulcan are stored here.            | No        |
-| handlers      | Indepedent functional code directly tied to vulcan subroutines. | No        |
-| logs          | Meaningfully structured storage directory for application logs. | Yes       |
-| modules       | Indepedent modular code that is used by vulcan.                 | No        |
-| prerequisites | Required code to run any vulcan execution.                      | No        |
-| settings      | All user customizables encouintered here.                       | Yes       |
-| shell         | Contains all terminal scripts.                                  | No        |
-| structures    | Contains all classes, managers and extended prototypes/classes. | No        |
-| webfiles      | Contains all files associated with the web (file) server.       | No        |
-| webhooks      | Contains all files associated with the web (hook) server.       | No        |
+| assets        | Contains all project assets. (hardcoded data & valuables)       |    No     |
+| commands      | Contains all command definitions and their code.                |    No     |
+| data          | Meaningfully structured storage directory for application data. |    Yes    |
+| events        | Contains all event oriented code.                               |    No     |
+| executions    | Different ways of booting up vulcan are stored here.            |    No     |
+| handlers      | Indepedent functional code directly tied to vulcan subroutines. |    No     |
+| logs          | Meaningfully structured storage directory for application logs. |    Yes    |
+| modules       | Indepedent modular code that is used by vulcan.                 |    No     |
+| prerequisites | Required code to run any vulcan execution.                      |    No     |
+| settings      | All user customizables encouintered here.                       |    Yes    |
+| shell         | Contains all terminal scripts.                                  |    No     |
+| structures    | Contains all classes, managers and extended prototypes/classes. |    No     |
+| webfiles      | Contains all files associated with the web (file) server.       |    No     |
+| webhooks      | Contains all files associated with the web (hook) server.       |    No     |
 
 ## Code Style Guidelines
 
@@ -42,4 +42,4 @@ All commits will be checked with the following tools:
 Merge requests will be denied if they do not meet basic standards.
 ```
 
-*Thank you for reading :)*
+_Thank you for reading :)_

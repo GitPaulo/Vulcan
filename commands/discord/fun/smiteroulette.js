@@ -1,5 +1,5 @@
 const smiteroulette = module.exports;
-const httpFetch     = xrequire('node-fetch');
+const httpFetch = xrequire('node-fetch');
 const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 /*
@@ -9,101 +9,97 @@ const messageEmbeds = xrequire('./modules/messageEmbeds');
 
 /* eslint-disable no-unused-vars */
 smiteroulette.load = async (descriptor, packages) => {
-    const result = await httpFetch(
-        'https://cms.smitegame.com/wp-json/smite-api/all-gods/1',
-        {
-            headers: // Header required or else 403
-            {
-                'agent': 'node.js'
-            }
-        }
-    );
-    const gods  = await result.json();
-    const cache = new Map();
-
-    const dynamicInsert = (god, key) => {
-        god[key]        = god[key].toLowerCase().trim(); // ok hirez!
-        const dataArray = cache.get(god[key]);
-
-        if (dataArray) {
-            dataArray.push(god);
-        } else {
-            cache.set(god[key], [god]);
-        }
-    };
-
-    cache.set('ALL', gods);
-
-    for (let god of gods) {
-        // Make map entry with pantheon
-        dynamicInsert(god, 'pantheon');
-
-        // Make map entry with role
-        dynamicInsert(god, 'role');
-
-        // Make map entry with types (Ranged, magical, ...)
-        // They come in a string cuz why not hirez
-        const types = god.type.split(',');
-
-        for (let i = 0; i < types.length; i++) {
-            const newKey   = 'type' + i;
-
-            god[newKey] = types[i].trim();
-            dynamicInsert(god, newKey);
-        }
+  const result = await httpFetch('https://cms.smitegame.com/wp-json/smite-api/all-gods/1', {
+    // Header required or else 403
+    headers: {
+      agent: 'node.js'
     }
+  });
+  const gods = await result.json();
+  const cache = new Map();
 
-    this.cache = cache;
+  const dynamicInsert = (god, key) => {
+    god[key] = god[key].toLowerCase().trim(); // ok hirez!
+    const dataArray = cache.get(god[key]);
+
+    if (dataArray) {
+      dataArray.push(god);
+    } else {
+      cache.set(god[key], [god]);
+    }
+  };
+
+  cache.set('ALL', gods);
+
+  for (let god of gods) {
+    // Make map entry with pantheon
+    dynamicInsert(god, 'pantheon');
+
+    // Make map entry with role
+    dynamicInsert(god, 'role');
+
+    // Make map entry with types (Ranged, magical, ...)
+    // They come in a string cuz why not hirez
+    const types = god.type.split(',');
+
+    for (let i = 0; i < types.length; i++) {
+      const newKey = 'type' + i;
+
+      god[newKey] = types[i].trim();
+      dynamicInsert(god, newKey);
+    }
+  }
+
+  this.cache = cache;
 };
 
-smiteroulette.execute = async (message) => {
-    const input    = message.parsed.args;
-    let   selector = null;
-    let   sarray   = null;
+smiteroulette.execute = async message => {
+  const input = message.parsed.args;
+  let selector = null;
+  let sarray = null;
 
-    if (input.length <= 0) {
-        selector = 'ALL';
-        sarray   = this.cache.get(selector);
-    } else { // Get intersection of selectors
-        const selectors = input;
+  if (input.length <= 0) {
+    selector = 'ALL';
+    sarray = this.cache.get(selector);
+  } else {
+    // Get intersection of selectors
+    const selectors = input;
 
-        sarray = [];
+    sarray = [];
 
-        for (let subselector of selectors) {
-            const ssarray = this.cache.get(subselector);
+    for (let subselector of selectors) {
+      const ssarray = this.cache.get(subselector);
 
-            sarray  = sarray.length <= 0 ? ssarray : sarray.intersection(ssarray);
-        }
-
-        selector = message.parsed.argsString;
+      sarray = sarray.length <= 0 ? ssarray : sarray.intersection(ssarray);
     }
 
-    if (!sarray) {
-        return message.client.emit(
-            'channelWarning',
-            message.channel,
-            `Invalid smite roulette selector! (Must be valid pantheon/class)`
-        );
-    }
+    selector = message.parsed.argsString;
+  }
 
-    if (sarray.length <= 0) {
-        return message.client.emit(
-            'channelWarning',
-            message.channel,
-            `Could not find any gods with selector: **'${selector}'**`
-        );
-    }
-
-    const god   = sarray.random();
-    const mWrap = messageEmbeds.reply(
-        {
-            message,
-            description: `<@${message.author.id}>'s smite god will be: **${god.name} (${god.title})**\n\t Selector: **${selector}**`,
-            image      : {
-                url: god.card
-            }
-        }
+  if (!sarray) {
+    return message.client.emit(
+      'channelWarning',
+      message.channel,
+      `Invalid smite roulette selector! (Must be valid pantheon/class)`
     );
+  }
 
-    await message.channel.send(mWrap);
+  if (sarray.length <= 0) {
+    return message.client.emit(
+      'channelWarning',
+      message.channel,
+      `Could not find any gods with selector: **'${selector}'**`
+    );
+  }
+
+  const god = sarray.random();
+  const mWrap = messageEmbeds.reply({
+    message,
+    description: `<@${message.author.id}>'s smite god will be: **${god.name} (${god.title})**\n\t Selector: **${selector}**`,
+    image: {
+      url: god.card
+    }
+  });
+
+  await message.channel.send(mWrap);
 };

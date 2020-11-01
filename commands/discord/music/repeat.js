@@ -1,24 +1,24 @@
-const repeat        = module.exports;
+const repeat = module.exports;
 const messageEmbeds = xrequire('./modules/messageEmbeds');
 
-repeat.execute = async (message) => {
-    const musicManager = message.guild.musicManager;
+repeat.execute = async message => {
+  const musicManager = message.guild.musicManager;
 
-    let input = message.parsed.args[0];
-    let bool  = input ? Boolean(input) : !musicManager.repeat;
+  let input = message.parsed.args[0];
+  let bool = input ? Boolean(input) : !musicManager.repeat;
 
-    musicManager.repeat = bool;
+  musicManager.repeat = bool;
 
-    await message.channel.send(messageEmbeds.reply(
+  await message.channel.send(
+    messageEmbeds.reply({
+      message,
+      title: ':notes:  - Song Repeat',
+      fields: [
         {
-            message,
-            title : ':notes:  - Song Repeat',
-            fields: [
-                {
-                    name : 'Repeat Status',
-                    value: bool.toString()
-                }
-            ]
+          name: 'Repeat Status',
+          value: bool.toString()
         }
-    ));
+      ]
+    })
+  );
 };

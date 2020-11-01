@@ -4,18 +4,17 @@
  */
 
 const messageEmbeds = xrequire('./modules/messageEmbeds');
-const logger        = xrequire('./modules/logger').getInstance();
+const logger = xrequire('./modules/logger').getInstance();
 
-module.exports = (
-    message,
-    description = 'Missing permissions!'
-) => {
-    message.channel.send(messageEmbeds.warning(
-        {
-            title: `Missing Permissions`,
-            description
-        }
-    )).catch((err) => {
-        logger.error(err.message);
+module.exports = (message, description = 'Missing permissions!') => {
+  message.channel
+    .send(
+      messageEmbeds.warning({
+        title: `Missing Permissions`,
+        description
+      })
+    )
+    .catch(err => {
+      logger.error(err.message);
     });
 };

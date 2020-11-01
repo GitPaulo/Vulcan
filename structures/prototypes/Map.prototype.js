@@ -1,9 +1,9 @@
 Map.prototype.toString = function () {
-    let result = {};
+  let result = {};
 
-    this.forEach((key, value) => {
-        result[key] = value;
-    });
+  this.forEach((key, value) => {
+    result[key] = value;
+  });
 
-    return JSON.stringify(result);
+  return JSON.stringify(result);
 };

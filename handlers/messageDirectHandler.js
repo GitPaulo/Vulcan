@@ -9,13 +9,13 @@
 
 const messageEmbeds = xrequire('./modules/messageEmbeds');
 
-module.exports = async (message) => {
-    await message.channel.send(messageEmbeds.error(
-        {
-            title      : 'Direct Messages [Unsupported]',
-            description: `Currently the bot does not support **commands* via direct messages.`
-        }
-    ));
+module.exports = async message => {
+  await message.channel.send(
+    messageEmbeds.error({
+      title: 'Direct Messages [Unsupported]',
+      description: `Currently the bot does not support **commands* via direct messages.`
+    })
+  );
 
-    return true;
+  return true;
 };

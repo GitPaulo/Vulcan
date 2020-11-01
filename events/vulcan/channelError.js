@@ -8,30 +8,32 @@
  */
 
 const messageEmbeds = xrequire('./modules/messageEmbeds');
-const logger        = xrequire('./modules/logger').getInstance();
+const logger = xrequire('./modules/logger').getInstance();
 
 module.exports = (
-    channel,
-    err,
-    description = 'Internal error has occured due to an action originating from this channel.'
+  channel,
+  err,
+  description = 'Internal error has occured due to an action originating from this channel.'
 ) => {
-    logger.error(`[${channel.name}] => ${description}\n\tError message: ${err.message}\n\tStack: ${err.stack}`);
-    channel.send(messageEmbeds.error(
-        {
-            title : 'Vulcan Internal Error',
-            description,
-            fields: [
-                {
-                    name : 'Error Message',
-                    value: err.message
-                },
-                {
-                    name : 'Stack String',
-                    value: `\`\`\`${err.stack.toString()}\`\`\``
-                }
-            ]
-        }
-    )).catch((err) => {
-        logger.error(err.message);
+  logger.error(`[${channel.name}] => ${description}\n\tError message: ${err.message}\n\tStack: ${err.stack}`);
+  channel
+    .send(
+      messageEmbeds.error({
+        title: 'Vulcan Internal Error',
+        description,
+        fields: [
+          {
+            name: 'Error Message',
+            value: err.message
+          },
+          {
+            name: 'Stack String',
+            value: `\`\`\`${err.stack.toString()}\`\`\``
+          }
+        ]
+      })
+    )
+    .catch(err => {
+      logger.error(err.message);
     });
 };

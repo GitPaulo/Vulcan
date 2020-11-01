@@ -7,28 +7,27 @@
 const { performance } = xrequire('perf_hooks');
 
 // Disable connect
-xrequire('./structures/classes/internal/Vulcan')
-    .prototype.connect = () => null;
+xrequire('./structures/classes/internal/Vulcan').prototype.connect = () => null;
 
 console.log(
+  `=======================================\n` +
+    `  Vulcan Loading Process Test [START]  \n` +
     `=======================================\n`
-  + `  Vulcan Loading Process Test [START]  \n`
-  + `=======================================\n`
 );
 
 let startTime = performance.now();
 
 {
-    module.exports = xrequire('./executions/main.js');
+  module.exports = xrequire('./executions/main.js');
 }
 
 let finishTime = performance.now();
 
 console.log(
+  `=======================================\n` +
+    `   Vulcan Loading Process Test [END]   \n` +
+    `   Time: ${finishTime - startTime}ms   \n` +
     `=======================================\n`
-  + `   Vulcan Loading Process Test [END]   \n`
-  + `   Time: ${finishTime - startTime}ms   \n`
-  + `=======================================\n`
 );
 
 process.exit(0);

@@ -11,36 +11,29 @@
  *   - To the <Class> object.
  */
 
-const fs            = xrequire('fs');
-const path          = xrequire('path');
-const logger        = xrequire('./modules/logger').getInstance();
+const fs = xrequire('fs');
+const path = xrequire('path');
+const logger = xrequire('./modules/logger').getInstance();
 const prototypesDir = path.join(global.basedir, './structures/prototypes/');
 
 // Load all prototypes in prototypeDir
-fs.readdirSync(prototypesDir).forEach((file) => {
-    logger.logTimeStart(`Prototypes ${file}`);
+fs.readdirSync(prototypesDir).forEach(file => {
+  logger.logTimeStart(`Prototypes ${file}`);
 
-    let parts = file.split('.');
-    let ext   = 'js';
+  let parts = file.split('.');
+  let ext = 'js';
 
-    if (parts.length < 2 || parts.length > 3) {
-        throw new Error(
-            `Invalid prototypes.js file name: ${file}`
-        );
-    }
+  if (parts.length < 2 || parts.length > 3) {
+    throw new Error(`Invalid prototypes.js file name: ${file}`);
+  }
 
-    if (parts[parts.length - 1] !== ext) {
-        throw new Error(
-            `Invalid prototypes.js file extension: ${file}`
-        );
-    }
+  if (parts[parts.length - 1] !== ext) {
+    throw new Error(`Invalid prototypes.js file extension: ${file}`);
+  }
 
-    let filePath = path.join(prototypesDir, file);
+  let filePath = path.join(prototypesDir, file);
 
-    xrequire(filePath);
+  xrequire(filePath);
 
-    logger.logTimeEnd(
-        `Prototypes ${file}`,
-        `Loaded (prototypes) file '${file}'.`
-    );
+  logger.logTimeEnd(`Prototypes ${file}`, `Loaded (prototypes) file '${file}'.`);
 });
