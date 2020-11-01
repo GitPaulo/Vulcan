@@ -49,7 +49,7 @@
     "snyk:snapshot": "snyk monitor",
     "snyk:wizard": "snyk wizard",
     "_COMMENT6": "==================== [ DOCS ] =============================",
-    "docs:display": "./node_modules/.bin/jsdoc -r .",
+    "docs:display": "./node_modules/.bin/jsdoc -c jsdoc.conf.json",
     "_COMMENT7": "==================== [ DEBUG ] =============================",
     "debug:install": "npm install -g clinic",
     "debug:debugger": "node --nolazy --inspect-brk index.js",
