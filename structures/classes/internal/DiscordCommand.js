@@ -3,8 +3,9 @@ const Command = xrequire('./structures/classes/internal/Command');
 
 /**
  * Subclass of Command specific for discord requests.
+ *
  * @class DiscordCommand
- * @extends {Command}
+ * @augments {Command}
  */
 class DiscordCommand extends Command {
   constructor(vulcan, commandDefinition) {
@@ -53,6 +54,7 @@ class DiscordCommand extends Command {
 
   /**
    * Register a command call by an author.
+   *
    * @param {UserResolvable} author The user that provoked the command call.
    */
   registerCall(author) {
@@ -74,6 +76,7 @@ class DiscordCommand extends Command {
 
   /**
    * Resolves the last call made by a user.
+   *
    * @param {UserResolvable} author The user that provoked the command call.
    * @returns {number} Date of the last call by author.
    */
@@ -89,6 +92,8 @@ class DiscordCommand extends Command {
 
   /**
    * Wrap around resolveCall()
+   *
+   * @param author
    */
   hasCalled(author) {
     return Boolean(this.resolveCall(author));
@@ -96,6 +101,7 @@ class DiscordCommand extends Command {
 
   /**
    * Checks if user is under throttling.
+   *
    * @param {UserResolvable} author The user that provoked the command call.
    * @returns {boolean} If command is under throttling rules.
    */
@@ -105,6 +111,8 @@ class DiscordCommand extends Command {
 
   /**
    * Wrap around underThrottling.
+   *
+   * @param author
    */
   isSpamming(author) {
     return this.underThrottling(author.id);
@@ -112,6 +120,7 @@ class DiscordCommand extends Command {
 
   /**
    * Returns if a user has permission to run the command.
+   *
    * @param {UserResolvable} author The user that provoked the command call.
    * @returns {boolean} If the user can call the command.
    */
@@ -141,6 +150,7 @@ class DiscordCommand extends Command {
 
   /**
    * Builds and returns a string representation of the command's key properties.
+   *
    * @returns {string} String representaiton.
    */
   toString() {

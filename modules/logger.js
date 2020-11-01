@@ -18,6 +18,9 @@ module.exports = (function () {
 
   // ? Constructor
   // Nested functions & vars are the 'private' properties
+  /**
+   *
+   */
   function logger() {
     let folderName = 'logs';
     let rootPath = global.basedir;

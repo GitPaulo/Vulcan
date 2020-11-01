@@ -5,6 +5,7 @@ const { Client } = xrequire('discord.js');
  * All command classes inherit from this object, including:
  *   - TerminalCommand
  *   - DiscordCommand
+ *
  * @class Command
  */
 class Command {
@@ -74,6 +75,7 @@ class Command {
 
   /**
    * Builds and returns a string representation of the command's key properties.
+   *
    * @returns {string} String representaiton.
    */
   toString() {

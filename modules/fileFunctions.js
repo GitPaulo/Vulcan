@@ -4,6 +4,9 @@ const path = xrequire('path');
 exports.allDirFiles = (dir, fileTypes = '.js') => {
   const filesToReturn = [];
 
+  /**
+   * @param currentPath
+   */
   function walkDir(currentPath) {
     const files = fs.readdirSync(currentPath);
 

@@ -15,6 +15,7 @@ module.exports = class _Guild extends xrequire('discord.js').Guild {
   /**
    * Resolves a 'default' channel for the guild.
    * (on join, typically, the bot channel is created)
+   *
    * @readonly
    */
   get botChannel() {
@@ -27,6 +28,7 @@ module.exports = class _Guild extends xrequire('discord.js').Guild {
 
   /**
    * Returns if the guild has been authorised.
+   *
    * @readonly
    */
   get authorised() {
@@ -35,9 +37,10 @@ module.exports = class _Guild extends xrequire('discord.js').Guild {
 
   /**
    * Finds all channels with the parameter as name.
+   *
    * @param {string} name Channel name.
    * @param {string} type Channel type. (https://github.com/discordjs/discord.js/blob/master/src/structures/Channel.js)
-   * @returns {array} Array of channels that matched.
+   * @returns {Array} Array of channels that matched.
    */
   findChannelsByName(name, type = 'text') {
     if (typeof name !== 'string') {

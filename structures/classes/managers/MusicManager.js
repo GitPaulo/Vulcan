@@ -389,6 +389,7 @@ class MusicManager extends EventEmitter {
   /**
    * Prepares a task to be played.
    * Pushes task to Music Manager queue.
+   *
    * @param {MusicManager.Task} task The task to be enqueued.
    */
   async _enqueue(task) {
@@ -413,6 +414,7 @@ class MusicManager extends EventEmitter {
    * Dequeues a task.
    * Tasks may be composed of many songs.
    * * If many songs, shifts internal task song queue.
+   *
    * @returns {MusicManager.Task} The task that was dequeued.
    */
   _dequeue() {
@@ -441,6 +443,7 @@ class MusicManager extends EventEmitter {
   /**
    * Plays a given task.
    * Establishes a connection and stream.
+   *
    * @param {MusicManager.Taskl} task The task to play.
    */
   async _play(task) {
@@ -506,6 +509,7 @@ class MusicManager extends EventEmitter {
   /**
    * Creates a new connection to a voice channel.
    * Joins that channel and sets up connection events.
+   *
    * @param {*} voiceChannel Voice channel to join.
    */
   async join(voiceChannel) {
@@ -553,6 +557,7 @@ class MusicManager extends EventEmitter {
 
   /**
    * Resolves a SongResolvable into a valid url.
+   *
    * @param {RequestResolvable} request Musica Manager request to resolve
    * @returns {Request} A Music Manager Request
    */
@@ -592,6 +597,7 @@ class MusicManager extends EventEmitter {
   /**
    * Parses a music request.
    * Enqueues request and, if possible, plays the request.
+   *
    * @param {RequestResolvable} request The request to be resolved
    * @param {GuildMember} requester The guild member that initiated the request via a discord command
    * @param {TextChannel} source The text channel from which the author made the request

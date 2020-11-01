@@ -82,6 +82,7 @@ class Vulcan extends Discord.Client {
 
   /**
    * Verifies token and connects to discord servers.
+   *
    * @returns {Promise<string>}
    */
   connect() {
@@ -98,6 +99,7 @@ class Vulcan extends Discord.Client {
 
   /**
    * Helper method to update data.
+   *
    * @param {*} descriptors String array identifying which data file to update.
    */
   _update(descriptors) {
@@ -139,6 +141,7 @@ class Vulcan extends Discord.Client {
 
   /**
    * Validates and adds a guild to the authorised list.
+   *
    * @param {GuildResolvable} guild The guild to authorise.
    * @returns {Guild}
    */
@@ -161,6 +164,7 @@ class Vulcan extends Discord.Client {
 
   /**
    * Validates and removes a guild from the authorised list.
+   *
    * @param {GuildResolvable} guild The guild to authorise.
    * @returns {Guild}
    */
@@ -187,6 +191,7 @@ class Vulcan extends Discord.Client {
 
   /**
    * Validates and adds a user to the blacklist.
+   *
    * @param {UserResolvable} user The to-be blacklisted user.
    * @returns {User}
    */
@@ -209,6 +214,7 @@ class Vulcan extends Discord.Client {
 
   /**
    * Validates and removes a user from the blacklist.
+   *
    * @param {UserResolvable} user The to-be unblacklisted user.
    * @returns {User}
    */
@@ -235,6 +241,7 @@ class Vulcan extends Discord.Client {
 
   /**
    * Updates a usergroup.
+   *
    * @param {UserResolvable} user The user to be updated.
    * @param {string} newGroupName The group name.
    * @returns {User} User that has been updated.
@@ -284,6 +291,7 @@ class Vulcan extends Discord.Client {
 
   /**
    * Fetches a usergroup.
+   *
    * @param {UserResolvable} user A user resolvable to fetch the usergroup from.
    * @returns {UserData} An object with information about the usergroup of a user.
    */
@@ -343,6 +351,7 @@ class Vulcan extends Discord.Client {
 
   /**
    * Resolves external IP data.
+   *
    * @returns {IpData}
    */
   async resolveIp() {

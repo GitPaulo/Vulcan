@@ -3,6 +3,10 @@ const TIME_LIMIT = 1000;
 
 const C = Math.sqrt(2);
 
+/**
+ * @param board
+ * @param player
+ */
 function getPlay(board, player) {
   let node = new GameNode(board, player);
   let winningPlay = node.getWinningPlay();
@@ -17,6 +21,10 @@ function getPlay(board, player) {
   return bestNode.originatingPlay;
 }
 
+/**
+ * @param node
+ * @param player
+ */
 function mcts(node, player) {
   let startTime = new Date();
 
@@ -25,6 +33,10 @@ function mcts(node, player) {
   }
 }
 
+/**
+ * @param node
+ * @param player
+ */
 function simulate(node, player) {
   let result = null;
 
@@ -52,6 +64,10 @@ function simulate(node, player) {
   return result;
 }
 
+/**
+ * @param node
+ * @param player
+ */
 function playout(node, player) {
   let currentNode = node;
 
@@ -66,6 +82,9 @@ function playout(node, player) {
   return currentNode.getPayoff(player);
 }
 
+/**
+ * @param node
+ */
 function select(node) {
   let bestNode = node.children[0];
   let bestScore = bestNode.score;
@@ -86,6 +105,10 @@ function select(node) {
   return bestNode;
 }
 
+/**
+ * @param node
+ * @param parentPlayoutCount
+ */
 function calculateUCT(node, parentPlayoutCount) {
   let logOfPlayoutCount = Math.log(parentPlayoutCount);
   let childPlayoutsRatio = logOfPlayoutCount / node.playouts;

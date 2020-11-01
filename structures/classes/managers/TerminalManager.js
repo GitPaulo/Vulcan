@@ -27,6 +27,7 @@ class TerminalManager {
   /**
    * Wrapper for the logger instance.
    * (Used throughout the class)
+   *
    * @param {*} message
    * @param {string} [type='terminal']
    */
@@ -104,6 +105,7 @@ class TerminalManager {
    * Event method.
    * Executed when the input stream receives an end-of-line input (\n, \r, or \r\n) [<enter>/<return> keys].
    * Parses 'line' into a 'terminal' command and trys to execute it.
+   *
    * @param {*} line
    */
   _CommandReceived(line) {

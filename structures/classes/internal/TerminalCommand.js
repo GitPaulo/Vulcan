@@ -2,8 +2,9 @@ const Command = xrequire('./structures/classes/internal/Command');
 
 /**
  * Subclass of Command specific for Terminal requests.
+ *
  * @class TerminalCommand
- * @extends {Command}
+ * @augments {Command}
  */
 class TerminalCommand extends Command {
   constructor(vulcan, commandDefinition) {

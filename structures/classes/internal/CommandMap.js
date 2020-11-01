@@ -4,8 +4,9 @@ const Command = xrequire('./structures/classes/internal/Command');
 /**
  * A map abstraction that holds any type of command.
  * Used to quickly look up commands.
+ *
  * @class CommandMap
- * @extends {Map}
+ * @augments {Map}
  */
 class CommandMap extends Map {
   constructor(...args) {
@@ -18,8 +19,9 @@ class CommandMap extends Map {
 
   /**
    * Returns and order of the command map keys by how similar they are to a keyword.
+   *
    * @param {string} keyword The keyword for comparison.
-   * @returns {array} The ordering.
+   * @returns {Array} The ordering.
    */
   similar(keyword) {
     let similarityHeap = buckets.Heap((a, b) => a.similarity < b.similarity);
@@ -36,6 +38,7 @@ class CommandMap extends Map {
 
   /**
    * Adds a command to the map.
+   *
    * @param {Command} command An instance of the command class.
    */
   addCommand(command) {
@@ -59,6 +62,7 @@ class CommandMap extends Map {
 
   /**
    * Quickly retrives the command by id or alias.
+   *
    * @param {string} idOrAlias String representing an id or alias of the command.
    * @returns {Command} The command, if any.
    */
