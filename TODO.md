@@ -4,6 +4,8 @@
 - [x] **(Task)** Reform eslint & add prettier w/ proper configuration & format everything to a standard & add EditorConfig.
 - [x] **(Task)** Format all files to prettier standards.
 - [ ] **(Task)** Configure jsdoc & enforce proper docs (where appropriate).
+- [ ] **(Task)** Make a list of things to learn and use from [this repo.](https://github.com/SwitchbladeBot/switchblade/)
+- [ ] **(Task)** Make a commit series of improvements (general code).
 - [ ] **(Task)** Test and make sure everything is ready for receiving more devs.
 - [ ] **(Bug)** Developers cannot bypass unauthorised guild block.
 - [ ] **(Task)** Hosts vs Owners inconsitency in naming.
