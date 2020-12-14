@@ -95,7 +95,7 @@
     "public-ip": "~4.0.2",
     "stream-stream": "~1.2.6",
     "ytdl-core-discord": "^1.2.4",
-    "ytsr": "~0.1.21"
+    "ytsr": "~2.0.1"
   },
   "devDependencies": {
     "clinic": "^7.0.0",
